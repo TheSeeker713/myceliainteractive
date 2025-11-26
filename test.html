@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MYCELIA INTERACTIVE | Podcast & Interactive Entertainment</title>
+    <meta name="description" content="Interactive production company creating AI-assisted content including the Fabricated Intelligence podcast and Nibble's Quest interactive animation.">
+    <meta property="og:title" content="MYCELIA INTERACTIVE | Podcast & Interactive Entertainment">
+    <meta property="og:description" content="Pioneering interactive storytelling through AI-assisted production">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80">
+    <meta property="og:url" content="https://myceliainteractive.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        @media (prefers-reduced-motion: reduce) {
+            * {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.01ms !important;
+              scroll-behavior: auto !important;
+            }
+        }
+        
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cosmic: '#0a0a1a',
+                        nebula: '#1a0638',
+                        mycelium: '#8a4fff',
+                        glow: '#c792ea',
+                        deepspace: '#050510'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 8s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'fade-in': 'fadeIn 1.5s ease-in forwards'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 0.7 },
+                            '50%': { opacity: 1 }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: radial-gradient(ellipse at bottom, #0a0a1a 0%, #050510 70%);
+            color: #e0e0ff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Cosmic Background Elements */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+        }
+        
+        .mycelium-node {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #8a4fff, transparent 70%);
+            box-shadow: 0 0 40px 10px #8a4fff;
+            animation: pulse-glow 4s infinite;
+        }
+        
+        .mycelium-connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8a4fff, transparent);
+            transform-origin: left center;
+        }
+        
+        /* Interactive Elements */
+        .podcast-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(138, 79, 255, 0.3);
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px rgba(199, 146, 234, 0.7);
+        }
+        
+        .glow-box {
+            box-shadow: 0 0 20px rgba(138, 79, 255, 0.5);
+        }
+        
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .interactive-item {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .interactive-item-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .interactive-item:hover .interactive-item-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .interactive-item-front, .interactive-item-back {
+            backface-visibility: hidden;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+        
+        .interactive-item-back {
+            transform: rotateY(180deg);
+            background: rgba(26, 6, 56, 0.9);
+        }
+        
+        /* Audio Player */
+        .audio-player {
+            background: rgba(10, 10, 26, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #8a4fff, #c792ea);
+            width: 30%;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .interactive-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="relative">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:z-50 focus:rounded">
+        Skip to content
+    </a>
+    <!-- Cosmic Background -->
+    <div class="cosmic-bg" id="cosmicCanvas"></div>
+    
+    <!-- Header -->
+    <header class="fixed w-full z-50 py-4 px-6 backdrop-blur-md bg-opacity-70 bg-cosmic border-b border-mycelium/20 h-20">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full bg-mycelium flex items-center justify-center mr-3 glow-box">
+                    <div class="w-8 h-8 rounded-full bg-glow animate-pulse-slow"></div>
+                </div>
+                <h1 class="text-2xl font-bold tracking-wider glow-text">MYCELIA<span class="text-glow"> INTERACTIVE</span></h1>
+            </div>
+            
+            <nav class="hidden md:block">
+                <ul class="flex space-x-8">
+                    <li><a href="#" class="text-glow hover:text-white transition duration-300">HOME</a></li>
+                    <li><a href="#" class="hover:text-glow transition duration-300">PODCASTS</a></li>
+                    <li><a href="#" class="hover:text-glow transition duration-300">EXPERIENCES</a></li>
+                    <li><a href="#" class="hover:text-glow transition duration-300">ABOUT</a></li>
+                    <li><a href="#" class="hover:text-glow transition duration-300">CONTACT</a></li>
+                </ul>
+            </nav>
+            
+            <button class="md:hidden text-glow text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main id="main-content" class="pt-24 pb-20" role="main">
+        <!-- Hero Section -->
+        <section class="container mx-auto px-4 py-16 md:py-24 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="hero-title text-5xl md:text-7xl font-extrabold mb-6 animate-fade-in">
+                    <span class="block text-white">MYCELIA</span>
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-mycelium to-glow">INTERACTIVE</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-glow/80 mb-10 max-w-2xl mx-auto animate-fade-in">
+                    Pioneering interactive storytelling through AI-assisted production
+                </p>
+                <div class="flex justify-center space-x-4 animate-fade-in">
+                    <button class="px-8 py-3 bg-gradient-to-r from-mycelium to-purple-600 rounded-full font-bold hover:scale-105 transition-transform duration-300 focus:ring-2 focus:ring-white focus:outline-none">
+                        ENTER THE NETWORK
+                    </button>
+                    <button class="px-8 py-3 border-2 border-mycelium rounded-full font-bold hover:bg-mycelium/20 transition-colors duration-300">
+                        LISTEN NOW
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Featured Podcast -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 glow-text">FABRICATED INTELLIGENCE</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-mycelium to-glow mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="max-w-4xl mx-auto bg-nebula/50 backdrop-blur-sm rounded-2xl overflow-hidden glow-box">
+                <div class="md:flex">
+                    <div class="md:w-2/5 p-8 flex items-center justify-center">
+                        <div class="relative">
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-mycelium/30 to-glow/20 blur-xl"></div>
+                            <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Neural Connections" 
+                                 class="relative rounded-xl w-full max-w-xs transform rotate-3">
+                        </div>
+                    </div>
+                    <div class="md:w-3/5 p-8">
+                        <div class="mb-6">
+                            <span class="inline-block px-3 py-1 bg-mycelium/20 text-glow rounded-full text-sm">SEASON 2</span>
+                            <h3 class="text-2xl font-bold mt-4 mb-2">Muppets, Mayhem and Machine Learning</h3>
+                            <p class="text-glow/80 mb-6">Our puppet protagonists uncover strange anomalies in their AI research lab. Is it just faulty code, or something more sinister?</p>
+                        </div>
+                        
+                        <div class="audio-player rounded-xl p-6 mb-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-xl">
+                                    <i class="fas fa-play-circle text-glow mr-4 cursor-pointer hover:text-white"></i>
+                                    <i class="fas fa-pause-circle text-gray-400 mr-4 cursor-pointer hover:text-white"></i>
+                                    <i class="fas fa-step-forward text-gray-400 cursor-pointer hover:text-white"></i>
+                                </div>
+                                <div class="text-sm text-gray-400">42:18</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-deepspace text-glow rounded-full text-sm">PUPPETS</span>
+                            <span class="px-3 py-1 bg-deepspace text-glow rounded-full text-sm">AI</span>
+                            <span class="px-3 py-1 bg-deepspace text-glow rounded-full text-sm">MYSTERY</span>
+                            <span class="px-3 py-1 bg-deepspace text-glow rounded-full text-sm">ARG</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Nibble's Quest -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 glow-text">NIBBLE'S QUEST</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-mycelium to-glow mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="max-w-4xl mx-auto bg-nebula/50 backdrop-blur-sm rounded-2xl overflow-hidden glow-box p-8">
+                <div class="md:flex items-center">
+                    <div class="md:w-2/5 mb-6 md:mb-0">
+                        <img src="https://images.unsplash.com/photo-1633613286848-e6f43bbafb8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             alt="Nibble's Quest" 
+                             class="rounded-xl w-full">
+                    </div>
+                    <div class="md:w-3/5 md:pl-8">
+                        <h3 class="text-2xl font-bold mb-4">Interactive Animated Short</h3>
+                        <p class="text-glow/80 mb-6">Guide Nibble through a surreal adventure where your choices create unique pathways and multiple endings. Our test product exploring interactive animation with AI-assisted narrative generation.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button class="px-6 py-3 bg-mycelium rounded-full font-bold hover:bg-glow transition-colors">
+                                PLAY DEMO
+                            </button>
+                            <button class="px-6 py-3 border-2 border-mycelium rounded-full font-bold hover:bg-mycelium/20 transition-colors">
+                                LEARN MORE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Breach -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 glow-text">THE BREACH</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-mycelium to-glow mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="max-w-3xl mx-auto text-center">
+                <p class="text-xl text-glow/80 mb-8">Something strange is happening at the edges of our digital world. Are you seeing it too?</p>
+                <button class="px-8 py-3 border-2 border-mycelium rounded-full font-bold hover:bg-mycelium/20 transition-colors duration-300">
+                    REPORT ANOMALIES
+                </button>
+            </div>
+        </section>
+
+        <!-- Tech Development -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 glow-text">INTERACTIVE EXPERIENCES</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-mycelium to-glow mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="interactive-grid">
+                <!-- Experience 1 -->
+                <div class="interactive-item h-80">
+                    <div class="interactive-item-inner w-full h-full relative">
+                        <div class="interactive-item-front bg-gradient-to-br from-nebula to-deepspace rounded-xl glow-box flex flex-col items-center justify-center p-6">
+                            <div class="w-20 h-20 rounded-full bg-gradient-to-r from-mycelium to-glow flex items-center justify-center mb-6 animate-spin-slow">
+                                <i class="fas fa-brain text-3xl text-cosmic"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">NEURAL GARDEN</h3>
+                            <p class="text-center text-glow/80">Cultivate your own neural network ecosystem</p>
+                        </div>
+                        <div class="interactive-item-back">
+                            <h3 class="text-xl font-bold mb-4 text-center">NEURAL GARDEN</h3>
+                            <p class="text-center mb-4">Grow and nurture a living neural network that responds to your thoughts and emotions.</p>
+                            <button class="px-6 py-2 bg-mycelium rounded-full mt-4 hover:bg-glow transition-colors">ENTER</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Experience 2 -->
+                <div class="interactive-item h-80">
+                    <div class="interactive-item-inner w-full h-full relative">
+                        <div class="interactive-item-front bg-gradient-to-br from-nebula to-deepspace rounded-xl glow-box flex flex-col items-center justify-center p-6">
+                            <div class="w-20 h-20 rounded-full bg-gradient-to-r from-mycelium to-glow flex items-center justify-center mb-6 animate-float">
+                                <i class="fas fa-atom text-3xl text-cosmic"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">QUANTUM REALMS</h3>
+                            <p class="text-center text-glow/80">Navigate through probabilistic dimensions</p>
+                        </div>
+                        <div class="interactive-item-back">
+                            <h3 class="text-xl font-bold mb-4 text-center">QUANTUM REALMS</h3>
+                            <p class="text-center mb-4">Explore the multiverse where every decision creates new realities.</p>
+                            <button class="px-6 py-2 bg-mycelium rounded-full mt-4 hover:bg-glow transition-colors">ENTER</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Experience 3 -->
+                <div class="interactive-item h-80">
+                    <div class="interactive-item-inner w-full h-full relative">
+                        <div class="interactive-item-front bg-gradient-to-br from-nebula to-deepspace rounded-xl glow-box flex flex-col items-center justify-center p-6">
+                            <div class="w-20 h-20 rounded-full bg-gradient-to-r from-mycelium to-glow flex items-center justify-center mb-6 animate-pulse-glow">
+                                <i class="fas fa-seedling text-3xl text-cosmic"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">MYCELIAL CONNECTION</h3>
+                            <p class="text-center text-glow/80">Join the underground network of consciousness</p>
+                        </div>
+                        <div class="interactive-item-back">
+                            <h3 class="text-xl font-bold mb-4 text-center">MYCELIAL CONNECTION</h3>
+                            <p class="text-center mb-4">Connect with others through the vast underground network of shared consciousness.</p>
+                            <button class="px-6 py-2 bg-mycelium rounded-full mt-4 hover:bg-glow transition-colors">ENTER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Podcast Archive -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 glow-text">PODCAST ARCHIVE</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-mycelium to-glow mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Podcast 1 -->
+                <div class="podcast-card bg-nebula/50 backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-500 glow-box">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="inline-block px-3 py-1 bg-mycelium/20 text-glow rounded-full text-sm">EPISODE 46</span>
+                            <span class="text-gray-400 text-sm">58:22</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">The Holographic Universe Theory</h3>
+                        <p class="text-glow/80 mb-4">Exploring the idea that our 3D reality is a projection from a 2D surface at the edge of the universe.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="text-glow hover:text-white flex items-center">
+                                <i class="fas fa-play-circle mr-2"></i> PLAY
+                            </button>
+                            <span class="text-sm text-gray-400">Jun 12, 2023</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Podcast 2 -->
+                <div class="podcast-card bg-nebula/50 backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-500 glow-box">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="inline-block px-3 py-1 bg-mycelium/20 text-glow rounded-full text-sm">EPISODE 45</span>
+                            <span class="text-gray-400 text-sm">51:10</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Psychedelics and Neural Plasticity</h3>
+                        <p class="text-glow/80 mb-4">How psychedelic compounds can rewire the brain and potentially treat mental health disorders.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="text-glow hover:text-white flex items-center">
+                                <i class="fas fa-play-circle mr-2"></i> PLAY
+                            </button>
+                            <span class="text-sm text-gray-400">May 28, 2023</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Podcast 3 -->
+                <div class="podcast-card bg-nebula/50 backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-500 glow-box">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="inline-block px-3 py-1 bg-mycelium/20 text-glow rounded-full text-sm">EPISODE 44</span>
+                            <span class="text-gray-400 text-sm">47:33</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">The Language of Fungi</h3>
+                        <p class="text-glow/80 mb-4">Decoding the complex communication systems of mycelial networks and what they can teach us.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="text-glow hover:text-white flex items-center">
+                                <i class="fas fa-play-circle mr-2"></i> PLAY
+                            </button>
+                            <span class="text-sm text-gray-400">May 14, 2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="px-8 py-3 border-2 border-mycelium rounded-full font-bold hover:bg-mycelium/20 transition-colors duration-300">
+                    VIEW ALL EPISODES
+                </button>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-cosmic border-t border-mycelium/20 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-glow">MYCELIA INTERACTIVE</h4>
+                    <p class="text-gray-400">AI-assisted interactive production company creating next-gen AR/VR/HR experiences and narrative puzzles.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-glow">NAVIGATE</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-glow transition-colors">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-glow transition-colors">Podcasts</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-glow transition-colors">Experiences</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-glow transition-colors">About</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-glow transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-glow">CONNECT</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-nebula flex items-center justify-center hover:bg-mycelium transition-colors">
+                            <i class="fab fa-spotify text-glow"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-nebula flex items-center justify-center hover:bg-mycelium transition-colors">
+                            <i class="fab fa-apple text-glow"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-nebula flex items-center justify-center hover:bg-mycelium transition-colors">
+                            <i class="fab fa-instagram text-glow"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-nebula flex items-center justify-center hover:bg-mycelium transition-colors">
+                            <i class="fab fa-twitter text-glow"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-glow">SUBSCRIBE</h4>
+                    <p class="text-gray-400 mb-2">Receive transmissions from the network</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 bg-deepspace rounded-l-lg w-full focus:outline-none focus:ring-2 focus:ring-mycelium">
+                        <button class="px-4 bg-mycelium rounded-r-lg hover:bg-glow transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-mycelium/20 text-center">
+                <p class="text-gray-500">&copy; 2023 MYCELIA INTERACTIVE. All rights reserved. This site is a portal to expanded consciousness.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Create cosmic background
+        function createCosmicBackground() {
+            const container = document.getElementById('cosmicCanvas');
+            
+            // Create stars
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+                container.appendChild(star);
+            }
+            
+            // Create nebulae
+            for (let i = 0; i < 5; i++) {
+                const nebula = document.createElement('div');
+                nebula.classList.add('nebula');
+                nebula.style.width = `${Math.random() * 400 + 200}px`;
+                nebula.style.height = `${Math.random() * 300 + 150}px`;
+                nebula.style.left = `${Math.random() * 100}%`;
+                nebula.style.top = `${Math.random() * 100}%`;
+                nebula.style.background = `radial-gradient(circle, 
+                    hsla(${Math.random() * 60 + 250}, 80%, 60%, 0.2), 
+                    hsla(${Math.random() * 60 + 250}, 80%, 40%, 0))`;
+                container.appendChild(nebula);
+            }
+            
+            // Create mycelium network
+            createMyceliumNetwork();
+        }
+        
+        // Create mycelium network
+        function createMyceliumNetwork() {
+            const container = document.getElementById('cosmicCanvas');
+            const nodeCount = 15;
+            const nodes = [];
+            
+            // Create nodes
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.classList.add('mycelium-node');
+                const size = Math.random() * 20 + 10;
+                node.style.width = `${size}px`;
+                node.style.height = `${size}px`;
+                
+                // Position nodes with more near the center
+                let left, top;
+                if (i < 4) {
+                    // Center nodes
+                    left = 50 + (Math.random() - 0.5) * 20;
+                    top = 50 + (Math.random() - 0.5) * 20;
+                } else {
+                    // Outer nodes
+                    left = 20 + Math.random() * 60;
+                    top = 20 + Math.random() * 60;
+                }
+                
+                node.style.left = `${left}%`;
+                node.style.top = `${top}%`;
+                node.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(node);
+                nodes.push({element: node, x: left, y: top});
+            }
+            
+            // Create connections between nodes
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    // Only connect some nodes
+                    if (Math.random() > 0.7) continue;
+                    
+                    const nodeA = nodes[i];
+                    const nodeB = nodes[j];
+                    
+                    // Calculate distance
+                    const dx = nodeB.x - nodeA.x;
+                    const dy = nodeB.y - nodeA.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // Only connect if within certain distance
+                    if (distance < 30) {
+                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                        const connection = document.createElement('div');
+                        connection.classList.add('mycelium-connection');
+                        connection.style.width = `${distance}%`;
+                        connection.style.left = `${nodeA.x}%`;
+                        connection.style.top = `${nodeA.y}%`;
+                        connection.style.transform = `rotate(${angle}deg)`;
+                        connection.style.opacity = 0.3 + Math.random() * 0.4;
+                        container.appendChild(connection);
+                    }
+                }
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createCosmicBackground();
+            
+            // Add hover effect to podcast cards
+            const cards = document.querySelectorAll('.podcast-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-10px)';
+                    card.style.boxShadow = '0 20px 30px rgba(138, 79, 255, 0.3)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = '';
+                });
+            });
+            
+            // Add click effect to interactive items
+            const interactiveItems = document.querySelectorAll('.interactive-item');
+            interactiveItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    item.querySelector('.interactive-item-inner').style.transform = 'rotateY(180deg)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
