@@ -1,0 +1,19 @@
+# Development Log: Mycelia Interactive™
+
+**Mycelia Interactive** © 2026 — Developed by J.W.
+
+---
+
+## ENTRY #2: Project Foundation & Initial Architecture
+
+**Date:** January 29, 2026  
+**Time:** 7:04pm
+**Phase:** 1.3 Completed  
+**Status:** set up basic web page structure.
+
+---
+
+1. added glitchtext.tsx
+2. added NetworkBg.tsx
+3. added page.tsx
+---
