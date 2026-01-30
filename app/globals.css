@@ -1,26 +1,394 @@
 @import "tailwindcss";
 
+/* ============================================
+   TAILWIND V4 THEME CONFIGURATION
+   Replaces tailwind.config.ts
+   ============================================ */
+
+@theme {
+  /* Hero Section Colors */
+  --color-hero-bg-dark: #1a0b2e;
+  --color-hero-bg-default: #2d1b4e;
+  --color-hero-bg-light: #3d2b5e;
+  
+  --color-hero-magenta-50: #ffe5f8;
+  --color-hero-magenta-100: #ffccf1;
+  --color-hero-magenta-200: #ff99e3;
+  --color-hero-magenta-300: #ff66d5;
+  --color-hero-magenta-400: #ff33c7;
+  --color-hero-magenta-500: #FF10F0;
+  --color-hero-magenta-600: #E535AB;
+  --color-hero-magenta-700: #cc0dd9;
+  --color-hero-magenta-800: #990aa3;
+  --color-hero-magenta-900: #66076d;
+  
+  --color-hero-cyan-50: #e5ffff;
+  --color-hero-cyan-100: #ccffff;
+  --color-hero-cyan-200: #99ffff;
+  --color-hero-cyan-300: #66ffff;
+  --color-hero-cyan-400: #33ffff;
+  --color-hero-cyan-500: #00F5FF;
+  --color-hero-cyan-600: #4DFFFF;
+  --color-hero-cyan-700: #00c2cc;
+  --color-hero-cyan-800: #009199;
+  --color-hero-cyan-900: #006166;
+  
+  --color-hero-neutral-darkest: #0a0a0a;
+  --color-hero-neutral-dark: #1a1a1a;
+  --color-hero-neutral-default: #2a2a3a;
+  --color-hero-neutral-light: #3a3a4a;
+  --color-hero-neutral-lighter: #4a4a5a;
+  
+  /* Brand Colors (Logo Reference) */
+  --color-brand-teal: #00CED1;
+  --color-brand-teal-light: #40E0E0;
+  --color-brand-teal-dark: #00A8AA;
+  --color-brand-gold: #FFB84D;
+  --color-brand-gold-light: #FFD084;
+  --color-brand-gold-dark: #E69A2E;
+  
+  /* Custom Animations */
+  --animate-split-left: split-left 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-split-right: split-right 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-glitch-1: glitch1 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  --animate-glitch-2: glitch2 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  --animate-glitch-skew: glitch-skew 1s ease-in-out infinite;
+  --animate-fade-in: fade-in 0.8s ease-out forwards;
+  --animate-fade-in-up: fade-in-up 0.8s ease-out forwards;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   CSS VARIABLES & CUSTOM PROPERTIES
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Hero Section Colors */
+  --hero-bg-dark: #1a0b2e;
+  --hero-bg-default: #2d1b4e;
+  --hero-bg-light: #3d2b5e;
+  
+  --hero-magenta-primary: #FF10F0;
+  --hero-magenta-secondary: #E535AB;
+  
+  --hero-cyan-primary: #00F5FF;
+  --hero-cyan-secondary: #4DFFFF;
+  
+  --hero-neutral-darkest: #0a0a0a;
+  --hero-neutral-dark: #1a1a1a;
+  --hero-neutral-default: #2a2a3a;
+  
+  --hero-text-primary: #FFFFFF;
+  --hero-text-secondary: rgba(255, 255, 255, 0.8);
+  
+  /* Brand Colors (Logo Reference) */
+  --brand-teal: #00CED1;
+  --brand-gold: #FFB84D;
+  
+  /* Typography */
+  --font-sans: var(--font-geist-sans, system-ui, sans-serif);
+  --font-mono: var(--font-geist-mono, monospace);
+  
+  /* Spacing & Layout */
+  --content-max-width: 1400px;
+  --hero-min-height: 100vh;
+  
+  /* Animation Timing */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.4s;
+  --transition-slow: 0.6s;
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  
+  /* Z-index Layers */
+  --z-background: -1;
+  --z-content: 1;
+  --z-overlay: 10;
+  --z-modal: 100;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
+@keyframes split-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes split-right {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(25%); }
+}
+
+@keyframes glitch1 {
+  0%, 100% {
+    transform: translate(0);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    opacity: 0.8;
+  }
+  40% {
+    transform: translate(-2px, -2px);
+    opacity: 0.9;
+  }
+  60% {
+    transform: translate(2px, 2px);
+    opacity: 0.8;
+  }
+  80% {
+    transform: translate(2px, -2px);
+    opacity: 0.9;
   }
 }
 
+@keyframes glitch2 {
+  0%, 100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  33% {
+    transform: translate(4px, 0);
+    filter: hue-rotate(90deg);
+  }
+  66% {
+    transform: translate(-4px, 0);
+    filter: hue-rotate(180deg);
+  }
+}
+
+@keyframes glitch-skew {
+  0%, 100% { transform: skew(0deg, 0deg); }
+  25% { transform: skew(2deg, 1deg); }
+  50% { transform: skew(-2deg, -1deg); }
+  75% { transform: skew(1deg, -2deg); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glitch-anim-1 {
+  0% { clip: rect(10px, 9999px, 31px, 0); }
+  10% { clip: rect(85px, 9999px, 70px, 0); }
+  20% { clip: rect(40px, 9999px, 100px, 0); }
+  30% { clip: rect(65px, 9999px, 45px, 0); }
+  40% { clip: rect(15px, 9999px, 95px, 0); }
+  50% { clip: rect(55px, 9999px, 25px, 0); }
+  60% { clip: rect(90px, 9999px, 60px, 0); }
+  70% { clip: rect(20px, 9999px, 80px, 0); }
+  80% { clip: rect(75px, 9999px, 35px, 0); }
+  90% { clip: rect(30px, 9999px, 90px, 0); }
+  100% { clip: rect(50px, 9999px, 50px, 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  10% { clip: rect(25px, 9999px, 70px, 0); }
+  20% { clip: rect(80px, 9999px, 40px, 0); }
+  30% { clip: rect(15px, 9999px, 85px, 0); }
+  40% { clip: rect(95px, 9999px, 20px, 0); }
+  50% { clip: rect(35px, 9999px, 75px, 0); }
+  60% { clip: rect(60px, 9999px, 30px, 0); }
+  70% { clip: rect(90px, 9999px, 55px, 0); }
+  80% { clip: rect(45px, 9999px, 65px, 0); }
+  90% { clip: rect(70px, 9999px, 10px, 0); }
+  100% { clip: rect(5px, 9999px, 95px, 0); }
+}
+
+@keyframes vhs-flicker {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+/* ============================================
+   GLOBAL RESETS & BASE STYLES
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--hero-bg-dark);
+  color: var(--hero-text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   ACCESSIBILITY: REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   CUSTOM ANIMATION CLASSES
+   ============================================ */
+
+.glitch-effect {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-effect::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--hero-magenta-primary);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim-1 5s infinite linear alternate-reverse;
+}
+
+.glitch-effect::after {
+  left: -2px;
+  text-shadow: -2px 0 var(--hero-cyan-primary);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim-2 5s infinite linear alternate-reverse;
+}
+
+.vhs-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.vhs-effect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: var(--z-overlay);
+  animation: vhs-flicker 0.1s infinite;
+}
+
+.split-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.split-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  transition: transform var(--transition-slow) var(--ease-smooth);
+}
+
+.split-panel-left {
+  left: 0;
+  background: linear-gradient(135deg, var(--hero-bg-dark), var(--hero-bg-default));
+}
+
+.split-panel-right {
+  right: 0;
+  background: linear-gradient(135deg, var(--hero-bg-default), var(--hero-bg-light));
+}
+
+.split-container:hover .split-panel-left {
+  transform: translateX(-5%);
+}
+
+.split-container:hover .split-panel-right {
+  transform: translateX(5%);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.hero-gradient {
+  background: linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 50%, #3d2b5e 100%);
+}
+
+.text-gradient-magenta {
+  background: linear-gradient(90deg, var(--hero-magenta-primary), var(--hero-magenta-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(90deg, var(--hero-cyan-primary), var(--hero-cyan-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-magenta {
+  box-shadow: 0 0 20px rgba(255, 16, 240, 0.5),
+              0 0 40px rgba(255, 16, 240, 0.3);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.5),
+              0 0 40px rgba(0, 245, 255, 0.3);
 }

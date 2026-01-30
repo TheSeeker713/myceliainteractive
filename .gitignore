@@ -20,6 +20,14 @@
 # production
 /build
 
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# VSCode workspace
+.vscode/
+*.code-workspace
+
 # misc
 .DS_Store
 *.pem
