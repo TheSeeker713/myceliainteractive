@@ -3,7 +3,7 @@
  * TO BE IMPLEMENTED IN PHASE 5
  */
 
-import { NetworkBgProps } from "./types";
+import { NetworkBgProps } from "./Hero/types";
 
 export default function NetworkBg(props: NetworkBgProps) {
   return (

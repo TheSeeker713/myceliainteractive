@@ -3,7 +3,7 @@
  * TO BE IMPLEMENTED IN PHASE 4
  */
 
-import { GlitchTextProps } from "./types";
+import { GlitchTextProps } from "./Hero/types";
 
 export default function GlitchText(props: GlitchTextProps) {
   return (
