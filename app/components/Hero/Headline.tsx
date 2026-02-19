@@ -25,19 +25,19 @@ export default function Headline({ text, className }: HeadlineProps) {
     <h1
       className={cn(
         // Typography
-        "text-5xl sm:text-6xl lg:text-7xl xl:text-8xl",
+        "text-4xl sm:text-5xl lg:text-6xl xl:text-7xl",
         "font-bold",
-        "tracking-tighter",
-        "leading-tight",
+        "tracking-tight",
+        "leading-[1.05]",
         
         // Color
-        "text-white",
+        "text-transparent bg-clip-text bg-gradient-to-r from-white via-hero-cyan-200 to-hero-magenta-200",
         
         // Spacing
-        "mb-6 sm:mb-8 lg:mb-10",
+        "mb-4 sm:mb-6 lg:mb-8",
         
         // Effects
-        "drop-shadow-lg",
+        "drop-shadow-[0_0_18px_rgba(92,222,255,0.28)]",
         
         // Custom classes
         className

@@ -3,9 +3,7 @@
  * TO BE IMPLEMENTED IN PHASE 5
  */
 
-import { NetworkBgProps } from "./Hero/types";
-
-export default function NetworkBg(props: NetworkBgProps) {
+export default function NetworkBg() {
   return (
     <div>
       <p>NetworkBg component - Phase 5</p>

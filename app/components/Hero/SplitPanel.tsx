@@ -47,7 +47,7 @@ export default function SplitPanel({
         // Base layout
         "relative w-full h-full",
         "flex items-center justify-center",
-        "p-6 sm:p-8 lg:p-10",
+        "p-5 sm:p-7 lg:p-8",
         
         // Hover expansion effect
         "transition-all duration-500 ease-out",
@@ -57,20 +57,20 @@ export default function SplitPanel({
         "bg-gradient-to-r",
         isLeft
           ? cn(
-              "from-hero-bg-dark/80 to-transparent",
-              isHovered && "from-hero-magenta-600/20"
+              "from-hero-bg-dark/90 to-transparent",
+              isHovered && "from-hero-magenta-500/25"
             )
           : cn(
-              "from-transparent to-hero-bg-dark/80",
-              isHovered && "to-hero-cyan-600/20"
+              "from-transparent to-hero-bg-dark/90",
+              isHovered && "to-hero-cyan-500/25"
             ),
         
         // Glow effect on hover
-        isHovered && isLeft && "shadow-lg shadow-hero-magenta-600/30",
-        isHovered && !isLeft && "shadow-lg shadow-hero-cyan-600/30",
+        isHovered && isLeft && "shadow-[0_0_28px_rgba(139,44,245,0.3)]",
+        isHovered && !isLeft && "shadow-[0_0_28px_rgba(0,199,255,0.3)]",
         
         // Active state from scroll
-        isActive && "ring-1 ring-inset ring-hero-magenta-500/50",
+        isActive && "ring-1 ring-inset ring-hero-cyan-300/50",
         
         // Custom classes
         className
@@ -81,12 +81,12 @@ export default function SplitPanel({
       aria-label={`${isLeft ? "Left" : "Right"} panel - ${isLeft ? "Choice A" : "Choice B"}`}
     >
       {/* Content container */}
-      <div className="flex flex-col items-center justify-center gap-4 text-center max-w-sm">
+      <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 text-center max-w-sm">
         {/* Accent color indicator */}
         <div
           className={cn(
             "w-2 h-8 rounded-full transition-all duration-300",
-            isLeft ? "bg-hero-magenta-500" : "bg-hero-cyan-500",
+            isLeft ? "bg-hero-magenta-400" : "bg-hero-cyan-400",
             isHovered && "h-12"
           )}
           aria-hidden="true"

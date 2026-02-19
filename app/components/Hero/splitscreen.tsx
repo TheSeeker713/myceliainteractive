@@ -47,20 +47,11 @@ export default function SplitScreen({
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredSide, setHoveredSide] = useState<"left" | "right" | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  // Check for prefers-reduced-motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches);
-    };
-    
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
+  const hasReducedMotion = () => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  };
 
   // Handle scroll trigger for animations
   useEffect(() => {
@@ -80,7 +71,7 @@ export default function SplitScreen({
   }, [enableScroll]);
 
   const handleMouseEnter = (side: "left" | "right") => {
-    if (!enableHover || prefersReducedMotion) return;
+    if (!enableHover || hasReducedMotion()) return;
     setIsHovered(true);
     setHoveredSide(side);
   };
@@ -100,14 +91,14 @@ export default function SplitScreen({
         "grid grid-cols-1 md:grid-cols-2 gap-0",
         
         // Responsive height
-        "min-h-96 md:min-h-80",
+        "min-h-[22rem] md:min-h-[20rem]",
         
         // Overflow handling
-        "overflow-hidden rounded-lg",
+        "overflow-hidden rounded-xl",
         
         // Border and styling
-        "border border-hero-magenta-500/30",
-        "bg-gradient-to-r from-hero-bg-dark/50 to-hero-bg-default/50",
+        "border border-hero-cyan-300/30",
+        "bg-gradient-to-r from-hero-bg-dark/70 via-hero-bg-default/70 to-hero-bg-dark/70",
         
         // Custom classes
         className
@@ -121,7 +112,7 @@ export default function SplitScreen({
       <SplitPanel
         side="left"
         isHovered={hoveredSide === "left"}
-        isActive={isScrolled && !prefersReducedMotion}
+        isActive={isScrolled && !hasReducedMotion()}
         onMouseEnter={() => handleMouseEnter("left")}
         onMouseLeave={handleMouseLeave}
       >
@@ -135,7 +126,7 @@ export default function SplitScreen({
           "transition-all duration-500 ease-out",
           "origin-center",
           isHovered && hoveredSide ? "opacity-100 scale-y-100" : "opacity-40 scale-y-75",
-          "bg-gradient-to-b from-transparent via-hero-magenta-500 to-transparent",
+          "bg-gradient-to-b from-transparent via-hero-cyan-300 to-transparent",
           "pointer-events-none",
           "hidden md:block"
         )}
@@ -146,7 +137,7 @@ export default function SplitScreen({
       <SplitPanel
         side="right"
         isHovered={hoveredSide === "right"}
-        isActive={isScrolled && !prefersReducedMotion}
+        isActive={isScrolled && !hasReducedMotion()}
         onMouseEnter={() => handleMouseEnter("right")}
         onMouseLeave={handleMouseLeave}
       >

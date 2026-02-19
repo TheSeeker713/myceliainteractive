@@ -34,13 +34,13 @@ export default function CTAButton({
   const variantStyles = {
     primary: cn(
       // Base
-      "bg-transparent",
-      "border-2 border-hero-magenta-500",
+      "bg-gradient-to-r from-hero-magenta-600/70 to-hero-magenta-500/70",
+      "border border-hero-magenta-300/70",
       "text-white",
       
       // Hover & Focus
-      "hover:bg-hero-magenta-600 hover:border-hero-magenta-400",
-      "hover:shadow-lg hover:shadow-hero-magenta-600/50",
+      "hover:from-hero-magenta-500 hover:to-hero-magenta-400 hover:border-hero-magenta-200",
+      "hover:shadow-[0_0_22px_rgba(139,44,245,0.5)]",
       "focus:outline-none focus:ring-2 focus:ring-hero-magenta-500 focus:ring-offset-2 focus:ring-offset-hero-bg-dark",
       
       // Transition
@@ -48,13 +48,14 @@ export default function CTAButton({
     ),
     secondary: cn(
       // Base
-      "bg-transparent",
-      "border-2 border-hero-cyan-500",
+      "bg-hero-bg-default/40",
+      "backdrop-blur-sm",
+      "border border-hero-cyan-300/70",
       "text-white",
       
       // Hover & Focus
-      "hover:bg-hero-cyan-600 hover:border-hero-cyan-400",
-      "hover:shadow-lg hover:shadow-hero-cyan-600/50",
+      "hover:bg-hero-cyan-500/20 hover:border-hero-cyan-200",
+      "hover:shadow-[0_0_22px_rgba(0,199,255,0.45)]",
       "focus:outline-none focus:ring-2 focus:ring-hero-cyan-500 focus:ring-offset-2 focus:ring-offset-hero-bg-dark",
       
       // Transition
@@ -67,14 +68,15 @@ export default function CTAButton({
       onClick={onClick}
       className={cn(
         // Base layout
-        "px-8 sm:px-10 lg:px-12",
-        "py-3 sm:py-4 lg:py-4",
+        "px-6 sm:px-8 lg:px-10",
+        "py-3 sm:py-3.5",
+        "min-h-11",
+        "rounded-md",
         
         // Typography
-        "text-base sm:text-lg",
+        "text-sm sm:text-base",
         "font-semibold",
-        "uppercase",
-        "tracking-widest",
+        "uppercase tracking-[0.14em]",
         
         // State styles
         variantStyles[variant as keyof typeof variantStyles],

@@ -27,10 +27,10 @@ export default function HeroContent({
     <div
       className={cn(
         // Grid layout
-        "grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12",
+        "grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10",
         
         // Alignment
-        "items-center justify-start",
+        "items-center",
         
         // Content area width
         "w-full",
@@ -39,18 +39,7 @@ export default function HeroContent({
         className
       )}
     >
-      {/* Left column - Main content (headline, subheadline, CTAs) */}
-      <div className="flex flex-col justify-center items-start order-2 lg:order-1">
-        {children}
-      </div>
-      
-      {/* Right column - Visual element placeholder (for split-screen in Phase 3) */}
-      <div 
-        className="hidden lg:flex order-1 lg:order-2 items-center justify-center h-96 rounded-lg border border-hero-magenta-500/20 bg-gradient-to-br from-hero-magenta-500/5 to-hero-cyan-500/5"
-        aria-hidden="true"
-      >
-        <p className="text-hero-magenta-400/60 text-sm">Visual content area - Phase 3</p>
-      </div>
+      {children}
     </div>
   );
 }

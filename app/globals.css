@@ -7,31 +7,31 @@
 
 @theme {
   /* Hero Section Colors */
-  --color-hero-bg-dark: #1a0b2e;
-  --color-hero-bg-default: #2d1b4e;
-  --color-hero-bg-light: #3d2b5e;
+  --color-hero-bg-dark: #08041a;
+  --color-hero-bg-default: #140a36;
+  --color-hero-bg-light: #261157;
   
-  --color-hero-magenta-50: #ffe5f8;
-  --color-hero-magenta-100: #ffccf1;
-  --color-hero-magenta-200: #ff99e3;
-  --color-hero-magenta-300: #ff66d5;
-  --color-hero-magenta-400: #ff33c7;
-  --color-hero-magenta-500: #FF10F0;
-  --color-hero-magenta-600: #E535AB;
-  --color-hero-magenta-700: #cc0dd9;
-  --color-hero-magenta-800: #990aa3;
-  --color-hero-magenta-900: #66076d;
+  --color-hero-magenta-50: #f5ecff;
+  --color-hero-magenta-100: #ead6ff;
+  --color-hero-magenta-200: #d8adff;
+  --color-hero-magenta-300: #bf7cff;
+  --color-hero-magenta-400: #a24fff;
+  --color-hero-magenta-500: #8b2cf5;
+  --color-hero-magenta-600: #761edb;
+  --color-hero-magenta-700: #5f18af;
+  --color-hero-magenta-800: #45127f;
+  --color-hero-magenta-900: #2c0c4f;
   
-  --color-hero-cyan-50: #e5ffff;
-  --color-hero-cyan-100: #ccffff;
-  --color-hero-cyan-200: #99ffff;
-  --color-hero-cyan-300: #66ffff;
-  --color-hero-cyan-400: #33ffff;
-  --color-hero-cyan-500: #00F5FF;
-  --color-hero-cyan-600: #4DFFFF;
-  --color-hero-cyan-700: #00c2cc;
-  --color-hero-cyan-800: #009199;
-  --color-hero-cyan-900: #006166;
+  --color-hero-cyan-50: #e8feff;
+  --color-hero-cyan-100: #bffbff;
+  --color-hero-cyan-200: #86f5ff;
+  --color-hero-cyan-300: #4beeff;
+  --color-hero-cyan-400: #1adfff;
+  --color-hero-cyan-500: #00c7ff;
+  --color-hero-cyan-600: #00a3db;
+  --color-hero-cyan-700: #007da8;
+  --color-hero-cyan-800: #005a78;
+  --color-hero-cyan-900: #003949;
   
   --color-hero-neutral-darkest: #0a0a0a;
   --color-hero-neutral-dark: #1a1a1a;
@@ -40,12 +40,12 @@
   --color-hero-neutral-lighter: #4a4a5a;
   
   /* Brand Colors (Logo Reference) */
-  --color-brand-teal: #00CED1;
-  --color-brand-teal-light: #40E0E0;
-  --color-brand-teal-dark: #00A8AA;
-  --color-brand-gold: #FFB84D;
-  --color-brand-gold-light: #FFD084;
-  --color-brand-gold-dark: #E69A2E;
+  --color-brand-teal: #32dfff;
+  --color-brand-teal-light: #82f3ff;
+  --color-brand-teal-dark: #00a1cd;
+  --color-brand-gold: #c6b4ff;
+  --color-brand-gold-light: #ece5ff;
+  --color-brand-gold-dark: #8d78d1;
   
   /* Custom Animations */
   --animate-split-left: split-left 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -65,26 +65,26 @@
 
 :root {
   /* Hero Section Colors */
-  --hero-bg-dark: #1a0b2e;
-  --hero-bg-default: #2d1b4e;
-  --hero-bg-light: #3d2b5e;
+  --hero-bg-dark: #08041a;
+  --hero-bg-default: #140a36;
+  --hero-bg-light: #261157;
   
-  --hero-magenta-primary: #FF10F0;
-  --hero-magenta-secondary: #E535AB;
+  --hero-magenta-primary: #8b2cf5;
+  --hero-magenta-secondary: #bf7cff;
   
-  --hero-cyan-primary: #00F5FF;
-  --hero-cyan-secondary: #4DFFFF;
+  --hero-cyan-primary: #00c7ff;
+  --hero-cyan-secondary: #4beeff;
   
   --hero-neutral-darkest: #0a0a0a;
   --hero-neutral-dark: #1a1a1a;
   --hero-neutral-default: #2a2a3a;
   
   --hero-text-primary: #FFFFFF;
-  --hero-text-secondary: rgba(255, 255, 255, 0.8);
+  --hero-text-secondary: rgba(235, 245, 255, 0.88);
   
   /* Brand Colors (Logo Reference) */
-  --brand-teal: #00CED1;
-  --brand-gold: #FFB84D;
+  --brand-teal: #32dfff;
+  --brand-gold: #c6b4ff;
   
   /* Typography */
   --font-sans: var(--font-geist-sans, system-ui, sans-serif);
@@ -243,10 +243,11 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--hero-bg-dark);
+  background: radial-gradient(circle at 20% 20%, #261157 0%, #140a36 40%, #08041a 100%);
   color: var(--hero-text-primary);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -254,6 +255,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  min-width: 320px;
 }
 
 /* ============================================
@@ -366,7 +368,7 @@ body {
    ============================================ */
 
 .hero-gradient {
-  background: linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 50%, #3d2b5e 100%);
+  background: radial-gradient(circle at 20% 30%, #2c1462 0%, #140a36 45%, #08041a 100%);
 }
 
 .text-gradient-magenta {
@@ -384,11 +386,11 @@ body {
 }
 
 .glow-magenta {
-  box-shadow: 0 0 20px rgba(255, 16, 240, 0.5),
-              0 0 40px rgba(255, 16, 240, 0.3);
+  box-shadow: 0 0 20px rgba(139, 44, 245, 0.45),
+              0 0 40px rgba(139, 44, 245, 0.25);
 }
 
 .glow-cyan {
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.5),
-              0 0 40px rgba(0, 245, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 199, 255, 0.45),
+              0 0 40px rgba(0, 199, 255, 0.25);
 }

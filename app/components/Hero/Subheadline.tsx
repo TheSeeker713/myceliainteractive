@@ -25,16 +25,16 @@ export default function Subheadline({ text, className }: SubheadlineProps) {
     <p
       className={cn(
         // Typography
-        "text-lg sm:text-xl lg:text-2xl",
+        "text-base sm:text-lg lg:text-xl",
         "font-normal",
         "tracking-normal",
         "leading-relaxed",
         
         // Color
-        "text-gray-200",
+        "text-cyan-50/90",
         
         // Spacing
-        "mb-8 sm:mb-10 lg:mb-12",
+        "mb-6 sm:mb-8 lg:mb-10",
         
         // Max width for readability
         "max-w-2xl",
