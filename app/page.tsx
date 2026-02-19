@@ -18,7 +18,7 @@ export default function Home() {
           <div className="w-full lg:col-span-5">
             <div className="relative overflow-hidden rounded-xl border border-hero-cyan-300/30 bg-hero-bg-default/30 p-2 shadow-[0_0_30px_rgba(0,199,255,0.18)]">
               <Image
-                src="/assets/images/Mycelia%20Interactive%20Banner.png"
+                src="/assets/images/Mycelia Interactive Banner.png"
                 alt="Mycelia Interactive cyber-themed banner"
                 width={1366}
                 height={768}
