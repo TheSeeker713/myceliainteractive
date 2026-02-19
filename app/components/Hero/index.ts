@@ -12,9 +12,12 @@ export { default as Headline } from "./Headline";
 export { default as Subheadline } from "./Subheadline";
 export { default as CTAButton } from "./CTAButton";
 
-// Sub-components (to be created in next phases)
+// Split-screen components
 export { default as SplitScreen } from "./splitscreen";
-// GlitchText and NetworkBg to be added in Phase 3 & 5
+export { default as SplitPanel } from "./SplitPanel";
+
+// Sub-components (to be created in future phases)
+// GlitchText and NetworkBg to be added in Phase 4 & 5
 
 // Types and interfaces
 export * from "./types";
