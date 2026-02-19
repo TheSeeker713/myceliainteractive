@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:cf": "next build",
+    "deploy": "wrangler deploy --assets=out",
+    "deploy:dry-run": "wrangler deploy --assets=out --dry-run",
     "start": "next start",
     "lint": "eslint"
   },
@@ -25,6 +28,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.67.0"
   }
 }
