@@ -16,6 +16,14 @@ export interface HeroProps {
 }
 
 /**
+ * Hero content wrapper props
+ */
+export interface HeroContentProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+/**
  * Split-screen component props
  */
 export interface SplitScreenProps {
@@ -43,6 +51,40 @@ export interface SplitPanelProps {
   side: PanelSide;
   children: React.ReactNode;
   isHovered?: boolean;
+  className?: string;
+}
+
+/**
+ * Headline component props
+ */
+export interface HeadlineProps {
+  /** Headline text content */
+  text: string;
+  /** Custom class names */
+  className?: string;
+}
+
+/**
+ * Subheadline component props
+ */
+export interface SubheadlineProps {
+  /** Subheadline text content */
+  text: string;
+  /** Custom class names */
+  className?: string;
+}
+
+/**
+ * CTA Button component props
+ */
+export interface CTAButtonProps {
+  /** Button text label */
+  text: string;
+  /** Click handler callback */
+  onClick?: () => void;
+  /** Button style variant */
+  variant?: "primary" | "secondary";
+  /** Custom class names */
   className?: string;
 }
 
