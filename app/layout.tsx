@@ -60,17 +60,33 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-hero-bg-default text-white`}
       >
-        <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-b border-hero-cyan-300/30 p-4">
-          <div className="max-w-7xl mx-auto flex items-center justify-between text-white font-bold">
-            <Image
-              src="/assets/images/Mycelia Interactive Banner.png"
-              alt="Mycelia Interactive"
-              width={180}
-              height={50}
-              className="h-10 w-auto object-contain rounded"
-            />
+        <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#08041a]/90 border-b border-hero-cyan-500/20 py-6 px-4 shadow-[0_4px_30px_rgba(0,199,255,0.15)] transition-all">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex-shrink-0">
+              <Image
+                src="/assets/images/Mycelia Interactive Banner.png"
+                alt="Mycelia Interactive"
+                width={220}
+                height={60}
+                className="h-12 w-auto object-contain rounded drop-shadow-[0_0_10px_rgba(139,44,245,0.3)] transition-transform hover:scale-105"
+              />
+            </div>
+            <div className="hidden sm:flex gap-6 items-center">
+              <a
+                href="#liminal-sin"
+                className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-hero-magenta-600 to-hero-cyan-600 font-semibold text-white hover:from-hero-magenta-500 hover:to-hero-cyan-500 hover:shadow-[0_0_20px_rgba(139,44,245,0.5)] transition-all duration-300"
+              >
+                Play Liminal Sin Demo
+              </a>
+              <a
+                href="#about"
+                className="px-6 py-2.5 rounded-lg bg-hero-bg-light/50 border border-hero-cyan-400/30 text-cyan-50 font-medium hover:bg-hero-cyan-900/40 hover:border-hero-cyan-300 hover:text-white transition-all duration-300"
+              >
+                Learn More
+              </a>
+            </div>
           </div>
         </header>
 
