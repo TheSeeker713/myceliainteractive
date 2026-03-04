@@ -36,7 +36,7 @@ export default function Home() {
             </Link>
 
             {/* Right Card: Liminal Sin */}
-            <Link href="/liminal-sin" className="w-full group/game block">
+            <Link href="/ls" className="w-full group/game block">
               <div className="relative overflow-hidden rounded-2xl border border-hero-cyan-400/30 shadow-[0_0_50px_rgba(0,199,255,0.2)] transition-all duration-700 hover:shadow-[0_0_80px_rgba(0,199,255,0.4)] hover:-translate-y-2 flex flex-col justify-center">
                 <Image
                   src="/assets/images/Liminal_Sin_Title.jpg"
