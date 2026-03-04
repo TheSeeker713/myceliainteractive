@@ -73,7 +73,7 @@ export default function LiminalSinLanding() {
         `}</style>
 
       {/* ── NAVBAR ─────────────────────────────────────────── */}
-      <nav className="fixed top-0 z-50 w-full flex items-center justify-between px-8 py-6 bg-black/70 backdrop-blur-md border-b border-purple-900/50">
+      <nav className="fixed top-0 z-50 w-full flex items-center justify-between px-4 sm:px-8 py-4 sm:py-6 bg-black/70 backdrop-blur-md border-b border-purple-900/50">
         {/* LEFT: Logo */}
         <Link href="/" aria-label="Return to home">
           <Image
@@ -81,26 +81,29 @@ export default function LiminalSinLanding() {
             alt="Mycelia Interactive"
             width={360}
             height={100}
-            className="h-14 w-auto object-contain rounded drop-shadow-[0_0_10px_rgba(139,44,245,0.3)] transition-transform hover:scale-105"
+            className="h-10 sm:h-14 w-auto object-contain rounded drop-shadow-[0_0_10px_rgba(139,44,245,0.3)] transition-transform hover:scale-105"
           />
         </Link>
         {/* RIGHT: Links + Buttons */}
-        <div className="flex items-center gap-8 flex-wrap justify-end">
+        <div className="flex items-center gap-3 sm:gap-6 lg:gap-8 flex-wrap justify-end">
+          {/* Roadmap — hidden on xs, visible from sm up */}
           <a
             href="/roadmap/roadmap.html"
-            className="uppercase tracking-[0.125em] text-white hover:text-purple-400 transition-colors text-sm font-medium"
+            className="hidden sm:inline uppercase tracking-[0.125em] text-white hover:text-purple-400 transition-colors text-sm font-medium"
           >
             Roadmap
           </a>
+          {/* Play Demo — always visible */}
           <a
             href="/ls"
-            className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-hero-magenta-600 to-hero-cyan-600 font-semibold text-white hover:from-hero-magenta-500 hover:to-hero-cyan-500 hover:shadow-[0_0_20px_rgba(139,44,245,0.5)] transition-all duration-300"
+            className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-gradient-to-r from-hero-magenta-600 to-hero-cyan-600 font-semibold text-white text-xs sm:text-sm hover:from-hero-magenta-500 hover:to-hero-cyan-500 hover:shadow-[0_0_20px_rgba(139,44,245,0.5)] transition-all duration-300 whitespace-nowrap"
           >
             Play Liminal Sin Demo
           </a>
+          {/* Learn More — hidden on xs */}
           <a
             href="/ls/lsr.html"
-            className="px-6 py-2.5 rounded-lg bg-hero-bg-light/50 border border-hero-cyan-400/30 text-cyan-50 font-medium hover:bg-hero-cyan-900/40 hover:border-hero-cyan-300 hover:text-white transition-all duration-300"
+            className="hidden sm:inline-flex px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-hero-bg-light/50 border border-hero-cyan-400/30 text-cyan-50 text-xs sm:text-sm font-medium hover:bg-hero-cyan-900/40 hover:border-hero-cyan-300 hover:text-white transition-all duration-300"
           >
             Learn More
           </a>
@@ -152,8 +155,8 @@ export default function LiminalSinLanding() {
         </div>
 
         {/* Tagline */}
-        <div className="absolute bottom-[12vh] left-1/2 -translate-x-1/2 z-10 whitespace-nowrap">
-          <p className="text-3xl font-light text-cyan-400 tracking-widest drop-shadow-[0_0_14px_rgba(0,199,255,0.7)]">
+        <div className="absolute bottom-[12vh] left-1/2 -translate-x-1/2 z-10 w-full px-4 text-center">
+          <p className="text-xl sm:text-2xl md:text-3xl font-light text-cyan-400 tracking-widest drop-shadow-[0_0_14px_rgba(0,199,255,0.7)]">
             Once you&apos;re in, will you ever get out?
           </p>
         </div>
@@ -161,9 +164,18 @@ export default function LiminalSinLanding() {
       </section>
       {/* ── END HERO ─────────────────────────────────────── */}
 
+      {/* ── DESKTOP DISCLAIMER ───────────────────────────── */}
+      <div className="w-full bg-[#0d0820] border-y border-purple-900/40 py-3 px-4 sm:px-8">
+        <p className="text-center text-xs sm:text-sm text-purple-300/80 tracking-wide">
+          <span className="font-semibold text-purple-400">⚠ Desktop Experience:</span>
+          {" "}LIMINAL SIN is designed for desktop browsers. Tablet support is currently in testing. Mobile play is not yet supported.
+        </p>
+      </div>
+      {/* ── END DESKTOP DISCLAIMER ─────────────────────────── */}
+
       {/* ── CONTENT SECTION ─────────────────────────────── */}
-      <section id="content" className="relative py-24 bg-[#050507]">
-        <div className="max-w-screen-2xl mx-auto px-8">
+      <section id="content" className="relative py-16 sm:py-24 bg-[#050507]">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-16 items-center">
 
             {/* LEFT COLUMN: text */}
@@ -210,9 +222,20 @@ export default function LiminalSinLanding() {
       {/* ── END CONTENT SECTION ─────────────────────────── */}
 
       {/* ── FOOTER ───────────────────────────────────────── */}
-      <footer className="w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 py-6 px-6 lg:py-8 lg:px-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-start text-cyan-50/70 text-sm">
-          &copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.
+      <footer className="w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 pt-8 pb-10 px-4 sm:px-8 lg:pt-10 lg:pb-14 lg:px-12">
+        <div className="max-w-7xl mx-auto space-y-4">
+          {/* Top row: copyright */}
+          <div className="flex items-center justify-start text-cyan-50/70 text-sm">
+            &copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.
+          </div>
+          {/* Bottom row: placeholder for future disclaimers, privacy link, etc. */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-cyan-50/40 border-t border-purple-900/30 pt-4">
+            <span>LIMINAL SIN&trade; is a work of interactive fiction. All characters and events are fictional.</span>
+            <span className="hidden sm:inline text-purple-900/60">|</span>
+            <a href="/privacy.html" className="hover:text-cyan-300 transition-colors">Privacy Policy</a>
+            <span className="hidden sm:inline text-purple-900/60">|</span>
+            <span className="text-purple-400/60">v0.1 — Early Access</span>
+          </div>
         </div>
       </footer>
       {/* ── END FOOTER ───────────────────────────────────── */}
