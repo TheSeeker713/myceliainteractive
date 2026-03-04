@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Mycelia Interactive | Interactive Cinema & Branching Narratives",
-  description: "Step into alternate realities. Experience interactive cinema where your choices shape the story. Full motion video meets branching narratives.",
+  description:
+    "Step into alternate realities. Experience interactive cinema where your choices shape the story. Full motion video meets branching narratives.",
   keywords: [
     "interactive cinema",
     "branching narratives",
@@ -31,13 +32,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://myceliainteractive.com",
     title: "Mycelia Interactive | Interactive Cinema",
-    description: "Experience interactive cinema where your choices shape the story.",
+    description:
+      "Experience interactive cinema where your choices shape the story.",
     siteName: "Mycelia Interactive",
   },
   twitter: {
     card: "summary_large_image",
     title: "Mycelia Interactive | Interactive Cinema",
-    description: "Experience interactive cinema where your choices shape the story.",
+    description:
+      "Experience interactive cinema where your choices shape the story.",
   },
 };
 
@@ -56,9 +59,22 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        {children}
+        <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-b border-hero-cyan-300/30 p-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between text-white font-bold">
+            Mycelia Interactive
+          </div>
+        </header>
+
+        <main className="flex-grow">{children}</main>
+
+        <footer className="sticky bottom-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 p-4 mt-auto">
+          <div className="max-w-7xl mx-auto flex items-center justify-center text-cyan-50/70 text-sm">
+            &copy; {new Date().getFullYear()} Mycelia Interactive. All rights
+            reserved.
+          </div>
+        </footer>
       </body>
     </html>
   );
