@@ -49,7 +49,17 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full justify-center">
+            <div className="mt-12 flex justify-center w-full relative overflow-hidden rounded-lg border border-hero-magenta-400/20 shadow-[0_0_20px_rgba(139,44,245,0.15)] group/game">
+              <Image
+                src="/assets/images/Liminal_Sin_Title.jpg"
+                alt="Liminal Sin Title"
+                width={800}
+                height={450}
+                className="w-full h-auto object-cover opacity-80 transition-opacity duration-500 group-hover/game:opacity-100"
+              />
+            </div>
+
+            <div className="mt-6 flex flex-col sm:flex-row gap-4 w-full justify-center">
               <CTAButton text="Play Liminal Sin Demo" variant="primary" />
               <CTAButton text="Learn More" variant="secondary" />
             </div>
