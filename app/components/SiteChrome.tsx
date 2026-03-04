@@ -63,8 +63,9 @@ export function SiteFooter() {
   }
   return (
     <footer className="site-gutter site-footer-py sticky bottom-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 mt-auto">
-      <div className="max-w-7xl mx-auto flex items-center justify-start text-cyan-50/70 text-sm">
-        &copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.
+      <div className="max-w-7xl mx-auto flex items-center justify-between text-cyan-50/70 text-sm">
+        <span>&copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.</span>
+        <a href="/ls/privacy.html" className="hover:text-cyan-300 transition-colors duration-200">Privacy Policy</a>
       </div>
     </footer>
   );
