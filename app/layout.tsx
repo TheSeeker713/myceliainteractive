@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Image from "next/image";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -63,7 +64,13 @@ export default function RootLayout({
       >
         <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-b border-hero-cyan-300/30 p-4">
           <div className="max-w-7xl mx-auto flex items-center justify-between text-white font-bold">
-            Mycelia Interactive
+            <Image
+              src="/assets/images/Mycelia Interactive Banner.png"
+              alt="Mycelia Interactive"
+              width={180}
+              height={50}
+              className="h-10 w-auto object-contain rounded"
+            />
           </div>
         </header>
 

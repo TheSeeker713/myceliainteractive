@@ -15,10 +15,6 @@ export default function Home() {
           <div className="w-full lg:col-span-7 flex flex-col items-start">
             <Headline text="Every Choice Creates a Universe" />
             <Subheadline text="Interactive cinema where your decisions shape reality. Step into branching narratives and experience the story your way." />
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
-              <CTAButton text="Enter Experience" variant="primary" />
-              <CTAButton text="Learn More" variant="secondary" />
-            </div>
           </div>
 
           <div className="w-full lg:col-span-5">
@@ -51,6 +47,11 @@ export default function Home() {
                   sizes="(max-width: 1024px) 100vw, 30vw"
                 />
               </div>
+            </div>
+
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full justify-center">
+              <CTAButton text="Play Liminal Sin Demo" variant="primary" />
+              <CTAButton text="Learn More" variant="secondary" />
             </div>
           </div>
         </div>
