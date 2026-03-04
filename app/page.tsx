@@ -41,9 +41,6 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex justify-center">
           <div className="w-full max-w-md">
             <div className="h-full rounded-xl border border-hero-magenta-300/30 bg-hero-bg-dark/60 p-5 sm:p-6 backdrop-blur-sm shadow-[0_0_28px_rgba(139,44,245,0.18)]">
-              <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">
-                Brand Identity
-              </h3>
               <div className="relative overflow-hidden rounded-lg border border-hero-cyan-300/35 bg-hero-bg-default/30 p-2">
                 <Image
                   src="/assets/images/Mycelia_Interactive_Logo.jpg"
@@ -54,10 +51,6 @@ export default function Home() {
                   sizes="(max-width: 1024px) 100vw, 30vw"
                 />
               </div>
-              <p className="mt-4 text-cyan-50/80 text-sm leading-relaxed">
-                Neon cyan and violet highlights now drive the full interface to
-                match your reference artwork.
-              </p>
             </div>
           </div>
         </div>
