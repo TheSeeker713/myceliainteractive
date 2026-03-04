@@ -232,7 +232,7 @@ export default function LiminalSinLanding() {
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-cyan-50/40 border-t border-purple-900/30 pt-4">
             <span>LIMINAL SIN&trade; is a work of interactive fiction. All characters and events are fictional.</span>
             <span className="hidden sm:inline text-purple-900/60">|</span>
-            <a href="/privacy.html" className="hover:text-cyan-300 transition-colors">Privacy Policy</a>
+            <a href="/ls/privacy.html" className="hover:text-cyan-300 transition-colors">Privacy Policy</a>
             <span className="hidden sm:inline text-purple-900/60">|</span>
             <span className="text-purple-400/60">v0.1 — Early Access</span>
           </div>
