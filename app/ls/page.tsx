@@ -1,48 +1,13 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function LiminalSinLanding() {
   return (
-    <main className="bg-hero-bg-dark min-h-screen text-white pb-20">
+    <div className="bg-[#08041a] min-h-screen text-white">
 
-      {/* ── HERO ─────────────────────────────────────────── */}
-      <div className="relative w-full min-h-[70vh] md:min-h-[80vh] flex flex-col items-center justify-center overflow-hidden">
-
-        {/* Background image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/assets/images/Liminal_Sin_Title.jpg"
-            alt="Liminal Sin Backdrop"
-            fill
-            className="object-cover opacity-40 mix-blend-luminosity duration-1000 animate-pulse"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-hero-bg-dark via-hero-bg-default/60 to-transparent" />
-        </div>
-
-        {/* ── Title card ── */}
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6 mt-16 mb-0">
-          <div className="bg-black/25 border border-white/10 backdrop-blur-sm rounded-2xl px-8 py-10 text-center shadow-[0_0_60px_rgba(139,44,245,0.12)]">
-            <div className="mb-5 drop-shadow-[0_0_30px_rgba(255,0,50,0.4)]">
-              <h1 className="text-6xl md:text-8xl font-black text-white tracking-widest uppercase">
-                LIMINAL SIN
-              </h1>
-            </div>
-            <p className="text-xl md:text-2xl text-red-100/90 font-light max-w-2xl mx-auto drop-shadow-md">
-              An Interactive FMV Psychological Horror where your reality is
-              fractured, and trust is the true illusion.
-            </p>
-          </div>
-        </div>
-
-        {/* ── Divider 1 ── */}
-        <div className="relative z-10 w-full mt-6">
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-purple-500/60 to-transparent" />
-          <div className="w-full h-px mt-[2px] bg-gradient-to-r from-transparent via-purple-900/30 to-transparent" />
-        </div>
-
-        {/* ── Button ── */}
-        {/* eslint-disable-next-line react/no-unknown-property */}
-        <style>{`
+      {/* ── STYLES ─────────────────────────────────────────── */}
+      { }
+      <style>{`
           @keyframes neon-flicker {
             0%, 100% {
               box-shadow: 0 0 6px #a855f7, 0 0 18px #7e22ce, 0 0 38px #6b21a8, inset 0 0 10px rgba(168,85,247,0.15);
@@ -68,13 +33,13 @@ export default function LiminalSinLanding() {
           .double-down-btn {
             position: relative;
             display: inline-block;
-            padding: 0.75rem 2.5rem;
+            padding: 1.25rem 3.5rem;
             background: linear-gradient(135deg, rgba(126,34,206,0.55), rgba(168,85,247,0.45));
             border: 1px solid rgba(192,132,252,0.6);
             border-radius: 0.375rem;
             color: #fff;
             font-family: var(--font-geist-mono), 'Courier New', monospace;
-            font-size: 0.875rem;
+            font-size: 1.25rem;
             font-weight: 700;
             letter-spacing: 0.14em;
             text-transform: uppercase;
@@ -106,76 +71,152 @@ export default function LiminalSinLanding() {
             text-shadow: 0 0 10px #f0abfc, 0 0 22px #e879f9;
           }
         `}</style>
-        <div className="relative z-10 flex justify-center mt-7 mb-7">
-          <a href="#signup">
+
+      {/* ── NAVBAR ─────────────────────────────────────────── */}
+      <nav className="fixed top-0 z-50 w-full flex items-center justify-between px-8 py-6 bg-black/70 backdrop-blur-md border-b border-purple-900/50">
+        {/* LEFT: Logo */}
+        <Link href="/" aria-label="Return to home">
+          <Image
+            src="/assets/images/Mycelia Interactive Banner.png"
+            alt="Mycelia Interactive"
+            width={360}
+            height={100}
+            className="h-14 w-auto object-contain rounded drop-shadow-[0_0_10px_rgba(139,44,245,0.3)] transition-transform hover:scale-105"
+          />
+        </Link>
+        {/* RIGHT: Links + Buttons */}
+        <div className="flex items-center gap-8 flex-wrap justify-end">
+          <a
+            href="/roadmap/roadmap.html"
+            className="uppercase tracking-[0.125em] text-white hover:text-purple-400 transition-colors text-sm font-medium"
+          >
+            Roadmap
+          </a>
+          <a
+            href="/ls"
+            className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-hero-magenta-600 to-hero-cyan-600 font-semibold text-white hover:from-hero-magenta-500 hover:to-hero-cyan-500 hover:shadow-[0_0_20px_rgba(139,44,245,0.5)] transition-all duration-300"
+          >
+            Play Liminal Sin Demo
+          </a>
+          <a
+            href="/ls/lsr.html"
+            className="px-6 py-2.5 rounded-lg bg-hero-bg-light/50 border border-hero-cyan-400/30 text-cyan-50 font-medium hover:bg-hero-cyan-900/40 hover:border-hero-cyan-300 hover:text-white transition-all duration-300"
+          >
+            Learn More
+          </a>
+        </div>
+      </nav>
+      {/* ── END NAVBAR ─────────────────────────────────────── */}
+
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="relative h-screen w-full overflow-hidden">
+
+        {/* Background image + gradient overlay */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/assets/images/Liminal_Sin_Title.jpg"
+            alt="Liminal Sin Backdrop"
+            fill
+            className="object-cover opacity-40 mix-blend-luminosity duration-1000 animate-pulse"
+            priority
+          />
+          {/* Top-30% transparent → black gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent from-[30%] to-[#08041a]" />
+          {/* Extra dark vignette at very bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#08041a] via-transparent to-transparent" />
+        </div>
+
+        {/* Glitch title "LIMINAL SIN" */}
+        <div className="absolute top-[18vh] left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
+          <h1
+            className="glitch-effect text-6xl md:text-8xl font-black text-white tracking-widest uppercase drop-shadow-[0_0_30px_rgba(255,0,50,0.4)]"
+            data-text="LIMINAL SIN"
+          >
+            LIMINAL SIN
+          </h1>
+        </div>
+
+        {/* Description card */}
+        <div className="absolute top-[42vh] left-1/2 -translate-x-1/2 z-20 w-[calc(100%-2rem)] max-w-[620px] px-10 py-9 bg-black/65 backdrop-blur-md border border-[#8b00ff]/40 rounded-2xl shadow-[0_0_40px_rgba(139,0,255,0.25)] text-center">
+          <p className="text-xl md:text-2xl text-red-100/90 font-light drop-shadow-md">
+            An Interactive FMV Psychological Horror where your reality is
+            fractured, and trust is the true illusion.
+          </p>
+        </div>
+
+        {/* DOUBLE DOWN button */}
+        <div className="absolute top-[62vh] left-1/2 -translate-x-1/2 z-30">
+          <a href="#content">
             <button className="double-down-btn">DOUBLE DOWN</button>
           </a>
         </div>
 
-        {/* ── Divider 2 ── */}
-        <div className="relative z-10 w-full mb-0">
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-purple-500/60 to-transparent" />
-          <div className="w-full h-px mt-[2px] bg-gradient-to-r from-transparent via-purple-900/30 to-transparent" />
+        {/* Tagline */}
+        <div className="absolute bottom-[12vh] left-1/2 -translate-x-1/2 z-10 whitespace-nowrap">
+          <p className="text-3xl font-light text-cyan-400 tracking-widest drop-shadow-[0_0_14px_rgba(0,199,255,0.7)]">
+            Once you&apos;re in, will you ever get out?
+          </p>
         </div>
 
-      </div>
+      </section>
       {/* ── END HERO ─────────────────────────────────────── */}
 
+      {/* ── CONTENT SECTION ─────────────────────────────── */}
+      <section id="content" className="relative py-24 bg-[#050507]">
+        <div className="max-w-screen-2xl mx-auto px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-16 items-center">
 
-      {/* ── PITCH ────────────────────────────────────────── */}
-      <section className="max-w-5xl mx-auto px-6 pt-10 pb-16 text-center space-y-6">
-        <h2 className="text-3xl md:text-5xl font-bold text-hero-cyan-300">
-          Once you&apos;re in, will you ever get out?
-        </h2>
+            {/* LEFT COLUMN: text */}
+            <div className="max-w-lg text-lg leading-relaxed text-gray-300 space-y-8">
+              <p>
+                In <strong className="text-white">LIMINAL SIN</strong>, you don&apos;t
+                just watch a movie; you direct the nightmare. Navigating through
+                branching timelines built with hundreds of cinematic FMV (Full
+                Motion Video) clips, every choice spirals you deeper into a
+                labyrinth of buried secrets and broken memories.
+              </p>
+              <p>
+                Investigate the anomalies. Hunt for the glitched artifacts. Choose
+                who to trust. The narrative adapts to your paranoia. Who is the
+                Game Master?
+              </p>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 text-left items-center">
-
-          {/* Text block */}
-          <div className="space-y-5 text-cyan-50/80 text-lg leading-relaxed">
-            <p>
-              In <strong className="text-white">LIMINAL SIN</strong>, you don&apos;t
-              just watch a movie; you direct the nightmare. Navigating through
-              branching timelines built with hundreds of cinematic FMV (Full
-              Motion Video) clips, every choice spirals you deeper into a
-              labyrinth of buried secrets and broken memories.
-            </p>
-            <p>
-              Investigate the anomalies. Hunt for the glitched artifacts. Choose
-              who to trust. The narrative adapts to your paranoia. Who is the
-              Game Master?
-            </p>
-          </div>
-
-          {/* Image + signup card overlaid bottom-right */}
-          <div className="relative">
-            <div className="overflow-hidden rounded-xl border border-hero-magenta-500/30 p-2 shadow-[0_0_30px_rgba(139,44,245,0.2)]">
+            {/* RIGHT COLUMN: image teaser card */}
+            <div className="relative w-full aspect-[16/9.5] rounded-3xl overflow-hidden border border-purple-500/30 shadow-2xl">
               <Image
                 src="/assets/images/Liminal_Sin_Title.jpg"
                 alt="Gameplay Sneak Peek"
-                width={800}
-                height={450}
-                className="w-full h-auto rounded-lg opacity-90 hover:opacity-100 transition-opacity"
+                fill
+                className="object-cover opacity-90 hover:opacity-100 transition-opacity"
               />
+              {/* Overlaid card — bottom-left */}
+              <div
+                id="signup"
+                className="absolute bottom-8 left-8 bg-black/90 border border-cyan-400/60 px-7 py-5 rounded-xl max-w-[280px]"
+              >
+                <h3 className="text-sm font-bold text-cyan-400 mb-1">
+                  Initializing Connection Protocols...
+                </h3>
+                <p className="text-cyan-100/50 text-xs">
+                  Access terminals loading in next phase.
+                </p>
+              </div>
             </div>
 
-            {/* ── Signup stub — bottom-right of image ── */}
-            <div
-              id="signup"
-              className="absolute bottom-4 right-4 w-[58%] bg-hero-bg-default/90 backdrop-blur-md border border-hero-cyan-500/25 rounded-xl p-4 shadow-[0_0_20px_rgba(0,199,255,0.12)]"
-            >
-              <h3 className="text-sm font-bold text-center text-white mb-1">
-                Initializing Connection Protocols...
-              </h3>
-              <p className="text-center text-cyan-100/50 text-xs">
-                Access terminals loading in next phase.
-              </p>
-            </div>
           </div>
-
         </div>
       </section>
-      {/* ── END PITCH ────────────────────────────────────── */}
+      {/* ── END CONTENT SECTION ─────────────────────────── */}
 
-    </main>
+      {/* ── FOOTER ───────────────────────────────────────── */}
+      <footer className="w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 py-6 px-6 lg:py-8 lg:px-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-start text-cyan-50/70 text-sm">
+          &copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.
+        </div>
+      </footer>
+      {/* ── END FOOTER ───────────────────────────────────── */}
+
+    </div>
   );
 }
