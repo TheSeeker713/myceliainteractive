@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -65,13 +66,15 @@ export default function RootLayout({
         <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#08041a]/90 border-b border-hero-cyan-500/20 py-8 lg:py-10 px-6 shadow-[0_4px_30px_rgba(0,199,255,0.15)] transition-all">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex-shrink-0">
-              <Image
-                src="/assets/images/Mycelia Interactive Banner.png"
-                alt="Mycelia Interactive"
-                width={360}
-                height={100}
-                className="h-16 lg:h-20 w-auto object-contain rounded drop-shadow-[0_0_10px_rgba(139,44,245,0.3)] transition-transform hover:scale-105"
-              />
+              <Link href="/" aria-label="Return to home">
+                <Image
+                  src="/assets/images/Mycelia Interactive Banner.png"
+                  alt="Mycelia Interactive"
+                  width={360}
+                  height={100}
+                  className="h-16 lg:h-20 w-auto object-contain rounded drop-shadow-[0_0_10px_rgba(139,44,245,0.3)] transition-transform hover:scale-105"
+                />
+              </Link>
             </div>
             <div className="hidden sm:flex gap-6 items-center">
               <a
