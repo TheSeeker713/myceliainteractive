@@ -119,6 +119,27 @@
   padding-top:    clamp(1.75rem, 4vw, 4rem);
   padding-bottom: clamp(1.75rem, 4vw, 4rem);
 }
+
+/* ============================================
+   MAIN SITE — FLUID SPACING UTILITIES
+   Same approach: plain CSS so Tailwind v4
+   never silently drops the declarations.
+   ============================================ */
+
+.site-gutter {
+  padding-left:  clamp(1.5rem, 6vw, 6rem);
+  padding-right: clamp(1.5rem, 6vw, 6rem);
+}
+
+.site-header-py {
+  padding-top:    clamp(1rem, 2.5vw, 2rem);
+  padding-bottom: clamp(1rem, 2.5vw, 2rem);
+}
+
+.site-footer-py {
+  padding-top:    clamp(1.25rem, 3vw, 3rem);
+  padding-bottom: clamp(1.25rem, 3vw, 3rem);
+}
   
   /* Animation Timing */
   --transition-fast: 0.2s;

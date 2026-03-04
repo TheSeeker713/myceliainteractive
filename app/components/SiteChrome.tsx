@@ -18,7 +18,7 @@ export function SiteHeader() {
     return null;
   }
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#08041a]/90 border-b border-hero-cyan-500/20 py-8 lg:py-10 px-6 shadow-[0_4px_30px_rgba(0,199,255,0.15)] transition-all">
+    <header className="site-gutter site-header-py sticky top-0 z-50 w-full backdrop-blur-xl bg-[#08041a]/90 border-b border-hero-cyan-500/20 shadow-[0_4px_30px_rgba(0,199,255,0.15)] transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex-shrink-0">
           <Link href="/" aria-label="Return to home">
@@ -62,7 +62,7 @@ export function SiteFooter() {
     return null;
   }
   return (
-    <footer className="sticky bottom-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 py-6 px-6 lg:py-8 lg:px-8 mt-auto">
+    <footer className="site-gutter site-footer-py sticky bottom-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 mt-auto">
       <div className="max-w-7xl mx-auto flex items-center justify-start text-cyan-50/70 text-sm">
         &copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.
       </div>
