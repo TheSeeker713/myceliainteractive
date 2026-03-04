@@ -38,7 +38,7 @@ export default function LiminalSinLanding() {
       {/* The Pitch */}
       <section className="max-w-5xl mx-auto px-6 py-16 md:py-24 text-center space-y-8">
         <h2 className="text-3xl md:text-5xl font-bold text-hero-cyan-300 mb-8">
-          Will You Uncover the Truth?
+          Once you&apos;re in, will you ever get out?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left items-center">
           <div className="space-y-6 text-cyan-50/80 text-lg leading-relaxed">
