@@ -73,7 +73,7 @@ export default function LiminalSinLanding() {
         `}</style>
 
       {/* ── NAVBAR ─────────────────────────────────────────── */}
-      <nav className="fixed top-0 z-50 w-full flex items-center justify-between px-[var(--ls-page-px)] py-[var(--ls-nav-py)] bg-black/70 backdrop-blur-md border-b border-purple-900/50">
+      <nav className="ls-gutter ls-nav-py fixed top-0 z-50 w-full flex items-center justify-between bg-black/70 backdrop-blur-md border-b border-purple-900/50">
         {/* LEFT: Logo */}
         <Link href="/" aria-label="Return to home">
           <Image
@@ -165,8 +165,8 @@ export default function LiminalSinLanding() {
       {/* ── END HERO ─────────────────────────────────────── */}
 
       {/* ── CONTENT SECTION ─────────────────────────────── */}
-      <section id="content" className="relative py-[var(--ls-section-py)] bg-[#050507]">
-        <div className="max-w-7xl mx-auto px-[var(--ls-page-px)]">
+      <section id="content" className="ls-section-py relative bg-[#050507]">
+        <div className="ls-gutter max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-16 items-center">
 
             {/* LEFT COLUMN: text */}
@@ -213,7 +213,7 @@ export default function LiminalSinLanding() {
       {/* ── END CONTENT SECTION ─────────────────────────── */}
 
       {/* ── DESKTOP DISCLAIMER ───────────────────────────── */}
-      <div className="w-full bg-[#0d0820] border-y border-purple-900/40 py-4 px-[var(--ls-page-px)]">
+      <div className="ls-gutter w-full bg-[#0d0820] border-y border-purple-900/40 py-4">
         <p className="text-center text-xs sm:text-sm text-purple-300/80 tracking-wide">
           <span className="font-semibold text-purple-400">⚠️ Desktop Experience:</span>
           {" "}LIMINAL SIN is designed for desktop browsers. Tablet support is currently in testing. Mobile play is not yet supported.
@@ -222,7 +222,7 @@ export default function LiminalSinLanding() {
       {/* ── END DESKTOP DISCLAIMER ─────────────────────────── */}
 
       {/* ── FOOTER ───────────────────────────────────────── */}
-      <footer className="w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 py-[var(--ls-footer-py)] px-[var(--ls-page-px)]">
+      <footer className="ls-gutter ls-footer-py w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30">
         <div className="max-w-7xl mx-auto space-y-4">
           {/* Top row: copyright */}
           <div className="flex items-center justify-start text-cyan-50/70 text-sm">

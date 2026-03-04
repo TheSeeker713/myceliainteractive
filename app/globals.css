@@ -94,13 +94,31 @@
   --content-max-width: 1400px;
   --hero-min-height: 100vh;
 
-  /* ── /ls page fluid spacing ──────────────────────────────
-     clamp() lives here so Tailwind arbitrary values stay
-     comma-free via var() references and always compile.   */
-  --ls-page-px:     clamp(1.5rem, 6vw, 6rem);   /* side gutter: nav, sections, footer */
-  --ls-section-py:  clamp(3rem, 8vw, 6rem);      /* vertical rhythm for content section */
-  --ls-footer-py:   clamp(1.5rem, 4vw, 3.5rem);  /* footer top/bottom */
-  --ls-nav-py:      clamp(0.75rem, 2vw, 1.5rem); /* navbar top/bottom */
+/* ============================================
+   /ls PAGE — FLUID SPACING UTILITIES
+   Plain CSS classes so Tailwind's scanner
+   never has a chance to drop them.
+   ============================================ */
+
+.ls-gutter {
+  padding-left:  clamp(1.5rem, 6vw, 6rem);
+  padding-right: clamp(1.5rem, 6vw, 6rem);
+}
+
+.ls-nav-py {
+  padding-top:    clamp(0.875rem, 2vw, 1.5rem);
+  padding-bottom: clamp(0.875rem, 2vw, 1.5rem);
+}
+
+.ls-section-py {
+  padding-top:    clamp(3rem, 8vw, 6rem);
+  padding-bottom: clamp(3rem, 8vw, 6rem);
+}
+
+.ls-footer-py {
+  padding-top:    clamp(1.75rem, 4vw, 4rem);
+  padding-bottom: clamp(1.75rem, 4vw, 4rem);
+}
   
   /* Animation Timing */
   --transition-fast: 0.2s;
