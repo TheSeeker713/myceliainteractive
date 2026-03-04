@@ -1,5 +1,11 @@
 import Image from "next/image";
-import { Hero, HeroContent, Headline, Subheadline, CTAButton, SplitScreen } from "@/components/Hero";
+import {
+  Hero,
+  HeroContent,
+  Headline,
+  Subheadline,
+  CTAButton,
+} from "@/components/Hero";
 
 export default function Home() {
   return (
@@ -32,59 +38,26 @@ export default function Home() {
       </Hero>
 
       <section className="w-full px-4 sm:px-6 lg:px-12 py-14 sm:py-18 lg:py-24 bg-gradient-to-b from-hero-bg-dark to-hero-bg-default">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6 text-center">
-            Choose Your Path
-          </h2>
-          <p className="text-cyan-50/85 text-center mb-8 sm:mb-10 max-w-2xl mx-auto text-sm sm:text-base">
-            Hover over each choice to explore the branching narrative. Every decision matters.
-          </p>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
-            <div className="lg:col-span-8">
-              <SplitScreen
-                enableHover={true}
-                enableScroll={true}
-                leftContent={
-                  <div className="text-center">
-                    <h3 className="text-xl sm:text-2xl font-bold text-hero-magenta-200 mb-3">
-                      Reality A
-                    </h3>
-                    <p className="text-cyan-50/80 text-sm sm:text-base">
-                      Dive into the unknown. Follow the glitching signals deeper into the alternate timeline.
-                    </p>
-                  </div>
-                }
-                rightContent={
-                  <div className="text-center">
-                    <h3 className="text-xl sm:text-2xl font-bold text-hero-cyan-200 mb-3">
-                      Reality B
-                    </h3>
-                    <p className="text-cyan-50/80 text-sm sm:text-base">
-                      Seek the truth. Navigate the branching paths to uncover what&apos;s really happening.
-                    </p>
-                  </div>
-                }
-              />
-            </div>
-
-            <div className="lg:col-span-4">
-              <div className="h-full rounded-xl border border-hero-magenta-300/30 bg-hero-bg-dark/60 p-5 sm:p-6 backdrop-blur-sm shadow-[0_0_28px_rgba(139,44,245,0.18)]">
-                <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">Brand Identity</h3>
-                <div className="relative overflow-hidden rounded-lg border border-hero-cyan-300/35 bg-hero-bg-default/30 p-2">
-                  <Image
-                    src="/assets/images/Mycelia_Interactive_Logo.jpg"
-                    alt="Mycelia Interactive logo"
-                    width={1024}
-                    height={1024}
-                    className="h-auto w-full rounded-md object-cover"
-                    sizes="(max-width: 1024px) 100vw, 30vw"
-                  />
-                </div>
-                <p className="mt-4 text-cyan-50/80 text-sm leading-relaxed">
-                  Neon cyan and violet highlights now drive the full interface to match your reference artwork.
-                </p>
+        <div className="max-w-7xl mx-auto flex justify-center">
+          <div className="w-full max-w-md">
+            <div className="h-full rounded-xl border border-hero-magenta-300/30 bg-hero-bg-dark/60 p-5 sm:p-6 backdrop-blur-sm shadow-[0_0_28px_rgba(139,44,245,0.18)]">
+              <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">
+                Brand Identity
+              </h3>
+              <div className="relative overflow-hidden rounded-lg border border-hero-cyan-300/35 bg-hero-bg-default/30 p-2">
+                <Image
+                  src="/assets/images/Mycelia_Interactive_Logo.jpg"
+                  alt="Mycelia Interactive logo"
+                  width={1024}
+                  height={1024}
+                  className="h-auto w-full rounded-md object-cover"
+                  sizes="(max-width: 1024px) 100vw, 30vw"
+                />
               </div>
+              <p className="mt-4 text-cyan-50/80 text-sm leading-relaxed">
+                Neon cyan and violet highlights now drive the full interface to
+                match your reference artwork.
+              </p>
             </div>
           </div>
         </div>
