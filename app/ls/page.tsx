@@ -73,7 +73,7 @@ export default function LiminalSinLanding() {
         `}</style>
 
       {/* ── NAVBAR ─────────────────────────────────────────── */}
-      <nav className="fixed top-0 z-50 w-full flex items-center justify-between px-4 sm:px-8 py-4 sm:py-6 bg-black/70 backdrop-blur-md border-b border-purple-900/50">
+      <nav className="fixed top-0 z-50 w-full flex items-center justify-between px-6 sm:px-12 lg:px-20 xl:px-24 py-4 sm:py-6 bg-black/70 backdrop-blur-md border-b border-purple-900/50">
         {/* LEFT: Logo */}
         <Link href="/" aria-label="Return to home">
           <Image
@@ -175,7 +175,7 @@ export default function LiminalSinLanding() {
 
       {/* ── CONTENT SECTION ─────────────────────────────── */}
       <section id="content" className="relative py-16 sm:py-24 bg-[#050507]">
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-screen-2xl mx-auto px-6 sm:px-12 lg:px-20 xl:px-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-16 items-center">
 
             {/* LEFT COLUMN: text */}
@@ -222,8 +222,8 @@ export default function LiminalSinLanding() {
       {/* ── END CONTENT SECTION ─────────────────────────── */}
 
       {/* ── FOOTER ───────────────────────────────────────── */}
-      <footer className="w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 pt-8 pb-10 px-4 sm:px-8 lg:pt-10 lg:pb-14 lg:px-12">
-        <div className="max-w-7xl mx-auto space-y-4">
+      <footer className="w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 pt-8 pb-10 px-6 sm:px-12 lg:pt-10 lg:pb-14 lg:px-20 xl:px-24">
+        <div className="max-w-screen-2xl mx-auto space-y-4">
           {/* Top row: copyright */}
           <div className="flex items-center justify-start text-cyan-50/70 text-sm">
             &copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.
