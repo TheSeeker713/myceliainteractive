@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mycelia Interactive — Roadmap Index</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Inter:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            orbitron: ['Orbitron', 'sans-serif'],
+            inter:    ['Inter', 'sans-serif'],
+            rajdhani: ['Rajdhani', 'sans-serif'],
+          },
+          colors: {
+            void:    '#05020f',
+            deep:    '#0a0520',
+            surface: '#110830',
+            card:    '#160a3a',
+            border:  '#2a1060',
+            magenta: { 400: '#d946ef', 500: '#a21caf', 600: '#7e22ce' },
+            cyan:    { 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4' },
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4,0,0.6,1) infinite',
+            'glow': 'glow 3s ease-in-out infinite alternate',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            glow: {
+              '0%':   { textShadow: '0 0 10px #d946ef, 0 0 20px #7e22ce' },
+              '100%': { textShadow: '0 0 20px #22d3ee, 0 0 40px #06b6d4' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%':      { transform: 'translateY(-10px)' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <style>
+    body { background-color: #05020f; font-family: 'Inter', sans-serif; }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #05020f; }
+    ::-webkit-scrollbar-thumb { background: #7e22ce; border-radius: 3px; }
+
+    /* Roadmap entry card */
+    .entry-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .entry-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 40px rgba(34,211,238,0.2);
+      border-color: rgba(34,211,238,0.5);
+    }
+
+    /* Glow animation for headline */
+    .animate-glow { animation: glow 3s ease-in-out infinite alternate; }
+    @keyframes glow {
+      0%   { text-shadow: 0 0 10px #d946ef, 0 0 20px #7e22ce; }
+      100% { text-shadow: 0 0 20px #22d3ee, 0 0 40px #06b6d4; }
+    }
+  </style>
+</head>
+<body class="relative min-h-screen text-white overflow-x-hidden">
+
+  <!-- ═══════════════════════════════════════════ TOP NAV ══ -->
+  <nav class="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#05020f]/90 border-b border-[#2a1060]">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <a
+        href="https://myceliainteractive.com"
+        class="flex items-center gap-2 font-rajdhani font-semibold text-sm text-cyan-300 hover:text-white transition-colors duration-200"
+        title="Return to main site"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        myceliainteractive.com
+      </a>
+      <span class="font-orbitron text-xs text-[#2a1060] uppercase tracking-widest select-none">roadmap index</span>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════ HERO ═════ -->
+  <section class="relative pt-24 pb-16 px-6 text-center overflow-hidden">
+    <!-- Background glow blobs -->
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#7e22ce]/15 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute top-0 right-0 w-80 h-80 bg-[#06b6d4]/8 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-3xl mx-auto">
+      <p
+        class="font-rajdhani text-xs uppercase tracking-[0.3em] text-cyan-400 mb-4 animate__animated animate__fadeInDown"
+        data-aos="fade-down" data-aos-duration="600"
+      >
+        Mycelia Interactive
+      </p>
+
+      <h1
+        class="font-orbitron font-black text-4xl md:text-6xl uppercase animate-glow mb-6"
+        data-aos="fade-up" data-aos-duration="700" data-aos-delay="100"
+      >
+        Product Roadmap
+      </h1>
+
+      <p
+        class="font-inter text-lg text-slate-400 max-w-xl mx-auto leading-relaxed"
+        data-aos="fade-up" data-aos-duration="700" data-aos-delay="200"
+      >
+        A versioned archive of all published planning documents — past decisions,
+        current priorities, and the shape of things to come.
+      </p>
+
+      <!-- Divider -->
+      <div
+        class="mt-10 mx-auto w-24 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent"
+        data-aos="zoom-in" data-aos-duration="600" data-aos-delay="300"
+      ></div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════ LEGEND ═══ -->
+  <section class="max-w-6xl mx-auto px-6 pb-6" data-aos="fade-up" data-aos-duration="500" data-aos-delay="100">
+    <div class="flex flex-wrap gap-4 items-center">
+      <span class="font-rajdhani text-xs uppercase tracking-widest text-slate-500 mr-2">Status key:</span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-rajdhani uppercase tracking-wider text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>Active
+      </span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-rajdhani uppercase tracking-wider text-slate-400 bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-slate-500 inline-block"></span>Archived
+      </span>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════ ENTRIES ══ -->
+  <main class="max-w-6xl mx-auto px-6 pb-32 space-y-5 relative z-10">
+
+    <!-- ── Entry: roadmap_2026-03-03 ── -->
+    <article
+      class="entry-card relative bg-[#160a3a]/70 border border-[#2a1060] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 backdrop-blur-sm"
+      data-aos="fade-up" data-aos-duration="600"
+    >
+      <!-- Status pill -->
+      <span
+        class="absolute top-4 right-4 md:hidden inline-flex items-center gap-1.5 text-xs font-rajdhani uppercase tracking-wider text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-full"
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping inline-block"></span>Active
+      </span>
+
+      <div class="flex-1">
+        <!-- Date badge -->
+        <p class="font-rajdhani text-xs uppercase tracking-widest text-slate-500 mb-2">March 3, 2026</p>
+
+        <h2 class="font-orbitron font-bold text-xl text-white mb-2">
+          Roadmap v1 — Q1 2026
+        </h2>
+
+        <p class="font-inter text-sm text-slate-400 leading-relaxed max-w-xl">
+          Signup pipeline, Cloudflare D1 backend, Gemini Live voice integration, NPC trust system,
+          FMV scene warping, contest judge &amp; tester onboarding. Initial public planning document.
+        </p>
+
+        <!-- Tag chips -->
+        <div class="flex flex-wrap gap-2 mt-4">
+          <span class="text-xs font-rajdhani uppercase tracking-wide text-magenta-400 bg-magenta-600/10 border border-magenta-600/20 px-2.5 py-0.5 rounded-full">Liminal Sin</span>
+          <span class="text-xs font-rajdhani uppercase tracking-wide text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-0.5 rounded-full">Backend</span>
+          <span class="text-xs font-rajdhani uppercase tracking-wide text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-0.5 rounded-full">Gemini AI</span>
+          <span class="text-xs font-rajdhani uppercase tracking-wide text-slate-400 bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-full">FMV</span>
+        </div>
+      </div>
+
+      <!-- Right: status + CTA -->
+      <div class="flex flex-col items-start md:items-end gap-4 shrink-0">
+        <!-- Status pill (desktop) -->
+        <span class="hidden md:inline-flex items-center gap-1.5 text-xs font-rajdhani uppercase tracking-wider text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping inline-block"></span>Active
+        </span>
+
+        <a
+          href="roadmap_2026-03-03.html"
+          class="inline-flex items-center gap-2 font-orbitron font-semibold text-sm px-6 py-3 rounded-xl bg-gradient-to-r from-[#7e22ce] to-[#06b6d4] text-white hover:from-[#a21caf] hover:to-[#22d3ee] hover:shadow-[0_0_24px_rgba(34,211,238,0.3)] transition-all duration-300"
+        >
+          View Document
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- ── Future entry placeholder (subtle, low contrast) ── -->
+    <article
+      class="relative border border-dashed border-[#2a1060]/60 rounded-2xl p-6 md:p-8 flex items-center gap-4 opacity-40 select-none"
+      data-aos="fade-up" data-aos-duration="500" data-aos-delay="100"
+      aria-hidden="true"
+    >
+      <div class="w-10 h-10 rounded-full border border-dashed border-[#2a1060] flex items-center justify-center shrink-0">
+        <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+      </div>
+      <div>
+        <p class="font-rajdhani text-xs uppercase tracking-widest text-slate-600 mb-1">Next entry</p>
+        <p class="font-inter text-sm text-slate-600">Future roadmap documents will appear here.</p>
+      </div>
+    </article>
+
+  </main>
+
+
+  <!-- ═══════════════════════════════════════════ FOOTER ════ -->
+  <footer class="relative z-10 border-t border-[#2a1060]/60 py-8 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-inter text-slate-600">
+      <span>&copy; <script>document.write(new Date().getFullYear())</script> Mycelia Interactive. All rights reserved.</span>
+      <div class="flex gap-6">
+        <a href="https://myceliainteractive.com" class="hover:text-cyan-400 transition-colors">Home</a>
+        <a href="https://myceliainteractive.com/ls" class="hover:text-cyan-400 transition-colors">Liminal Sin</a>
+        <a href="roadmap_2026-03-03.html" class="hover:text-cyan-400 transition-colors">Latest Roadmap</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════ SCRIPTS ══ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+    AOS.init({ once: true, easing: 'ease-out-cubic' });
+
+    // Subtle entrance for the hero headline
+    gsap.from('h1', { opacity: 0, y: 30, duration: 1, ease: 'power3.out', delay: 0.2 });
+  </script>
+</body>
+</html>

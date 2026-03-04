@@ -78,6 +78,12 @@ export default function RootLayout({
             </div>
             <div className="hidden sm:flex gap-6 items-center">
               <a
+                href="/roadmap/roadmap.html"
+                className="px-4 py-2 text-sm font-medium text-cyan-200/70 hover:text-cyan-300 transition-colors duration-200 font-[family-name:var(--font-geist-mono)] tracking-wide"
+              >
+                Roadmap
+              </a>
+              <a
                 href="/ls"
                 className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-hero-magenta-600 to-hero-cyan-600 font-semibold text-white hover:from-hero-magenta-500 hover:to-hero-cyan-500 hover:shadow-[0_0_20px_rgba(139,44,245,0.5)] transition-all duration-300"
               >
