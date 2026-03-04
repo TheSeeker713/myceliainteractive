@@ -73,7 +73,7 @@ export default function LiminalSinLanding() {
         `}</style>
 
       {/* ── NAVBAR ─────────────────────────────────────────── */}
-      <nav className="fixed top-0 z-50 w-full flex items-center justify-between px-6 sm:px-12 lg:px-20 xl:px-24 py-4 sm:py-6 bg-black/70 backdrop-blur-md border-b border-purple-900/50">
+      <nav className="fixed top-0 z-50 w-full flex items-center justify-between px-[clamp(1rem,5vw,5rem)] py-[clamp(0.75rem,2vw,1.5rem)] bg-black/70 backdrop-blur-md border-b border-purple-900/50">
         {/* LEFT: Logo */}
         <Link href="/" aria-label="Return to home">
           <Image
@@ -165,7 +165,7 @@ export default function LiminalSinLanding() {
       {/* ── END HERO ─────────────────────────────────────── */}
 
       {/* ── DESKTOP DISCLAIMER ───────────────────────────── */}
-      <div className="w-full bg-[#0d0820] border-y border-purple-900/40 py-3 px-4 sm:px-8">
+      <div className="w-full bg-[#0d0820] border-y border-purple-900/40 py-3 px-[clamp(1rem,5vw,5rem)]">
         <p className="text-center text-xs sm:text-sm text-purple-300/80 tracking-wide">
           <span className="font-semibold text-purple-400">⚠ Desktop Experience:</span>
           {" "}LIMINAL SIN is designed for desktop browsers. Tablet support is currently in testing. Mobile play is not yet supported.
@@ -174,8 +174,8 @@ export default function LiminalSinLanding() {
       {/* ── END DESKTOP DISCLAIMER ─────────────────────────── */}
 
       {/* ── CONTENT SECTION ─────────────────────────────── */}
-      <section id="content" className="relative py-16 sm:py-24 bg-[#050507]">
-        <div className="max-w-screen-2xl mx-auto px-6 sm:px-12 lg:px-20 xl:px-24">
+      <section id="content" className="relative py-[clamp(3rem,8vw,6rem)] bg-[#050507]">
+        <div className="max-w-7xl mx-auto px-[clamp(1rem,5vw,5rem)]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-16 items-center">
 
             {/* LEFT COLUMN: text */}
@@ -222,8 +222,8 @@ export default function LiminalSinLanding() {
       {/* ── END CONTENT SECTION ─────────────────────────── */}
 
       {/* ── FOOTER ───────────────────────────────────────── */}
-      <footer className="w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 pt-8 pb-10 px-6 sm:px-12 lg:pt-10 lg:pb-14 lg:px-20 xl:px-24">
-        <div className="max-w-screen-2xl mx-auto space-y-4">
+      <footer className="w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 py-[clamp(1.5rem,4vw,3.5rem)] px-[clamp(1rem,5vw,5rem)]">
+        <div className="max-w-7xl mx-auto space-y-4">
           {/* Top row: copyright */}
           <div className="flex items-center justify-start text-cyan-50/70 text-sm">
             &copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.
