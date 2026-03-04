@@ -24,7 +24,7 @@ export default function LiminalSinLanding() {
             </h1>
           </div>
           <p className="text-xl md:text-2xl text-red-100/90 font-light mb-10 max-w-2xl mx-auto drop-shadow-md">
-            An Interactive FMV Psychological Horror where your reality
+            An Interactive FMV Psychological Horror where your reality is
             fractured, and trust is the true illusion.
           </p>
           <div className="flex gap-6">
