@@ -55,7 +55,7 @@ const EMAIL1_HTML = (name: string, type: "judge" | "tester") => `
           : "You are on the list. We will contact you when a slot opens. Do not expect conventional onboarding."}
       </p>
       <div style="border-top:1px solid rgba(139,0,255,0.2);padding-top:20px;margin-top:8px;">
-        <p style="font-size:11px;color:rgba(139,92,246,0.35);letter-spacing:0.15em;margin:0;">
+        <p style="font-size:11px;color:rgba(139,92,246,0.7);letter-spacing:0.15em;margin:0;">
           LIMINAL SIN — MYCELIA INTERACTIVE — 2026<br>
           This message was sent because you requested access. You will not receive further unsolicited contact.
         </p>
@@ -86,7 +86,7 @@ const EMAIL2_HTML = (name: string) => `<!DOCTYPE html>
         </td></tr>
       </table>
       <div style="border-top:1px solid rgba(139,0,255,0.2);padding-top:20px;margin-top:8px;">
-        <p style="font-size:11px;color:rgba(139,92,246,0.35);letter-spacing:0.15em;margin:0;">
+        <p style="font-size:11px;color:rgba(139,92,246,0.7);letter-spacing:0.15em;margin:0;">
           LIMINAL SIN — MYCELIA INTERACTIVE — 2026
         </p>
       </div>
