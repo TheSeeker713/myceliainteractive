@@ -329,6 +329,160 @@ export default function LiminalSinLanding() {
       </section>
       {/* ── END VEGAS UNDERGROUND ────────────────────────── */}
 
+      {/* ── TRUST SYSTEM ─────────────────────────────────── */}
+      <section className="ls-section-py relative bg-[#050507]">
+        <div className="ls-gutter max-w-7xl mx-auto flex flex-col items-center gap-12">
+
+          {/* Header */}
+          <div className="text-center space-y-3 max-w-2xl">
+            <p
+              className="text-xs tracking-[0.35em] uppercase text-purple-400/60"
+              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+            >
+              Core Mechanic
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-black uppercase tracking-wider text-white"
+              style={{ textShadow: "0 0 20px rgba(139,0,255,0.25)" }}
+            >
+              The Trust System
+            </h2>
+            <p className="text-gray-400/80 text-base leading-relaxed">
+              The characters are agents, not actors. Their behavior shifts with every word you
+              speak. Build trust through honesty. Destroy it through manipulation. Watch the
+              house collect its debt.
+            </p>
+          </div>
+
+          {/* 3-column cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+
+            {/* Neutral */}
+            <div className="relative rounded-2xl border border-purple-800/40 bg-[#0a0514]/70 backdrop-blur-md p-7 flex flex-col gap-4 overflow-hidden">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-2xl"
+                style={{
+                  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(88,28,135,0.12) 0%, transparent 70%)",
+                }}
+              />
+              <div className="relative z-10 flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="text-xl"
+                    aria-hidden="true"
+                    style={{ filter: "drop-shadow(0 0 6px rgba(192,132,252,0.5))" }}
+                  >◈</span>
+                  <h3
+                    className="text-lg font-bold tracking-widest uppercase text-purple-200"
+                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  >
+                    Neutral
+                  </h3>
+                </div>
+                <p
+                  className="text-xs text-purple-400/50 uppercase tracking-widest"
+                  style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                >
+                  Starting State
+                </p>
+                <p className="text-gray-400/80 text-sm leading-relaxed">
+                  The characters are cautious but willing to listen. They withhold critical
+                  survival secrets. Every interaction is a calculation — is this voice a
+                  lifeline, or a trap?
+                </p>
+              </div>
+            </div>
+
+            {/* High Trust */}
+            <div className="relative rounded-2xl border border-cyan-700/40 bg-[#00100f]/70 backdrop-blur-md p-7 flex flex-col gap-4 overflow-hidden">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-2xl"
+                style={{
+                  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6,78,59,0.2) 0%, transparent 70%)",
+                }}
+              />
+              <div className="relative z-10 flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="text-xl text-cyan-400"
+                    aria-hidden="true"
+                    style={{ filter: "drop-shadow(0 0 6px rgba(34,211,238,0.6))" }}
+                  >◈</span>
+                  <h3
+                    className="text-lg font-bold tracking-widest uppercase text-cyan-200"
+                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  >
+                    High Trust
+                  </h3>
+                </div>
+                <p
+                  className="text-xs text-cyan-400/50 uppercase tracking-widest"
+                  style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                >
+                  Trigger: Honesty. Reliable guidance.
+                </p>
+                <p className="text-gray-400/80 text-sm leading-relaxed">
+                  Compliance. Environmental clues surface. Survival hints are shared. The
+                  characters follow your lead — but they remember every promise you&apos;ve
+                  made and whether you kept it.
+                </p>
+              </div>
+            </div>
+
+            {/* Low Trust */}
+            <div className="relative rounded-2xl border border-red-900/50 bg-[#0f0101]/70 backdrop-blur-md p-7 flex flex-col gap-4 overflow-hidden">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-2xl"
+                style={{
+                  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(127,29,29,0.2) 0%, transparent 70%)",
+                }}
+              />
+              <div className="relative z-10 flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="text-xl text-red-400"
+                    aria-hidden="true"
+                    style={{ filter: "drop-shadow(0 0 6px rgba(248,113,113,0.6))" }}
+                  >◈</span>
+                  <h3
+                    className="text-lg font-bold tracking-widest uppercase text-red-300"
+                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  >
+                    Low Trust
+                  </h3>
+                </div>
+                <p
+                  className="text-xs text-red-400/50 uppercase tracking-widest"
+                  style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                >
+                  Trigger: Lies. Leading into traps.
+                </p>
+                <p className="text-gray-400/80 text-sm leading-relaxed">
+                  Unpredictable. They may disobey, hide information, or spiral into
+                  paranoia. At the floor — they negotiate for their own survival over the
+                  others. The house begins to collect.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Footer note */}
+          <p
+            className="text-xs text-purple-500/40 text-center max-w-lg"
+            style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+          >
+            Trust is not a meter. It is a lived memory. The AI agents track everything you
+            say — and everything you don&apos;t.
+          </p>
+
+        </div>
+      </section>
+      {/* ── END TRUST SYSTEM ─────────────────────────────── */}
+
       {/* ── DESKTOP DISCLAIMER ───────────────────────────── */}
       <div className="ls-gutter w-full bg-[#0d0820] border-y border-purple-900/40 py-4">
         <p className="text-center text-xs sm:text-sm text-purple-300/80 tracking-wide">
