@@ -57,8 +57,9 @@ export default function SignupForms() {
           <div className="absolute top-0 right-0 bg-hero-magenta-600 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-lg">
             Limit: 30 Slots
           </div>
-          <h3 className="text-2xl font-bold text-hero-magenta-300 mb-2">Beta Subjects</h3>
-          <p className="text-magenta-100/70 text-sm mb-6">Volunteer to test the psychological payload. Slots are strictly limited to the first 30 suitable candidates.</p>
+          <h3 className="text-2xl font-bold text-hero-magenta-300 mb-2">Early Access — Prototype Build</h3>
+          <p className="text-magenta-100/70 text-sm mb-4">Request access to the prototype. Slots are strictly limited to the first 30 suitable candidates.</p>
+          <p className="text-magenta-100/40 text-xs mb-6">⚠ This prototype is optimized for desktop. Playing on a mobile device may result in an unintended experience.</p>
           <form onSubmit={handleTesterSubmit} className="space-y-4 mt-auto">
             <div>
               <label className="block text-xs font-medium text-magenta-200 uppercase tracking-wider mb-1">Subject Designation</label>
