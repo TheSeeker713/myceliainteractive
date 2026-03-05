@@ -241,22 +241,17 @@ export default function LiminalSinLanding() {
           {/* Lore body */}
           <div className="text-base sm:text-lg text-gray-400/80 leading-relaxed space-y-6 text-left">
             <p>
-              Three Las Vegas locals went on a late-night ghost hunt in the basement of a
-              Strip casino. A formally-dressed couple walked straight through a sealed
-              escalator gate and vanished. They followed. The floor gave way.
+              Somewhere beneath the Las Vegas Strip, three people are missing.
+              Not missing like lost. Missing like{" "}
+              <span className="text-purple-300 font-semibold">they went somewhere they were not supposed to go</span>.
             </p>
             <p>
-              They are now inside a place that should not exist — a descent through world
-              layers where the laws of physics degrade the further down you go. Smooth white
-              concrete cylinders give way to a civilization that stopped mid-moment. Ancient
-              caverns. Bioluminescent moss. Water that shouldn&apos;t be there.
+              They can still hear a voice. Yours. And right now, you are the
+              only reason any of them are still alive.
             </p>
-            <p>
-              You are not a character. You are an{" "}
-              <span className="text-purple-300 font-semibold">anomaly</span> — a disembodied
-              voice from outside the story. You are the only bridge between three people
-              trapped in an impossible place. You are neither fully trusted, nor fully
-              distrusted. And the house is watching everything.
+            <p className="text-gray-500/70 italic text-sm">
+              What they find down there &mdash; we&apos;re not going to tell you.
+              That&apos;s the point.
             </p>
           </div>
 
