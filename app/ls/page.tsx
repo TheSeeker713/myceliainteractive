@@ -483,6 +483,120 @@ export default function LiminalSinLanding() {
       </section>
       {/* ── END TRUST SYSTEM ─────────────────────────────── */}
 
+      {/* ── WHAT AWAITS YOU ──────────────────────────────── */}
+      <section className="ls-section-py relative bg-[#02010a]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 40% at 50% 60%, rgba(126,34,206,0.1) 0%, transparent 70%)",
+          }}
+        />
+        <div className="ls-gutter max-w-4xl mx-auto relative z-10 flex flex-col items-center gap-12">
+
+          {/* Header */}
+          <div className="text-center space-y-3">
+            <p
+              className="text-xs tracking-[0.35em] uppercase text-purple-400/60"
+              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+            >
+              System Capabilities
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-black uppercase tracking-wider text-white"
+              style={{ textShadow: "0 0 20px rgba(139,0,255,0.25)" }}
+            >
+              What Awaits You
+            </h2>
+          </div>
+
+          {/* Feature list */}
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {[
+              {
+                icon: "🎙",
+                label: "Your Voice Is the Mechanic",
+                desc: "No controllers. No menus. You speak — and the characters react in real time. Social engineering is the only lever you have.",
+              },
+              {
+                icon: "👁",
+                label: "The House Watches You Back",
+                desc: "The Game Master perceives your webcam and reads your vocal cadence. Your calm can be weaponized. Your panic will be punished.",
+              },
+              {
+                icon: "🎞",
+                label: "Full Motion Video — Generatively Rebuilt",
+                desc: "Synthetic liminal Vegas spaces generated with VEO 3 and Kling 3.0. Architecture that shifts mid-scene. A door that was there a moment ago may dissolve into a wall.",
+              },
+              {
+                icon: "🤖",
+                label: "Agents, Not Actors",
+                desc: "Jason, Audrey, and Josh are autonomous AI agents with individual trust and fear metrics. They remember. They resist. They can refuse.",
+              },
+              {
+                icon: "🎰",
+                label: "Slotsky — The Probability Engine",
+                desc: "Not a monster. A force. The casino logic made sentient underground. It rearranges corridors. Removes exits. The house always wins.",
+              },
+              {
+                icon: "🧱",
+                label: "The Fourth Wall Is a Lie",
+                desc: "Tell the characters they're in a simulation. Watch a Logic Collapse event shatter reality. The FMV tears. Anomalous Intensity spikes. Consequences are permanent.",
+              },
+            ].map(({ icon, label, desc }) => (
+              <div
+                key={label}
+                className="flex gap-5 rounded-xl border border-purple-900/30 bg-[#0a0514]/50 p-6 hover:border-purple-700/50 hover:bg-[#0a0514]/80 transition-all duration-300 group"
+              >
+                <span
+                  className="text-2xl mt-0.5 shrink-0 select-none"
+                  aria-hidden="true"
+                >
+                  {icon}
+                </span>
+                <div className="flex flex-col gap-1.5">
+                  <h3
+                    className="text-sm font-bold text-purple-200 uppercase tracking-wide group-hover:text-white transition-colors"
+                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  >
+                    {label}
+                  </h3>
+                  <p className="text-gray-500/80 text-sm leading-relaxed group-hover:text-gray-400/90 transition-colors">
+                    {desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA nudge toward signup */}
+          <div className="flex flex-col items-center gap-4 text-center">
+            <div
+              className="w-16 h-px"
+              style={{
+                background: "linear-gradient(90deg, transparent, rgba(192,132,252,0.4), transparent)",
+              }}
+            />
+            <p
+              className="text-sm text-purple-400/50"
+              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+            >
+              Prototype access opens below. First 30 subjects only.
+            </p>
+            <a
+              href="#access"
+              className="text-xs uppercase tracking-[0.25em] text-cyan-400/70 hover:text-cyan-300 transition-colors"
+              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+            >
+              ↓ Request Access
+            </a>
+          </div>
+
+        </div>
+      </section>
+      {/* ── END WHAT AWAITS YOU ──────────────────────────── */}
+
       {/* ── DESKTOP DISCLAIMER ───────────────────────────── */}
       <div className="ls-gutter w-full bg-[#0d0820] border-y border-purple-900/40 py-4">
         <p className="text-center text-xs sm:text-sm text-purple-300/80 tracking-wide">
