@@ -212,6 +212,123 @@ export default function LiminalSinLanding() {
       </section>
       {/* ── END CONTENT SECTION ─────────────────────────── */}
 
+      {/* ── VEGAS UNDERGROUND ────────────────────────────── */}
+      <section className="ls-section-py relative bg-[#02010a]">
+        {/* Faint radial pulse behind the text */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(88,28,135,0.12) 0%, transparent 70%)",
+          }}
+        />
+        <div className="ls-gutter max-w-3xl mx-auto relative z-10 flex flex-col items-center gap-10 text-center">
+
+          {/* Section eyebrow */}
+          <p
+            className="text-xs tracking-[0.35em] uppercase text-purple-400/60"
+            style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+          >
+            Origin Event — Layer 0
+          </p>
+
+          {/* Pull quote */}
+          <blockquote
+            className="text-2xl sm:text-3xl md:text-4xl font-light leading-snug text-purple-100/90 italic"
+            style={{ textShadow: "0 0 24px rgba(139,0,255,0.3)" }}
+          >
+            &ldquo;You cannot see the voice. You never see the voice. You do not know if it is
+            inside your head or outside of it. Your instinct is not to trust it. Your instinct
+            is also that it might be the only thing keeping you alive.&rdquo;
+          </blockquote>
+
+          {/* Divider */}
+          <div
+            className="w-16 h-px"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, rgba(192,132,252,0.5), transparent)",
+            }}
+          />
+
+          {/* Lore body */}
+          <div className="text-base sm:text-lg text-gray-400/80 leading-relaxed space-y-6 text-left">
+            <p>
+              Three Las Vegas locals went on a late-night ghost hunt in the basement of a
+              Strip casino. A formally-dressed couple walked straight through a sealed
+              escalator gate and vanished. They followed. The floor gave way.
+            </p>
+            <p>
+              They are now inside a place that should not exist — a descent through world
+              layers where the laws of physics degrade the further down you go. Smooth white
+              concrete cylinders give way to a civilization that stopped mid-moment. Ancient
+              caverns. Bioluminescent moss. Water that shouldn&apos;t be there.
+            </p>
+            <p>
+              You are not a character. You are an{" "}
+              <span className="text-purple-300 font-semibold">anomaly</span> — a disembodied
+              voice from outside the story. You are the only bridge between three people
+              trapped in an impossible place. You are neither fully trusted, nor fully
+              distrusted. And the house is watching everything.
+            </p>
+          </div>
+
+          {/* World layer table */}
+          <div className="w-full overflow-x-auto mt-2">
+            <table className="w-full text-sm text-left border-collapse">
+              <thead>
+                <tr className="border-b border-purple-900/40">
+                  <th
+                    className="py-2 pr-6 text-purple-400/60 font-medium uppercase tracking-widest text-xs"
+                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  >
+                    Layer
+                  </th>
+                  <th
+                    className="py-2 pr-6 text-purple-400/60 font-medium uppercase tracking-widest text-xs"
+                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  >
+                    Name
+                  </th>
+                  <th
+                    className="py-2 text-purple-400/60 font-medium uppercase tracking-widest text-xs"
+                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  >
+                    Tone
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-purple-900/20">
+                {[
+                  ["0", "Bally's Avenue Shops", "Nostalgic dread. Uncanny quiet."],
+                  ["1", "The Boring Tunnel / Water Park", "Threshold dread. Modern tomb."],
+                  ["2", "The Flood Drain Civilization", "Visceral claustrophobia. Absent people."],
+                  ["3", "The Nature Vault", "Awe overrides dialogue. Silence is the horror."],
+                  ["4", "The Machine (Jubilee Mine)", "Primal. Final."],
+                ].map(([layer, name, tone]) => (
+                  <tr key={layer} className="group">
+                    <td
+                      className="py-3 pr-6 text-purple-500/70 font-mono text-xs"
+                    >
+                      {layer}
+                    </td>
+                    <td className="py-3 pr-6 text-gray-300 group-hover:text-white transition-colors">
+                      {name}
+                    </td>
+                    <td className="py-3 text-gray-500/80 italic text-sm">
+                      {tone}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </section>
+      {/* ── END VEGAS UNDERGROUND ────────────────────────── */}
+
       {/* ── DESKTOP DISCLAIMER ───────────────────────────── */}
       <div className="ls-gutter w-full bg-[#0d0820] border-y border-purple-900/40 py-4">
         <p className="text-center text-xs sm:text-sm text-purple-300/80 tracking-wide">
