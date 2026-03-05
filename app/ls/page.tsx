@@ -49,7 +49,7 @@ export default function LiminalSinLanding() {
             transition: background 0.25s ease, letter-spacing 0.15s ease;
           }
           .double-down-btn::before {
-            content: 'DOUBLE DOWN';
+            content: '[ LOCKED ]';
             position: absolute;
             inset: 0;
             display: flex;
@@ -150,11 +150,14 @@ export default function LiminalSinLanding() {
           </p>
         </div>
 
-        {/* DOUBLE DOWN button */}
-        <div className="absolute top-[62vh] left-1/2 -translate-x-1/2 z-30">
+        {/* LOCKED button + date */}
+        <div className="absolute top-[62vh] left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-4">
           <a href="#content">
-            <button className="double-down-btn">DOUBLE DOWN</button>
+            <button className="double-down-btn">[ LOCKED ]</button>
           </a>
+          <p className="text-sm sm:text-base font-mono tracking-[0.18em] uppercase text-purple-300/80 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
+            Prototype available &mdash; March 16th
+          </p>
         </div>
 
         {/* Tagline */}
