@@ -144,9 +144,9 @@ export default function LiminalSinLanding() {
         <div className="absolute top-[42vh] left-1/2 -translate-x-1/2 z-20 w-[calc(100%-2rem)] max-w-[620px] px-10 py-9 bg-black/65 backdrop-blur-md border border-[#8b00ff]/40 rounded-2xl shadow-[0_0_40px_rgba(139,0,255,0.25)] text-center">
           <p className="text-xl md:text-2xl text-red-100/90 font-light drop-shadow-md">
             An Interactive FMV Psychological Horror unlike anything you&apos;ve
-            experienced. A Gemini Live AI that sees and hears you &mdash; in
-            real time. The line between reality and illusion disappears the
-            moment you begin.
+            experienced before. A Gemini Live AI that watches, listens, and
+            responds &mdash; in real time. The line between reality and
+            illusion disappears the instant you Enter.
           </p>
         </div>
 
