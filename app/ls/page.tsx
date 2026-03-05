@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import SignupForms from "@/app/ls/SignupForms";
 
 export default function LiminalSinLanding() {
   return (
@@ -193,18 +194,7 @@ export default function LiminalSinLanding() {
                 fill
                 className="object-cover opacity-90 hover:opacity-100 transition-opacity"
               />
-              {/* Overlaid card — bottom-left */}
-              <div
-                id="signup"
-                className="absolute bottom-8 left-8 bg-black/90 border border-cyan-400/60 px-7 py-5 rounded-xl max-w-[280px]"
-              >
-                <h3 className="text-sm font-bold text-cyan-400 mb-1">
-                  Initializing Connection Protocols...
-                </h3>
-                <p className="text-cyan-100/50 text-xs">
-                  Access terminals loading in next phase.
-                </p>
-              </div>
+
             </div>
 
           </div>
