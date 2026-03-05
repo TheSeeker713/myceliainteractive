@@ -249,10 +249,6 @@ export default function LiminalSinLanding() {
               They can still hear a voice. Yours. And right now, you are the
               only reason any of them are still alive.
             </p>
-            <p className="text-gray-500/70 italic text-sm">
-              What they find down there &mdash; we&apos;re not going to tell you.
-              That&apos;s the point.
-            </p>
           </div>
 
           {/* World layer table */}
