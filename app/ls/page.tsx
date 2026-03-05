@@ -251,57 +251,6 @@ export default function LiminalSinLanding() {
             </p>
           </div>
 
-          {/* World layer table */}
-          <div className="w-full overflow-x-auto mt-2">
-            <table className="w-full text-sm text-left border-collapse">
-              <thead>
-                <tr className="border-b border-purple-900/40">
-                  <th
-                    className="py-2 pr-6 text-purple-400/60 font-medium uppercase tracking-widest text-xs"
-                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
-                  >
-                    Layer
-                  </th>
-                  <th
-                    className="py-2 pr-6 text-purple-400/60 font-medium uppercase tracking-widest text-xs"
-                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
-                  >
-                    Name
-                  </th>
-                  <th
-                    className="py-2 text-purple-400/60 font-medium uppercase tracking-widest text-xs"
-                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
-                  >
-                    Tone
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-purple-900/20">
-                {[
-                  ["0", "Bally's Avenue Shops", "Nostalgic dread. Uncanny quiet."],
-                  ["1", "The Boring Tunnel / Water Park", "Threshold dread. Modern tomb."],
-                  ["2", "The Flood Drain Civilization", "Visceral claustrophobia. Absent people."],
-                  ["3", "The Nature Vault", "Awe overrides dialogue. Silence is the horror."],
-                  ["4", "The Machine (Jubilee Mine)", "Primal. Final."],
-                ].map(([layer, name, tone]) => (
-                  <tr key={layer} className="group">
-                    <td
-                      className="py-3 pr-6 text-purple-500/70 font-mono text-xs"
-                    >
-                      {layer}
-                    </td>
-                    <td className="py-3 pr-6 text-gray-300 group-hover:text-white transition-colors">
-                      {name}
-                    </td>
-                    <td className="py-3 text-gray-500/80 italic text-sm">
-                      {tone}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
         </div>
       </section>
       {/* ── END VEGAS UNDERGROUND ────────────────────────── */}
