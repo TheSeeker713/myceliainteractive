@@ -13,11 +13,6 @@
       "database_id": "cb37396d-6a97-43e7-b492-94a1eb4647b7"
     }
   ],
-  "send_email": [
-    {
-      "name": "SEND_EMAIL"
-    }
-  ],
   "triggers": {
     "crons": ["* * * * *"]
   }

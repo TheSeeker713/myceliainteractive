@@ -1,8 +1,6 @@
-import { EmailMessage } from "cloudflare:email";
-
 export interface Env {
   liminal_sin_signups: D1Database;
-  SEND_EMAIL: SendEmail;
+  BREVO_API_KEY: string;
   ADMIN_TOKEN: string;
   ASSETS: Fetcher;
 }
@@ -13,23 +11,29 @@ interface SignupBody {
   type: "judge" | "tester";
 }
 
-// Build RFC-5322 MIME message as a ReadableStream (required by cloudflare:email runtime)
-function buildMimeStream(from: string, to: string, subject: string, html: string): ReadableStream {
-  const raw = [
-    `From: ${from}`,
-    `To: ${to}`,
-    `Subject: ${subject}`,
-    `MIME-Version: 1.0`,
-    `Content-Type: text/html; charset=utf-8`,
-    ``,
-    html,
-  ].join("\r\n");
-  return new ReadableStream({
-    start(controller) {
-      controller.enqueue(new TextEncoder().encode(raw));
-      controller.close();
+async function sendBrevo(
+  apiKey: string,
+  to: string,
+  subject: string,
+  html: string
+): Promise<void> {
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      sender: { name: "Liminal Sin", email: "access@myceliainteractive.com" },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
   });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Brevo error ${res.status}: ${text}`);
+  }
 }
 
 const EMAIL1_HTML = (name: string, type: "judge" | "tester") => `
@@ -101,20 +105,16 @@ async function sendEmail1(
     type === "judge"
       ? "Clearance Authorized — Liminal Sin Judge Access"
       : "Signal Received — Liminal Sin Beta Access Request Logged";
-  const stream = buildMimeStream("Liminal Sin <access@myceliainteractive.com>", to, subject, EMAIL1_HTML(name, type));
-  const message = new EmailMessage("access@myceliainteractive.com", to, stream);
-  await env.SEND_EMAIL.send(message);
+  await sendBrevo(env.BREVO_API_KEY, to, subject, EMAIL1_HTML(name, type));
 }
 
 async function sendEmail2(env: Env, to: string, name: string): Promise<void> {
-  const stream = buildMimeStream(
-    "Liminal Sin <access@myceliainteractive.com>",
+  await sendBrevo(
+    env.BREVO_API_KEY,
     to,
     "The Underground Is Open — Your Access Is Ready",
     EMAIL2_HTML(name)
   );
-  const message = new EmailMessage("access@myceliainteractive.com", to, stream);
-  await env.SEND_EMAIL.send(message);
 }
 
 async function handleSignup(request: Request, env: Env): Promise<Response> {
@@ -181,8 +181,8 @@ async function handleSignup(request: Request, env: Env): Promise<Response> {
       .prepare("UPDATE signups SET email1_sent = 1 WHERE email = ?")
       .bind(trimmedEmail)
       .run();
-  } catch {
-    // Email failure is non-fatal
+  } catch (err) {
+    console.error("[Email1 failed]", String(err));
   }
 
   return Response.json({ ok: true }, { status: 201 });

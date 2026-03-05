@@ -17,16 +17,6 @@ interface Fetcher {
   fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
 }
 
-declare module "cloudflare:email" {
-  export class EmailMessage {
-    constructor(from: string, to: string, raw: ReadableStream);
-  }
-}
-
-interface SendEmail {
-  send(message: import("cloudflare:email").EmailMessage): Promise<void>;
-}
-
 interface ScheduledController {
   scheduledTime: number;
   cron: string;
