@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:cf": "next build",
-    "deploy": "wrangler deploy --assets=out",
+    "deploy": "next build && wrangler deploy",
     "deploy:dry-run": "wrangler deploy --assets=out --dry-run",
     "start": "next start",
     "lint": "eslint"
