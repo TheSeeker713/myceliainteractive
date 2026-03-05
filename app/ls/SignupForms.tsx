@@ -10,21 +10,43 @@ export default function SignupForms() {
   const handleJudgeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus({ type: 'loading', message: 'Encrypting connection...' });
-    // This will hit the Step 5 API later
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: judgeForm.name, email: judgeForm.email, type: 'judge' }),
+      });
+      if (res.status === 409) {
+        setStatus({ type: 'error', message: 'This signal is already registered.' });
+        return;
+      }
+      if (!res.ok) throw new Error('API error');
       setStatus({ type: 'success', message: 'Judge access logged successfully.' });
       setJudgeForm({ name: '', email: '' });
-    }, 1000);
+    } catch {
+      setStatus({ type: 'error', message: 'Connection failed. Try again.' });
+    }
   };
 
   const handleTesterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus({ type: 'loading', message: 'Encrypting connection...' });
-    // This will hit the Step 5 API later
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: testerForm.name, email: testerForm.email, type: 'tester' }),
+      });
+      if (res.status === 409) {
+        setStatus({ type: 'error', message: 'This signal is already registered.' });
+        return;
+      }
+      if (!res.ok) throw new Error('API error');
       setStatus({ type: 'success', message: 'Tester position reserved. Awaiting origin coordinates.' });
       setTesterForm({ name: '', email: '' });
-    }, 1000);
+    } catch {
+      setStatus({ type: 'error', message: 'Connection failed. Try again.' });
+    }
   };
 
   return (

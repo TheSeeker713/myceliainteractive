@@ -1,7 +1,16 @@
 {
   "name": "myceliainteractive",
+  "main": "workers/signup-api.ts",
   "compatibility_date": "2026-02-19",
   "assets": {
-    "directory": "./out"
-  }
+    "directory": "./out",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "liminal_sin_signups",
+      "database_name": "liminal-sin-signups",
+      "database_id": "cb37396d-6a97-43e7-b492-94a1eb4647b7"
+    }
+  ]
 }
