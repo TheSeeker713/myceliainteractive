@@ -173,16 +173,22 @@ export default function LiminalSinLanding() {
             {/* LEFT COLUMN: text */}
             <div className="text-lg leading-relaxed text-gray-300 space-y-8">
               <p>
-                In <strong className="text-white">LIMINAL SIN</strong>, you don&apos;t
-                just watch a movie; you direct the nightmare. Navigating through
-                branching timelines built with hundreds of cinematic FMV (Full
-                Motion Video) clips, every choice spirals you deeper into a
-                labyrinth of buried secrets and broken memories.
+                <strong className="text-white">LIMINAL SIN</strong> is a prototype
+                built on a new kind of interactive architecture. Set in the{" "}
+                <span className="text-purple-300 font-semibold">Vegas Underground</span>{" "}
+                &mdash; a descent through impossible layers beneath a Las Vegas Strip
+                casino &mdash; you become a disembodied voice woven into a living
+                story. Three people are trapped. They can hear you. Whether they
+                trust you is entirely up to them.
               </p>
               <p>
-                Investigate the anomalies. Hunt for the glitched artifacts. Choose
-                who to trust. The narrative adapts to your paranoia. Who is the
-                Game Master?
+                This is{" "}
+                <strong className="text-white">Mycelia Interactive&apos;s</strong>{" "}
+                first demonstration of real-time AI-driven narrative &mdash; where
+                voice, emotion, and trust reshape the story as it unfolds. Not a
+                branching menu. Not a chatbot. A system that watches, listens, and
+                responds. The potential of this technology extends far beyond what
+                any single experience can contain.
               </p>
             </div>
 
@@ -222,16 +228,6 @@ export default function LiminalSinLanding() {
           >
             Origin Event — Layer 0
           </p>
-
-          {/* Pull quote */}
-          <blockquote
-            className="text-2xl sm:text-3xl md:text-4xl font-light leading-snug text-purple-100/90 italic"
-            style={{ textShadow: "0 0 24px rgba(139,0,255,0.3)" }}
-          >
-            &ldquo;You cannot see the voice. You never see the voice. You do not know if it is
-            inside your head or outside of it. Your instinct is not to trust it. Your instinct
-            is also that it might be the only thing keeping you alive.&rdquo;
-          </blockquote>
 
           {/* Divider */}
           <div
