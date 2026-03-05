@@ -13,9 +13,9 @@ interface SignupBody {
   type: "judge" | "tester";
 }
 
-// Build a minimal RFC-5322 MIME message as a raw string
-function buildMime(from: string, to: string, subject: string, html: string): string {
-  return [
+// Build RFC-5322 MIME message as a ReadableStream (required by cloudflare:email runtime)
+function buildMimeStream(from: string, to: string, subject: string, html: string): ReadableStream {
+  const raw = [
     `From: ${from}`,
     `To: ${to}`,
     `Subject: ${subject}`,
@@ -24,6 +24,12 @@ function buildMime(from: string, to: string, subject: string, html: string): str
     ``,
     html,
   ].join("\r\n");
+  return new ReadableStream({
+    start(controller) {
+      controller.enqueue(new TextEncoder().encode(raw));
+      controller.close();
+    },
+  });
 }
 
 const EMAIL1_HTML = (name: string, type: "judge" | "tester") => `
@@ -95,19 +101,19 @@ async function sendEmail1(
     type === "judge"
       ? "Clearance Authorized — Liminal Sin Judge Access"
       : "Signal Received — Liminal Sin Beta Access Request Logged";
-  const raw = buildMime("Liminal Sin <access@myceliainteractive.com>", to, subject, EMAIL1_HTML(name, type));
-  const message = new EmailMessage("access@myceliainteractive.com", to, raw);
+  const stream = buildMimeStream("Liminal Sin <access@myceliainteractive.com>", to, subject, EMAIL1_HTML(name, type));
+  const message = new EmailMessage("access@myceliainteractive.com", to, stream);
   await env.SEND_EMAIL.send(message);
 }
 
 async function sendEmail2(env: Env, to: string, name: string): Promise<void> {
-  const raw = buildMime(
+  const stream = buildMimeStream(
     "Liminal Sin <access@myceliainteractive.com>",
     to,
     "The Underground Is Open — Your Access Is Ready",
     EMAIL2_HTML(name)
   );
-  const message = new EmailMessage("access@myceliainteractive.com", to, raw);
+  const message = new EmailMessage("access@myceliainteractive.com", to, stream);
   await env.SEND_EMAIL.send(message);
 }
 
