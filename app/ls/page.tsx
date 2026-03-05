@@ -587,6 +587,44 @@ export default function LiminalSinLanding() {
       </section>
       {/* ── END WHAT AWAITS YOU ──────────────────────────── */}
 
+      {/* ── ACCESS SECTION ───────────────────────────────── */}
+      <section id="access" className="ls-section-py relative bg-[#050507]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 50% at 50% 30%, rgba(88,28,135,0.1) 0%, transparent 70%)",
+          }}
+        />
+        <div className="ls-gutter max-w-5xl mx-auto relative z-10 flex flex-col items-center gap-10">
+
+          {/* Header */}
+          <div className="text-center space-y-3 max-w-2xl">
+            <p
+              className="text-xs tracking-[0.35em] uppercase text-purple-400/60"
+              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+            >
+              Request Access
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-black uppercase tracking-wider text-white"
+              style={{ textShadow: "0 0 20px rgba(139,0,255,0.25)" }}
+            >
+              Enter the Underground
+            </h2>
+            <p className="text-gray-400/80 text-base leading-relaxed">
+              The prototype opens soon. Register your access point below. You will be
+              contacted when the signal is live.
+            </p>
+          </div>
+
+          <SignupForms />
+
+        </div>
+      </section>
+      {/* ── END ACCESS SECTION ───────────────────────────── */}
+
       {/* ── DESKTOP DISCLAIMER ───────────────────────────── */}
       <div className="ls-gutter w-full bg-[#0d0820] border-y border-purple-900/40 py-4">
         <p className="text-center text-xs sm:text-sm text-purple-300/80 tracking-wide">
