@@ -25,7 +25,7 @@
 
 ---
 
-## Completed Work
+## Completed Work (IN PROGRESS — pending final landing page copy + email confirmation)
 
 ### Landing Page — myceliainteractive.com/ls
 - [x] Navbar with logo + nav links
