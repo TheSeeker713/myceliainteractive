@@ -1,6 +1,4 @@
 export default function JudgesAccess() {
-  const gameUrl = process.env.NEXT_PUBLIC_GAME_URL ?? "#";
-
   return (
     <div className="bg-[#08041a] min-h-screen text-white flex flex-col items-center justify-center relative overflow-hidden">
 
@@ -110,7 +108,7 @@ export default function JudgesAccess() {
         </p>
 
         {/* CTA */}
-        <a href={gameUrl} className="judge-btn" rel="noopener noreferrer">
+        <a href="/ls/judges/game" className="judge-btn">
           Enter the Underground
         </a>
 
