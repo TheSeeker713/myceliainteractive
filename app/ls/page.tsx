@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import SignupForms from "@/app/ls/SignupForms";
+import FPVCarousel from "@/app/components/FPVCarousel";
 
 export default function LiminalSinLanding() {
   return (
-    <div className="bg-[#08041a] min-h-screen text-white">
-
+    <div className="bg-[#08041a] min-h-screen text-white relative">
       {/* ── STYLES ─────────────────────────────────────────── */}
-      { }
+      {}
       <style>{`
           @keyframes neon-flicker {
             0%, 100% {
@@ -114,7 +114,6 @@ export default function LiminalSinLanding() {
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="relative h-screen w-full overflow-hidden">
-
         {/* Background image + gradient overlay */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -145,8 +144,8 @@ export default function LiminalSinLanding() {
           <p className="text-xl md:text-2xl text-red-100/90 font-light drop-shadow-md">
             An Interactive FMV Psychological Horror unlike anything you&apos;ve
             experienced before. A Gemini Live AI that watches, listens, and
-            responds &mdash; in real time. The line between reality and
-            illusion disappears the instant you Enter.
+            responds &mdash; in real time. The line between reality and illusion
+            disappears the instant you Enter.
           </p>
         </div>
 
@@ -166,34 +165,40 @@ export default function LiminalSinLanding() {
             Once you&apos;re in, will you ever get out?
           </p>
         </div>
-
       </section>
       {/* ── END HERO ─────────────────────────────────────── */}
+
+      {/* ── BACKGROUND AI FPV CAROUSEL ─────────────────── */}
+      <FPVCarousel />
 
       {/* ── CONTENT SECTION ─────────────────────────────── */}
       <section id="content" className="ls-section-py relative bg-[#050507]">
         <div className="ls-gutter max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-16 items-center">
-
             {/* LEFT COLUMN: text */}
             <div className="text-lg leading-relaxed text-gray-300 space-y-8">
               <p>
-                <strong className="text-white">LIMINAL SIN</strong> is a prototype
-                built on a new kind of interactive architecture. Set in the{" "}
-                <span className="text-purple-300 font-semibold">Vegas Underground</span>{" "}
-                &mdash; a descent through impossible layers beneath a Las Vegas Strip
-                casino &mdash; you become a disembodied voice woven into a living
-                story. Three people are trapped. They can hear you. Whether they
-                trust you is entirely up to them.
+                <strong className="text-white">LIMINAL SIN</strong> is a
+                prototype built on a new kind of interactive architecture. Set
+                in the{" "}
+                <span className="text-purple-300 font-semibold">
+                  Vegas Underground
+                </span>{" "}
+                &mdash; a descent through impossible layers beneath a Las Vegas
+                Strip casino &mdash; you become a disembodied voice woven into a
+                living story. Three people are trapped. They can hear you.
+                Whether they trust you is entirely up to them.
               </p>
               <p>
                 This is{" "}
-                <strong className="text-white">Mycelia Interactive&apos;s</strong>{" "}
-                first demonstration of real-time AI-driven narrative &mdash; where
-                voice, emotion, and trust reshape the story as it unfolds. Not a
-                branching menu. Not a chatbot. A system that watches, listens, and
-                responds. The potential of this technology extends far beyond what
-                any single experience can contain.
+                <strong className="text-white">
+                  Mycelia Interactive&apos;s
+                </strong>{" "}
+                first demonstration of real-time AI-driven narrative &mdash;
+                where voice, emotion, and trust reshape the story as it unfolds.
+                Not a branching menu. Not a chatbot. A system that watches,
+                listens, and responds. The potential of this technology extends
+                far beyond what any single experience can contain.
               </p>
             </div>
 
@@ -205,9 +210,7 @@ export default function LiminalSinLanding() {
                 fill
                 className="object-cover opacity-90 hover:opacity-100 transition-opacity"
               />
-
             </div>
-
           </div>
         </div>
       </section>
@@ -225,11 +228,12 @@ export default function LiminalSinLanding() {
           }}
         />
         <div className="ls-gutter max-w-3xl mx-auto relative z-10 flex flex-col items-center gap-10 text-center">
-
           {/* Section eyebrow */}
           <p
             className="text-xs tracking-[0.35em] uppercase text-purple-400/60"
-            style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+            style={{
+              fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
+            }}
           >
             Origin Event — Layer 0
           </p>
@@ -248,14 +252,16 @@ export default function LiminalSinLanding() {
             <p>
               Somewhere beneath the Las Vegas Strip, three people are missing.
               Not missing like lost. Missing like{" "}
-              <span className="text-purple-300 font-semibold">they went somewhere they were not supposed to go</span>.
+              <span className="text-purple-300 font-semibold">
+                they went somewhere they were not supposed to go
+              </span>
+              .
             </p>
             <p>
               They can still hear a voice. Yours. And right now, you are the
               only reason any of them are still alive.
             </p>
           </div>
-
         </div>
       </section>
       {/* ── END VEGAS UNDERGROUND ────────────────────────── */}
@@ -263,12 +269,13 @@ export default function LiminalSinLanding() {
       {/* ── TRUST SYSTEM ─────────────────────────────────── */}
       <section className="ls-section-py relative bg-[#050507]">
         <div className="ls-gutter max-w-7xl mx-auto flex flex-col items-center gap-12">
-
           {/* Header */}
           <div className="text-center space-y-3 max-w-2xl">
             <p
               className="text-xs tracking-[0.35em] uppercase text-purple-400/60"
-              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+              style={{
+                fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
+              }}
             >
               Core Mechanic
             </p>
@@ -279,22 +286,22 @@ export default function LiminalSinLanding() {
               The Trust System
             </h2>
             <p className="text-gray-400/80 text-base leading-relaxed">
-              The characters are agents, not actors. Their behavior shifts with every word you
-              speak. Build trust through honesty. Destroy it through manipulation. Watch the
-              house collect its debt.
+              The characters are agents, not actors. Their behavior shifts with
+              every word you speak. Build trust through honesty. Destroy it
+              through manipulation. Watch the house collect its debt.
             </p>
           </div>
 
           {/* 3-column cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-
             {/* Neutral */}
             <div className="relative rounded-2xl border border-purple-800/40 bg-[#0a0514]/70 backdrop-blur-md p-7 flex flex-col gap-4 overflow-hidden">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 rounded-2xl"
                 style={{
-                  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(88,28,135,0.12) 0%, transparent 70%)",
+                  background:
+                    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(88,28,135,0.12) 0%, transparent 70%)",
                 }}
               />
               <div className="relative z-10 flex flex-col gap-4">
@@ -302,25 +309,35 @@ export default function LiminalSinLanding() {
                   <span
                     className="text-xl"
                     aria-hidden="true"
-                    style={{ filter: "drop-shadow(0 0 6px rgba(192,132,252,0.5))" }}
-                  >◈</span>
+                    style={{
+                      filter: "drop-shadow(0 0 6px rgba(192,132,252,0.5))",
+                    }}
+                  >
+                    ◈
+                  </span>
                   <h3
                     className="text-lg font-bold tracking-widest uppercase text-purple-200"
-                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                    style={{
+                      fontFamily:
+                        "var(--font-geist-mono), 'Courier New', monospace",
+                    }}
                   >
                     Neutral
                   </h3>
                 </div>
                 <p
                   className="text-xs text-purple-400/50 uppercase tracking-widest"
-                  style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  style={{
+                    fontFamily:
+                      "var(--font-geist-mono), 'Courier New', monospace",
+                  }}
                 >
                   Starting State
                 </p>
                 <p className="text-gray-400/80 text-sm leading-relaxed">
-                  The characters are cautious but willing to listen. They withhold critical
-                  survival secrets. Every interaction is a calculation — is this voice a
-                  lifeline, or a trap?
+                  The characters are cautious but willing to listen. They
+                  withhold critical survival secrets. Every interaction is a
+                  calculation — is this voice a lifeline, or a trap?
                 </p>
               </div>
             </div>
@@ -331,7 +348,8 @@ export default function LiminalSinLanding() {
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 rounded-2xl"
                 style={{
-                  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6,78,59,0.2) 0%, transparent 70%)",
+                  background:
+                    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6,78,59,0.2) 0%, transparent 70%)",
                 }}
               />
               <div className="relative z-10 flex flex-col gap-4">
@@ -339,25 +357,35 @@ export default function LiminalSinLanding() {
                   <span
                     className="text-xl text-cyan-400"
                     aria-hidden="true"
-                    style={{ filter: "drop-shadow(0 0 6px rgba(34,211,238,0.6))" }}
-                  >◈</span>
+                    style={{
+                      filter: "drop-shadow(0 0 6px rgba(34,211,238,0.6))",
+                    }}
+                  >
+                    ◈
+                  </span>
                   <h3
                     className="text-lg font-bold tracking-widest uppercase text-cyan-200"
-                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                    style={{
+                      fontFamily:
+                        "var(--font-geist-mono), 'Courier New', monospace",
+                    }}
                   >
                     High Trust
                   </h3>
                 </div>
                 <p
                   className="text-xs text-cyan-400/50 uppercase tracking-widest"
-                  style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  style={{
+                    fontFamily:
+                      "var(--font-geist-mono), 'Courier New', monospace",
+                  }}
                 >
                   Trigger: Honesty. Reliable guidance.
                 </p>
                 <p className="text-gray-400/80 text-sm leading-relaxed">
-                  Compliance. Environmental clues surface. Survival hints are shared. The
-                  characters follow your lead — but they remember every promise you&apos;ve
-                  made and whether you kept it.
+                  Compliance. Environmental clues surface. Survival hints are
+                  shared. The characters follow your lead — but they remember
+                  every promise you&apos;ve made and whether you kept it.
                 </p>
               </div>
             </div>
@@ -368,7 +396,8 @@ export default function LiminalSinLanding() {
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 rounded-2xl"
                 style={{
-                  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(127,29,29,0.2) 0%, transparent 70%)",
+                  background:
+                    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(127,29,29,0.2) 0%, transparent 70%)",
                 }}
               />
               <div className="relative z-10 flex flex-col gap-4">
@@ -376,40 +405,50 @@ export default function LiminalSinLanding() {
                   <span
                     className="text-xl text-red-400"
                     aria-hidden="true"
-                    style={{ filter: "drop-shadow(0 0 6px rgba(248,113,113,0.6))" }}
-                  >◈</span>
+                    style={{
+                      filter: "drop-shadow(0 0 6px rgba(248,113,113,0.6))",
+                    }}
+                  >
+                    ◈
+                  </span>
                   <h3
                     className="text-lg font-bold tracking-widest uppercase text-red-300"
-                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                    style={{
+                      fontFamily:
+                        "var(--font-geist-mono), 'Courier New', monospace",
+                    }}
                   >
                     Low Trust
                   </h3>
                 </div>
                 <p
                   className="text-xs text-red-400/50 uppercase tracking-widest"
-                  style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                  style={{
+                    fontFamily:
+                      "var(--font-geist-mono), 'Courier New', monospace",
+                  }}
                 >
                   Trigger: Lies. Leading into traps.
                 </p>
                 <p className="text-gray-400/80 text-sm leading-relaxed">
-                  Unpredictable. They may disobey, hide information, or spiral into
-                  paranoia. At the floor — they negotiate for their own survival over the
-                  others. The house begins to collect.
+                  Unpredictable. They may disobey, hide information, or spiral
+                  into paranoia. At the floor — they negotiate for their own
+                  survival over the others. The house begins to collect.
                 </p>
               </div>
             </div>
-
           </div>
 
           {/* Footer note */}
           <p
             className="text-xs text-purple-500/40 text-center max-w-lg"
-            style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+            style={{
+              fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
+            }}
           >
-            Trust is not a meter. It is a lived memory. The AI agents track everything you
-            say — and everything you don&apos;t.
+            Trust is not a meter. It is a lived memory. The AI agents track
+            everything you say — and everything you don&apos;t.
           </p>
-
         </div>
       </section>
       {/* ── END TRUST SYSTEM ─────────────────────────────── */}
@@ -425,12 +464,13 @@ export default function LiminalSinLanding() {
           }}
         />
         <div className="ls-gutter max-w-4xl mx-auto relative z-10 flex flex-col items-center gap-12">
-
           {/* Header */}
           <div className="text-center space-y-3">
             <p
               className="text-xs tracking-[0.35em] uppercase text-purple-400/60"
-              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+              style={{
+                fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
+              }}
             >
               System Capabilities
             </p>
@@ -489,7 +529,10 @@ export default function LiminalSinLanding() {
                 <div className="flex flex-col gap-1.5">
                   <h3
                     className="text-sm font-bold text-purple-200 uppercase tracking-wide group-hover:text-white transition-colors"
-                    style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+                    style={{
+                      fontFamily:
+                        "var(--font-geist-mono), 'Courier New', monospace",
+                    }}
                   >
                     {label}
                   </h3>
@@ -506,24 +549,28 @@ export default function LiminalSinLanding() {
             <div
               className="w-16 h-px"
               style={{
-                background: "linear-gradient(90deg, transparent, rgba(192,132,252,0.4), transparent)",
+                background:
+                  "linear-gradient(90deg, transparent, rgba(192,132,252,0.4), transparent)",
               }}
             />
             <p
               className="text-sm text-purple-400/50"
-              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+              style={{
+                fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
+              }}
             >
               Prototype access opens below. First 30 subjects only.
             </p>
             <a
               href="#access"
               className="text-xs uppercase tracking-[0.25em] text-cyan-400/70 hover:text-cyan-300 transition-colors"
-              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+              style={{
+                fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
+              }}
             >
               ↓ Request Access
             </a>
           </div>
-
         </div>
       </section>
       {/* ── END WHAT AWAITS YOU ──────────────────────────── */}
@@ -539,12 +586,13 @@ export default function LiminalSinLanding() {
           }}
         />
         <div className="ls-gutter max-w-5xl mx-auto relative z-10 flex flex-col items-center gap-10">
-
           {/* Header */}
           <div className="text-center space-y-3 max-w-2xl">
             <p
               className="text-xs tracking-[0.35em] uppercase text-purple-400/60"
-              style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+              style={{
+                fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
+              }}
             >
               Request Access
             </p>
@@ -555,13 +603,12 @@ export default function LiminalSinLanding() {
               Enter the Underground
             </h2>
             <p className="text-gray-400/80 text-base leading-relaxed">
-              The prototype opens soon. Register your access point below. You will be
-              contacted when the signal is live.
+              The prototype opens soon. Register your access point below. You
+              will be contacted when the signal is live.
             </p>
           </div>
 
           <SignupForms />
-
         </div>
       </section>
       {/* ── END ACCESS SECTION ───────────────────────────── */}
@@ -569,8 +616,11 @@ export default function LiminalSinLanding() {
       {/* ── DESKTOP DISCLAIMER ───────────────────────────── */}
       <div className="ls-gutter w-full bg-[#0d0820] border-y border-purple-900/40 py-4">
         <p className="text-center text-xs sm:text-sm text-purple-300/80 tracking-wide">
-          <span className="font-semibold text-purple-400">⚠️ Desktop Experience:</span>
-          {" "}LIMINAL SIN is designed for desktop browsers. Tablet support is currently in testing. Mobile play is not yet supported.
+          <span className="font-semibold text-purple-400">
+            ⚠️ Desktop Experience:
+          </span>{" "}
+          LIMINAL SIN is designed for desktop browsers. Tablet support is
+          currently in testing. Mobile play is not yet supported.
         </p>
       </div>
       {/* ── END DESKTOP DISCLAIMER ─────────────────────────── */}
@@ -580,20 +630,28 @@ export default function LiminalSinLanding() {
         <div className="max-w-7xl mx-auto space-y-4">
           {/* Top row: copyright */}
           <div className="flex items-center justify-start text-cyan-50/70 text-sm">
-            &copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.
+            &copy; {new Date().getFullYear()} Mycelia Interactive. All rights
+            reserved.
           </div>
           {/* Bottom row: placeholder for future disclaimers, privacy link, etc. */}
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-cyan-50/40 border-t border-purple-900/30 pt-4">
-            <span>LIMINAL SIN&trade; is a work of interactive fiction. All characters and events are fictional.</span>
+            <span>
+              LIMINAL SIN&trade; is a work of interactive fiction. All
+              characters and events are fictional.
+            </span>
             <span className="hidden sm:inline text-purple-900/60">|</span>
-            <a href="/ls/privacy.html" className="hover:text-cyan-300 transition-colors">Privacy Policy</a>
+            <a
+              href="/ls/privacy.html"
+              className="hover:text-cyan-300 transition-colors"
+            >
+              Privacy Policy
+            </a>
             <span className="hidden sm:inline text-purple-900/60">|</span>
             <span className="text-purple-400/60">v0.1 — Early Access</span>
           </div>
         </div>
       </footer>
       {/* ── END FOOTER ───────────────────────────────────── */}
-
     </div>
   );
 }

@@ -3,6 +3,8 @@ export interface Env {
   BREVO_API_KEY: string;
   ADMIN_TOKEN: string;
   ASSETS: Fetcher;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  AI: any;
 }
 
 interface SignupBody {
@@ -15,7 +17,7 @@ async function sendBrevo(
   apiKey: string,
   to: string,
   subject: string,
-  html: string
+  html: string,
 ): Promise<void> {
   const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
@@ -50,9 +52,11 @@ const EMAIL1_HTML = (name: string, type: "judge" | "tester") => `
       <p style="font-size:14px;color:rgba(196,181,253,0.7);line-height:1.7;margin:0 0 24px;">
         <strong style="color:#e9d5ff;">${name}</strong>,<br>
         Your access request has been logged in the system.
-        ${type === "judge"
-          ? "Direct entry credentials will be issued before the experience goes live."
-          : "You are on the list. We will contact you when a slot opens. Do not expect conventional onboarding."}
+        ${
+          type === "judge"
+            ? "Direct entry credentials will be issued before the experience goes live."
+            : "You are on the list. We will contact you when a slot opens. Do not expect conventional onboarding."
+        }
       </p>
       <div style="border-top:1px solid rgba(139,0,255,0.2);padding-top:20px;margin-top:8px;">
         <p style="font-size:11px;color:rgba(139,92,246,0.7);letter-spacing:0.15em;margin:0;">
@@ -99,7 +103,7 @@ async function sendEmail1(
   env: Env,
   to: string,
   name: string,
-  type: "judge" | "tester"
+  type: "judge" | "tester",
 ): Promise<void> {
   const subject =
     type === "judge"
@@ -113,7 +117,7 @@ async function sendEmail2(env: Env, to: string, name: string): Promise<void> {
     env.BREVO_API_KEY,
     to,
     "The Underground Is Open — Your Access Is Ready",
-    EMAIL2_HTML(name)
+    EMAIL2_HTML(name),
   );
 }
 
@@ -121,7 +125,10 @@ async function handleSignup(request: Request, env: Env): Promise<Response> {
   // Only accept JSON
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {
-    return Response.json({ error: "Expected application/json" }, { status: 415 });
+    return Response.json(
+      { error: "Expected application/json" },
+      { status: 415 },
+    );
   }
 
   let body: unknown;
@@ -158,7 +165,7 @@ async function handleSignup(request: Request, env: Env): Promise<Response> {
     // Write to D1
     await env.liminal_sin_signups
       .prepare(
-        "INSERT INTO signups (name, email, type, created_at) VALUES (?, ?, ?, ?)"
+        "INSERT INTO signups (name, email, type, created_at) VALUES (?, ?, ?, ?)",
       )
       .bind(trimmedName, trimmedEmail, type, new Date().toISOString())
       .run();
@@ -168,7 +175,7 @@ async function handleSignup(request: Request, env: Env): Promise<Response> {
     if (msg.includes("UNIQUE") || msg.includes("unique")) {
       return Response.json(
         { error: "This email is already registered." },
-        { status: 409 }
+        { status: 409 },
       );
     }
     return Response.json({ error: "Database error" }, { status: 500 });
@@ -188,7 +195,10 @@ async function handleSignup(request: Request, env: Env): Promise<Response> {
   return Response.json({ ok: true }, { status: 201 });
 }
 
-async function handleSetGameLive(request: Request, env: Env): Promise<Response> {
+async function handleSetGameLive(
+  request: Request,
+  env: Env,
+): Promise<Response> {
   const authHeader = request.headers.get("authorization") ?? "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
   if (!token || token !== env.ADMIN_TOKEN) {
@@ -197,7 +207,66 @@ async function handleSetGameLive(request: Request, env: Env): Promise<Response> 
   await env.liminal_sin_signups
     .prepare("UPDATE settings SET value = '1' WHERE key = 'game_live'")
     .run();
-  return Response.json({ ok: true, message: "Game is now live. Email 2 will deliver on the next cron tick." });
+  return Response.json({
+    ok: true,
+    message: "Game is now live. Email 2 will deliver on the next cron tick.",
+  });
+}
+
+// Token restriction constants
+const MAX_SEEDS = 12;
+
+const FPV_PROMPTS = [
+  "Photorealistic FPV view through smart glasses, walking down the Vegas Underground Boring Tunnel, creepy, dimly lit, liminal space, glowing neon signs in the distance, highly detailed 8k",
+  "Photorealistic FPV view through smart glasses, exploring an abandoned underground waterpark, dry cracked slides, rusted metal, eerie shadows, liminal space, hyper-realistic",
+  "Photorealistic FPV view through smart glasses, a surreal blending of a Las Vegas tunnel and an abandoned dirty waterpark, illogical architecture, dreamcore horror, highly detailed",
+];
+
+async function handleAiImage(request: Request, env: Env): Promise<Response> {
+  const url = new URL(request.url);
+  // Cap generation variations to protect AI limits
+  const seedParam = url.searchParams.get("seed") || "0";
+  const rawSeed = parseInt(seedParam, 10);
+  const safeSeed = isNaN(rawSeed) ? 0 : rawSeed % MAX_SEEDS;
+  
+  // Try to return from cache first via explicitly fetched cache if environment supports it, but here we can just rely on standard HTTP caching for the edge by returning standard headers. The worker environment type doesn't have caches.default natively without extra types.
+  // Instead, since Cloudflare automatically caches based on Cache-Control for GET requests via standard zones, we just need to return the correct headers.
+
+  // Rotate prompts based on the seed
+  const prompt = FPV_PROMPTS[safeSeed % FPV_PROMPTS.length];
+
+  try {
+    const aiResponse = await env.AI.run(
+      "@cf/black-forest-labs/flux-1-schnell",
+      {
+        prompt,
+        // Pass the seed to ensure deterministic output for the same safeSeed
+        seed: safeSeed * 1000, // Arbitrary multiplier to space out seeds
+      },
+    );
+
+    // Cloudflare AI text-to-image returns a JSON object with a base64 encoded string in `image`
+    const binaryString = atob(aiResponse.image);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    const response = new Response(bytes, {
+      headers: {
+        "Content-Type": "image/jpeg",
+        "Cache-Control": "public, max-age=86400, s-maxage=86400", // Cache heavily
+      },
+    });
+
+    return response;
+  } catch (err) {
+    console.error("AI Generation Error:", err);
+    return Response.json(
+      { error: "Failed to generate image" },
+      { status: 500 },
+    );
+  }
 }
 
 const handler = {
@@ -222,6 +291,14 @@ const handler = {
       return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
 
+    // AI Image Endpoint
+    if (url.pathname === "/api/ai/image" && request.method === "GET") {
+      return handleAiImage(request, env);
+    }
+    if (url.pathname === "/api/ai/image") {
+      return Response.json({ error: "Method not allowed" }, { status: 405 });
+    }
+
     // Everything else: serve static assets
     return env.ASSETS.fetch(request);
   },
@@ -236,7 +313,9 @@ const handler = {
 
     // Find all users who received Email 1 but not yet Email 2
     const { results } = await env.liminal_sin_signups
-      .prepare("SELECT name, email FROM signups WHERE email1_sent = 1 AND email2_sent = 0")
+      .prepare(
+        "SELECT name, email FROM signups WHERE email1_sent = 1 AND email2_sent = 0",
+      )
       .all<{ name: string; email: string }>();
 
     for (const row of results) {
