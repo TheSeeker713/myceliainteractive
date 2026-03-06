@@ -1,6 +1,6 @@
 # CURRENT_STATE.md — myceliainteractive
 > **AI WORKING MEMORY** — Updated at the end of each session.
-> Last updated: March 5, 2026
+> Last updated: March 6, 2026
 
 ---
 
@@ -25,7 +25,7 @@
 
 ---
 
-## Completed Work (IN PROGRESS — pending final landing page copy + email confirmation)
+## Completed Work
 
 ### Landing Page — myceliainteractive.com/ls
 - [x] Navbar with logo + nav links
@@ -53,8 +53,8 @@
 - [x] Email 1: Instant welcome on signup — sent via Brevo to any email address
 - [x] Email 2: "The Underground Is Open" — sent by cron after admin flips game_live flag
 - [x] SPF record: `v=spf1 include:_spf.mx.cloudflare.net ~all` confirmed on domain
-- [x] From address: `access@myceliainteractive.com` (Email Routing → digiartifact11@gmail.com)
-- [ ] **PENDING: Confirm Email 1 delivers to jrobards713@gmail.com** (last test ran, awaiting result)
+- [x] From address: `access@myceliainteractive.com` (Email Routing → admin inbox)
+- [x] Email 1 delivery confirmed via live test — signup flow end-to-end verified
 
 ---
 
@@ -78,3 +78,24 @@ Within 60 seconds all signed-up users receive Email 2.
 | `app/ls/page.tsx` | Liminal Sin landing page |
 | `app/ls/SignupForms.tsx` | Judge + tester signup forms (client component) |
 | `app/ls/judges/page.tsx` | Judge backdoor route |
+| `app/components/FPVCarousel.tsx` | Cloudflare AI FPV image carousel — `/ls` background |
+| `app/ls/game/` | Game UI shell — WebSocket client (IN PROGRESS) |
+
+---
+
+## Cloudflare AI — Workers AI Binding
+- [x] `wrangler.jsonc` — `ai` binding wired (`env.AI`)
+- [x] `workers/globals.d.ts` — `AI: any` added to `Env`
+- [x] `GET /api/ai/image?seed={0-11}` — Flux 1 Schnell FPV image generation, 12-seed cap, 24h edge cache
+- [x] `app/components/FPVCarousel.tsx` — crossfade carousel, random 12–24s intervals, `unoptimized` images
+- [ ] `GET /api/ai/tts` — Deepgram ambient voiceover endpoint (PENDING)
+- [ ] Dynamic copy mutations via Llama 3 (OPTIONAL)
+
+## Game UI Shell — app/ls/game/ (IN PROGRESS)
+- [ ] WebSocket context provider (`GameWSContext`)
+- [ ] Microphone capture → `player_speech` events
+- [ ] Webcam capture at 1 FPS → `player_frame` events
+- [ ] Agent audio playback via Web Audio API
+- [ ] HUD overlay: cracked glasses effect + trust indicator
+- [ ] FMV video sequence rendering on `fmv_trigger` events
+- [ ] `NEXT_PUBLIC_GAME_WS_URL` env var wired
