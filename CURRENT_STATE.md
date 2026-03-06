@@ -1,6 +1,6 @@
 # CURRENT_STATE.md — myceliainteractive
 > **AI WORKING MEMORY** — Updated at the end of each session.
-> Last updated: March 6, 2026
+> Last updated: March 6, 2026 (session 2)
 
 ---
 
@@ -79,7 +79,11 @@ Within 60 seconds all signed-up users receive Email 2.
 | `app/ls/SignupForms.tsx` | Judge + tester signup forms (client component) |
 | `app/ls/judges/page.tsx` | Judge backdoor route |
 | `app/components/FPVCarousel.tsx` | Cloudflare AI FPV image carousel — `/ls` background |
-| `app/ls/game/` | Game UI shell — WebSocket client (IN PROGRESS) |
+| `app/ls/game/page.tsx` | Game UI shell — wrapper for Google Cloud game |
+| `app/ls/game/GameWSContext.tsx` | WebSocket context provider (shell, not yet wired to GC URL) |
+| `app/ls/game/GameHUD.tsx` | HUD overlay component shell |
+| `app/ls/game/usePlayerMedia.ts` | Mic + webcam capture hook (shell) |
+| `app/ls/judges/game/page.tsx` | Judge game shell — same as above with `judgeMode=true` |
 
 ---
 
@@ -91,11 +95,23 @@ Within 60 seconds all signed-up users receive Email 2.
 - [ ] `GET /api/ai/tts` — Deepgram ambient voiceover endpoint (PENDING)
 - [ ] Dynamic copy mutations via Llama 3 (OPTIONAL)
 
-## Game UI Shell — app/ls/game/ (IN PROGRESS)
-- [ ] WebSocket context provider (`GameWSContext`)
-- [ ] Microphone capture → `player_speech` events
-- [ ] Webcam capture at 1 FPS → `player_frame` events
-- [ ] Agent audio playback via Web Audio API
-- [ ] HUD overlay: cracked glasses effect + trust indicator
-- [ ] FMV video sequence rendering on `fmv_trigger` events
-- [ ] `NEXT_PUBLIC_GAME_WS_URL` env var wired
+## Game UI Shell — app/ls/game/ + app/ls/judges/game/
+
+> **Architecture note**: The actual game runtime lives on Google Cloud Run (`liminal-sin-gemini`). These Next.js pages are thin **wrapper shells** — they provide the browser client that connects to the GC WebSocket server. All game logic lives in the backend.
+
+### Shell files created (committed)
+- [x] `app/ls/game/page.tsx` — Player game wrapper page shell ("ENTER" splash → begin session)
+- [x] `app/ls/game/GameWSContext.tsx` — WebSocket context provider (structure in place)
+- [x] `app/ls/game/GameHUD.tsx` — HUD overlay component shell
+- [x] `app/ls/game/usePlayerMedia.ts` — Mic + webcam `getUserMedia` capture hook
+- [x] `app/ls/judges/game/page.tsx` — Judge variant, passes `judgeMode: true` in `session_start`
+
+### Still needed to make it functional
+- [ ] `NEXT_PUBLIC_GAME_WS_URL` env var wired in `.env.local` + Cloudflare Pages dashboard
+- [ ] `GameWSContext` actually connects to real GC WebSocket URL and sends `session_start`
+- [ ] Microphone audio → base64 chunks → `player_speech` events over WebSocket
+- [ ] Webcam at 1 FPS → JPEG → base64 → `player_frame` events over WebSocket
+- [ ] Agent audio playback: receive `agent_speech` → decode base64 → Web Audio API
+- [ ] HUD: trust indicator driven by `trust_update` events
+- [ ] HUD: cracked glasses glitch overlay driven by `hud_glitch` events
+- [ ] FMV video rendering on `fmv_trigger` / `fmv_stop` events

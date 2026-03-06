@@ -184,7 +184,7 @@
         what&apos;s coming, and what&apos;s still just a dream in the dark.
       </p>
       <div class="mt-4 inline-block px-4 py-1.5 rounded-full border border-yellow-500/40 bg-yellow-500/10 text-yellow-300 text-xs font-rajdhani tracking-widest uppercase">
-        Last Updated: March 3, 2026
+        Last Updated: March 6, 2026
       </div>
     </div>
 
@@ -230,6 +230,36 @@
           <div class="text-cyan-400 text-xl mb-3">🏠</div>
           <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Homepage Redesign</h3>
           <p class="text-slate-400 text-sm leading-relaxed font-inter">Full UI overhaul targeting contest judges. Two-column animated card layout linking to Mycelia Interactive and Liminal Sin sub-pages.</p>
+        </div>
+
+        <div class="roadmap-card card-done rounded-xl border border-cyan-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="0">
+          <div class="text-cyan-400 text-xl mb-3">📋</div>
+          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Signup Forms + D1 Backend</h3>
+          <p class="text-slate-400 text-sm leading-relaxed font-inter">Judge and Beta Tester signup forms live on <code class="text-cyan-400">/ls</code>. Cloudflare D1 stores all signups. <code class="text-cyan-400">POST /api/signup</code> validates input, writes to D1, and triggers the welcome email.</p>
+        </div>
+
+        <div class="roadmap-card card-done rounded-xl border border-cyan-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="80">
+          <div class="text-cyan-400 text-xl mb-3">📧</div>
+          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Email Dispatch System</h3>
+          <p class="text-slate-400 text-sm leading-relaxed font-inter">Two-email flow via Brevo. Email 1 fires instantly on signup. Email 2 (&quot;The Underground Is Open&quot;) dispatches to all users within 60 seconds of admin flipping the game-live flag via a protected API endpoint.</p>
+        </div>
+
+        <div class="roadmap-card card-done rounded-xl border border-cyan-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="160">
+          <div class="text-cyan-400 text-xl mb-3">🔐</div>
+          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Judge Backdoor Page</h3>
+          <p class="text-slate-400 text-sm leading-relaxed font-inter">Atmospheric access gate at <code class="text-cyan-400">/ls/judges</code> — &quot;SIGNAL AUTHORIZED&quot; page with neon-flicker CTA. Links to the judge game session wrapper at <code class="text-cyan-400">/ls/judges/game</code>.</p>
+        </div>
+
+        <div class="roadmap-card card-done rounded-xl border border-cyan-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="0">
+          <div class="text-cyan-400 text-xl mb-3">🖼️</div>
+          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">FPV Image Carousel (CF AI)</h3>
+          <p class="text-slate-400 text-sm leading-relaxed font-inter">Background image carousel on <code class="text-cyan-400">/ls</code> powered by Cloudflare Workers AI (Flux 1 Schnell). Generates cinematic POV Smart Glasses shots of the Vegas Underground — 12-seed cap, 24h edge cache, crossfade transitions.</p>
+        </div>
+
+        <div class="roadmap-card card-done rounded-xl border border-cyan-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="80">
+          <div class="text-cyan-400 text-xl mb-3">🗺️</div>
+          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">This Roadmap Page</h3>
+          <p class="text-slate-400 text-sm leading-relaxed font-inter">Versioned roadmap index and detail document live at <code class="text-cyan-400">/roadmap</code>. Reflects actual project state and is updated each session.</p>
         </div>
 
         <div class="roadmap-card card-done rounded-xl border border-cyan-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="80">
@@ -284,15 +314,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
         <div class="roadmap-card card-wip rounded-xl border border-purple-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="0">
-          <div class="text-purple-400 text-xl mb-3">📋</div>
-          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Signup Forms UI</h3>
-          <p class="text-slate-400 text-sm leading-relaxed font-inter">Two forms on <code class="text-purple-300">/ls</code>: one for Contest Judges (optional), one for Game Testers (hard cap of 30 spots). Fake names and screen names are explicitly welcome.</p>
+          <div class="text-purple-400 text-xl mb-3">🎮</div>
+          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Game UI Shell</h3>
+          <p class="text-slate-400 text-sm leading-relaxed font-inter">Browser client at <code class="text-purple-300">/ls/game</code> and <code class="text-purple-300">/ls/judges/game</code>. Shell pages, WebSocket context, HUD overlay, and mic/webcam capture hooks are in place. Next step: wire to the live Google Cloud Run WebSocket endpoint.</p>
         </div>
 
         <div class="roadmap-card card-wip rounded-xl border border-purple-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="80">
-          <div class="text-purple-400 text-xl mb-3">🗺️</div>
-          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">This Roadmap Page</h3>
-          <p class="text-slate-400 text-sm leading-relaxed font-inter">You are here. Being built and iterated in real time.</p>
+          <div class="text-purple-400 text-xl mb-3">🤖</div>
+          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Gemini Live Integration</h3>
+          <p class="text-slate-400 text-sm leading-relaxed font-inter">Full-duplex WebSocket pipeline between the browser client and the Google Cloud Run backend. WebSocket event contract defined in <code class="text-purple-300">TEAM_CONTRACT.md</code>. Frontend shell is ready; backend pipeline is actively in development in <code class="text-purple-300">liminal-sin-gemini</code>.</p>
         </div>
 
       </div>
@@ -311,33 +341,21 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
         <div class="roadmap-card card-planned rounded-xl border border-fuchsia-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="0">
-          <div class="text-fuchsia-400 text-xl mb-3">🗄️</div>
-          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Cloudflare D1 Backend</h3>
-          <p class="text-slate-400 text-sm leading-relaxed font-inter">Edge SQLite database via Cloudflare D1 to store Judge and Tester signups. API route at <code class="text-fuchsia-300">/api/signup</code> with contact forwarding to the studio inbox.</p>
+          <div class="text-fuchsia-400 text-xl mb-3">�</div>
+          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">TTS Ambient Voiceover</h3>
+          <p class="text-slate-400 text-sm leading-relaxed font-inter">Creepy atmospheric audio clips for the <code class="text-fuchsia-300">/ls</code> landing page generated via Cloudflare Workers AI (<code class="text-fuchsia-300">@cf/deepgram/aura-2-en</code>). Dynamic, procedurally generated — no manual voice recordings required.</p>
         </div>
 
         <div class="roadmap-card card-planned rounded-xl border border-fuchsia-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="80">
-          <div class="text-fuchsia-400 text-xl mb-3">📧</div>
-          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Email Dispatch Integration</h3>
-          <p class="text-slate-400 text-sm leading-relaxed font-inter">All signup contact info automatically forwarded to the studio email address via an edge-compatible email provider.</p>
-        </div>
-
-        <div class="roadmap-card card-planned rounded-xl border border-fuchsia-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="160">
           <div class="text-fuchsia-400 text-xl mb-3">🎁</div>
           <h3 class="font-orbitron font-semibold text-sm text-white mb-2">User Reward System</h3>
           <p class="text-slate-400 text-sm leading-relaxed font-inter">A system to reward early adopters, testers, and active community members. Early access, exclusive in-game content, and recognition tiers are under consideration.</p>
         </div>
 
-        <div class="roadmap-card card-planned rounded-xl border border-fuchsia-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="0">
+        <div class="roadmap-card card-planned rounded-xl border border-fuchsia-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="160">
           <div class="text-fuchsia-400 text-xl mb-3">💬</div>
           <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Feedback API Endpoint</h3>
           <p class="text-slate-400 text-sm leading-relaxed font-inter">Backend at <code class="text-fuchsia-300">/api/feedback</code> to receive user-submitted bugs, ideas, and issues from the form below. Submissions route to the studio inbox and are reviewed for roadmap inclusion.</p>
-        </div>
-
-        <div class="roadmap-card card-planned rounded-xl border border-fuchsia-500/20 bg-card p-5" data-aos="fade-up" data-aos-delay="80">
-          <div class="text-fuchsia-400 text-xl mb-3">🤖</div>
-          <h3 class="font-orbitron font-semibold text-sm text-white mb-2">Gemini Live Integration</h3>
-          <p class="text-slate-400 text-sm leading-relaxed font-inter">Connecting the Game Master and NPC multi-agent system (Liminal Sin Gemini project) to the live web experience via real-time voice input.</p>
         </div>
 
       </div>
