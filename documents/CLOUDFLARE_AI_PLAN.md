@@ -15,8 +15,17 @@ This document outlines the technical plan for integrating Cloudflare Workers AI 
 | Asset Type | Primary Model | Purpose |
 |---|---|---|
 | **Ambient Voiceover** | `@cf/deepgram/aura-2-en` | Generate creepy, distant, or glitchy atmospheric dialogue clips dynamically for the landing page without needing manual voice recordings. |
-| **Atmospheric Images** | `@cf/black-forest-labs/flux-1-schnell` | Generate glitchy, liminal background textures or teaser images on the fly (or cached) based on player interactions with the marketing shell. |
+| **Smart Glasses FPV Carousel (Images)** | `@cf/black-forest-labs/flux-1-schnell` | Generate a background carousel of cinematic, photorealistic static images for the `/ls` page. Images must be from a POV/FPV Smart glasses camera perspective, showcasing the Vegas Underground prototype areas (Boring Tunnel, underground waterpark, and the blending of the two). |
 | **Dynamic Copy (Optional)** | `@cf/meta/llama-3-8b-instruct` | Small localized text mutations (e.g., changing the lore text subtly on reload to create an unsettling "Mandela effect" for returning visitors). |
+
+### Feature Details: FPV Smart Glasses Image Carousel
+- **Positioning**: Rendered in the background of the `/ls` page.
+- **Generation**: Images are generated asynchronously using the Cloudflare AI API (`flux-1-schnell`) and rotated in a smooth carousel.
+- **Visual Style**: Cinematic and photorealistic quality. Strictly POV/FPV perspective as if viewed through the player's Smart Glasses camera.
+- **Content Restriction**: Must ONLY cover scenes available in the project prototype, specifically:
+  - The Vegas Underground Boring Tunnel
+  - The abandoned underground waterpark
+  - The surreal blending of the two environments.
 
 ## 3. Implementation Steps
 
