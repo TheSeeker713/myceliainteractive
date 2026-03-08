@@ -75,8 +75,10 @@ AGENTS.md             ← This file
   - Capturing microphone input → sending to backend
   - Capturing webcam frames → sending to backend (1 FPS JPEG)
   - Receiving agent audio responses → playing via Web Audio API
-  - Rendering HUD overlays (cracked glasses effect, trust indicator)
-  - Rendering FMV video sequences triggered by backend events
+  - Rendering HUD overlays (trust indicator)
+  <!-- DEFERRED: cracked glasses HUD effect — smart glasses system deferred to roadmap (March 7, 2026) -->
+  <!-- DEPRECATED: FMV video sequences — replaced by Imagen 3 live scene generation (March 7, 2026 pivot) -->
+  - Rendering Imagen 3 scene backgrounds triggered by backend `scene_change` events
 
 ### Key Principle
 The game UI is a **dumb terminal**. It sends player input and renders what the backend tells it to render. All game logic, trust state, and agent decisions live in `liminal-sin-gemini`. Never embed game logic in the UI.
@@ -173,3 +175,6 @@ See `TEAM_CONTRACT.md` for:
 - How to run the mock backend server during frontend development
 - Rules for changes that affect both repos simultaneously
 - The full split of responsibilities between MI and LS
+
+**CRITICAL REQUIREMENT:** Read \documents/BACKEND_SIGNALS.md\ to understand the WebSocket contract and your VAD (Voice Activity Detection) implementation responsibilities for frontend-backend interaction.
+

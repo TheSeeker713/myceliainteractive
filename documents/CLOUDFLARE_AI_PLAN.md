@@ -18,6 +18,9 @@ This document outlines the technical plan for integrating Cloudflare Workers AI 
 | **Smart Glasses FPV Carousel (Images)** | `@cf/black-forest-labs/flux-1-schnell` | Generate a background carousel of cinematic, photorealistic static images for the `/ls` page. Images must be from a POV/FPV Smart glasses camera perspective, showcasing the Vegas Underground prototype areas (Boring Tunnel, underground waterpark, and the blending of the two). |
 | **Dynamic Copy (Optional)** | `@cf/meta/llama-3-8b-instruct` | Small localized text mutations (e.g., changing the lore text subtly on reload to create an unsettling "Mandela effect" for returning visitors). |
 
+<!-- NOTE (March 7, 2026): The "Smart Glasses" label above refers to the POV visual perspective style for the image carousel marketing asset — NOT the in-game smart glasses hardware system, which is deferred to roadmap. The FPV carousel itself is active and implemented. -->
+> ⚠️ **Note:** "Smart Glasses FPV Carousel" refers to the **POV visual style** of the marketing asset — not the in-game smart glasses hardware (deferred to roadmap). The carousel is **active and implemented**.
+
 ### Feature Details: FPV Smart Glasses Image Carousel
 - **Positioning**: Rendered in the background of the `/ls` page.
 - **Generation**: Images are generated asynchronously using the Cloudflare AI API (`flux-1-schnell`) and rotated in a smooth carousel.
@@ -74,4 +77,4 @@ app.get('/api/ai/tts', async (c) => {
 
 ## 4. Security & Compliance Checks
 - **Rate Limiting**: AI endpoints must be heavily rate-limited to avoid abuse (e.g., bots generating 1,000 images and driving up our CF bill).
-- **Hard Contest Boundary**: Ensure NO game agent (Jason, Audrey, Josh, Game Master) references or calls `c.env.AI`. Game agents strictly live in the `liminal-sin-gemini` repo using the Google ADK.
+- **Hard Contest Boundary**: Ensure NO game agent (Jason, Audrey, Josh, Game Master) references or calls `c.env.AI`. Game agents strictly live in the `liminal-sin-gemini` repo using the Gemini Live API (direct GenAI SDK + WebSocket; ADK deferred post-contest as of March 7, 2026).

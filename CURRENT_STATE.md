@@ -113,5 +113,21 @@ Within 60 seconds all signed-up users receive Email 2.
 - [ ] Webcam at 1 FPS → JPEG → base64 → `player_frame` events over WebSocket
 - [ ] Agent audio playback: receive `agent_speech` → decode base64 → Web Audio API
 - [ ] HUD: trust indicator driven by `trust_update` events
-- [ ] HUD: cracked glasses glitch overlay driven by `hud_glitch` events
-- [ ] FMV video rendering on `fmv_trigger` / `fmv_stop` events
+<!-- DEFERRED: cracked glasses glitch overlay — smart glasses system deferred to roadmap (March 7, 2026) -->
+<!-- - [ ] HUD: cracked glasses glitch overlay driven by `hud_glitch` events -->
+<!-- DEPRECATED: FMV video rendering — FMV pipeline replaced by Imagen 3 live generation (March 7, 2026 pivot) -->
+<!-- - [ ] FMV video rendering on `fmv_trigger` / `fmv_stop` events -->
+- [ ] Imagen 3 scene background rendering triggered by backend `scene_change` events
+
+### March 7, 2026 - Cross-Repo Update
+- The backend (`liminal-sin-gemini`) has completed Phase 1+2: `LiveSessionManager` built, Cloud Run live and confirmed healthy.
+- Backend has defined VAD logic and webcam 1 FPS logic requirements for the frontend. See `documents/BACKEND_SIGNALS.md` for details.
+
+### March 7, 2026 - Strategic Pivot
+- **ElevenLabs TTS dropped** — subscription expires in 2 days. All NPC voice output now uses Gemini Live native `voiceConfig`.
+- **FMV pipeline dropped** — pre-generated clip library not achievable in 4-day timeline. Replaced by **Imagen 3 live generation** per `scene_key` trigger.
+- **Demo scope:** Jason-only interactive NPC. Audrey = echo background only. Josh = deferred to roadmap.
+- **NPC voices (Gemini Live native):** Jason = `Fenrir`, Audrey = `Aoede`.
+- **New frontend event:** `scene_change` (replaces deprecated `fmv_trigger`/`fmv_stop`) — see TEAM_CONTRACT.md §3 for updated event contract.
+- **Smart glasses/HUD system** deferred to roadmap — cracked glasses effect removed from demo scope.
+
