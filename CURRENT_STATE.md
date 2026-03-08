@@ -1,6 +1,6 @@
 # CURRENT_STATE.md — myceliainteractive
 > **AI WORKING MEMORY** — Updated at the end of each session.
-> Last updated: March 6, 2026 (session 2)
+> Last updated: March 8, 2026 (evening — cracked screen cleanup + FMV/audio architecture decisions)
 
 ---
 
@@ -113,11 +113,12 @@ Within 60 seconds all signed-up users receive Email 2.
 - [ ] Webcam at 1 FPS → JPEG → base64 → `player_frame` events over WebSocket
 - [ ] Agent audio playback: receive `agent_speech` → decode base64 → Web Audio API
 - [ ] HUD: trust indicator driven by `trust_update` events
+- [ ] **Imagen 4 scene background** — receive `scene_image` WS event → set as CSS `background-image` on game container (Step C)
+- [ ] **Audio layer system** — three Web Audio channels: Jason voice (1.0) / ambient SFX (0.6) / music (0.3); each with `fadeIn`, `fadeOut`, `setVolume`, `loop` controls
 <!-- DEFERRED: cracked glasses glitch overlay — smart glasses system deferred to roadmap (March 7, 2026) -->
 <!-- - [ ] HUD: cracked glasses glitch overlay driven by `hud_glitch` events -->
-<!-- DEPRECATED: FMV video rendering — FMV pipeline replaced by Imagen 3 live generation (March 7, 2026 pivot) -->
+<!-- DEPRECATED: FMV video rendering — FMV pipeline replaced by Imagen 4 live generation (March 7, 2026 pivot) -->
 <!-- - [ ] FMV video rendering on `fmv_trigger` / `fmv_stop` events -->
-- [ ] Imagen 3 scene background rendering triggered by backend `scene_change` events
 
 ### March 7, 2026 - Cross-Repo Update
 - The backend (`liminal-sin-gemini`) has completed Phase 1+2: `LiveSessionManager` built, Cloud Run live and confirmed healthy.
@@ -125,11 +126,20 @@ Within 60 seconds all signed-up users receive Email 2.
 
 ### March 7, 2026 - Strategic Pivot
 - **ElevenLabs TTS dropped** — subscription expires in 2 days. All NPC voice output now uses Gemini Live native `voiceConfig`.
-- **FMV pipeline dropped** — pre-generated clip library not achievable in 4-day timeline. Replaced by **Imagen 3 live generation** per `scene_key` trigger.
+- **FMV pipeline dropped** — pre-generated clip library not achievable in 4-day timeline. Replaced by **Imagen 4 live generation** per `scene_key` trigger.
 - **Demo scope:** Jason-only interactive NPC. Audrey = echo background only. Josh = deferred to roadmap.
 - **NPC voices (Gemini Live native):** Jason = `Fenrir`, Audrey = `Aoede`.
 - **New frontend event:** `scene_change` (replaces deprecated `fmv_trigger`/`fmv_stop`) — see TEAM_CONTRACT.md §3 for updated event contract.
-<!-- [AI: commented out March 8 2026 — cracked screen reference removed from active spec per user directive. Original preserved below.]
-- **Smart glasses/HUD system** deferred to roadmap — cracked glasses effect removed from demo scope.
--->
+
+### March 8, 2026 - Session Update
+- **Cracked screen refs commented out** — `GameHUD.tsx` cracked glass overlay div wrapped in `{false && ()}` — never renders, original code preserved. `CURRENT_STATE.md` plain-text ref also commented out.
+- **FMV architecture clarified** — This IS an FMV game. Videos loop per zone (no embedded audio). Live Gemini audio plays over video. Imagen 4 generates new scene images on `triggerSceneChange` GM event.
+- **Jason POV confirmed** — Everything is first-person. "Smart Glasses" is a frontend UI label only — never in any Imagen prompt text.
+- **Audio hierarchy defined:**
+  - Jason voice = loudest (gain 1.0)
+  - Ambient sounds/SFX = medium (gain ~0.6)
+  - Music background = lowest (gain ~0.3)
+  - All audible simultaneously; fade in/out + loop controls required
+- **"Ignore commented content" rule** added to AGENTS.md (both repos) — Rule 5
+- **Backend GM session fixed** — AUDIO modality, `sendToolResponse`, `callId`, trust enum mapping all corrected (commit in liminal-sin-gemini repo)
 
