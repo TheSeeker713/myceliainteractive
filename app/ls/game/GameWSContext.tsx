@@ -113,6 +113,7 @@ interface GameWSContextValue {
   lastEvent: ServerEvent | null;
   sceneImage: string | null; // base64 JPEG from latest SCENE_IMAGE event; persists across events
   send: (event: ClientEvent) => void;
+  connect: () => void; // call from a user gesture to open the WS + start the session
 }
 
 const GameWSContext = createContext<GameWSContextValue>({
@@ -120,6 +121,7 @@ const GameWSContext = createContext<GameWSContextValue>({
   lastEvent: null,
   sceneImage: null,
   send: () => {},
+  connect: () => {},
 });
 
 // ── Provider ───────────────────────────────────────────────────────────────
@@ -133,9 +135,8 @@ export function GameWSProvider({
 }) {
   const wsUrl = process.env.NEXT_PUBLIC_GAME_WS_URL;
 
-  const [status, setStatus] = useState<ConnectionStatus>(
-    wsUrl ? "connecting" : "error"
-  );
+  const [status, setStatus] = useState<ConnectionStatus>("closed");
+  const [shouldConnect, setShouldConnect] = useState(false);
   const [lastEvent, setLastEvent] = useState<ServerEvent | null>(null);
   const [sceneImage, setSceneImage] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
@@ -146,11 +147,15 @@ export function GameWSProvider({
     }
   }, []);
 
+  // Called from a user gesture (Begin Session click). Flips shouldConnect so
+  // the WS connects within the autoplay-policy grace window.
+  const connect = useCallback(() => {
+    setStatus("connecting");
+    setShouldConnect(true);
+  }, []);
+
   useEffect(() => {
-    if (!wsUrl) {
-      console.warn("[GameWS] NEXT_PUBLIC_GAME_WS_URL is not set — connection skipped.");
-      return;
-    }
+    if (!wsUrl || !shouldConnect) return;
 
     const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
@@ -178,10 +183,10 @@ export function GameWSProvider({
     return () => {
       ws.close();
     };
-  }, [wsUrl, judgeMode, send]);
+  }, [wsUrl, judgeMode, send, shouldConnect]);
 
   return (
-    <GameWSContext.Provider value={{ status, lastEvent, sceneImage, send }}>
+    <GameWSContext.Provider value={{ status, lastEvent, sceneImage, send, connect }}>
       {children}
     </GameWSContext.Provider>
   );

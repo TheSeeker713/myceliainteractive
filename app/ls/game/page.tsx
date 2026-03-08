@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GameWSProvider } from "./GameWSContext";
+import { GameWSProvider, useGameWS } from "./GameWSContext";
 import GameHUD from "./GameHUD";
 import { usePlayerMedia } from "./usePlayerMedia";
 
@@ -17,6 +17,7 @@ import { usePlayerMedia } from "./usePlayerMedia";
 
 function GameInner() {
   const [sessionActive, setSessionActive] = useState(false);
+  const { connect } = useGameWS();
 
   // Start media capture once the user explicitly starts the session
   usePlayerMedia(sessionActive);
@@ -24,7 +25,7 @@ function GameInner() {
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
       {/* HUD overlays + FMV layer + audio playback */}
-      <GameHUD />
+      <GameHUD sessionActive={sessionActive} />
 
       {/* ── Start prompt (shown before session begins) ─── */}
       {!sessionActive && (
@@ -49,7 +50,7 @@ function GameInner() {
             be seen.
           </p>
           <button
-            onClick={() => setSessionActive(true)}
+            onClick={() => { connect(); setSessionActive(true); }}
             className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
           >
             Begin Session

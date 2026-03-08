@@ -20,7 +20,7 @@ import type {
  * encode agent behaviour.
  */
 
-export default function GameHUD() {
+export default function GameHUD({ sessionActive = false }: { sessionActive?: boolean }) {
   const { lastEvent, status, sceneImage } = useGameWS();
   const glitchRef = useRef<HTMLDivElement>(null);
   const fmvRef = useRef<HTMLVideoElement>(null);
@@ -28,6 +28,16 @@ export default function GameHUD() {
   // nextPlayTimeRef schedules chunks end-to-end for gapless playback.
   const audioCtxRef = useRef<AudioContext | null>(null);
   const nextPlayTimeRef = useRef<number>(0);
+
+  // Create + resume AudioContext inside the Begin Session gesture tick.
+  // Must NOT be created lazily in a WS message handler — Chrome's autoplay
+  // policy suspends any AudioContext created outside a user gesture.
+  useEffect(() => {
+    if (!sessionActive || audioCtxRef.current) return;
+    const ctx = new AudioContext({ sampleRate: 24000 });
+    ctx.resume().catch(() => {});
+    audioCtxRef.current = ctx;
+  }, [sessionActive]);
 
   // HUD Glitch effect
   useEffect(() => {

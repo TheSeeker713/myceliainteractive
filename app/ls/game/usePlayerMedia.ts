@@ -18,6 +18,7 @@ export function usePlayerMedia(active: boolean) {
   const { send, status } = useGameWS();
   const streamRef = useRef<MediaStream | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
+  const micCtxRef = useRef<AudioContext | null>(null);
   const frameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -25,6 +26,8 @@ export function usePlayerMedia(active: boolean) {
   const stopAll = useCallback(() => {
     recorderRef.current?.stop();
     recorderRef.current = null;
+    void micCtxRef.current?.close();
+    micCtxRef.current = null;
     if (frameIntervalRef.current) clearInterval(frameIntervalRef.current);
     frameIntervalRef.current = null;
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -50,24 +53,33 @@ export function usePlayerMedia(active: boolean) {
 
         streamRef.current = stream;
 
-        // ── Microphone: MediaRecorder in 2s chunks ────────
-        const recorder = new MediaRecorder(stream, {
-          mimeType: MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-            ? "audio/webm;codecs=opus"
-            : "audio/webm",
-        });
-        recorderRef.current = recorder;
+        // ── Microphone: ScriptProcessor → raw PCM 16kHz Int16 ────────────────
+        // Gemini Live requires audio/pcm;rate=16000 — raw linear PCM only.
+        // MediaRecorder outputs WebM/Opus containers which Gemini cannot decode.
+        // AudioContext({ sampleRate: 16000 }) auto-resamples the 48kHz mic input.
+        const micCtx = new AudioContext({ sampleRate: 16000 });
+        micCtxRef.current = micCtx;
+        const micSource = micCtx.createMediaStreamSource(stream);
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
+        const processor = micCtx.createScriptProcessor(4096, 1, 1);
+        micSource.connect(processor);
+        processor.connect(micCtx.destination); // must be connected to fire onaudioprocess
 
-        recorder.ondataavailable = async (e) => {
-          if (e.data.size === 0) return;
-          const arrayBuf = await e.data.arrayBuffer();
-          const b64 = btoa(
-            String.fromCharCode(...new Uint8Array(arrayBuf))
-          );
-          send({ type: "player_speech", audio: b64, timestamp: Date.now() });
+        processor.onaudioprocess = (e) => {
+          const float32 = e.inputBuffer.getChannelData(0);
+          const int16 = new Int16Array(float32.length);
+          for (let i = 0; i < float32.length; i++) {
+            const s = Math.max(-1, Math.min(1, float32[i]));
+            int16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
+          }
+          // Encode in 32KB chunks to avoid call-stack overflow on spread
+          const bytes = new Uint8Array(int16.buffer);
+          let raw = "";
+          for (let i = 0; i < bytes.length; i += 0x8000) {
+            raw += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+          }
+          send({ type: "player_speech", audio: btoa(raw), timestamp: Date.now() });
         };
-
-        recorder.start(2000); // emit every 2 seconds
 
         // ── Webcam: canvas snapshot at 1 FPS ─────────────
         const canvas = document.createElement("canvas");
