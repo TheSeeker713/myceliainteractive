@@ -24,6 +24,10 @@ export default function GameHUD() {
   const { lastEvent, status, sceneImage } = useGameWS();
   const glitchRef = useRef<HTMLDivElement>(null);
   const fmvRef = useRef<HTMLVideoElement>(null);
+  // Shared AudioContext — one per session, not one per chunk.
+  // nextPlayTimeRef schedules chunks end-to-end for gapless playback.
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const nextPlayTimeRef = useRef<number>(0);
 
   // HUD Glitch effect
   useEffect(() => {
@@ -62,7 +66,8 @@ export default function GameHUD() {
     }
   }, [lastEvent]);
 
-  // Agent audio playback via Web Audio API
+  // Agent audio playback — raw 16-bit little-endian PCM at 24kHz from Gemini Live.
+  // decodeAudioData() only handles encoded formats (MP3/WAV) — must decode PCM manually.
   useEffect(() => {
     if (lastEvent?.type !== "agent_speech") return;
     const ev = lastEvent as AgentSpeechEvent;
@@ -70,15 +75,35 @@ export default function GameHUD() {
 
     (async () => {
       try {
-        const ctx = new AudioContext();
+        if (!audioCtxRef.current) {
+          audioCtxRef.current = new AudioContext({ sampleRate: 24000 });
+        }
+        const ctx = audioCtxRef.current;
+        if (ctx.state === "suspended") await ctx.resume();
+
+        // Decode base64 → raw bytes → Int16 → Float32
         const binary = atob(ev.audio);
-        const buf = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) buf[i] = binary.charCodeAt(i);
-        const audioBuf = await ctx.decodeAudioData(buf.buffer);
+        const numSamples = binary.length >> 1; // 2 bytes per 16-bit sample
+        const float32 = new Float32Array(numSamples);
+        for (let i = 0; i < numSamples; i++) {
+          const lo = binary.charCodeAt(i * 2) & 0xff;
+          const hi = binary.charCodeAt(i * 2 + 1) & 0xff;
+          const s16 = (hi << 8) | lo;
+          float32[i] = (s16 > 32767 ? s16 - 65536 : s16) / 32768;
+        }
+
+        const audioBuf = ctx.createBuffer(1, numSamples, 24000);
+        audioBuf.copyToChannel(float32, 0);
+
         const source = ctx.createBufferSource();
         source.buffer = audioBuf;
         source.connect(ctx.destination);
-        source.start();
+
+        // Schedule gapless: each chunk starts exactly where the previous ended
+        const now = ctx.currentTime;
+        const startAt = Math.max(nextPlayTimeRef.current, now);
+        source.start(startAt);
+        nextPlayTimeRef.current = startAt + audioBuf.duration;
       } catch (e) {
         console.error("[GameHUD] Audio playback error:", e);
       }
@@ -151,7 +176,7 @@ export default function GameHUD() {
             <div className="w-24 h-1 bg-purple-900/60 rounded-full overflow-hidden">
               <div
                 className="h-full bg-purple-400 transition-all duration-700"
-                style={{ width: `${trustEvent.trust_level}%` }}
+                style={{ width: `${trustEvent.trust_level * 100}%` }}
               />
             </div>
           </div>
@@ -160,7 +185,7 @@ export default function GameHUD() {
             <div className="w-24 h-1 bg-red-900/60 rounded-full overflow-hidden">
               <div
                 className="h-full bg-red-500 transition-all duration-700"
-                style={{ width: `${trustEvent.fear_index}%` }}
+                style={{ width: `${trustEvent.fear_index * 100}%` }}
               />
             </div>
           </div>
