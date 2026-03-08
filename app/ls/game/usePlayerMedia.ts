@@ -55,10 +55,14 @@ export function usePlayerMedia(active: boolean) {
 
         // ── Microphone: ScriptProcessor → raw PCM 16kHz Int16 ────────────────
         // Gemini Live requires audio/pcm;rate=16000 — raw linear PCM only.
-        // MediaRecorder outputs WebM/Opus containers which Gemini cannot decode.
-        // AudioContext({ sampleRate: 16000 }) auto-resamples the 48kHz mic input.
+        // We request sampleRate:16000 but Chrome may silently use its native rate
+        // (usually 48kHz). We detect the actual rate and manually downsample so
+        // Gemini always receives correctly-labeled 16kHz PCM.
         const micCtx = new AudioContext({ sampleRate: 16000 });
+        await micCtx.resume(); // ensure not suspended even for an input-only context
         micCtxRef.current = micCtx;
+        const actualRate = micCtx.sampleRate; // may differ from 16000
+        console.log(`[usePlayerMedia] AudioContext sampleRate: ${actualRate}`);
         const micSource = micCtx.createMediaStreamSource(stream);
         // eslint-disable-next-line @typescript-eslint/no-deprecated
         const processor = micCtx.createScriptProcessor(4096, 1, 1);
@@ -66,10 +70,25 @@ export function usePlayerMedia(active: boolean) {
         processor.connect(micCtx.destination); // must be connected to fire onaudioprocess
 
         processor.onaudioprocess = (e) => {
-          const float32 = e.inputBuffer.getChannelData(0);
-          const int16 = new Int16Array(float32.length);
-          for (let i = 0; i < float32.length; i++) {
-            const s = Math.max(-1, Math.min(1, float32[i]));
+          const raw32 = e.inputBuffer.getChannelData(0);
+
+          // If Chrome honored sampleRate:16000, raw32 IS 16kHz — use directly.
+          // If Chrome used its native rate instead, downsample to 16kHz explicitly.
+          let pcm16k: Float32Array;
+          if (actualRate === 16000) {
+            pcm16k = raw32;
+          } else {
+            const ratio = actualRate / 16000;
+            const outLen = Math.floor(raw32.length / ratio);
+            pcm16k = new Float32Array(outLen);
+            for (let i = 0; i < outLen; i++) {
+              pcm16k[i] = raw32[Math.round(i * ratio)];
+            }
+          }
+
+          const int16 = new Int16Array(pcm16k.length);
+          for (let i = 0; i < pcm16k.length; i++) {
+            const s = Math.max(-1, Math.min(1, pcm16k[i]));
             int16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
           }
           // Encode in 32KB chunks to avoid call-stack overflow on spread
