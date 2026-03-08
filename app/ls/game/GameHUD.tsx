@@ -21,7 +21,7 @@ import type {
  */
 
 export default function GameHUD() {
-  const { lastEvent, status } = useGameWS();
+  const { lastEvent, status, sceneImage } = useGameWS();
   const glitchRef = useRef<HTMLDivElement>(null);
   const fmvRef = useRef<HTMLVideoElement>(null);
 
@@ -93,6 +93,17 @@ export default function GameHUD() {
 
   return (
     <>
+      {/* ── Imagen 4 scene background (beneath FMV at z-10) ── */}
+      {sceneImage && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={`data:image/jpeg;base64,${sceneImage}`}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
+        />
+      )}
+
       {/* ── FMV layer (beneath HUD overlays) ─────────────── */}
       <video
         ref={fmvRef}

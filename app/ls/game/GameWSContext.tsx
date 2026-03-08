@@ -65,6 +65,14 @@ export type SessionErrorEvent = {
   message: string;
 };
 
+export type SceneImageEvent = {
+  type: "scene_image";
+  agent: string;
+  sessionId: string;
+  payload: { sceneKey: string; data: string }; // data is base64 JPEG
+  timestamp: number;
+};
+
 export type ServerEvent =
   | AgentSpeechEvent
   | AgentInterruptEvent
@@ -73,7 +81,8 @@ export type ServerEvent =
   | FmvStopEvent
   | HudGlitchEvent
   | SessionReadyEvent
-  | SessionErrorEvent;
+  | SessionErrorEvent
+  | SceneImageEvent;
 
 // ── Outbound payload types (client → server) ───────────────────────────────
 
@@ -90,12 +99,14 @@ export type ConnectionStatus = "connecting" | "open" | "closed" | "error";
 interface GameWSContextValue {
   status: ConnectionStatus;
   lastEvent: ServerEvent | null;
+  sceneImage: string | null; // base64 JPEG from latest SCENE_IMAGE event; persists across events
   send: (event: ClientEvent) => void;
 }
 
 const GameWSContext = createContext<GameWSContextValue>({
   status: "closed",
   lastEvent: null,
+  sceneImage: null,
   send: () => {},
 });
 
@@ -114,6 +125,7 @@ export function GameWSProvider({
     wsUrl ? "connecting" : "error"
   );
   const [lastEvent, setLastEvent] = useState<ServerEvent | null>(null);
+  const [sceneImage, setSceneImage] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
   const send = useCallback((event: ClientEvent) => {
@@ -140,6 +152,9 @@ export function GameWSProvider({
       try {
         const parsed: ServerEvent = JSON.parse(ev.data as string);
         setLastEvent(parsed);
+        if (parsed.type === "scene_image") {
+          setSceneImage(parsed.payload.data);
+        }
       } catch {
         console.error("[GameWS] Failed to parse message:", ev.data);
       }
@@ -154,7 +169,7 @@ export function GameWSProvider({
   }, [wsUrl, judgeMode, send]);
 
   return (
-    <GameWSContext.Provider value={{ status, lastEvent, send }}>
+    <GameWSContext.Provider value={{ status, lastEvent, sceneImage, send }}>
       {children}
     </GameWSContext.Provider>
   );
