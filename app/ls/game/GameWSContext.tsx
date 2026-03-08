@@ -25,7 +25,7 @@ export type AgentSpeechEvent = {
   type: "agent_speech";
   agent: string;
   audio: string; // base64
-  text: string;
+  text?: string; // optional — backend may omit when audio-only
 };
 
 export type AgentInterruptEvent = {
@@ -73,6 +73,16 @@ export type SceneImageEvent = {
   timestamp: number;
 };
 
+export type SceneChangeEvent = {
+  type: "scene_change";
+  payload: { sceneKey: string };
+};
+
+export type SlotskyTriggerEvent = {
+  type: "slotsky_trigger";
+  payload: { anomalyType: string };
+};
+
 export type ServerEvent =
   | AgentSpeechEvent
   | AgentInterruptEvent
@@ -82,7 +92,9 @@ export type ServerEvent =
   | HudGlitchEvent
   | SessionReadyEvent
   | SessionErrorEvent
-  | SceneImageEvent;
+  | SceneImageEvent
+  | SceneChangeEvent
+  | SlotskyTriggerEvent;
 
 // ── Outbound payload types (client → server) ───────────────────────────────
 
