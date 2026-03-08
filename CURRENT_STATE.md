@@ -129,5 +129,7 @@ Within 60 seconds all signed-up users receive Email 2.
 - **Demo scope:** Jason-only interactive NPC. Audrey = echo background only. Josh = deferred to roadmap.
 - **NPC voices (Gemini Live native):** Jason = `Fenrir`, Audrey = `Aoede`.
 - **New frontend event:** `scene_change` (replaces deprecated `fmv_trigger`/`fmv_stop`) — see TEAM_CONTRACT.md §3 for updated event contract.
+<!-- [AI: commented out March 8 2026 — cracked screen reference removed from active spec per user directive. Original preserved below.]
 - **Smart glasses/HUD system** deferred to roadmap — cracked glasses effect removed from demo scope.
+-->
 

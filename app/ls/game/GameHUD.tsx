@@ -102,18 +102,22 @@ export default function GameHUD() {
         muted={false}
       />
 
-      {/* ── Cracked glasses overlay ───────────────────────── */}
-      <div
-        ref={glitchRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-200"
-        style={{
-          backgroundImage:
-            "url('/assets/images/cracked-glass.png')",
-          backgroundSize: "cover",
-          opacity: 0,
-        }}
-      />
+      {/* [REMOVED March 8 2026: Cracked glass overlay deferred to roadmap. Feature removed from demo scope per user directive.
+           Frontend will use a semi-transparent Smart Glasses overlay (future). glitchRef will be null — the
+           hud_glitch useEffect is null-guarded (if (!el) return), so this is safe. Original preserved below via false && pattern. */}
+      {false && (
+        <div
+          ref={glitchRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-200"
+          style={{
+            backgroundImage:
+              "url('/assets/images/cracked-glass.png')",
+            backgroundSize: "cover",
+            opacity: 0,
+          }}
+        />
+      )}
 
       {/* ── Scanline overlay ──────────────────────────────── */}
       <div
