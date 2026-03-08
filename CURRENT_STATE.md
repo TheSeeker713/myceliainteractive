@@ -1,6 +1,6 @@
-# CURRENT_STATE.md — myceliainteractive
+﻿# CURRENT_STATE.md — myceliainteractive
 > **AI WORKING MEMORY** — Updated at the end of each session.
-> Last updated: March 8, 2026 (evening — cracked screen cleanup + FMV/audio architecture decisions)
+> Last updated: March 8, 2026 (late evening — Steps B/C/D live, mic bug diagnosed)
 
 ---
 
@@ -80,9 +80,9 @@ Within 60 seconds all signed-up users receive Email 2.
 | `app/ls/judges/page.tsx` | Judge backdoor route |
 | `app/components/FPVCarousel.tsx` | Cloudflare AI FPV image carousel — `/ls` background |
 | `app/ls/game/page.tsx` | Game UI shell — wrapper for Google Cloud game |
-| `app/ls/game/GameWSContext.tsx` | WebSocket context provider (shell, not yet wired to GC URL) |
-| `app/ls/game/GameHUD.tsx` | HUD overlay component shell |
-| `app/ls/game/usePlayerMedia.ts` | Mic + webcam capture hook (shell) |
+| `app/ls/game/GameWSContext.tsx` | WebSocket context — connected to Cloud Run WS, deferred connect, sceneImage state |
+| `app/ls/game/GameHUD.tsx` | Game HUD — Imagen 4 crossfade background, AudioContext playback, Begin Session button |
+| `app/ls/game/usePlayerMedia.ts` | Mic + webcam capture — ScriptProcessorNode 16kHz PCM, 1FPS JPEG frames |
 | `app/ls/judges/game/page.tsx` | Judge game shell — same as above with `judgeMode=true` |
 
 ---
@@ -106,15 +106,31 @@ Within 60 seconds all signed-up users receive Email 2.
 - [x] `app/ls/game/usePlayerMedia.ts` — Mic + webcam `getUserMedia` capture hook
 - [x] `app/ls/judges/game/page.tsx` — Judge variant, passes `judgeMode: true` in `session_start`
 
-### Still needed to make it functional
-- [ ] `NEXT_PUBLIC_GAME_WS_URL` env var wired in `.env.local` + Cloudflare Pages dashboard
-- [ ] `GameWSContext` actually connects to real GC WebSocket URL and sends `session_start`
-- [ ] Microphone audio → base64 chunks → `player_speech` events over WebSocket
-- [ ] Webcam at 1 FPS → JPEG → base64 → `player_frame` events over WebSocket
-- [ ] Agent audio playback: receive `agent_speech` → decode base64 → Web Audio API
-- [ ] HUD: trust indicator driven by `trust_update` events
-- [ ] **Imagen 4 scene background** — receive `scene_image` WS event → set as CSS `background-image` on game container (Step C)
-- [ ] **Audio layer system** — three Web Audio channels: Jason voice (1.0) / ambient SFX (0.6) / music (0.3); each with `fadeIn`, `fadeOut`, `setVolume`, `loop` controls
+### Completed — March 8, 2026 (Steps B/C/D live)
+- [x] `NEXT_PUBLIC_GAME_WS_URL=wss://liminal-sin-server-1071754889104.us-west1.run.app` — set in `.env.production` + Cloudflare Pages dashboard
+- [x] WS deferred to "Begin Session" click (satisfies AudioContext autoplay policy)
+- [x] `GameWSContext.tsx` — connects to Cloud Run WS, `session_ready` received ✅
+- [x] Agent audio playback — `agent_speech` events → decode base64 PCM → Web Audio API ✅ **JASON SPEAKS INTRO**
+- [x] Webcam at 1 FPS → JPEG → base64 → `player_frame` events — ✅ WORKING
+- [x] **Imagen 4 scene background** — `scene_image` WS event → `<img>` crossfade CSS background ✅ **TUNNEL IMAGE VISIBLE**
+- [x] `usePlayerMedia.ts` — `ScriptProcessorNode` at 16kHz, Float32→Int16 PCM, base64, sends `player_speech`
+
+### ❌ ACTIVE BUG — Microphone → JASON not working
+**Console error (Chrome DevTools, March 8 2026):**
+```
+[usePlayerMedia] Media access error: NotReadableError: Device in use
+```
+**Root cause:** `usePlayerMedia` `useEffect` watches `status` from `useGameWS()`. When status transitions `connecting` → `open`, the effect re-fires. The `stopAll()` cleanup calls `void micCtxRef.current?.close()` (not awaited). If the old AudioContext hasn't fully released the mic hardware before the NEW `getUserMedia({audio:true, video:true})` call fires, Chrome throws `NotReadableError: Device in use`.
+
+**Fix (next session — IMMEDIATE):**
+- Add `const isCapturing = useRef(false)` guard — only call `getUserMedia` once, skip re-entry
+- OR: expose `startCapture()` function from the hook, call it once from `GameHUD.tsx` after `session_ready` fires (not on every `status` re-render)
+- Do NOT create a second AudioContext — `GameHUD.tsx` already has one open for playback
+
+### Still pending
+- [ ] Fix `NotReadableError: Device in use` in `usePlayerMedia.ts` **(NEXT — IMMEDIATE)**
+- [ ] Step E: Three-channel Web Audio (Jason 1.0 / ambient 0.6 / music 0.3) with `fadeIn`, `fadeOut`, `setVolume`, `loop`
+- [ ] HUD: trust level indicator driven by `trust_update` WS events
 <!-- DEFERRED: cracked glasses glitch overlay — smart glasses system deferred to roadmap (March 7, 2026) -->
 <!-- - [ ] HUD: cracked glasses glitch overlay driven by `hud_glitch` events -->
 <!-- DEPRECATED: FMV video rendering — FMV pipeline replaced by Imagen 4 live generation (March 7, 2026 pivot) -->
@@ -131,15 +147,22 @@ Within 60 seconds all signed-up users receive Email 2.
 - **NPC voices (Gemini Live native):** Jason = `Fenrir`, Audrey = `Aoede`.
 - **New frontend event:** `scene_change` (replaces deprecated `fmv_trigger`/`fmv_stop`) — see TEAM_CONTRACT.md §3 for updated event contract.
 
-### March 8, 2026 - Session Update
-- **Cracked screen refs commented out** — `GameHUD.tsx` cracked glass overlay div wrapped in `{false && ()}` — never renders, original code preserved. `CURRENT_STATE.md` plain-text ref also commented out.
-- **FMV architecture clarified** — This IS an FMV game. Videos loop per zone (no embedded audio). Live Gemini audio plays over video. Imagen 4 generates new scene images on `triggerSceneChange` GM event.
+### March 8, 2026 - Session Update (morning)
+- **Cracked screen refs commented out** — `GameHUD.tsx` cracked glass overlay div wrapped in `{false && ()}` — never renders, original code preserved.
+- **FMV architecture clarified** — This IS an FMV game. Videos loop per zone. Live Gemini audio plays over video. Imagen 4 generates new scene images on `triggerSceneChange` GM event.
 - **Jason POV confirmed** — Everything is first-person. "Smart Glasses" is a frontend UI label only — never in any Imagen prompt text.
-- **Audio hierarchy defined:**
-  - Jason voice = loudest (gain 1.0)
-  - Ambient sounds/SFX = medium (gain ~0.6)
-  - Music background = lowest (gain ~0.3)
-  - All audible simultaneously; fade in/out + loop controls required
 - **"Ignore commented content" rule** added to AGENTS.md (both repos) — Rule 5
-- **Backend GM session fixed** — AUDIO modality, `sendToolResponse`, `callId`, trust enum mapping all corrected (commit in liminal-sin-gemini repo)
+- **Backend GM session fixed** — AUDIO modality, `sendToolResponse`, `callId`, trust enum mapping (liminal-sin-gemini repo)
+
+### March 8, 2026 - Session Update (evening — Steps B/C/D)
+- **Steps B, C, D COMPLETE and LIVE in production**
+- **Step B (Imagen 4):** `server/services/imagen.ts` created with 7 zone prompts. `triggerSceneChange` → Imagen 4 → `scene_image` WS event → frontend crossfade renders ✅
+- **Step C (scene_image rendering):** `GameWSContext.tsx` receives `scene_image`, `GameHUD.tsx` renders as crossfade `<img>` background ✅ Tunnel image visible in browser
+- **Step D (webcam frame pipe):** `usePlayerMedia.ts` 1FPS JPEG → `player_frame` WS event → `gmManager.sendFrame()` ✅ Webcam confirmed working
+- **JASON speaks intro** — confirms WS connect ✅, session_ready ✅, agent_speech PCM playback ✅
+- **IAM permissions fixed** — Cloud Run SA granted `roles/aiplatform.user` + `roles/datastore.user`
+- **WSS URL corrected** — `.env.production` now uses numbered URL (canonical redirects break WS upgrades)
+- **AudioContext autoplay fix** — deferred WS connect + AudioContext creation to "Begin Session" button click
+- **MediaRecorder → ScriptProcessorNode** — Gemini Live requires raw PCM 16kHz, not Opus/WebM
+- **❌ Active bug:** `[usePlayerMedia] Media access error: NotReadableError: Device in use` — mic not reaching JASON (see ACTIVE BUG section above)
 
