@@ -38,8 +38,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — .env.local holds secrets (never commit). .env.production holds public build-time defaults (safe to commit).
 .env*
+!.env.production
 
 # vercel
 .vercel
