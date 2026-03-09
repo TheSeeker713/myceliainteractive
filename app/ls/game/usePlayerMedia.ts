@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 import { useGameWS } from "./GameWSContext";
 
 /**
@@ -14,11 +14,10 @@ import { useGameWS } from "./GameWSContext";
  * Per TEAM_CONTRACT.md §2 this hook owns ONLY the transport of raw media.
  * It never makes decisions about the content.
  */
-export function usePlayerMedia(active: boolean) {
+export function usePlayerMedia(active: boolean, sharedCtxRef: RefObject<AudioContext | null>) {
   const { send, status } = useGameWS();
   const streamRef = useRef<MediaStream | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
-  const micCtxRef = useRef<AudioContext | null>(null);
   const frameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -31,8 +30,6 @@ export function usePlayerMedia(active: boolean) {
   const stopAll = useCallback(() => {
     recorderRef.current?.stop();
     recorderRef.current = null;
-    void micCtxRef.current?.close();
-    micCtxRef.current = null;
     if (frameIntervalRef.current) clearInterval(frameIntervalRef.current);
     frameIntervalRef.current = null;
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -48,10 +45,29 @@ export function usePlayerMedia(active: boolean) {
 
     (async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-          video: { facingMode: "user", width: 320, height: 240 },
-        });
+        // Step I: Enhanced audio constraints prevent music/SFX bleed into mic.
+        // iOS Safari may reject the sampleRate constraint — retry without it.
+        let stream: MediaStream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              autoGainControl: true,
+              sampleRate: 16000,
+            },
+            video: { facingMode: "user", width: 320, height: 240 },
+          });
+        } catch {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              autoGainControl: true,
+            },
+            video: { facingMode: "user", width: 320, height: 240 },
+          });
+        }
 
         if (cancelled) {
           stream.getTracks().forEach((t) => t.stop());
@@ -62,13 +78,16 @@ export function usePlayerMedia(active: boolean) {
 
         // ── Microphone: ScriptProcessor → raw PCM 16kHz Int16 ────────────────
         // Gemini Live requires audio/pcm;rate=16000 — raw linear PCM only.
-        // We request sampleRate:16000 but Chrome may silently use its native rate
-        // (usually 48kHz). We detect the actual rate and manually downsample so
-        // Gemini always receives correctly-labeled 16kHz PCM.
-        const micCtx = new AudioContext({ sampleRate: 16000 });
-        await micCtx.resume(); // ensure not suspended even for an input-only context
-        micCtxRef.current = micCtx;
-        const actualRate = micCtx.sampleRate; // may differ from 16000
+        // Step H: Reuse the shared AudioContext (24kHz) created by GameHUD inside
+        // the Begin Session gesture. iOS Safari silently suspends a second
+        // concurrent AudioContext — sharing one avoids that failure mode.
+        // The downsample logic below handles any rate != 16000.
+        const micCtx = sharedCtxRef.current;
+        if (!micCtx) {
+          console.error("[usePlayerMedia] Shared AudioContext not ready — aborting mic setup");
+          return;
+        }
+        const actualRate = micCtx.sampleRate; // 24000 from shared ctx; downsampled below
         console.log(`[usePlayerMedia] AudioContext sampleRate: ${actualRate}`);
         const micSource = micCtx.createMediaStreamSource(stream);
         // eslint-disable-next-line @typescript-eslint/no-deprecated

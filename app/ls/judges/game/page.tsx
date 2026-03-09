@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { GameWSProvider, useGameWS } from "../../game/GameWSContext";
 import GameHUD from "../../game/GameHUD";
 import { usePlayerMedia } from "../../game/usePlayerMedia";
@@ -17,12 +17,15 @@ import { usePlayerMedia } from "../../game/usePlayerMedia";
 function JudgeGameInner() {
   const [sessionActive, setSessionActive] = useState(false);
   const { connect } = useGameWS();
+  // Single shared AudioContext — passed to both GameHUD and usePlayerMedia
+  // to avoid iOS's concurrent AudioContext limit.
+  const audioCtxRef = useRef<AudioContext | null>(null);
 
-  usePlayerMedia(sessionActive);
+  usePlayerMedia(sessionActive, audioCtxRef);
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
-      <GameHUD sessionActive={sessionActive} />
+      <GameHUD sessionActive={sessionActive} audioCtxRef={audioCtxRef} />
 
       {!sessionActive && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black/90">

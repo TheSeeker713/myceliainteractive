@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type MutableRefObject } from "react";
 import { useGameWS } from "./GameWSContext";
 import { useAudioLayers } from "./useAudioLayers";
 import type {
@@ -23,13 +23,17 @@ import type {
  * encode agent behaviour.
  */
 
-export default function GameHUD({ sessionActive = false }: { sessionActive?: boolean }) {
+export default function GameHUD({
+  sessionActive = false,
+  audioCtxRef,
+}: {
+  sessionActive?: boolean;
+  audioCtxRef: MutableRefObject<AudioContext | null>;
+}) {
   const { lastEvent, status, sceneImage } = useGameWS();
   const glitchRef = useRef<HTMLDivElement>(null);
   const fmvRef = useRef<HTMLVideoElement>(null);
-  // Shared AudioContext — one per session, not one per chunk.
   // nextPlayTimeRef schedules chunks end-to-end for gapless playback.
-  const audioCtxRef = useRef<AudioContext | null>(null);
   const nextPlayTimeRef = useRef<number>(0);
   // All in-flight scheduled source nodes. Cleared on agent_interrupt so Jason
   // stops immediately when the player speaks over him.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { GameWSProvider, useGameWS } from "./GameWSContext";
 import GameHUD from "./GameHUD";
 import { usePlayerMedia } from "./usePlayerMedia";
@@ -18,14 +18,18 @@ import { usePlayerMedia } from "./usePlayerMedia";
 function GameInner() {
   const [sessionActive, setSessionActive] = useState(false);
   const { connect } = useGameWS();
+  // Single shared AudioContext for the whole session — passed to both GameHUD
+  // (playback) and usePlayerMedia (mic capture) to avoid iOS's concurrent
+  // AudioContext limit.
+  const audioCtxRef = useRef<AudioContext | null>(null);
 
   // Start media capture once the user explicitly starts the session
-  usePlayerMedia(sessionActive);
+  usePlayerMedia(sessionActive, audioCtxRef);
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
       {/* HUD overlays + FMV layer + audio playback */}
-      <GameHUD sessionActive={sessionActive} />
+      <GameHUD sessionActive={sessionActive} audioCtxRef={audioCtxRef} />
 
       {/* ── Start prompt (shown before session begins) ─── */}
       {!sessionActive && (
