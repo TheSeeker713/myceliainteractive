@@ -48,3 +48,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Audio assets - stored in GCS (gs://liminal-sin-assets), not git
+public/assets/music/
+public/assets/sound_fx/
