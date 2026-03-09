@@ -28,6 +28,9 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
   // nextPlayTimeRef schedules chunks end-to-end for gapless playback.
   const audioCtxRef = useRef<AudioContext | null>(null);
   const nextPlayTimeRef = useRef<number>(0);
+  // All in-flight scheduled source nodes. Cleared on agent_interrupt so Jason
+  // stops immediately when the player speaks over him.
+  const sourceNodesRef = useRef<AudioBufferSourceNode[]>([]);
 
   // Create + resume AudioContext inside the Begin Session gesture tick.
   // Must NOT be created lazily in a WS message handler — Chrome's autoplay
@@ -38,6 +41,18 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
     ctx.resume().catch(() => {});
     audioCtxRef.current = ctx;
   }, [sessionActive]);
+
+  // Barge-in: player spoke over Jason — kill all queued audio immediately.
+  useEffect(() => {
+    if (lastEvent?.type !== "agent_interrupt") return;
+    const nodes = sourceNodesRef.current;
+    for (const node of nodes) {
+      try { node.stop(); } catch { /* already stopped or never started */ }
+    }
+    sourceNodesRef.current = [];
+    nextPlayTimeRef.current = 0;
+    console.log(`[GameHUD] agent_interrupt — cancelled ${nodes.length} queued audio nodes`);
+  }, [lastEvent]);
 
   // HUD Glitch effect
   useEffect(() => {
@@ -108,6 +123,10 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
         const source = ctx.createBufferSource();
         source.buffer = audioBuf;
         source.connect(ctx.destination);
+        sourceNodesRef.current.push(source);
+        source.onended = () => {
+          sourceNodesRef.current = sourceNodesRef.current.filter(n => n !== source);
+        };
 
         // Schedule gapless: each chunk starts exactly where the previous ended
         const now = ctx.currentTime;
