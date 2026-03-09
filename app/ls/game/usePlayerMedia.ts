@@ -22,6 +22,11 @@ export function usePlayerMedia(active: boolean) {
   const frameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  // Guard: getUserMedia must only be called once per session activation.
+  // Without this, any status change while active===true re-triggers the effect,
+  // stopAll() closes the AudioContext (fire-and-forget), and the next
+  // getUserMedia call races with the pending close → NotReadableError: Device in use.
+  const captureStartedRef = useRef(false);
 
   const stopAll = useCallback(() => {
     recorderRef.current?.stop();
@@ -36,6 +41,8 @@ export function usePlayerMedia(active: boolean) {
 
   useEffect(() => {
     if (!active || status !== "open") return;
+    if (captureStartedRef.current) return; // already capturing — do not re-enter
+    captureStartedRef.current = true;
 
     let cancelled = false;
 
@@ -132,6 +139,7 @@ export function usePlayerMedia(active: boolean) {
     return () => {
       cancelled = true;
       stopAll();
+      captureStartedRef.current = false; // allow re-init if session restarts
     };
   }, [active, status, send, stopAll]);
 

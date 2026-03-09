@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GameWSProvider } from "../../game/GameWSContext";
+import { GameWSProvider, useGameWS } from "../../game/GameWSContext";
 import GameHUD from "../../game/GameHUD";
 import { usePlayerMedia } from "../../game/usePlayerMedia";
 
@@ -16,12 +16,13 @@ import { usePlayerMedia } from "../../game/usePlayerMedia";
 
 function JudgeGameInner() {
   const [sessionActive, setSessionActive] = useState(false);
+  const { connect } = useGameWS();
 
   usePlayerMedia(sessionActive);
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
-      <GameHUD />
+      <GameHUD sessionActive={sessionActive} />
 
       {!sessionActive && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black/90">
@@ -44,7 +45,7 @@ function JudgeGameInner() {
             Judge mode active. Microphone and camera access required.
           </p>
           <button
-            onClick={() => setSessionActive(true)}
+            onClick={() => { connect(); setSessionActive(true); }}
             className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
           >
             Begin Judge Session
