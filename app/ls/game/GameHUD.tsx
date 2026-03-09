@@ -2,11 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import { useGameWS } from "./GameWSContext";
+import { useAudioLayers } from "./useAudioLayers";
 import type {
   AgentSpeechEvent,
   FmvTriggerEvent,
   HudGlitchEvent,
   TrustUpdateEvent,
+  SessionReadyEvent,
+  SlotskyTriggerEvent,
 } from "./GameWSContext";
 
 /**
@@ -32,6 +35,27 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
   // stops immediately when the player speaks over him.
   const sourceNodesRef = useRef<AudioBufferSourceNode[]>([]);
 
+  // ── Audio layer system ───────────────────────────────────────────────────
+  const {
+    ensureGainNodes,
+    preloadAll,
+    playSFX,
+    crossfadeMusic,
+    stopMusic,
+    startAmbientLoop,
+    stopAmbientLoop,
+    playSequence,
+  } = useAudioLayers(audioCtxRef);
+
+  // Trust/fear tracking — compare to previous values to detect crossings
+  const prevTrustRef = useRef<number>(0.5);
+  const prevFearRef = useRef<number>(0.0);
+  const fearThresholdsCrossedRef = useRef<Set<number>>(new Set());
+  // Fires once when trust first crosses 0.6 upward (resets if trust drops < 0.5)
+  const trustKnowledgeFiredRef = useRef(false);
+  // Fires voicebox_activate + music_intro on Jason's very first utterance
+  const firstJasonSpeechRef = useRef(false);
+
   // Create + resume AudioContext inside the Begin Session gesture tick.
   // Must NOT be created lazily in a WS message handler — Chrome's autoplay
   // policy suspends any AudioContext created outside a user gesture.
@@ -40,11 +64,16 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
     const ctx = new AudioContext({ sampleRate: 24000 });
     ctx.resume().catch(() => {});
     audioCtxRef.current = ctx;
+    // Initialise gain nodes and kick off background preload of all audio assets.
+    ensureGainNodes();
+    preloadAll();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionActive]);
 
   // Barge-in: player spoke over Jason — kill all queued audio immediately.
   useEffect(() => {
     if (lastEvent?.type !== "agent_interrupt") return;
+    playSFX("barge_in");
     const nodes = sourceNodesRef.current;
     for (const node of nodes) {
       try { node.stop(); } catch { /* already stopped or never started */ }
@@ -52,12 +81,14 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
     sourceNodesRef.current = [];
     nextPlayTimeRef.current = 0;
     console.log(`[GameHUD] agent_interrupt — cancelled ${nodes.length} queued audio nodes`);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // HUD Glitch effect
   useEffect(() => {
     if (lastEvent?.type !== "hud_glitch") return;
     const ev = lastEvent as HudGlitchEvent;
+    playSFX(`glitch_${ev.intensity}`);
     const el = glitchRef.current;
     if (!el) return;
 
@@ -73,6 +104,7 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
       el.classList.remove(opacityClass, "animate-pulse");
     }, ev.duration_ms);
     return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // FMV playback
@@ -91,12 +123,112 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
     }
   }, [lastEvent]);
 
+  // session_ready: server has initialised both Gemini sessions — start ambient loop.
+  useEffect(() => {
+    if (lastEvent?.type !== "session_ready") return;
+    void (lastEvent as SessionReadyEvent);
+    startAmbientLoop("ambient_cold_open");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastEvent]);
+
+  // trust_update: drive music crossfades and threshold SFX.
+  useEffect(() => {
+    if (lastEvent?.type !== "trust_update") return;
+    const ev = lastEvent as TrustUpdateEvent;
+    const { trust_level, fear_index } = ev;
+    const prevTrust = prevTrustRef.current;
+    const prevFear = prevFearRef.current;
+
+    // Trust fell
+    if (trust_level < prevTrust) {
+      playSFX("trust_drop");
+    }
+    // Trust crossed 0.6 upward — private knowledge unlocked
+    if (trust_level >= 0.6 && prevTrust < 0.6 && !trustKnowledgeFiredRef.current) {
+      trustKnowledgeFiredRef.current = true;
+      playSFX("knowledge_unlock");
+    }
+    // Reset so it can fire again if trust recovers after dropping below 0.5
+    if (trust_level < 0.5) trustKnowledgeFiredRef.current = false;
+
+    // Sudden fear spike (delta > 0.10 in one update)
+    if (fear_index - prevFear > 0.1) {
+      playSFX("fear_spike");
+    }
+    // Fear threshold crossings — each fires once per session
+    if (fear_index >= 0.6 && !fearThresholdsCrossedRef.current.has(0.6)) {
+      fearThresholdsCrossedRef.current.add(0.6);
+      crossfadeMusic("music_tension", 3000);
+    }
+    if (fear_index >= 0.85 && !fearThresholdsCrossedRef.current.has(0.85)) {
+      fearThresholdsCrossedRef.current.add(0.85);
+      crossfadeMusic("music_climax", 2000);
+    }
+    if (fear_index >= 0.9 && !fearThresholdsCrossedRef.current.has(0.9)) {
+      fearThresholdsCrossedRef.current.add(0.9);
+      playSFX("fear_critical");
+    }
+
+    prevTrustRef.current = trust_level;
+    prevFearRef.current = fear_index;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastEvent]);
+
+  // slotsky_trigger: route each anomaly type to its audio event.
+  useEffect(() => {
+    if (lastEvent?.type !== "slotsky_trigger") return;
+    const ev = lastEvent as SlotskyTriggerEvent;
+    switch (ev.payload.anomalyType) {
+      case "anomaly_bells":
+        playSFX("slotsky_bells");
+        break;
+      case "anomaly_cards":
+        playSFX("slotsky_cards");
+        break;
+      case "anomaly_lights":
+        playSFX("slotsky_lights");
+        break;
+      case "anomaly_geometry":
+        playSFX("slotsky_geometry");
+        break;
+      case "fourth_wall_correction":
+        // Bells first, sharp electrical crackle 1.5 s later, then psychosis music
+        playSequence([
+          { key: "fourth_wall_bells", delayMs: 0 },
+          { key: "fourth_wall_crackle", delayMs: 1500 },
+        ]);
+        crossfadeMusic("music_psychosis", 1000);
+        break;
+      case "found_transition":
+        // Stop all layers, 8-second darkness silence, then water rise
+        stopMusic(500);
+        stopAmbientLoop(500);
+        playSFX("proximity_found");
+        setTimeout(() => playSFX("found_water_rise"), 8000);
+        break;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastEvent]);
+
   // Agent audio playback — raw 16-bit little-endian PCM at 24kHz from Gemini Live.
   // decodeAudioData() only handles encoded formats (MP3/WAV) — must decode PCM manually.
   useEffect(() => {
     if (lastEvent?.type !== "agent_speech") return;
     const ev = lastEvent as AgentSpeechEvent;
     if (!ev.audio) return;
+
+    // Detect start of a new utterance (audio queue was empty when this chunk arrived).
+    // First-ever utterance: voicebox_activate + crossfade to intro music.
+    // Subsequent utterances: transmission ping.
+    if (sourceNodesRef.current.length === 0) {
+      if (!firstJasonSpeechRef.current) {
+        firstJasonSpeechRef.current = true;
+        playSFX("voicebox_activate");
+        crossfadeMusic("music_intro", 2000);
+      } else {
+        playSFX("transmission_ping");
+      }
+    }
 
     (async () => {
       try {
@@ -137,6 +269,7 @@ export default function GameHUD({ sessionActive = false }: { sessionActive?: boo
         console.error("[GameHUD] Audio playback error:", e);
       }
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // Latest trust data for the HUD indicator
