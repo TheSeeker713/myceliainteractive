@@ -1,7 +1,7 @@
 # CURRENT_STATE.md � myceliainteractive (Frontend)
 
 > **AI WORKING MEMORY** � This file is the source of truth for the current state of the frontend project.
-> Last updated: March 10, 2026 (F1-F6 ALL COMPLETE; backend B1-B6 ALL COMPLETE)
+> Last updated: March 10, 2026 (F1-F6 ALL COMPLETE; backend B1-B6 ALL COMPLETE; FE error handling + camera/mic resilience planned)
 
 ---
 
@@ -134,6 +134,63 @@ All four backend-prerequisite frontend steps are **DONE** and pushed to main:
 
 ---
 
+## NEXT: Error Handling + Camera/Mic Resilience
+
+> **Status: PLANNED — not yet started. Approved plan. Execute in phase order.**
+
+### Phase FE-1 — Error Infrastructure *(build first — all other phases depend on this)*
+
+| Step | Task | File(s) | Status |
+|------|------|---------|--------|
+| FE-1a | Add `client_error_logs` D1 table + `POST /api/log-error` route | `workers/signup-api.ts` | TODO |
+| FE-1b | Create `useGameError.ts` — error queue hook + dual cloud logger (D1 + Firestore pre-wire) | `app/ls/game/useGameError.ts` (NEW) | TODO |
+| FE-1c | Create `ErrorOverlay.tsx` — `ErrorToast` (recoverable, 8s auto-dismiss) + `ErrorModal` (fatal, End Session btn) | `app/ls/game/ErrorOverlay.tsx` (NEW) | TODO |
+| FE-1d | Create `GameErrorBoundary.tsx` — React class error boundary wrapping game shell; crash fallback UI | `app/ls/game/GameErrorBoundary.tsx` (NEW) | TODO |
+
+### Phase FE-2 — Mic Handling *(depends on FE-1)*
+
+| Step | Task | File(s) | Status |
+|------|------|---------|--------|
+| FE-2a | Split `getUserMedia` into two sequential calls — mic first (fatal if denied), webcam second (non-blocking if denied). New states: `micDenied`, `micActive`, `webcamDenied` | `usePlayerMedia.ts` | TODO |
+| FE-2b | Add `MicBlocker` fatal modal in `GameHUD.tsx` — shown when `micDenied && !demoEnded`. Buttons: "Reload" + "End Session" | `GameHUD.tsx` | TODO |
+
+**Mic is required. Webcam is optional. Session can run audio-only.**
+
+### Phase FE-3 — Camera Coverage Detection *(parallel with FE-2)*
+
+| Step | Task | File(s) | Status |
+|------|------|---------|--------|
+| FE-3a | Add pixel brightness analysis to 1FPS canvas loop. Sample `getImageData(0,0,80,60)` (quarter res). 3+ dark frames (avg brightness < 20) → `setCameraObscured(true)`. Uses `darkFrameCountRef` (no re-render per frame). | `usePlayerMedia.ts` | TODO |
+| FE-3b | Add `CameraObscuredEvent` type `{ type: "camera_obscured"; obscured: boolean }` to `ServerEvent` union (future-proofs backend signal) | `GameWSContext.tsx` | TODO |
+| FE-3c | Add non-blocking amber camera nudge banner — shown when `(cameraObscured \|\| webcamDenied) && !cameraNudgeDismissed && !demoEnded`. Dismissable with "Got it". Game continues. | `GameHUD.tsx` | TODO |
+
+### Phase FE-4 — Wire Existing Silent Errors *(depends on FE-1)*
+
+| Step | Existing `console.error` | Replace with | Severity |
+|------|--------------------------|--------------|----------|
+| FE-4a | `GameHUD.tsx` audio decoder catch | `dispatchError("Audio playback interrupted")` | recoverable |
+| FE-4b | `GameWSContext.tsx` `ws.onerror` | `dispatchError("Connection error — backend unreachable")` | recoverable |
+| FE-4c | `GameWSContext.tsx` `session_error` event handler | `dispatchError(ev.message)` | fatal |
+| FE-4d | `usePlayerMedia.ts` top-level catch | `dispatchError("Media capture error")` | recoverable |
+
+### New Files (to be created)
+- `app/ls/game/useGameError.ts`
+- `app/ls/game/ErrorOverlay.tsx`
+- `app/ls/game/GameErrorBoundary.tsx`
+
+### Backend Dependency (create in backend session)
+`POST /log-client-error` endpoint on Cloud Run — writes to Firestore. Frontend pre-wires the call with `AbortSignal.timeout(3000)` and silently ignores 404 until endpoint exists.
+
+### Verification Checklist
+- [ ] Deny mic → `MicBlocker` modal appears; "End Session" fires `session_end`
+- [ ] Deny webcam → camera nudge banner appears; JASON audio still works
+- [ ] Cover webcam 3+ seconds → nudge appears; uncover → clears (if not dismissed)
+- [ ] Kill backend mid-session → recoverable toast appears; session does not hard-crash
+- [ ] Check D1 `client_error_logs` after mic deny → row written with `sessionId` + error
+- [ ] `npx tsc --noEmit` on all modified files → 0 errors
+
+---
+
 ## Step Progress Tracker
 
 | Step | Feature | Status |
@@ -156,6 +213,10 @@ All four backend-prerequisite frontend steps are **DONE** and pushed to main:
 | P | `scene_video` handler � Veo 3.1 Fast clip playback + freeze | **DONE** |
 | Q | Demo video (4 min, mandatory) | March 11-14 |
 | R | Architecture diagram (mandatory) | March 13-15 |
+| FE-1 | Error infrastructure (useGameError, ErrorOverlay, ErrorBoundary, D1 log endpoint) | TODO |
+| FE-2 | Mic blocker modal + split getUserMedia | TODO |
+| FE-3 | Camera coverage detection + nudge banner | TODO |
+| FE-4 | Wire existing silent console.errors to dispatchError | TODO |
 
 ---
 
@@ -227,8 +288,9 @@ All assets live at `https://storage.googleapis.com/liminal-sin-assets/`
 | `app/ls/game/usePlayerMedia.ts` | Mic + webcam � ScriptProcessorNode 16kHz PCM, 1FPS JPEG |
 | `app/ls/game/audioManifest.ts` | Audio event keys -> GCS URL pools (30 keys, 87 SFX / 118 total files) |
 | `app/ls/game/useAudioLayers.ts` | 3-channel Web Audio hook (musicGain/sfxGain/ambientGain) |
-| `app/ls/judges/game/page.tsx` | Judge game shell � judgeMode=true |
-
+| `app/ls/judges/game/page.tsx` | Judge game shell � judgeMode=true || `app/ls/game/useGameError.ts` | *(planned)* Error queue hook + dual cloud logger (D1 + Firestore) |
+| `app/ls/game/ErrorOverlay.tsx` | *(planned)* ErrorToast + ErrorModal components |
+| `app/ls/game/GameErrorBoundary.tsx` | *(planned)* React class error boundary |
 ---
 
 ## Audio System � Architecture (Step E)
