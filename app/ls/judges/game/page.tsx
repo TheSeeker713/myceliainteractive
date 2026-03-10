@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { GameWSProvider, useGameWS } from "../../game/GameWSContext";
 import GameHUD from "../../game/GameHUD";
 import { usePlayerMedia } from "../../game/usePlayerMedia";
+import { GameErrorBoundary } from "../../game/GameErrorBoundary";
 
 /**
  * Judge Game Shell — /ls/judges/game
@@ -21,7 +22,8 @@ function JudgeGameInner() {
   // to avoid iOS's concurrent AudioContext limit.
   const audioCtxRef = useRef<AudioContext | null>(null);
 
-  const { webcamActive } = usePlayerMedia(sessionActive, audioCtxRef);
+  const { webcamActive, micDenied, webcamDenied, cameraObscured } =
+    usePlayerMedia(sessionActive, audioCtxRef);
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
@@ -29,6 +31,9 @@ function JudgeGameInner() {
         sessionActive={sessionActive}
         audioCtxRef={audioCtxRef}
         webcamActive={webcamActive}
+        micDenied={micDenied}
+        webcamDenied={webcamDenied}
+        cameraObscured={cameraObscured}
       />
 
       {!sessionActive && (
@@ -68,8 +73,10 @@ function JudgeGameInner() {
 
 export default function JudgeGamePage() {
   return (
-    <GameWSProvider judgeMode={true}>
-      <JudgeGameInner />
-    </GameWSProvider>
+    <GameErrorBoundary>
+      <GameWSProvider judgeMode={true}>
+        <JudgeGameInner />
+      </GameWSProvider>
+    </GameErrorBoundary>
   );
 }

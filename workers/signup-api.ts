@@ -228,7 +228,7 @@ async function handleAiImage(request: Request, env: Env): Promise<Response> {
   const seedParam = url.searchParams.get("seed") || "0";
   const rawSeed = parseInt(seedParam, 10);
   const safeSeed = isNaN(rawSeed) ? 0 : rawSeed % MAX_SEEDS;
-  
+
   // Try to return from cache first via explicitly fetched cache if environment supports it, but here we can just rely on standard HTTP caching for the edge by returning standard headers. The worker environment type doesn't have caches.default natively without extra types.
   // Instead, since Cloudflare automatically caches based on Cache-Control for GET requests via standard zones, we just need to return the correct headers.
 
@@ -269,6 +269,46 @@ async function handleAiImage(request: Request, env: Env): Promise<Response> {
   }
 }
 
+async function handleLogError(request: Request, env: Env): Promise<Response> {
+  try {
+    const body = (await request.json()) as Record<string, unknown>;
+    // Sanitize and cap string lengths to prevent injection/bloat
+    const sessionId = String(body.sessionId ?? "unknown").slice(0, 128);
+    const errorType = String(body.errorType ?? "client_error").slice(0, 64);
+    const message = String(body.message ?? "").slice(0, 1000);
+    const severity = String(body.severity ?? "recoverable").slice(0, 32);
+    const url = String(body.url ?? "").slice(0, 256);
+    const stack = String(body.stack ?? "").slice(0, 2000);
+
+    // Self-initialising table — no migration infrastructure needed
+    await env.liminal_sin_signups
+      .prepare(
+        `CREATE TABLE IF NOT EXISTS client_error_logs (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          session_id TEXT NOT NULL,
+          error_type TEXT NOT NULL,
+          message TEXT NOT NULL,
+          severity TEXT NOT NULL,
+          url TEXT,
+          stack TEXT,
+          created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )`,
+      )
+      .run();
+
+    await env.liminal_sin_signups
+      .prepare(
+        `INSERT INTO client_error_logs (session_id, error_type, message, severity, url, stack)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+      )
+      .bind(sessionId, errorType, message, severity, url, stack)
+      .run();
+  } catch {
+    // Never cascade — log failure must not break the game session
+  }
+  return Response.json({ ok: true });
+}
+
 const handler = {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -296,6 +336,14 @@ const handler = {
       return handleAiImage(request, env);
     }
     if (url.pathname === "/api/ai/image") {
+      return Response.json({ error: "Method not allowed" }, { status: 405 });
+    }
+
+    // Client error logging
+    if (url.pathname === "/api/log-error" && request.method === "POST") {
+      return handleLogError(request, env);
+    }
+    if (url.pathname === "/api/log-error") {
       return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
 

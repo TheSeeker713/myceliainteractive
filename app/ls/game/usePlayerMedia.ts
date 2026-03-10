@@ -26,11 +26,17 @@ export function usePlayerMedia(
 ) {
   const { send, status } = useGameWS();
   const streamRef = useRef<MediaStream | null>(null);
+  const videoStreamRef = useRef<MediaStream | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const frameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [webcamActive, setWebcamActive] = useState(false);
+  const [micDenied, setMicDenied] = useState(false);
+  const [micActive, setMicActive] = useState(false);
+  const [webcamDenied, setWebcamDenied] = useState(false);
+  const [cameraObscured, setCameraObscured] = useState(false);
+  const darkFrameCountRef = useRef(0);
   // Guard: getUserMedia must only be called once per session activation.
   // Without this, any status change while active===true re-triggers the effect,
   // stopAll() closes the AudioContext (fire-and-forget), and the next
@@ -44,7 +50,10 @@ export function usePlayerMedia(
     frameIntervalRef.current = null;
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
+    videoStreamRef.current?.getTracks().forEach((t) => t.stop());
+    videoStreamRef.current = null;
     setWebcamActive(false);
+    setMicActive(false);
   }, []);
 
   useEffect(() => {
@@ -56,36 +65,53 @@ export function usePlayerMedia(
 
     (async () => {
       try {
-        // Step I: Enhanced audio constraints prevent music/SFX bleed into mic.
-        // iOS Safari may reject the sampleRate constraint — retry without it.
-        let stream: MediaStream;
+        // Step I: Mic first (fatal if denied), webcam second (non-blocking if denied).
+        // Splitting getUserMedia lets us distinguish which device failed.
+        let audioStream: MediaStream;
         try {
-          stream = await navigator.mediaDevices.getUserMedia({
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true,
-              sampleRate: 16000,
-            },
-            video: { facingMode: "user", width: 320, height: 240 },
-          });
+          try {
+            audioStream = await navigator.mediaDevices.getUserMedia({
+              audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+                sampleRate: 16000,
+              },
+              video: false,
+            });
+          } catch {
+            // iOS Safari may reject the sampleRate constraint — retry without it.
+            audioStream = await navigator.mediaDevices.getUserMedia({
+              audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+              },
+              video: false,
+            });
+          }
         } catch {
-          stream = await navigator.mediaDevices.getUserMedia({
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true,
-            },
-            video: { facingMode: "user", width: 320, height: 240 },
-          });
+          if (cancelled) return;
+          setMicDenied(true);
+          return; // Fatal — mic is required for this experience
         }
 
         if (cancelled) {
-          stream.getTracks().forEach((t) => t.stop());
+          audioStream.getTracks().forEach((t) => t.stop());
           return;
         }
 
-        streamRef.current = stream;
+        streamRef.current = audioStream;
+        setMicActive(true);
+
+        // Detect if mic track ends mid-session (e.g. device unplugged)
+        const audioTrack = audioStream.getAudioTracks()[0];
+        if (audioTrack) {
+          audioTrack.onended = () => {
+            setMicDenied(true);
+            setMicActive(false);
+          };
+        }
 
         // ── Microphone: ScriptProcessor → raw PCM 16kHz Int16 ────────────────
         // Gemini Live requires audio/pcm;rate=16000 — raw linear PCM only.
@@ -102,7 +128,7 @@ export function usePlayerMedia(
         }
         const actualRate = micCtx.sampleRate; // 24000 from shared ctx; downsampled below
         console.log(`[usePlayerMedia] AudioContext sampleRate: ${actualRate}`);
-        const micSource = micCtx.createMediaStreamSource(stream);
+        const micSource = micCtx.createMediaStreamSource(audioStream);
 
         const processor = micCtx.createScriptProcessor(4096, 1, 1);
         micSource.connect(processor);
@@ -143,33 +169,71 @@ export function usePlayerMedia(
           });
         };
 
-        // ── Webcam: canvas snapshot at 1 FPS ─────────────
-        const canvas = document.createElement("canvas");
-        canvas.width = 320;
-        canvas.height = 240;
-        canvasRef.current = canvas;
+        // ── Webcam: optional, non-blocking if denied ──────────
+        try {
+          const videoStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user", width: 320, height: 240 },
+            audio: false,
+          });
 
-        const video = document.createElement("video");
-        video.srcObject = stream;
-        video.muted = true;
-        video.playsInline = true;
-        videoRef.current = video;
-        await video.play();
-
-        frameIntervalRef.current = setInterval(() => {
-          const ctx2d = canvas.getContext("2d");
-          if (!ctx2d || video.readyState < 2) return;
-          ctx2d.drawImage(video, 0, 0, 320, 240);
-          // Extract as JPEG base64, strip data URI prefix
-          const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
-          const b64 = dataUrl.split(",")[1];
-          if (b64) {
-            send({ type: "player_frame", jpeg: b64, timestamp: Date.now() });
+          if (cancelled) {
+            videoStream.getTracks().forEach((t) => t.stop());
+            return;
           }
-        }, 1000); // 1 FPS
 
-        // Webcam is now actively capturing
-        setWebcamActive(true);
+          videoStreamRef.current = videoStream;
+
+          const canvas = document.createElement("canvas");
+          canvas.width = 320;
+          canvas.height = 240;
+          canvasRef.current = canvas;
+
+          const video = document.createElement("video");
+          video.srcObject = videoStream;
+          video.muted = true;
+          video.playsInline = true;
+          videoRef.current = video;
+          await video.play();
+
+          darkFrameCountRef.current = 0;
+          frameIntervalRef.current = setInterval(() => {
+            const ctx2d = canvas.getContext("2d");
+            if (!ctx2d || video.readyState < 2) return;
+            ctx2d.drawImage(video, 0, 0, 320, 240);
+
+            // Brightness analysis — quarter-res sample (80×60 ≈ 4800 px, fast at 1 FPS)
+            const imageData = ctx2d.getImageData(0, 0, 80, 60);
+            let brightnessSum = 0;
+            for (let i = 0; i < imageData.data.length; i += 4) {
+              brightnessSum +=
+                (imageData.data[i] +
+                  imageData.data[i + 1] +
+                  imageData.data[i + 2]) /
+                3;
+            }
+            const avgBrightness = brightnessSum / (imageData.data.length / 4);
+            if (avgBrightness < 20) {
+              darkFrameCountRef.current++;
+              if (darkFrameCountRef.current >= 3) setCameraObscured(true);
+            } else {
+              darkFrameCountRef.current = 0;
+              setCameraObscured(false);
+            }
+
+            // Send frame to backend for GM vision
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
+            const b64 = dataUrl.split(",")[1];
+            if (b64) {
+              send({ type: "player_frame", jpeg: b64, timestamp: Date.now() });
+            }
+          }, 1000); // 1 FPS
+
+          // Webcam is now actively capturing
+          setWebcamActive(true);
+        } catch {
+          setWebcamDenied(true);
+          // Webcam denied — game continues with mic only
+        }
       } catch (err) {
         console.error("[usePlayerMedia] Media access error:", err);
       }
@@ -180,7 +244,15 @@ export function usePlayerMedia(
       stopAll();
       captureStartedRef.current = false; // allow re-init if session restarts
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, status, send, stopAll]);
 
-  return { stopAll, webcamActive };
+  return {
+    stopAll,
+    webcamActive,
+    micDenied,
+    micActive,
+    webcamDenied,
+    cameraObscured,
+  };
 }

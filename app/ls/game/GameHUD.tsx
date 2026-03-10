@@ -9,12 +9,15 @@ import {
 } from "react";
 import { useGameWS } from "./GameWSContext";
 import { useAudioLayers } from "./useAudioLayers";
+import { useGameError } from "./useGameError";
+import { ErrorOverlay, ErrorModal } from "./ErrorOverlay";
 import type {
   AgentSpeechEvent,
   FmvTriggerEvent,
   HudGlitchEvent,
   TrustUpdateEvent,
   SessionReadyEvent,
+  SessionErrorEvent,
   SlotskyTriggerEvent,
 } from "./GameWSContext";
 
@@ -33,10 +36,16 @@ export default function GameHUD({
   sessionActive = false,
   audioCtxRef,
   webcamActive = false,
+  micDenied = false,
+  webcamDenied = false,
+  cameraObscured = false,
 }: {
   sessionActive?: boolean;
   audioCtxRef: MutableRefObject<AudioContext | null>;
   webcamActive?: boolean;
+  micDenied?: boolean;
+  webcamDenied?: boolean;
+  cameraObscured?: boolean;
 }) {
   const {
     lastEvent,
@@ -90,6 +99,9 @@ export default function GameHUD({
     stopAmbientLoop,
     playSequence,
   } = useAudioLayers(audioCtxRef);
+
+  const { errorQueue, dispatchError, dismissError } = useGameError();
+  const [cameraNudgeDismissed, setCameraNudgeDismissed] = useState(false);
 
   // Trust/fear tracking — compare to previous values to detect crossings
   const prevTrustRef = useRef<number>(0.5);
@@ -420,10 +432,56 @@ export default function GameHUD({
         nextPlayTimeRef.current = startAt + audioBuf.duration;
       } catch (e) {
         console.error("[GameHUD] Audio playback error:", e);
+        dispatchError({
+          severity: "recoverable",
+          message: "Audio playback was interrupted.",
+          context: "agent_speech",
+        });
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
+
+  // End session helper — graceful WS close then reload
+  const handleEndSession = useCallback(() => {
+    send({ type: "session_end" });
+    setTimeout(() => window.location.reload(), 500);
+  }, [send]);
+
+  // WS error state → fatal error card
+  useEffect(() => {
+    if (status !== "error") return;
+    dispatchError({
+      severity: "fatal",
+      message: "The connection was lost. The backend may be unreachable.",
+      context: "ws_error",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  // session_error server event → fatal error card
+  useEffect(() => {
+    if (lastEvent?.type !== "session_error") return;
+    const ev = lastEvent as SessionErrorEvent;
+    dispatchError({
+      severity: "fatal",
+      message: ev.message || "A server-side session error occurred.",
+      context: `session_error:${ev.code}`,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastEvent]);
+
+  // Mic denied → fatal error card (mic is required)
+  useEffect(() => {
+    if (!micDenied) return;
+    dispatchError({
+      severity: "fatal",
+      message:
+        "Microphone access was denied. This experience requires your voice. We apologise — the session cannot continue.",
+      context: "mic_denied",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [micDenied]);
 
   // Latest trust data for the HUD indicator
   const trustEvent =
@@ -646,6 +704,62 @@ export default function GameHUD({
           {status === "closed" && "Signal Lost"}
           {status === "error" && "Connection Error — No Backend"}
         </div>
+      )}
+
+      {/* ── Camera obscured nudge (non-blocking, dismissible) ─ */}
+      {cameraObscured &&
+        !webcamDenied &&
+        sessionActive &&
+        !cameraNudgeDismissed && (
+          <div
+            className="absolute top-16 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-3 px-4 py-2 font-mono text-xs"
+            style={{
+              background: "rgba(10,10,10,0.9)",
+              border: "1px solid rgba(220,38,38,0.5)",
+            }}
+          >
+            <span className="text-red-400">⚠</span>
+            <span className="text-red-300/80">
+              Camera appears covered. The GM is watching.
+            </span>
+            <button
+              onClick={() => setCameraNudgeDismissed(true)}
+              className="text-red-500/50 hover:text-red-400 ml-1"
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+      {/* ── Webcam denied indicator (informational) ─────────── */}
+      {webcamDenied && sessionActive && (
+        <div
+          className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[55] px-4 py-2 font-mono text-[10px] tracking-widest uppercase"
+          style={{
+            background: "rgba(10,10,10,0.8)",
+            border: "1px solid rgba(220,38,38,0.3)",
+            color: "rgba(220,38,38,0.6)",
+          }}
+        >
+          Camera offline — audio only
+        </div>
+      )}
+
+      {/* ── Error toast stack + fatal modals ────────────────── */}
+      <ErrorOverlay
+        errorQueue={errorQueue}
+        onDismiss={dismissError}
+        onEndSession={handleEndSession}
+      />
+
+      {/* ── Mic blocked modal (overrides ErrorOverlay for mic denial) ── */}
+      {micDenied && !demoEnded && (
+        <ErrorModal
+          title="No Signal"
+          message="Microphone access was denied. This experience requires your voice to proceed. We apologise — the session cannot continue without it."
+          onEndSession={handleEndSession}
+        />
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { GameWSProvider, useGameWS } from "./GameWSContext";
 import GameHUD from "./GameHUD";
 import { usePlayerMedia } from "./usePlayerMedia";
+import { GameErrorBoundary } from "./GameErrorBoundary";
 
 /**
  * Game UI Shell — /ls/game
@@ -24,7 +25,8 @@ function GameInner() {
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   // Start media capture once the user explicitly starts the session
-  const { webcamActive } = usePlayerMedia(sessionActive, audioCtxRef);
+  const { webcamActive, micDenied, webcamDenied, cameraObscured } =
+    usePlayerMedia(sessionActive, audioCtxRef);
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
@@ -33,6 +35,9 @@ function GameInner() {
         sessionActive={sessionActive}
         audioCtxRef={audioCtxRef}
         webcamActive={webcamActive}
+        micDenied={micDenied}
+        webcamDenied={webcamDenied}
+        cameraObscured={cameraObscured}
       />
 
       {/* ── Start prompt (shown before session begins) ─── */}
@@ -74,8 +79,10 @@ function GameInner() {
 
 export default function GamePage() {
   return (
-    <GameWSProvider judgeMode={false}>
-      <GameInner />
-    </GameWSProvider>
+    <GameErrorBoundary>
+      <GameWSProvider judgeMode={false}>
+        <GameInner />
+      </GameWSProvider>
+    </GameErrorBoundary>
   );
 }

@@ -88,6 +88,11 @@ export type SlotskyTriggerEvent = {
   payload: { anomalyType: string };
 };
 
+export type CameraObscuredEvent = {
+  type: "camera_obscured";
+  obscured: boolean;
+};
+
 export type ServerEvent =
   | AgentSpeechEvent
   | AgentInterruptEvent
@@ -100,7 +105,8 @@ export type ServerEvent =
   | SceneImageEvent
   | SceneChangeEvent
   | SceneVideoEvent
-  | SlotskyTriggerEvent;
+  | SlotskyTriggerEvent
+  | CameraObscuredEvent;
 
 // ── Outbound payload types (client → server) ───────────────────────────────
 
