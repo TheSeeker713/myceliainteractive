@@ -386,10 +386,10 @@ export default function GameHUD({
     if (sourceNodesRef.current.length === 0) {
       if (!firstJasonSpeechRef.current) {
         firstJasonSpeechRef.current = true;
-        playSFX("voicebox_activate");
+        playSFX("voicebox_activate", 0.7);
         crossfadeMusic("music_intro", 2000);
       } else {
-        playSFX("transmission_ping");
+        playSFX("transmission_ping", 0.7);
       }
     }
 

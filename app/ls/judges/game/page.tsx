@@ -5,6 +5,7 @@ import { GameWSProvider, useGameWS } from "../../game/GameWSContext";
 import GameHUD from "../../game/GameHUD";
 import { usePlayerMedia } from "../../game/usePlayerMedia";
 import { GameErrorBoundary } from "../../game/GameErrorBoundary";
+import { IntroSequence } from "../../game/IntroSequence";
 
 /**
  * Judge Game Shell — /ls/judges/game
@@ -16,7 +17,10 @@ import { GameErrorBoundary } from "../../game/GameErrorBoundary";
  */
 
 function JudgeGameInner() {
-  const [sessionActive, setSessionActive] = useState(false);
+  const [sessionPhase, setSessionPhase] = useState<
+    "waiting" | "intro" | "active"
+  >("waiting");
+  const sessionActive = sessionPhase !== "waiting";
   const { connect } = useGameWS();
   // Single shared AudioContext — passed to both GameHUD and usePlayerMedia
   // to avoid iOS's concurrent AudioContext limit.
@@ -36,7 +40,15 @@ function JudgeGameInner() {
         cameraObscured={cameraObscured}
       />
 
-      {!sessionActive && (
+      {/* ── Cinematic intro sequence ────────────────────── */}
+      {sessionPhase === "intro" && (
+        <IntroSequence
+          audioCtxRef={audioCtxRef}
+          onComplete={() => setSessionPhase("active")}
+        />
+      )}
+
+      {sessionPhase === "waiting" && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black/90">
           <p
             className="text-xs tracking-[0.35em] uppercase"
@@ -59,7 +71,7 @@ function JudgeGameInner() {
           <button
             onClick={() => {
               connect();
-              setSessionActive(true);
+              setSessionPhase("intro");
             }}
             className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
           >

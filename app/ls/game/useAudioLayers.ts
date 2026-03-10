@@ -28,7 +28,7 @@ import {
  * gesture, so it inherits Chrome's autoplay-policy permission.
  */
 export function useAudioLayers(
-  audioCtxRef: React.MutableRefObject<AudioContext | null>
+  audioCtxRef: React.MutableRefObject<AudioContext | null>,
 ) {
   // ── Internal state (all in refs — no re-renders) ───────────────────────
   const bufferCacheRef = useRef<Map<string, AudioBuffer[]>>(new Map());
@@ -59,7 +59,7 @@ export function useAudioLayers(
     },
     // All deps are refs — stable across renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   // ── Gain node initialisation ───────────────────────────────────────────
@@ -96,7 +96,7 @@ export function useAudioLayers(
       if (pool?.length) {
         sessionLockedPicksRef.current.set(
           key,
-          Math.floor(Math.random() * pool.length)
+          Math.floor(Math.random() * pool.length),
         );
       }
     }
@@ -123,7 +123,7 @@ export function useAudioLayers(
     await Promise.allSettled(PRIORITY_KEYS.map(loadKey));
 
     const remaining = Object.keys(AUDIO_MANIFEST).filter(
-      (k) => !PRIORITY_KEYS.includes(k)
+      (k) => !PRIORITY_KEYS.includes(k),
     );
     await Promise.allSettled(remaining.map(loadKey));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,7 +169,7 @@ export function useAudioLayers(
       source.start();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   // ── Music: start a looping tier ───────────────────────────────────────
@@ -206,7 +206,7 @@ export function useAudioLayers(
       linearRamp(mGain, 0.3, fadeInMs);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   // ── Music: crossfade to a new tier ───────────────────────────────────
@@ -220,7 +220,7 @@ export function useAudioLayers(
       setTimeout(() => playMusic(newTier, half), half);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   // ── Music: fade out and stop ──────────────────────────────────────────
@@ -242,7 +242,7 @@ export function useAudioLayers(
       }, fadeOutMs);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   // ── Ambient: start a looping background layer ─────────────────────────
@@ -271,7 +271,7 @@ export function useAudioLayers(
       if (!sessionLockedPicksRef.current.has(key)) {
         sessionLockedPicksRef.current.set(
           key,
-          Math.floor(Math.random() * buffers.length)
+          Math.floor(Math.random() * buffers.length),
         );
       }
       const idx = sessionLockedPicksRef.current.get(key)!;
@@ -284,10 +284,10 @@ export function useAudioLayers(
       source.start();
       ambientSourceRef.current = source;
 
-      linearRamp(aGain, 0.12, 3000);
+      linearRamp(aGain, 0.16, 3000);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   const stopAmbientLoop = useCallback(
@@ -307,7 +307,7 @@ export function useAudioLayers(
       }, fadeMs);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   // ── Sequenced multi-step playback ─────────────────────────────────────
@@ -320,7 +320,7 @@ export function useAudioLayers(
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   return {

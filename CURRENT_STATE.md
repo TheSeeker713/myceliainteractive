@@ -1,7 +1,7 @@
 # CURRENT_STATE.md � myceliainteractive (Frontend)
 
 > **AI WORKING MEMORY** � This file is the source of truth for the current state of the frontend project.
-> Last updated: March 10, 2026 (F1-F6 ALL COMPLETE; backend B1-B6 ALL COMPLETE; FE error handling + camera/mic resilience planned)
+> Last updated: March 10, 2026 (F1-F6 ALL COMPLETE; backend B1-B6 ALL COMPLETE; FE error handling + camera/mic resilience planned; **intro sequence + audio fix incoming — see backend CURRENT_STATE.md for full plan**)
 
 ---
 
@@ -191,6 +191,42 @@ All four backend-prerequisite frontend steps are **DONE** and pushed to main:
 
 ---
 
+## INCOMING: Intro Sequence + Audio Fixes (Cross-Ref — Backend Plan)
+
+> **FYI ONLY — Full plan lives in `liminal-sin-gemini/CURRENT_STATE.md` under "NEXT: Intro Sequence + Audio Fixes".**
+> Do NOT overwrite any existing plan in this file. This section is a cross-reference only.
+> Planned March 10, 2026.
+
+### Summary
+Three workstreams decided from E2E testing feedback. All implementation is frontend (this repo) except one line in `jason.ts` (backend).
+
+| Workstream | What | Status |
+|------------|------|--------|
+| **A — Cinematic Intro Sequence** | New `IntroSequence.tsx` component. Randomized intro music + wind SFX → production credits → LIMINAL SIN title → Jason landing + monologue. | TODO |
+| **B — SFX Volume Fix** | Reduce `ambientGain` to 0.15–0.18 and `sfxGain` for dialogue events to 0.40–0.45. Wind SFX stays at 0.65 during intro. | TODO |
+| **C — OBS Mic / Demo Recording** | OBS holds mic device even when muted. Use iPad for demo recording — confirmed working. | Operational — no code |
+
+### Credits Text (locked for IntroSequence)
+```
+A MYCELIA INTERACTIVE EXPERIENCE
+Directed by J.W.
+Produced by A.L.
+Music by THE S33K3R
+```
+
+### Volume Spec
+- Wind SFX during intro: **gain 0.65**
+- Intro music: **gain 0.35–0.40**
+- Ambient during active gameplay: **gain 0.15–0.18**
+
+### New Files This Workstream
+- `components/IntroSequence.tsx` — NEW
+
+### Backend Change (1 line)
+- `server/services/npc/jason.ts` in `liminal-sin-gemini` — `monologueMode` flag added to `buildJasonSystemPrompt()`
+
+---
+
 ## Step Progress Tracker
 
 | Step | Feature | Status |
@@ -213,10 +249,12 @@ All four backend-prerequisite frontend steps are **DONE** and pushed to main:
 | P | `scene_video` handler � Veo 3.1 Fast clip playback + freeze | **DONE** |
 | Q | Demo video (4 min, mandatory) | March 11-14 |
 | R | Architecture diagram (mandatory) | March 13-15 |
-| FE-1 | Error infrastructure (useGameError, ErrorOverlay, ErrorBoundary, D1 log endpoint) | TODO |
-| FE-2 | Mic blocker modal + split getUserMedia | TODO |
-| FE-3 | Camera coverage detection + nudge banner | TODO |
-| FE-4 | Wire existing silent console.errors to dispatchError | TODO |
+| FE-1 | Error infrastructure (useGameError, ErrorOverlay, ErrorBoundary, D1 log endpoint) | **DONE** |
+| FE-2 | Mic blocker modal + split getUserMedia | **DONE** |
+| FE-3 | Camera coverage detection + nudge banner | **DONE** |
+| FE-4 | Wire existing silent console.errors to dispatchError | **DONE** |
+| FE-5 | Cinematic intro sequence (IntroSequence.tsx + sessionPhase state) | **DONE** |
+| FE-6 | SFX volume fix (ambientGain 0.12→0.16; dialogue SFX 0.7 scale) | **DONE** |
 
 ---
 

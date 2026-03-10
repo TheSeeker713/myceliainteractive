@@ -5,6 +5,7 @@ import { GameWSProvider, useGameWS } from "./GameWSContext";
 import GameHUD from "./GameHUD";
 import { usePlayerMedia } from "./usePlayerMedia";
 import { GameErrorBoundary } from "./GameErrorBoundary";
+import { IntroSequence } from "./IntroSequence";
 
 /**
  * Game UI Shell — /ls/game
@@ -17,7 +18,10 @@ import { GameErrorBoundary } from "./GameErrorBoundary";
  */
 
 function GameInner() {
-  const [sessionActive, setSessionActive] = useState(false);
+  const [sessionPhase, setSessionPhase] = useState<
+    "waiting" | "intro" | "active"
+  >("waiting");
+  const sessionActive = sessionPhase !== "waiting";
   const { connect } = useGameWS();
   // Single shared AudioContext for the whole session — passed to both GameHUD
   // (playback) and usePlayerMedia (mic capture) to avoid iOS's concurrent
@@ -40,8 +44,16 @@ function GameInner() {
         cameraObscured={cameraObscured}
       />
 
+      {/* ── Cinematic intro sequence ────────────────────── */}
+      {sessionPhase === "intro" && (
+        <IntroSequence
+          audioCtxRef={audioCtxRef}
+          onComplete={() => setSessionPhase("active")}
+        />
+      )}
+
       {/* ── Start prompt (shown before session begins) ─── */}
-      {!sessionActive && (
+      {sessionPhase === "waiting" && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black/90">
           <p
             className="text-xs tracking-[0.35em] uppercase"
@@ -65,7 +77,7 @@ function GameInner() {
           <button
             onClick={() => {
               connect();
-              setSessionActive(true);
+              setSessionPhase("intro");
             }}
             className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
           >
