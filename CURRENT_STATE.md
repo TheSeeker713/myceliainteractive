@@ -1,7 +1,7 @@
 # CURRENT_STATE.md � myceliainteractive (Frontend)
 
 > **AI WORKING MEMORY** � This file is the source of truth for the current state of the frontend project.
-> Last updated: March 10, 2026 (F1-F6 ALL COMPLETE; backend B4+B5 COMPLETE — all 7 GM tools battle-tested)
+> Last updated: March 10, 2026 (F1-F6 ALL COMPLETE; backend B1-B6 ALL COMPLETE)
 
 ---
 
@@ -29,7 +29,7 @@ Base URL: `https://storage.googleapis.com/liminal-sin-assets/`
 3. **Mic capture** � `ScriptProcessorNode` 16kHz, raw PCM Int16 -> base64 -> `player_speech`
 4. **JASON dialogue** � bidirectional voice, in-lore, Gemini Live native audio (Enceladus)
 5. **Voice barge-in (Step F)** � `agent_interrupt` cancels all queued AudioBufferSourceNodes
-6. **Layered audio system (Step E)** � 3-channel Web Audio: music/SFX/ambient. 83 files, 28 event keys.
+6. **Layered audio system (Step E)** — 3-channel Web Audio: music/SFX/ambient. 118 total files (87 SFX), 30 event keys.
 7. **SIGNAL LOST bug** � judges/game `connect()` fixed
 8. **NotReadableError** � `captureStartedRef` guard, getUserMedia fires once
 9. **Jason voice = Enceladus** (Step G)
@@ -98,19 +98,20 @@ Base URL: `https://storage.googleapis.com/liminal-sin-assets/`
 
 ---
 
-### Backend B1-B5 Complete (March 9-10)
+### Backend B1-B6 Complete (March 9-10)
 
-As of March 10, backend steps B1-B5 are **DONE**:
+As of March 10, backend steps B1-B6 are **DONE**:
 - B1-B3: Veo 3.1 Fast pipeline (`veo.ts` + `triggerVideoGen` GM tool + gameMaster wiring)
 - B4: GCS assets verified. 87 SFX, 10 images, 4 voice_overs. Video/podcast assets removed from GCS (not needed for contest phase).
 - B5: All 7 GM tools battle-tested via `POST /debug/fire-gm-event`: triggerTrustChange, triggerFearChange, triggerGlitchEvent, triggerSceneChange, triggerSlotsky, triggerVideoGen, triggerAudienceUpdate. All passing.
-- `db.ts`: Added `updateSceneKey()` and `updateProximityState()` � persists scene + proximity to Firestore.
+- `db.ts`: Added `updateSceneKey()` and `updateProximityState()` — persists scene + proximity to Firestore.
+- B6: 4 backend bugs fixed — GM model crash (`responseModalities: [Modality.TEXT]` removed from GM config), GM tool ACK hang (`sendToolResponse` moved outside WS guard into `.finally()`), missing `jasonManager` 5th arg in `GM_FUNCTION_CALL` handler, `triggerTrustChange` now accepts raw float (0.0–1.0) OR case-insensitive string (High/Neutral/Low).
 
 ### Frontend F1-F4 Complete (March 9)
 
 All four backend-prerequisite frontend steps are **DONE** and pushed to main:
 - **F1** � Black screen + 10s text hint + disappears on first `player_speech`
-- **F2** � GM red eye breathing indicator (top-right, `gm-eye-breathe` keyframe)
+- **F2** — GM SVG eye indicator (44×28px almond SVG, red iris with pulse animation, black pupil, white glint, webcam-gated — only renders when webcam is actively capturing, hidden after demo ends)
 - **F3** � Scene image crossfade pipeline (dual img layers, `pushImage()` + `requestAnimationFrame`)
 - **F4** � `scene_video` handler: GCS URL playback ? canvas frame capture ? crossfade pipeline; taint fallback
 
@@ -149,7 +150,7 @@ All four backend-prerequisite frontend steps are **DONE** and pushed to main:
 | J | GCS audio storage + audioManifest updated | DONE |
 | K | Black screen opening + text hint | **DONE** |
 | L | Scene image display pipeline | **DONE** |
-| M | GM red eye indicator | **DONE** |
+| M | GM SVG eye indicator (webcam-gated) | **DONE** |
 | N | Glitch effects (CSS) | **DONE** |
 | O | Demo end sequence | **DONE** |
 | P | `scene_video` handler � Veo 3.1 Fast clip playback + freeze | **DONE** |
@@ -224,7 +225,7 @@ All assets live at `https://storage.googleapis.com/liminal-sin-assets/`
 | `app/ls/game/GameWSContext.tsx` | WebSocket context � deferred connect, sceneImage state |
 | `app/ls/game/GameHUD.tsx` | Game HUD � 3-layer audio, agent_interrupt, 25 WS event mappings |
 | `app/ls/game/usePlayerMedia.ts` | Mic + webcam � ScriptProcessorNode 16kHz PCM, 1FPS JPEG |
-| `app/ls/game/audioManifest.ts` | Audio event keys -> GCS URL pools (28 keys, 83 files) |
+| `app/ls/game/audioManifest.ts` | Audio event keys -> GCS URL pools (30 keys, 87 SFX / 118 total files) |
 | `app/ls/game/useAudioLayers.ts` | 3-channel Web Audio hook (musicGain/sfxGain/ambientGain) |
 | `app/ls/judges/game/page.tsx` | Judge game shell � judgeMode=true |
 
@@ -239,8 +240,8 @@ All assets live at `https://storage.googleapis.com/liminal-sin-assets/`
 | SFX | `sfxGain` | 0.8 | One-shot sound effects triggered by WS events |
 | Ambient | `ambientGain` | 0.5 | Looped ambient environment sounds |
 
-### audioManifest.ts Keys (28 keys)
-`session_start` `voicebox_activate` `voicebox_deactivate` `ambient_tunnel_loop` `ambient_static_loop` `music_intro` `music_tension` `music_climax` `music_psychosis` `fourth_wall_correction` `npc_glitch_tier1` `npc_glitch_tier2` `npc_glitch_tier3` `slotsky_shadow` `slotsky_flicker` `slotsky_whisper` `slotsky_mirror` `slotsky_shatter` `trust_drop_warning` `trust_drop_low` `trust_rebuild` `found_transition` `heartbeat_pulse` `static_surge` `breath_stutter` `horror_sting` `footstep_loop` `water_drip`
+### audioManifest.ts Keys (30 keys)
+`music_intro` `music_tension` `music_climax` `music_psychosis` `ambient_cold_open` `ambient_water_echo` `voicebox_activate` `transmission_ping` `barge_in` `knowledge_unlock` `trust_drop` `fear_spike` `fear_critical` `slotsky_bells` `slotsky_cards` `slotsky_lights` `slotsky_geometry` `fourth_wall_bells` `fourth_wall_crackle` `glitch_low` `glitch_medium` `glitch_high` `proximity_echo` `proximity_found` `found_water_rise` `static_takeover` `descent_sting` `jason_whisper` `relay_true` `relay_false`
 
 ---
 
