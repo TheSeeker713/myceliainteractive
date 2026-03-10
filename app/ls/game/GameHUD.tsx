@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, type MutableRefObject } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from "react";
 import { useGameWS } from "./GameWSContext";
 import { useAudioLayers } from "./useAudioLayers";
 import type {
@@ -30,7 +36,14 @@ export default function GameHUD({
   sessionActive?: boolean;
   audioCtxRef: MutableRefObject<AudioContext | null>;
 }) {
-  const { lastEvent, status, sceneImage } = useGameWS();
+  const {
+    lastEvent,
+    status,
+    sceneImage,
+    sceneVideo,
+    playerHasSpoken,
+    clearSceneVideo,
+  } = useGameWS();
   const glitchRef = useRef<HTMLDivElement>(null);
   const fmvRef = useRef<HTMLVideoElement>(null);
   // nextPlayTimeRef schedules chunks end-to-end for gapless playback.
@@ -38,6 +51,21 @@ export default function GameHUD({
   // All in-flight scheduled source nodes. Cleared on agent_interrupt so Jason
   // stops immediately when the player speaks over him.
   const sourceNodesRef = useRef<AudioBufferSourceNode[]>([]);
+
+  // F1: text hint
+  const [showHint, setShowHint] = useState(false);
+  const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // F3: crossfade layers
+  const [imgLayerA, setImgLayerA] = useState<string | null>(null);
+  const [imgLayerB, setImgLayerB] = useState<string | null>(null);
+  const [activeImgLayer, setActiveImgLayer] = useState<0 | 1>(0);
+  const activeImgLayerRef = useRef<0 | 1>(0);
+  const prevSceneImageRef = useRef<string | null>(null);
+
+  // F4: scene video
+  const sceneVideoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // ── Audio layer system ───────────────────────────────────────────────────
   const {
@@ -60,6 +88,50 @@ export default function GameHUD({
   // Fires voicebox_activate + music_intro on Jason's very first utterance
   const firstJasonSpeechRef = useRef(false);
 
+  // F3: push a new image through the crossfade pipeline
+  const pushImage = useCallback((dataUri: string) => {
+    const current = activeImgLayerRef.current;
+    if (current === 0) {
+      setImgLayerB(dataUri);
+      requestAnimationFrame(() => {
+        setActiveImgLayer(1);
+        activeImgLayerRef.current = 1;
+      });
+    } else {
+      setImgLayerA(dataUri);
+      requestAnimationFrame(() => {
+        setActiveImgLayer(0);
+        activeImgLayerRef.current = 0;
+      });
+    }
+  }, []);
+
+  // F4: capture last video frame and push through crossfade, then clear video
+  const handleSceneVideoEnded = useCallback(() => {
+    const video = sceneVideoRef.current;
+    const canvas = canvasRef.current;
+    let captured = false;
+    if (video && canvas) {
+      try {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(video, 0, 0);
+          const frameDataUri = canvas.toDataURL("image/jpeg", 0.85);
+          pushImage(frameDataUri);
+          captured = true;
+        }
+      } catch {
+        console.warn(
+          "[GameHUD] Canvas tainted — video stays frozen on last frame",
+        );
+      }
+    }
+    if (captured && video) video.style.display = "none";
+    clearSceneVideo();
+  }, [clearSceneVideo, pushImage]);
+
   // Create + resume AudioContext inside the Begin Session gesture tick.
   // Must NOT be created lazily in a WS message handler — Chrome's autoplay
   // policy suspends any AudioContext created outside a user gesture.
@@ -71,7 +143,7 @@ export default function GameHUD({
     // Initialise gain nodes and kick off background preload of all audio assets.
     ensureGainNodes();
     preloadAll();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionActive]);
 
   // Barge-in: player spoke over Jason — kill all queued audio immediately.
@@ -80,12 +152,18 @@ export default function GameHUD({
     playSFX("barge_in");
     const nodes = sourceNodesRef.current;
     for (const node of nodes) {
-      try { node.stop(); } catch { /* already stopped or never started */ }
+      try {
+        node.stop();
+      } catch {
+        /* already stopped or never started */
+      }
     }
     sourceNodesRef.current = [];
     nextPlayTimeRef.current = 0;
-    console.log(`[GameHUD] agent_interrupt — cancelled ${nodes.length} queued audio nodes`);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log(
+      `[GameHUD] agent_interrupt — cancelled ${nodes.length} queued audio nodes`,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // HUD Glitch effect
@@ -108,7 +186,7 @@ export default function GameHUD({
       el.classList.remove(opacityClass, "animate-pulse");
     }, ev.duration_ms);
     return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // FMV playback
@@ -132,8 +210,43 @@ export default function GameHUD({
     if (lastEvent?.type !== "session_ready") return;
     void (lastEvent as SessionReadyEvent);
     startAmbientLoop("ambient_cold_open");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // F1: fade in text hint after 10 seconds of silence
+    hintTimerRef.current = setTimeout(() => setShowHint(true), 10000);
+    return () => {
+      if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
+
+  // F1: hide text hint once player speaks
+  useEffect(() => {
+    if (playerHasSpoken) {
+      setShowHint(false);
+      if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
+    }
+  }, [playerHasSpoken]);
+
+  // F3: crossfade scene images when sceneImage changes
+  useEffect(() => {
+    if (sceneImage === prevSceneImageRef.current) return;
+    prevSceneImageRef.current = sceneImage;
+    if (!sceneImage) return;
+    pushImage(`data:image/jpeg;base64,${sceneImage}`);
+    // Hide any leftover frozen video from F4
+    if (sceneVideoRef.current) sceneVideoRef.current.style.display = "none";
+  }, [sceneImage, pushImage]);
+
+  // F4: play scene video when sceneVideo arrives
+  useEffect(() => {
+    if (!sceneVideo) return;
+    const video = sceneVideoRef.current;
+    if (!video) return;
+    video.src = sceneVideo.url;
+    video.style.display = "block";
+    video
+      .play()
+      .catch((e) => console.error("[GameHUD] scene_video play error:", e));
+  }, [sceneVideo]);
 
   // trust_update: drive music crossfades and threshold SFX.
   useEffect(() => {
@@ -148,7 +261,11 @@ export default function GameHUD({
       playSFX("trust_drop");
     }
     // Trust crossed 0.6 upward — private knowledge unlocked
-    if (trust_level >= 0.6 && prevTrust < 0.6 && !trustKnowledgeFiredRef.current) {
+    if (
+      trust_level >= 0.6 &&
+      prevTrust < 0.6 &&
+      !trustKnowledgeFiredRef.current
+    ) {
       trustKnowledgeFiredRef.current = true;
       playSFX("knowledge_unlock");
     }
@@ -175,7 +292,7 @@ export default function GameHUD({
 
     prevTrustRef.current = trust_level;
     prevFearRef.current = fear_index;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // slotsky_trigger: route each anomaly type to its audio event.
@@ -211,7 +328,7 @@ export default function GameHUD({
         setTimeout(() => playSFX("found_water_rise"), 8000);
         break;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // Agent audio playback — raw 16-bit little-endian PCM at 24kHz from Gemini Live.
@@ -261,7 +378,9 @@ export default function GameHUD({
         source.connect(ctx.destination);
         sourceNodesRef.current.push(source);
         source.onended = () => {
-          sourceNodesRef.current = sourceNodesRef.current.filter(n => n !== source);
+          sourceNodesRef.current = sourceNodesRef.current.filter(
+            (n) => n !== source,
+          );
         };
 
         // Schedule gapless: each chunk starts exactly where the previous ended
@@ -273,27 +392,48 @@ export default function GameHUD({
         console.error("[GameHUD] Audio playback error:", e);
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // Latest trust data for the HUD indicator
   const trustEvent =
-    lastEvent?.type === "trust_update"
-      ? (lastEvent as TrustUpdateEvent)
-      : null;
+    lastEvent?.type === "trust_update" ? (lastEvent as TrustUpdateEvent) : null;
 
   return (
     <>
-      {/* ── Imagen 4 scene background (beneath FMV at z-10) ── */}
-      {sceneImage && (
+      {/* ── Scene image crossfade layers (F3) ──────────────── */}
+      {imgLayerA && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={`data:image/jpeg;base64,${sceneImage}`}
+          src={imgLayerA}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
+          style={{ opacity: activeImgLayer === 0 ? 1 : 0 }}
         />
       )}
+      {imgLayerB && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={imgLayerB}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
+          style={{ opacity: activeImgLayer === 1 ? 1 : 0 }}
+        />
+      )}
+
+      {/* ── Scene video overlay (F4) ──────────────────────── */}
+      <video
+        ref={sceneVideoRef}
+        className="absolute inset-0 w-full h-full object-cover z-[5]"
+        style={{ display: "none" }}
+        playsInline
+        muted
+        crossOrigin="anonymous"
+        onEnded={handleSceneVideoEnded}
+      />
+      <canvas ref={canvasRef} className="hidden" />
 
       {/* ── FMV layer (beneath HUD overlays) ─────────────── */}
       <video
@@ -313,8 +453,7 @@ export default function GameHUD({
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-200"
           style={{
-            backgroundImage:
-              "url('/assets/images/cracked-glass.png')",
+            backgroundImage: "url('/assets/images/cracked-glass.png')",
             backgroundSize: "cover",
             opacity: 0,
           }}
@@ -330,6 +469,30 @@ export default function GameHUD({
             "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.08) 2px, rgba(255,255,255,0.08) 4px)",
         }}
       />
+
+      {/* ── "say something..." text hint (F1) ─────────────── */}
+      {showHint && !playerHasSpoken && (
+        <div className="absolute inset-0 z-25 flex items-center justify-center pointer-events-none">
+          <p
+            className="font-mono text-sm tracking-[0.3em] uppercase"
+            style={{
+              color: "rgba(160,160,160,0.5)",
+              animation: "hint-fade-in 2s ease-in forwards",
+            }}
+          >
+            say something...
+          </p>
+        </div>
+      )}
+
+      {/* ── GM Red Eye indicator (F2) ─────────────────────── */}
+      {sessionActive && status === "open" && (
+        <div
+          aria-hidden="true"
+          className="absolute top-5 right-5 z-40 w-3 h-3 rounded-full bg-red-600 shadow-[0_0_8px_2px_rgba(220,38,38,0.6)]"
+          style={{ animation: "gm-eye-breathe 3.5s ease-in-out infinite" }}
+        />
+      )}
 
       {/* ── Trust indicator (bottom-right) ─────────────────── */}
       {trustEvent && (

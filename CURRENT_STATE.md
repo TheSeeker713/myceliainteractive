@@ -1,92 +1,152 @@
-﻿# CURRENT_STATE.md — myceliainteractive
-> **AI WORKING MEMORY** — This file is overwritten at the start of every new AI session.
-> Last updated: March 9, 2026 (full sprint — Steps E + F complete, audio system live, barge-in wired)
+﻿# CURRENT_STATE.md — myceliainteractive (Frontend)
+
+> **AI WORKING MEMORY** — This file is the source of truth for the current state of the frontend project.
+> Last updated: March 9, 2026 (F1-F4 COMPLETE — black screen, red eye, scene image crossfade, scene_video handler; F5-F6 remain)
 
 ---
 
-## ⚠️ NEXT AI SESSION — READ THIS FIRST
+## WARNING: NEXT AI SESSION — READ THIS FIRST
 
-### Completed — March 9, 2026 (full sprint)
+This is the FRONTEND repo (Cloudflare Pages). All backend/server code lives in `liminal-sin-gemini` repo.
+Before writing any code, read AGENTS.md in the backend repo for lore context.
 
-**Bugs fixed:**
-1. **SIGNAL LOST bug** — `app/ls/judges/game/page.tsx` was missing the `connect()` call. Fixed. Judge game wrapper now connects to Cloud Run WS.
-2. **NotReadableError: Device in use** — `usePlayerMedia.ts` was calling `getUserMedia` twice due to React effect re-fire on status transitions. Fixed by adding `captureStartedRef` guard — `getUserMedia` is now called exactly once per session activation.
+**ARCHITECTURE CORRECTION (March 9):**
+The GM is a SILENT gaming engine — it NEVER speaks to the player. It communicates only via function calls.
+JASON is the only voice the player hears (Gemini Live, Enceladus voice).
+Slotsky is invisible — handles scene changes and in-game perks via event flags.
 
-**Steps E + F complete:**
-3. **Step F — Voice interrupt / barge-in** — `agent_interrupt` WS event now cancels all queued `AudioBufferSourceNode`s in `GameHUD.tsx` immediately. Player can speak over JASON mid-sentence and cut him off.
-4. **Step E — Layered audio system** — Three new files created:
-   - `app/ls/game/audioManifest.ts` — 28 audio event keys → string[] file path pools (83 total audio files mapped). Pure constants, no logic.
-   - `app/ls/game/useAudioLayers.ts` — 3-channel Web Audio hook: `musicGain` (0.3) / `sfxGain` (0.8) / `ambientGain` (0.5). Functions: `preloadAll`, `playSFX`, `playMusic`, `crossfadeMusic`, `stopMusic`, `startAmbientLoop`, `stopAmbientLoop`, `playSequence`.
-   - `GameHUD.tsx` — updated to import and wire all 25 WS events → audio triggers. New refs tracking threshold crossings for tier-based music swaps.
-   - Anti-repeat randomization: session-locked music variant pre-pick, SFX never repeats same variant twice consecutively, ±8% volume micro-jitter per play.
-   - All 25 WS event → audio trigger mappings wired, including: `session_ready` → ambient loop start, first Jason speech → `voicebox_activate` + `music_intro`, fear threshold 0.6/0.85/0.9 crossing → music crossfades, `found_transition` → 8s silence then ambient loop.
+**ALL AUDIO ASSETS ARE ON GCS** — Do NOT reference local `/assets/music/` or `/assets/sound_fx/` paths.
+Base URL: `https://storage.googleapis.com/liminal-sin-assets/`
 
 ---
 
-## ⚠️ PENDING — NEXT SESSION PRIORITIES
+## What Has Been Built — Completed Steps
 
-### Priority 1 — Jason's Voice Change (MUST DO BEFORE DEMO)
-Current voice in backend `gemini.ts` line ~195: `prebuiltVoiceConfig: { voiceName: 'Fenrir' }`
-User needs to test all available voices in browser first, then pick the best one.
+### Steps A-J — ALL COMPLETE
 
-**Available Gemini Live prebuilt voices (2026 GA):**
-`Puck` `Charon` `Kore` `Fenrir` `Aoede` `Orbit` `Zephyr` `Leda` `Callisto` `Constellation` `Vesper` `Nova` `Rigel` `Umbriel` `Algenib` `Achernar` `Alnair` `Schedar`
+1. **Backend Cloud Run server** — `wss://liminal-sin-server-1071754889104.us-west1.run.app`
+2. **Frontend WS connects** — deferred to "Begin Session" click (autoplay policy)
+3. **Mic capture** — `ScriptProcessorNode` 16kHz, raw PCM Int16 -> base64 -> `player_speech`
+4. **JASON dialogue** — bidirectional voice, in-lore, Gemini Live native audio (Enceladus)
+5. **Voice barge-in (Step F)** — `agent_interrupt` cancels all queued AudioBufferSourceNodes
+6. **Layered audio system (Step E)** — 3-channel Web Audio: music/SFX/ambient. 83 files, 28 event keys.
+7. **SIGNAL LOST bug** — judges/game `connect()` fixed
+8. **NotReadableError** — `captureStartedRef` guard, getUserMedia fires once
+9. **Jason voice = Enceladus** (Step G)
+10. **iOS cross-device** (Step H) — shared AudioContext
+11. **echoCancellation** (Step I) — mic bleed fix
+13. **F1 — Black screen opening + text hint (Step K)** — `session_ready` starts 10s timer → `showHint` fades in "say something..."; disappears on first `player_speech` (`playerHasSpoken` flag in context)
+14. **F2 — GM Red Eye indicator (Step M)** — red circle top-right, `gm-eye-breathe` keyframe 0.3→1.0 opacity over 3.5s; visible while `sessionActive && status === 'open'`
+15. **F3 — Scene image crossfade pipeline (Step L)** — dual `<img>` layers A/B with `transition-opacity duration-1000`; `pushImage()` swaps via `requestAnimationFrame`; replaces single static `<img>`
+16. **F4 — `scene_video` handler (Step P)** — `SceneVideoEvent` type added; video overlay plays GCS URL at z-[5]; `handleSceneVideoEnded` captures last frame via canvas → feeds crossfade pipeline; taint-safe fallback
 
-**Voice test page plan:**
-1. Create `public/voice-test.html` — static self-contained HTML (no Next.js build needed)
-2. Page has a dropdown of all prebuilt voices + a text input for a test line
-3. On submit → connects to Cloud Run WS with a `voice_override` param → hears JASON speak with that voice
-4. User picks best masculine/cinematic/horror voice
-5. Dev: backend `gemini.ts` reads `process.env.JASON_VOICE ?? 'Fenrir'`
-6. Set `JASON_VOICE=<chosen>` in Cloud Run env → no redeploy needed
+## Core Architecture — The 3-Minute Demo
 
-### Priority 2 — iOS / Cross-Device Compatibility (AudioContext conflict)
-`usePlayerMedia.ts` creates its own `AudioContext` at 16kHz for mic capture.
-`GameHUD.tsx` creates a second `AudioContext` at 24kHz for audio playback.
-**iOS Safari silently fails if two AudioContexts are open.** Mobile will break.
+### How the Game Works (Frontend Perspective)
 
-**Fix:** Pass `audioCtxRef` from `GameHUD.tsx` down into `usePlayerMedia` — share the single context. The mic processing `ScriptProcessorNode` runs on the same context as playback (different sample rates are handled via `AudioContext.sampleRate` and resampling).
+1. **BLACK SCREEN START** — Game starts with NO image, NO video. Screen is pure black.
+   - SFX triggers from GCS: falling, crash, ambient underground sounds.
+   - JASON's voice plays through Gemini Live (Enceladus).
+   - After ~10s, a text overlay hint fades in: "say something..."
 
-**Files to touch:** `GameHUD.tsx` (pass ref down) + `usePlayerMedia.ts` (accept ctx instead of creating own).
+2. **FLASHLIGHT MECHANIC** — Player suggests Jason use flashlight.
+   - Backend fires Imagen 4 to generate a still frame (non-blocking).
+   - Frontend receives `scene_image` WS event with base64 JPEG.
+   - Crossfade from black to the image (POV through flashlight).
 
-### Priority 3 — echoCancellation Constraint (prevents music bleed into mic)
-Without this, speakers playing music/SFX will bleed into the mic and confuse JASON's VAD.
-In `usePlayerMedia.ts`, update `getUserMedia`:
-```ts
-audio: {
-  echoCancellation: true,
-  noiseSuppression: true,
-  autoGainControl: true,
-  // Note: omit sampleRate on iOS — causes constraint errors
-}
-```
+3. **SCENE TRANSITIONS** — Each new scene arrives as a `scene_image` WS event.
+   - Hold current image until next one arrives.
+   - Crossfade between images for smooth transitions.
+   - JASON stalls with dialogue while images generate in background.
 
-### Priority 4 — GCS Audio File Storage (MUST DO before deploy)
-83 audio files in `public/assets/` must NOT be deployed via Cloudflare Pages.
-Cloudflare Pages has a 25MB **per-file** deploy limit. Large music MP3s may fail.
-Also: bloats git history permanently if committed.
+4. **DEMO END** — GM triggers `found_transition` via Slotsky.
+   - Stop requesting new scenes.
+   - Hold final image.
+   - Play animated end sequence.
+   - Close session gracefully.
 
-**Decision: Google Cloud Storage bucket — `gs://liminal-sin-assets`**
-- GCP project: `project-c4c3ba57-5165-4e24-89e` (same GCP project as backend)
-- CORS configured to allow `myceliainteractive.com`
-- Public URL: `https://storage.googleapis.com/liminal-sin-assets/audio/music/<file>.mp3`
-- After uploading: update `audioManifest.ts` — replace `/assets/music/` → GCS URLs
-- Add `public/assets/music/` and `public/assets/sound_fx/` to `.gitignore`
+### WS Events the Frontend Must Handle
 
-**GCS setup commands (run once):**
-```bash
-gcloud storage buckets create gs://liminal-sin-assets \
-  --project=project-c4c3ba57-5165-4e24-89e --location=us-west1 \
-  --uniform-bucket-level-access
-gcloud storage buckets add-iam-policy-binding gs://liminal-sin-assets \
-  --member=allUsers --role=roles/storage.objectViewer
-gcloud storage cp -r "public/assets/music/*" gs://liminal-sin-assets/audio/music/
-gcloud storage cp -r "public/assets/sound_fx/*" gs://liminal-sin-assets/audio/sfx/
-```
+| WS Event | Type | Frontend Action |
+|----------|------|-----------------|
+| `session_ready` | System | Start ambient audio loop, show "connected" state |
+| `agent_speech` | Audio | Decode base64 PCM, queue in AudioBufferSourceNode chain |
+| `agent_interrupt` | Audio | Cancel all queued audio nodes (barge-in) |
+| `trust_update` | State | Update internal trust/fear state, trigger tier-based music crossfades |
+| `hud_glitch` | Visual | CSS glitch effect (intensity: low/medium/high, duration_ms) |
+| `scene_change` | State | Update scene key in state |
+| `scene_image` | Visual | Decode base64 JPEG, crossfade to new background image |
+| `scene_video` | Visual | **NEW** — Play Veo 3.1 Fast short video clip over current scene, freeze on last frame |
+| `slotsky_trigger` | Event | Trigger Slotsky SFX/visual based on anomalyType |
 
-### Priority 5 — User action pending
-Rename `Psychosis_Apparatus_2026-03-08T204945 (1).mp3` → `music_psychosis.mp3` in `public/assets/music/`.
-This is the file mapped to `fourth_wall_correction` key in `audioManifest.ts`.
+### Demo Sequence (what the player experiences)
+
+| Beat | Time | Frontend Effect |
+|------|------|-----------------|
+| 1 | 0:00 | BLACK SCREEN. SFX: falling, crash, ambient. No image element visible. |
+| 2 | 0:05 | JASON audio starts playing (hurt, confused, voicebox activated) |
+| 3 | 0:15 | CSS text overlay fades in: "say something..." |
+| 4 | 0:20-0:40 | Player speaks. JASON responds. Still black screen. |
+| 5 | 0:40-1:00 | Player suggests flashlight. `scene_image` arrives first (still). Crossfade black → tunnel POV. Then `scene_video` arrives — short Veo 3.1 Fast clip plays, freezes on last frame. |
+| 6 | 1:00-1:30 | Exploration. Each scene change: `scene_image` then `scene_video`. Possible `hud_glitch` effects. |
+| 7 | 1:30-2:00 | Slotsky cards. `slotsky_trigger(anomaly_cards)` -> SFX: slot bells. |
+| 8 | 2:00-2:30 | Distant voice echoes (Audrey/Josh). Ambient layer shift. |
+| 9 | 2:30-2:50 | Scene transitions accelerate. Music crossfades to climax tier. |
+| 10 | 2:50-3:00 | `slotsky_trigger(found_transition)` -> Hold image, end animation, session close. |
+
+---
+
+### Backend B1-B3 Complete (Veo 3.1 Fast Pipeline)
+
+As of March 9, backend steps B1-B3 are **DONE**:
+- `server/services/veo.ts` — Veo 3.1 Fast img2vid service (new file)
+- `triggerVideoGen` GM tool declaration added to `gemini.ts`
+- `triggerVideoGen` case wired in `gameMaster.ts` → broadcasts `scene_video` WS event
+- WS event format: `{ type: 'scene_video', payload: { sceneKey, url } }` where `url` is a GCS URI
+
+The frontend F4 step can now be tested end-to-end once implemented.
+
+### Frontend F1-F4 Complete (March 9)
+
+All four backend-prerequisite frontend steps are **DONE** and pushed to main:
+- **F1** — Black screen + 10s text hint + disappears on first `player_speech`
+- **F2** — GM red eye breathing indicator (top-right, `gm-eye-breathe` keyframe)
+- **F3** — Scene image crossfade pipeline (dual img layers, `pushImage()` + `requestAnimationFrame`)
+- **F4** — `scene_video` handler: GCS URL playback → canvas frame capture → crossfade pipeline; taint fallback
+
+**Backend can now run B4 (GCS asset verify) and B5 (GM trust battle-test) end-to-end.**
+
+---
+
+## REMAINING WORK ORDER (March 9 — F5 + F6 still to do)
+
+> F1-F4 are COMPLETE. Remaining frontend items below.
+
+### ~~F1 — Black Screen Opening~~ — DONE
+### ~~F2 — GM Red Eye Indicator~~ — DONE
+### ~~F3 — Scene Image Crossfade Pipeline~~ — DONE
+### ~~F4 — `scene_video` Handler~~ — DONE
+
+---
+
+### F5 — Glitch Effect Implementation (Step N)
+
+On `hud_glitch` WS event:
+- `intensity: 'low'` → subtle screen shake, 500ms
+- `intensity: 'medium'` → screen shake + color distortion, 800ms
+- `intensity: 'high'` → heavy shake + color invert + scan lines, 1200ms
+- Pure CSS/JS — no additional dependencies needed
+
+---
+
+### F6 — Demo End Sequence (Step O)
+
+On `slotsky_trigger` with `anomalyType: 'found_transition'`:
+1. Stop all ambient and music audio
+2. Hold the final scene image (no more transitions)
+3. After 2s delay: fade in end overlay (title card + "experience complete" or similar)
+4. After 5s: close WS connection gracefully
+5. Return to landing page or show a judge feedback prompt
 
 ---
 
@@ -94,19 +154,40 @@ This is the file mapped to `fourth_wall_correction` key in `audioManifest.ts`.
 
 | Step | Feature | Status |
 |---|---|---|
-| A | Backend Cloud Run server running | ✅ Complete |
-| B | Frontend WS connects on button click | ✅ Complete |
-| C | Mic capture — raw PCM 16kHz stream | ✅ Complete |
-| D | JASON dialogue — back and forth, in-lore | ✅ Complete |
-| E | Layered audio system (music/SFX/ambient) | ✅ Complete (GCS migration pending) |
-| F | Voice interrupt / barge-in | ✅ Complete |
-| G | JASON voice — browser test + change | ⏳ Next session |
-| H | iOS cross-device compatibility | ⏳ Next session |
-| I | echoCancellation constraint | ⏳ Next session |
-| J | GCS audio storage + audioManifest URL update | ⏳ Next session |
-| K | GM trust routing battle-tested end-to-end | ⏳ Pending |
-| L | Demo video (4 min, mandatory submission) | ⏳ March 11–14 |
-| M | Architecture diagram (mandatory submission) | ⏳ March 13–15 |
+| A | Backend Cloud Run server running | DONE |
+| B | Frontend WS connects on button click | DONE |
+| C | Mic capture — raw PCM 16kHz stream | DONE |
+| D | JASON dialogue — bidirectional voice | DONE |
+| E | Layered audio system (music/SFX/ambient) | DONE |
+| F | Voice interrupt / barge-in | DONE |
+| G | JASON voice — Enceladus | DONE |
+| H | iOS cross-device compatibility | DONE |
+| I | echoCancellation constraint | DONE |
+| J | GCS audio storage + audioManifest updated | DONE |
+| K | Black screen opening + text hint | **DONE** |
+| L | Scene image display pipeline | **DONE** |
+| M | GM red eye indicator | **DONE** |
+| N | Glitch effects (CSS) | **TODAY** |
+| O | Demo end sequence | **TODAY** |
+| P | `scene_video` handler — Veo 3.1 Fast clip playback + freeze | **DONE** |
+| Q | Demo video (4 min, mandatory) | March 11-14 |
+| R | Architecture diagram (mandatory) | March 13-15 |
+
+---
+
+## GCS Asset Inventory (fully migrated)
+
+All assets live at `https://storage.googleapis.com/liminal-sin-assets/`
+
+| Category | GCS Path | Count |
+|----------|----------|-------|
+| Music | `audio/music/` | 17 |
+| SFX | `audio/sfx/` | 66 |
+| Voice Overs | `audio/voice_overs/` | 4 |
+| Podcasts | `audio/podcasts/` | 6 |
+| Video Clips | `video/clips/` | 6 |
+| Reference Images | `images/` | 6 |
+| **Total** | | **105 files** |
 
 ---
 
@@ -114,10 +195,10 @@ This is the file mapped to `fourth_wall_correction` key in `audioManifest.ts`.
 
 | Date | Milestone |
 |---|---|
-| March 9, 2026 (today) | Steps E + F complete and pushed |
-| March 10, 2026 | Voice change + iOS fix + echoCancellation + GCS migration |
+| March 9, 2026 | Steps A-J complete. **Today: F1 (black screen) → F2 (red eye) → F3 (scene image) → F4 (scene_video / Veo 3.1 Fast) → F5 (glitch) → F6 (demo end). ALL frontend done today.** |
+| March 10, 2026 | Integration testing. Full 3-minute demo playthrough end-to-end. Backend + frontend wired together. Fix any issues. |
 | **March 11, 2026 @ 11:11 PM MT** | **Internal prototype cutoff — full demo functional** |
-| March 12–14 | Demo video recording + architecture diagram |
+| March 12-14 | Demo video recording + architecture diagram |
 | March 15 | Submission prep, final review |
 | **March 16, 2026 @ 5:00 PM PDT** | **HARD DEADLINE — CONTEST SUBMISSION** |
 
@@ -129,7 +210,7 @@ This is the file mapped to `fourth_wall_correction` key in `audioManifest.ts`.
 |---|---|
 | **Site** | myceliainteractive.com |
 | **Stack** | Next.js 16, React 19, Tailwind v4, Cloudflare Pages + Workers, D1 |
-| **Deploy** | `npm run deploy` → `next build && wrangler deploy` |
+| **Deploy** | `npm run deploy` (chains `next build` + `wrangler deploy`) |
 | **Worker name** | `myceliainteractive` |
 | **D1 Database** | `liminal-sin-signups` — ID: `cb37396d-6a97-43e7-b492-94a1eb4647b7` |
 | **Backend WS** | `wss://liminal-sin-server-1071754889104.us-west1.run.app` |
@@ -158,12 +239,12 @@ This is the file mapped to `fourth_wall_correction` key in `audioManifest.ts`.
 | `app/ls/SignupForms.tsx` | Judge + tester signup forms (client component) |
 | `app/ls/judges/page.tsx` | Judge backdoor route |
 | `app/components/FPVCarousel.tsx` | Cloudflare AI FPV image carousel — `/ls` background |
-| `app/ls/game/page.tsx` | Game UI shell — wrapper for Google Cloud game |
+| `app/ls/game/page.tsx` | Game UI shell — wrapper for game |
 | `app/ls/game/GameWSContext.tsx` | WebSocket context — deferred connect, sceneImage state |
-| `app/ls/game/GameHUD.tsx` | Game HUD — 3-layer audio wired, agent_interrupt, SM wiring for all 25 WS events |
-| `app/ls/game/usePlayerMedia.ts` | Mic + webcam capture — ScriptProcessorNode 16kHz PCM, 1FPS JPEG, captureStartedRef guard |
-| `app/ls/game/audioManifest.ts` | Audio event keys → file path pools (28 keys, 83 files, pure constants) |
-| `app/ls/game/useAudioLayers.ts` | 3-channel Web Audio hook (musicGain / sfxGain / ambientGain) |
+| `app/ls/game/GameHUD.tsx` | Game HUD — 3-layer audio, agent_interrupt, 25 WS event mappings |
+| `app/ls/game/usePlayerMedia.ts` | Mic + webcam — ScriptProcessorNode 16kHz PCM, 1FPS JPEG |
+| `app/ls/game/audioManifest.ts` | Audio event keys -> GCS URL pools (28 keys, 83 files) |
+| `app/ls/game/useAudioLayers.ts` | 3-channel Web Audio hook (musicGain/sfxGain/ambientGain) |
 | `app/ls/judges/game/page.tsx` | Judge game shell — judgeMode=true |
 
 ---
@@ -173,21 +254,12 @@ This is the file mapped to `fourth_wall_correction` key in `audioManifest.ts`.
 ### 3-Channel Gain Structure
 | Channel | GainNode | Default Gain | What plays |
 |---|---|---|---|
-| Music | `musicGain` | 0.3 | Looped background music tracks with crossfading |
+| Music | `musicGain` | 0.3 | Looped background tracks with crossfading |
 | SFX | `sfxGain` | 0.8 | One-shot sound effects triggered by WS events |
 | Ambient | `ambientGain` | 0.5 | Looped ambient environment sounds |
 
-### Randomization Strategy
-- **Music variants**: session-locked pre-pick at `session_ready` (e.g. `music_intro_2` for this entire session, won't switch mid-session unless `crossfadeMusic()` fires)
-- **SFX anti-repeat**: `lastSfxVariant` map prevents same variant playing twice consecutively
-- **Volume jitter**: every play is ±8% of nominal gain (micro-variation for organic feel)
-
 ### audioManifest.ts Keys (28 keys)
 `session_start` `voicebox_activate` `voicebox_deactivate` `ambient_tunnel_loop` `ambient_static_loop` `music_intro` `music_tension` `music_climax` `music_psychosis` `fourth_wall_correction` `npc_glitch_tier1` `npc_glitch_tier2` `npc_glitch_tier3` `slotsky_shadow` `slotsky_flicker` `slotsky_whisper` `slotsky_mirror` `slotsky_shatter` `trust_drop_warning` `trust_drop_low` `trust_rebuild` `found_transition` `heartbeat_pulse` `static_surge` `breath_stutter` `horror_sting` `footstep_loop` `water_drip`
-
-### File counts
-- `public/assets/music/` — 17 files: 6x `music_intro_N`, 6x `music_tension_N`, 4x `music_climax_N`, 1x `music_psychosis`
-- `public/assets/sound_fx/` — 66 files across all SFX keys (most have `_1`–`_4` variants)
 
 ---
 
@@ -206,15 +278,4 @@ curl -X POST https://myceliainteractive.com/api/set-game-live \
 
 ### Cloudflare AI
 - `GET /api/ai/image?seed={0-11}` — Flux 1 Schnell FPV image generation, 12-seed cap, 24h edge cache
-- `app/components/FPVCarousel.tsx` — crossfade carousel, random 12–24s intervals
-
----
-
-## Known Issues (NOT bugs, design decisions deferred)
-
-| Issue | Status | Notes |
-|---|---|---|
-| iOS dual AudioContext | ⏳ Deferred | Two AudioContexts (playback + mic) — iOS Safari will silently fail. Fix: share single ctx. |
-| Music bleed into mic | ⏳ Deferred | echoCancellation not yet set on getUserMedia. Needed for speaker setups. |
-| Large audio files in git | ⏳ Deferred | 83 MP3s not committed — stored locally. GCS migration needed before production deploy. |
-| `music_psychosis.mp3` wrong filename | ⏳ Pending user | User must rename `Psychosis_Apparatus_...mp3` → `music_psychosis.mp3` |
+- `app/components/FPVCarousel.tsx` — crossfade carousel, random 12-24s intervals

@@ -10,7 +10,7 @@
   --color-hero-bg-dark: #08041a;
   --color-hero-bg-default: #140a36;
   --color-hero-bg-light: #261157;
-  
+
   --color-hero-magenta-50: #f5ecff;
   --color-hero-magenta-100: #ead6ff;
   --color-hero-magenta-200: #d8adff;
@@ -21,7 +21,7 @@
   --color-hero-magenta-700: #5f18af;
   --color-hero-magenta-800: #45127f;
   --color-hero-magenta-900: #2c0c4f;
-  
+
   --color-hero-cyan-50: #e8feff;
   --color-hero-cyan-100: #bffbff;
   --color-hero-cyan-200: #86f5ff;
@@ -32,13 +32,13 @@
   --color-hero-cyan-700: #007da8;
   --color-hero-cyan-800: #005a78;
   --color-hero-cyan-900: #003949;
-  
+
   --color-hero-neutral-darkest: #0a0a0a;
   --color-hero-neutral-dark: #1a1a1a;
   --color-hero-neutral-default: #2a2a3a;
   --color-hero-neutral-light: #3a3a4a;
   --color-hero-neutral-lighter: #4a4a5a;
-  
+
   /* Brand Colors (Logo Reference) */
   --color-brand-teal: #32dfff;
   --color-brand-teal-light: #82f3ff;
@@ -46,10 +46,11 @@
   --color-brand-gold: #c6b4ff;
   --color-brand-gold-light: #ece5ff;
   --color-brand-gold-dark: #8d78d1;
-  
+
   /* Custom Animations */
   --animate-split-left: split-left 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  --animate-split-right: split-right 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-split-right: split-right 0.6s cubic-bezier(0.22, 1, 0.36, 1)
+    forwards;
   --animate-glitch-1: glitch1 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   --animate-glitch-2: glitch2 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   --animate-glitch-skew: glitch-skew 1s ease-in-out infinite;
@@ -68,85 +69,85 @@
   --hero-bg-dark: #08041a;
   --hero-bg-default: #140a36;
   --hero-bg-light: #261157;
-  
+
   --hero-magenta-primary: #8b2cf5;
   --hero-magenta-secondary: #bf7cff;
-  
+
   --hero-cyan-primary: #00c7ff;
   --hero-cyan-secondary: #4beeff;
-  
+
   --hero-neutral-darkest: #0a0a0a;
   --hero-neutral-dark: #1a1a1a;
   --hero-neutral-default: #2a2a3a;
-  
-  --hero-text-primary: #FFFFFF;
+
+  --hero-text-primary: #ffffff;
   --hero-text-secondary: rgba(235, 245, 255, 0.88);
-  
+
   /* Brand Colors (Logo Reference) */
   --brand-teal: #32dfff;
   --brand-gold: #c6b4ff;
-  
+
   /* Typography */
   --font-sans: var(--font-geist-sans, system-ui, sans-serif);
   --font-mono: var(--font-geist-mono, monospace);
-  
+
   /* Spacing & Layout */
   --content-max-width: 1400px;
   --hero-min-height: 100vh;
 
-/* ============================================
+  /* ============================================
    /ls PAGE — FLUID SPACING UTILITIES
    Plain CSS classes so Tailwind's scanner
    never has a chance to drop them.
    ============================================ */
 
-.ls-gutter {
-  padding-left:  clamp(1.5rem, 6vw, 6rem);
-  padding-right: clamp(1.5rem, 6vw, 6rem);
-}
+  .ls-gutter {
+    padding-left: clamp(1.5rem, 6vw, 6rem);
+    padding-right: clamp(1.5rem, 6vw, 6rem);
+  }
 
-.ls-nav-py {
-  padding-top:    clamp(0.875rem, 2vw, 1.5rem);
-  padding-bottom: clamp(0.875rem, 2vw, 1.5rem);
-}
+  .ls-nav-py {
+    padding-top: clamp(0.875rem, 2vw, 1.5rem);
+    padding-bottom: clamp(0.875rem, 2vw, 1.5rem);
+  }
 
-.ls-section-py {
-  padding-top:    clamp(3rem, 8vw, 6rem);
-  padding-bottom: clamp(3rem, 8vw, 6rem);
-}
+  .ls-section-py {
+    padding-top: clamp(3rem, 8vw, 6rem);
+    padding-bottom: clamp(3rem, 8vw, 6rem);
+  }
 
-.ls-footer-py {
-  padding-top:    clamp(1.75rem, 4vw, 4rem);
-  padding-bottom: clamp(1.75rem, 4vw, 4rem);
-}
+  .ls-footer-py {
+    padding-top: clamp(1.75rem, 4vw, 4rem);
+    padding-bottom: clamp(1.75rem, 4vw, 4rem);
+  }
 
-/* ============================================
+  /* ============================================
    MAIN SITE — FLUID SPACING UTILITIES
    Same approach: plain CSS so Tailwind v4
    never silently drops the declarations.
    ============================================ */
 
-.site-gutter {
-  padding-left:  clamp(1.5rem, 6vw, 6rem);
-  padding-right: clamp(1.5rem, 6vw, 6rem);
-}
+  .site-gutter {
+    padding-left: clamp(1.5rem, 6vw, 6rem);
+    padding-right: clamp(1.5rem, 6vw, 6rem);
+  }
 
-.site-header-py {
-  padding-top:    clamp(1rem, 2.5vw, 2rem);
-  padding-bottom: clamp(1rem, 2.5vw, 2rem);
-}
+  .site-header-py {
+    padding-top: clamp(1rem, 2.5vw, 2rem);
+    padding-bottom: clamp(1rem, 2.5vw, 2rem);
+  }
 
-.site-footer-py {
-  padding-top:    clamp(1.25rem, 3vw, 3rem);
-  padding-bottom: clamp(1.25rem, 3vw, 3rem);
-}
-  
+  .site-footer-py {
+    padding-top: clamp(1.25rem, 3vw, 3rem);
+    padding-bottom: clamp(1.25rem, 3vw, 3rem);
+  }
+
   /* Animation Timing */
   --transition-fast: 0.2s;
   --transition-normal: 0.4s;
   --transition-slow: 0.6s;
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
-  
+
   /* Z-index Layers */
   --z-background: -1;
   --z-content: 1;
@@ -159,17 +160,26 @@
    ============================================ */
 
 @keyframes split-left {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-25%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
 }
 
 @keyframes split-right {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(25%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(25%);
+  }
 }
 
 @keyframes glitch1 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0);
     opacity: 1;
   }
@@ -192,7 +202,8 @@
 }
 
 @keyframes glitch2 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0);
     filter: hue-rotate(0deg);
   }
@@ -207,15 +218,28 @@
 }
 
 @keyframes glitch-skew {
-  0%, 100% { transform: skew(0deg, 0deg); }
-  25% { transform: skew(2deg, 1deg); }
-  50% { transform: skew(-2deg, -1deg); }
-  75% { transform: skew(1deg, -2deg); }
+  0%,
+  100% {
+    transform: skew(0deg, 0deg);
+  }
+  25% {
+    transform: skew(2deg, 1deg);
+  }
+  50% {
+    transform: skew(-2deg, -1deg);
+  }
+  75% {
+    transform: skew(1deg, -2deg);
+  }
 }
 
 @keyframes fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes fade-in-up {
@@ -230,7 +254,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -241,41 +266,116 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes glitch-anim-1 {
-  0% { clip: rect(10px, 9999px, 31px, 0); }
-  10% { clip: rect(85px, 9999px, 70px, 0); }
-  20% { clip: rect(40px, 9999px, 100px, 0); }
-  30% { clip: rect(65px, 9999px, 45px, 0); }
-  40% { clip: rect(15px, 9999px, 95px, 0); }
-  50% { clip: rect(55px, 9999px, 25px, 0); }
-  60% { clip: rect(90px, 9999px, 60px, 0); }
-  70% { clip: rect(20px, 9999px, 80px, 0); }
-  80% { clip: rect(75px, 9999px, 35px, 0); }
-  90% { clip: rect(30px, 9999px, 90px, 0); }
-  100% { clip: rect(50px, 9999px, 50px, 0); }
+  0% {
+    clip: rect(10px, 9999px, 31px, 0);
+  }
+  10% {
+    clip: rect(85px, 9999px, 70px, 0);
+  }
+  20% {
+    clip: rect(40px, 9999px, 100px, 0);
+  }
+  30% {
+    clip: rect(65px, 9999px, 45px, 0);
+  }
+  40% {
+    clip: rect(15px, 9999px, 95px, 0);
+  }
+  50% {
+    clip: rect(55px, 9999px, 25px, 0);
+  }
+  60% {
+    clip: rect(90px, 9999px, 60px, 0);
+  }
+  70% {
+    clip: rect(20px, 9999px, 80px, 0);
+  }
+  80% {
+    clip: rect(75px, 9999px, 35px, 0);
+  }
+  90% {
+    clip: rect(30px, 9999px, 90px, 0);
+  }
+  100% {
+    clip: rect(50px, 9999px, 50px, 0);
+  }
 }
 
 @keyframes glitch-anim-2 {
-  0% { clip: rect(65px, 9999px, 100px, 0); }
-  10% { clip: rect(25px, 9999px, 70px, 0); }
-  20% { clip: rect(80px, 9999px, 40px, 0); }
-  30% { clip: rect(15px, 9999px, 85px, 0); }
-  40% { clip: rect(95px, 9999px, 20px, 0); }
-  50% { clip: rect(35px, 9999px, 75px, 0); }
-  60% { clip: rect(60px, 9999px, 30px, 0); }
-  70% { clip: rect(90px, 9999px, 55px, 0); }
-  80% { clip: rect(45px, 9999px, 65px, 0); }
-  90% { clip: rect(70px, 9999px, 10px, 0); }
-  100% { clip: rect(5px, 9999px, 95px, 0); }
+  0% {
+    clip: rect(65px, 9999px, 100px, 0);
+  }
+  10% {
+    clip: rect(25px, 9999px, 70px, 0);
+  }
+  20% {
+    clip: rect(80px, 9999px, 40px, 0);
+  }
+  30% {
+    clip: rect(15px, 9999px, 85px, 0);
+  }
+  40% {
+    clip: rect(95px, 9999px, 20px, 0);
+  }
+  50% {
+    clip: rect(35px, 9999px, 75px, 0);
+  }
+  60% {
+    clip: rect(60px, 9999px, 30px, 0);
+  }
+  70% {
+    clip: rect(90px, 9999px, 55px, 0);
+  }
+  80% {
+    clip: rect(45px, 9999px, 65px, 0);
+  }
+  90% {
+    clip: rect(70px, 9999px, 10px, 0);
+  }
+  100% {
+    clip: rect(5px, 9999px, 95px, 0);
+  }
 }
 
 @keyframes vhs-flicker {
-  0%, 100% { opacity: 0.9; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* F2: GM red eye breathing indicator */
+@keyframes gm-eye-breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* F1: text hint fade-in */
+@keyframes hint-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ============================================
@@ -294,7 +394,12 @@ html {
 }
 
 body {
-  background: radial-gradient(circle at 20% 20%, #261157 0%, #140a36 40%, #08041a 100%);
+  background: radial-gradient(
+    circle at 20% 20%,
+    #261157 0%,
+    #140a36 40%,
+    #08041a 100%
+  );
   color: var(--hero-text-primary);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -394,12 +499,20 @@ body {
 
 .split-panel-left {
   left: 0;
-  background: linear-gradient(135deg, var(--hero-bg-dark), var(--hero-bg-default));
+  background: linear-gradient(
+    135deg,
+    var(--hero-bg-dark),
+    var(--hero-bg-default)
+  );
 }
 
 .split-panel-right {
   right: 0;
-  background: linear-gradient(135deg, var(--hero-bg-default), var(--hero-bg-light));
+  background: linear-gradient(
+    135deg,
+    var(--hero-bg-default),
+    var(--hero-bg-light)
+  );
 }
 
 .split-container:hover .split-panel-left {
@@ -415,29 +528,44 @@ body {
    ============================================ */
 
 .hero-gradient {
-  background: radial-gradient(circle at 20% 30%, #2c1462 0%, #140a36 45%, #08041a 100%);
+  background: radial-gradient(
+    circle at 20% 30%,
+    #2c1462 0%,
+    #140a36 45%,
+    #08041a 100%
+  );
 }
 
 .text-gradient-magenta {
-  background: linear-gradient(90deg, var(--hero-magenta-primary), var(--hero-magenta-secondary));
+  background: linear-gradient(
+    90deg,
+    var(--hero-magenta-primary),
+    var(--hero-magenta-secondary)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-cyan {
-  background: linear-gradient(90deg, var(--hero-cyan-primary), var(--hero-cyan-secondary));
+  background: linear-gradient(
+    90deg,
+    var(--hero-cyan-primary),
+    var(--hero-cyan-secondary)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .glow-magenta {
-  box-shadow: 0 0 20px rgba(139, 44, 245, 0.45),
-              0 0 40px rgba(139, 44, 245, 0.25);
+  box-shadow:
+    0 0 20px rgba(139, 44, 245, 0.45),
+    0 0 40px rgba(139, 44, 245, 0.25);
 }
 
 .glow-cyan {
-  box-shadow: 0 0 20px rgba(0, 199, 255, 0.45),
-              0 0 40px rgba(0, 199, 255, 0.25);
+  box-shadow:
+    0 0 20px rgba(0, 199, 255, 0.45),
+    0 0 40px rgba(0, 199, 255, 0.25);
 }

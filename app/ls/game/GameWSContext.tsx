@@ -78,6 +78,11 @@ export type SceneChangeEvent = {
   payload: { sceneKey: string };
 };
 
+export type SceneVideoEvent = {
+  type: "scene_video";
+  payload: { sceneKey: string; url: string };
+};
+
 export type SlotskyTriggerEvent = {
   type: "slotsky_trigger";
   payload: { anomalyType: string };
@@ -94,6 +99,7 @@ export type ServerEvent =
   | SessionErrorEvent
   | SceneImageEvent
   | SceneChangeEvent
+  | SceneVideoEvent
   | SlotskyTriggerEvent;
 
 // ── Outbound payload types (client → server) ───────────────────────────────
@@ -112,16 +118,22 @@ interface GameWSContextValue {
   status: ConnectionStatus;
   lastEvent: ServerEvent | null;
   sceneImage: string | null; // base64 JPEG from latest SCENE_IMAGE event; persists across events
+  sceneVideo: { sceneKey: string; url: string } | null;
+  playerHasSpoken: boolean;
   send: (event: ClientEvent) => void;
   connect: () => void; // call from a user gesture to open the WS + start the session
+  clearSceneVideo: () => void;
 }
 
 const GameWSContext = createContext<GameWSContextValue>({
   status: "closed",
   lastEvent: null,
   sceneImage: null,
+  sceneVideo: null,
+  playerHasSpoken: false,
   send: () => {},
   connect: () => {},
+  clearSceneVideo: () => {},
 });
 
 // ── Provider ───────────────────────────────────────────────────────────────
@@ -139,13 +151,25 @@ export function GameWSProvider({
   const [shouldConnect, setShouldConnect] = useState(false);
   const [lastEvent, setLastEvent] = useState<ServerEvent | null>(null);
   const [sceneImage, setSceneImage] = useState<string | null>(null);
+  const [sceneVideo, setSceneVideo] = useState<{
+    sceneKey: string;
+    url: string;
+  } | null>(null);
+  const [playerHasSpoken, setPlayerHasSpoken] = useState(false);
+  const playerHasSpokenRef = useRef(false);
   const wsRef = useRef<WebSocket | null>(null);
 
   const send = useCallback((event: ClientEvent) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(event));
+      if (event.type === "player_speech" && !playerHasSpokenRef.current) {
+        playerHasSpokenRef.current = true;
+        setPlayerHasSpoken(true);
+      }
     }
   }, []);
+
+  const clearSceneVideo = useCallback(() => setSceneVideo(null), []);
 
   // Called from a user gesture (Begin Session click). Flips shouldConnect so
   // the WS connects within the autoplay-policy grace window.
@@ -172,6 +196,9 @@ export function GameWSProvider({
         if (parsed.type === "scene_image") {
           setSceneImage(parsed.payload.data);
         }
+        if (parsed.type === "scene_video") {
+          setSceneVideo((parsed as SceneVideoEvent).payload);
+        }
       } catch {
         console.error("[GameWS] Failed to parse message:", ev.data);
       }
@@ -186,7 +213,18 @@ export function GameWSProvider({
   }, [wsUrl, judgeMode, send, shouldConnect]);
 
   return (
-    <GameWSContext.Provider value={{ status, lastEvent, sceneImage, send, connect }}>
+    <GameWSContext.Provider
+      value={{
+        status,
+        lastEvent,
+        sceneImage,
+        sceneVideo,
+        playerHasSpoken,
+        send,
+        connect,
+        clearSceneVideo,
+      }}
+    >
       {children}
     </GameWSContext.Provider>
   );
