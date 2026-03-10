@@ -378,6 +378,170 @@
   }
 }
 
+/* F5: HUD glitch — low intensity (subtle jitter) */
+@keyframes hud-glitch-low {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-2px, 1px);
+  }
+  30% {
+    transform: translate(1px, -1px);
+  }
+  50% {
+    transform: translate(-1px, 0);
+  }
+  70% {
+    transform: translate(2px, 1px);
+  }
+  90% {
+    transform: translate(0, -1px);
+  }
+}
+
+/* F5: HUD glitch — medium intensity (shake + color shift) */
+@keyframes hud-glitch-medium {
+  0%,
+  100% {
+    transform: translate(0, 0) skewX(0deg);
+    filter: none;
+  }
+  10% {
+    transform: translate(-4px, 2px) skewX(0.5deg);
+    filter: hue-rotate(30deg);
+  }
+  20% {
+    transform: translate(3px, -1px) skewX(-0.3deg);
+    filter: hue-rotate(-20deg);
+  }
+  30% {
+    transform: translate(-2px, 3px) skewX(0.8deg);
+    filter: hue-rotate(60deg) saturate(1.5);
+  }
+  40% {
+    transform: translate(4px, -2px) skewX(-0.5deg);
+    filter: none;
+  }
+  50% {
+    transform: translate(-3px, 1px) skewX(1deg);
+    filter: hue-rotate(90deg);
+  }
+  60% {
+    transform: translate(2px, -3px) skewX(-0.8deg);
+    filter: hue-rotate(-40deg);
+  }
+  70% {
+    transform: translate(-1px, 2px) skewX(0.3deg);
+    filter: saturate(2);
+  }
+  80% {
+    transform: translate(3px, -1px) skewX(-0.5deg);
+    filter: hue-rotate(45deg);
+  }
+  90% {
+    transform: translate(-2px, 0) skewX(0.5deg);
+    filter: none;
+  }
+}
+
+/* F5: HUD glitch — high intensity (heavy shake + invert + scanlines) */
+@keyframes hud-glitch-high {
+  0%,
+  100% {
+    transform: translate(0, 0) skewX(0deg) scale(1);
+    filter: none;
+  }
+  5% {
+    transform: translate(-6px, 3px) skewX(2deg) scale(1.01);
+    filter: invert(1) hue-rotate(180deg);
+  }
+  10% {
+    transform: translate(5px, -4px) skewX(-1.5deg) scale(0.99);
+    filter: brightness(2) saturate(3);
+  }
+  15% {
+    transform: translate(-4px, 2px) skewX(3deg) scale(1.02);
+    filter: invert(1);
+  }
+  20% {
+    transform: translate(6px, -2px) skewX(-2deg) scale(1);
+    filter: hue-rotate(90deg) contrast(2);
+  }
+  25% {
+    transform: translate(-3px, 5px) skewX(1deg) scale(0.98);
+    filter: none;
+  }
+  30% {
+    transform: translate(4px, -3px) skewX(-3deg) scale(1.01);
+    filter: invert(0.8) brightness(1.5);
+  }
+  40% {
+    transform: translate(-5px, 1px) skewX(2deg) scale(1);
+    filter: saturate(3) hue-rotate(270deg);
+  }
+  50% {
+    transform: translate(3px, -5px) skewX(-1deg) scale(1.01);
+    filter: invert(1) contrast(1.5);
+  }
+  60% {
+    transform: translate(-6px, 4px) skewX(2.5deg) scale(0.99);
+    filter: hue-rotate(180deg);
+  }
+  70% {
+    transform: translate(5px, -2px) skewX(-2deg) scale(1.02);
+    filter: brightness(2);
+  }
+  80% {
+    transform: translate(-3px, 3px) skewX(1.5deg) scale(1);
+    filter: invert(0.5) saturate(2);
+  }
+  90% {
+    transform: translate(4px, -4px) skewX(-1deg) scale(1.01);
+    filter: none;
+  }
+}
+
+/* F5: Scanline burst overlay for high-intensity glitch */
+.hud-glitch-scanlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 0, 0, 0.08) 2px,
+    rgba(255, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* F6: Demo end overlay fade-in */
+@keyframes demo-end-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* F2: GM eye iris pulse */
+@keyframes gm-eye-iris-pulse {
+  0%,
+  100% {
+    r: 5;
+    opacity: 0.8;
+  }
+  50% {
+    r: 6;
+    opacity: 1;
+  }
+}
+
 /* ============================================
    GLOBAL RESETS & BASE STYLES
    ============================================ */

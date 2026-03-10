@@ -32,9 +32,11 @@ import type {
 export default function GameHUD({
   sessionActive = false,
   audioCtxRef,
+  webcamActive = false,
 }: {
   sessionActive?: boolean;
   audioCtxRef: MutableRefObject<AudioContext | null>;
+  webcamActive?: boolean;
 }) {
   const {
     lastEvent,
@@ -43,6 +45,7 @@ export default function GameHUD({
     sceneVideo,
     playerHasSpoken,
     clearSceneVideo,
+    send,
   } = useGameWS();
   const glitchRef = useRef<HTMLDivElement>(null);
   const fmvRef = useRef<HTMLVideoElement>(null);
@@ -55,6 +58,15 @@ export default function GameHUD({
   // F1: text hint
   const [showHint, setShowHint] = useState(false);
   const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // F5: glitch effect
+  const [glitchClass, setGlitchClass] = useState<string | null>(null);
+  const glitchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // F6: demo end sequence
+  const [demoEnded, setDemoEnded] = useState(false);
+  const [endOverlayVisible, setEndOverlayVisible] = useState(false);
+  const wsCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // F3: crossfade layers
   const [imgLayerA, setImgLayerA] = useState<string | null>(null);
@@ -166,26 +178,34 @@ export default function GameHUD({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
-  // HUD Glitch effect
+  // F5: HUD Glitch effect — applies full-screen CSS animation per intensity
   useEffect(() => {
     if (lastEvent?.type !== "hud_glitch") return;
+    if (demoEnded) return; // no glitches after demo ends
     const ev = lastEvent as HudGlitchEvent;
-    playSFX(`glitch_${ev.intensity}`);
-    const el = glitchRef.current;
-    if (!el) return;
 
-    const intensityMap: Record<string, string> = {
-      low: "opacity-20",
-      medium: "opacity-50",
-      high: "opacity-80",
+    const classMap: Record<string, string> = {
+      low: "hud-glitch-active-low",
+      medium: "hud-glitch-active-medium",
+      high: "hud-glitch-active-high",
     };
-    const opacityClass = intensityMap[ev.intensity] ?? "opacity-40";
+    const cls = classMap[ev.intensity] ?? classMap.medium;
+    const duration =
+      ev.duration_ms ||
+      (ev.intensity === "low" ? 500 : ev.intensity === "high" ? 1200 : 800);
 
-    el.classList.add(opacityClass, "animate-pulse");
-    const timer = setTimeout(() => {
-      el.classList.remove(opacityClass, "animate-pulse");
-    }, ev.duration_ms);
-    return () => clearTimeout(timer);
+    // Clear any in-flight glitch
+    if (glitchTimerRef.current) clearTimeout(glitchTimerRef.current);
+    setGlitchClass(cls);
+
+    glitchTimerRef.current = setTimeout(() => {
+      setGlitchClass(null);
+      glitchTimerRef.current = null;
+    }, duration);
+
+    return () => {
+      if (glitchTimerRef.current) clearTimeout(glitchTimerRef.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
@@ -228,16 +248,18 @@ export default function GameHUD({
 
   // F3: crossfade scene images when sceneImage changes
   useEffect(() => {
+    if (demoEnded) return; // F6: freeze scene after demo ends
     if (sceneImage === prevSceneImageRef.current) return;
     prevSceneImageRef.current = sceneImage;
     if (!sceneImage) return;
     pushImage(`data:image/jpeg;base64,${sceneImage}`);
     // Hide any leftover frozen video from F4
     if (sceneVideoRef.current) sceneVideoRef.current.style.display = "none";
-  }, [sceneImage, pushImage]);
+  }, [sceneImage, pushImage, demoEnded]);
 
   // F4: play scene video when sceneVideo arrives
   useEffect(() => {
+    if (demoEnded) return; // F6: no new videos after demo ends
     if (!sceneVideo) return;
     const video = sceneVideoRef.current;
     if (!video) return;
@@ -246,7 +268,7 @@ export default function GameHUD({
     video
       .play()
       .catch((e) => console.error("[GameHUD] scene_video play error:", e));
-  }, [sceneVideo]);
+  }, [sceneVideo, demoEnded]);
 
   // trust_update: drive music crossfades and threshold SFX.
   useEffect(() => {
@@ -321,11 +343,19 @@ export default function GameHUD({
         crossfadeMusic("music_psychosis", 1000);
         break;
       case "found_transition":
-        // Stop all layers, 8-second darkness silence, then water rise
+        // F6: Demo end sequence
+        // 1. Stop all audio layers
         stopMusic(500);
         stopAmbientLoop(500);
         playSFX("proximity_found");
-        setTimeout(() => playSFX("found_water_rise"), 8000);
+        // 2. Freeze scene — block all future image/video transitions
+        setDemoEnded(true);
+        // 3. After 2s: fade in end title overlay
+        setTimeout(() => setEndOverlayVisible(true), 2000);
+        // 4. After 7s: close WS gracefully
+        wsCloseTimerRef.current = setTimeout(() => {
+          send({ type: "session_end" });
+        }, 7000);
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -400,7 +430,21 @@ export default function GameHUD({
     lastEvent?.type === "trust_update" ? (lastEvent as TrustUpdateEvent) : null;
 
   return (
-    <>
+    <div
+      className="absolute inset-0"
+      style={
+        glitchClass
+          ? {
+              animation:
+                glitchClass === "hud-glitch-active-low"
+                  ? "hud-glitch-low 0.08s steps(2) infinite"
+                  : glitchClass === "hud-glitch-active-medium"
+                    ? "hud-glitch-medium 0.12s steps(3) infinite"
+                    : "hud-glitch-high 0.1s steps(4) infinite",
+            }
+          : undefined
+      }
+    >
       {/* ── Scene image crossfade layers (F3) ──────────────── */}
       {imgLayerA && (
         // eslint-disable-next-line @next/next/no-img-element
@@ -460,6 +504,15 @@ export default function GameHUD({
         />
       )}
 
+      {/* ── F5: Glitch color/scanline overlay (high intensity only) ── */}
+      {glitchClass === "hud-glitch-active-high" && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-30 hud-glitch-scanlines"
+          style={{ backgroundColor: "rgba(255, 0, 0, 0.06)" }}
+        />
+      )}
+
       {/* ── Scanline overlay ──────────────────────────────── */}
       <div
         aria-hidden="true"
@@ -485,13 +538,54 @@ export default function GameHUD({
         </div>
       )}
 
-      {/* ── GM Red Eye indicator (F2) ─────────────────────── */}
-      {sessionActive && status === "open" && (
+      {/* ── GM Eye indicator (F2 redesign) ─────────────── */}
+      {/* Only visible when session is active, WS is open, AND webcam is capturing */}
+      {sessionActive && status === "open" && webcamActive && !demoEnded && (
         <div
           aria-hidden="true"
-          className="absolute top-5 right-5 z-40 w-3 h-3 rounded-full bg-red-600 shadow-[0_0_8px_2px_rgba(220,38,38,0.6)]"
+          className="absolute top-5 right-5 z-40"
           style={{ animation: "gm-eye-breathe 3.5s ease-in-out infinite" }}
-        />
+        >
+          <svg
+            width="44"
+            height="28"
+            viewBox="0 0 44 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Outer eye shape */}
+            <path
+              d="M2 14C2 14 10 2 22 2C34 2 42 14 42 14C42 14 34 26 22 26C10 26 2 14 2 14Z"
+              stroke="#dc2626"
+              strokeWidth="1.5"
+              fill="rgba(220, 38, 38, 0.08)"
+            />
+            {/* Iris */}
+            <circle cx="22" cy="14" r="7" fill="#991b1b" />
+            <circle
+              cx="22"
+              cy="14"
+              r="5"
+              fill="#dc2626"
+              style={{
+                animation: "gm-eye-iris-pulse 3.5s ease-in-out infinite",
+              }}
+            />
+            {/* Pupil */}
+            <circle cx="22" cy="14" r="2.5" fill="#0a0a0a" />
+            {/* Glint */}
+            <circle cx="19" cy="11.5" r="1" fill="rgba(255,255,255,0.5)" />
+          </svg>
+          {/* Red glow behind the eye */}
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              filter: "blur(8px)",
+              background:
+                "radial-gradient(circle, rgba(220,38,38,0.4) 0%, transparent 70%)",
+            }}
+          />
+        </div>
       )}
 
       {/* ── Trust indicator (bottom-right) ─────────────────── */}
@@ -521,6 +615,30 @@ export default function GameHUD({
         </div>
       )}
 
+      {/* ── F6: Demo end overlay ────────────────────────── */}
+      {endOverlayVisible && (
+        <div
+          className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-black/80"
+          style={{ animation: "demo-end-fade-in 1.5s ease-in forwards" }}
+        >
+          <h1
+            className="text-5xl md:text-7xl font-black text-white tracking-[0.3em] uppercase mb-6"
+            style={{
+              textShadow:
+                "0 0 40px rgba(220,38,38,0.5), 0 0 80px rgba(139,44,245,0.3)",
+            }}
+          >
+            LIMINAL SIN
+          </h1>
+          <p
+            className="font-mono text-sm tracking-[0.4em] uppercase"
+            style={{ color: "rgba(192,132,252,0.7)" }}
+          >
+            experience complete
+          </p>
+        </div>
+      )}
+
       {/* ── Connection status banner (dev visibility) ─────── */}
       {status !== "open" && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-1 rounded bg-black/70 border border-red-500/40 text-red-400 text-xs font-mono tracking-widest uppercase">
@@ -529,6 +647,6 @@ export default function GameHUD({
           {status === "error" && "Connection Error — No Backend"}
         </div>
       )}
-    </>
+    </div>
   );
 }

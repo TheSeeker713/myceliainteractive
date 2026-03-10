@@ -24,12 +24,16 @@ function GameInner() {
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   // Start media capture once the user explicitly starts the session
-  usePlayerMedia(sessionActive, audioCtxRef);
+  const { webcamActive } = usePlayerMedia(sessionActive, audioCtxRef);
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
       {/* HUD overlays + FMV layer + audio playback */}
-      <GameHUD sessionActive={sessionActive} audioCtxRef={audioCtxRef} />
+      <GameHUD
+        sessionActive={sessionActive}
+        audioCtxRef={audioCtxRef}
+        webcamActive={webcamActive}
+      />
 
       {/* ── Start prompt (shown before session begins) ─── */}
       {!sessionActive && (
@@ -54,7 +58,10 @@ function GameInner() {
             be seen.
           </p>
           <button
-            onClick={() => { connect(); setSessionActive(true); }}
+            onClick={() => {
+              connect();
+              setSessionActive(true);
+            }}
             className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
           >
             Begin Session

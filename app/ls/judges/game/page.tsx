@@ -21,11 +21,15 @@ function JudgeGameInner() {
   // to avoid iOS's concurrent AudioContext limit.
   const audioCtxRef = useRef<AudioContext | null>(null);
 
-  usePlayerMedia(sessionActive, audioCtxRef);
+  const { webcamActive } = usePlayerMedia(sessionActive, audioCtxRef);
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
-      <GameHUD sessionActive={sessionActive} audioCtxRef={audioCtxRef} />
+      <GameHUD
+        sessionActive={sessionActive}
+        audioCtxRef={audioCtxRef}
+        webcamActive={webcamActive}
+      />
 
       {!sessionActive && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black/90">
@@ -48,7 +52,10 @@ function JudgeGameInner() {
             Judge mode active. Microphone and camera access required.
           </p>
           <button
-            onClick={() => { connect(); setSessionActive(true); }}
+            onClick={() => {
+              connect();
+              setSessionActive(true);
+            }}
             className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
           >
             Begin Judge Session

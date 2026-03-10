@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, type RefObject } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import { useGameWS } from "./GameWSContext";
 
 /**
@@ -14,13 +20,17 @@ import { useGameWS } from "./GameWSContext";
  * Per TEAM_CONTRACT.md §2 this hook owns ONLY the transport of raw media.
  * It never makes decisions about the content.
  */
-export function usePlayerMedia(active: boolean, sharedCtxRef: RefObject<AudioContext | null>) {
+export function usePlayerMedia(
+  active: boolean,
+  sharedCtxRef: RefObject<AudioContext | null>,
+) {
   const { send, status } = useGameWS();
   const streamRef = useRef<MediaStream | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const frameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [webcamActive, setWebcamActive] = useState(false);
   // Guard: getUserMedia must only be called once per session activation.
   // Without this, any status change while active===true re-triggers the effect,
   // stopAll() closes the AudioContext (fire-and-forget), and the next
@@ -34,6 +44,7 @@ export function usePlayerMedia(active: boolean, sharedCtxRef: RefObject<AudioCon
     frameIntervalRef.current = null;
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
+    setWebcamActive(false);
   }, []);
 
   useEffect(() => {
@@ -84,13 +95,15 @@ export function usePlayerMedia(active: boolean, sharedCtxRef: RefObject<AudioCon
         // The downsample logic below handles any rate != 16000.
         const micCtx = sharedCtxRef.current;
         if (!micCtx) {
-          console.error("[usePlayerMedia] Shared AudioContext not ready — aborting mic setup");
+          console.error(
+            "[usePlayerMedia] Shared AudioContext not ready — aborting mic setup",
+          );
           return;
         }
         const actualRate = micCtx.sampleRate; // 24000 from shared ctx; downsampled below
         console.log(`[usePlayerMedia] AudioContext sampleRate: ${actualRate}`);
         const micSource = micCtx.createMediaStreamSource(stream);
-        // eslint-disable-next-line @typescript-eslint/no-deprecated
+
         const processor = micCtx.createScriptProcessor(4096, 1, 1);
         micSource.connect(processor);
         processor.connect(micCtx.destination); // must be connected to fire onaudioprocess
@@ -123,7 +136,11 @@ export function usePlayerMedia(active: boolean, sharedCtxRef: RefObject<AudioCon
           for (let i = 0; i < bytes.length; i += 0x8000) {
             raw += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
           }
-          send({ type: "player_speech", audio: btoa(raw), timestamp: Date.now() });
+          send({
+            type: "player_speech",
+            audio: btoa(raw),
+            timestamp: Date.now(),
+          });
         };
 
         // ── Webcam: canvas snapshot at 1 FPS ─────────────
@@ -150,6 +167,9 @@ export function usePlayerMedia(active: boolean, sharedCtxRef: RefObject<AudioCon
             send({ type: "player_frame", jpeg: b64, timestamp: Date.now() });
           }
         }, 1000); // 1 FPS
+
+        // Webcam is now actively capturing
+        setWebcamActive(true);
       } catch (err) {
         console.error("[usePlayerMedia] Media access error:", err);
       }
@@ -162,5 +182,5 @@ export function usePlayerMedia(active: boolean, sharedCtxRef: RefObject<AudioCon
     };
   }, [active, status, send, stopAll]);
 
-  return { stopAll };
+  return { stopAll, webcamActive };
 }
