@@ -61,8 +61,35 @@ export function IntroSequence({
       }, 11500),
     );
 
-    // ── Audio ──────────────────────────────────────────────────────────────
+    // ── Audio ─────────────────────────────────────────────────────────────
     const ctx = audioCtxRef.current;
+
+    // FE-16B: Descent impact thud at t=10.8s (fires in the silence after wind fades)
+    if (ctx) {
+      timers.push(
+        setTimeout(() => {
+          const stingPool = AUDIO_MANIFEST["descent_sting"];
+          if (!stingPool?.length || !audioCtxRef.current) return;
+          const url = stingPool[Math.floor(Math.random() * stingPool.length)];
+          (async () => {
+            try {
+              const res = await fetch(url);
+              if (!res.ok) return;
+              const buf = await audioCtxRef.current!.decodeAudioData(
+                await res.arrayBuffer(),
+              );
+              const src = audioCtxRef.current!.createBufferSource();
+              src.buffer = buf;
+              src.loop = false;
+              src.connect(audioCtxRef.current!.destination);
+              src.start();
+            } catch {
+              /* silent degradation — missing file does not affect intro */
+            }
+          })();
+        }, 10800),
+      );
+    }
     if (ctx) {
       const iGain = ctx.createGain();
       iGain.gain.value = 0;
@@ -110,8 +137,8 @@ export function IntroSequence({
           }
         }
 
-        // Ambient underlay (cold open drip/wind) — loops at 0.65 gain
-        const windPool = AUDIO_MANIFEST["ambient_cold_open"];
+        // Ambient underlay (rushing wind) — session-locked variant, loops at 0.65 gain
+        const windPool = AUDIO_MANIFEST["wind_intro"];
         if (windPool?.length) {
           const url = windPool[Math.floor(Math.random() * windPool.length)];
           try {
