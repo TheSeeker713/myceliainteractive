@@ -55,6 +55,11 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
     `${S}/sfx_water_echo_3.mp3`,
     `${S}/sfx_water_echo_4.mp3`,
   ],
+  // Session-locked variant of rushing wind for intro cinematic
+  wind_intro: [
+    `${S}/rushing_wind.mp3`,
+    `${S}/rushing_wind_2.mp3`,
+  ],
 
   // ── SFX: Transmission / Session ─────────────────────────────────────────
   voicebox_activate: [
@@ -175,6 +180,7 @@ export const SESSION_LOCKED_KEYS: string[] = [
   "music_psychosis",
   "ambient_cold_open",
   "ambient_water_echo",
+  "wind_intro",
 ];
 
 // Loaded first in preloadAll so they are ready before first session_ready

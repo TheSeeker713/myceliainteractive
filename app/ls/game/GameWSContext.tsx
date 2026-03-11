@@ -98,6 +98,10 @@ export type HintEvent = {
   text: string;
 };
 
+export type PlayerSpeakPromptEvent = {
+  type: "player_speak_prompt";
+};
+
 export type ServerEvent =
   | AgentSpeechEvent
   | AgentInterruptEvent
@@ -112,7 +116,8 @@ export type ServerEvent =
   | SceneVideoEvent
   | SlotskyTriggerEvent
   | CameraObscuredEvent
-  | HintEvent;
+  | HintEvent
+  | PlayerSpeakPromptEvent;
 
 // ── Outbound payload types (client → server) ─────────────────────────────────────────────────────────────────────
 

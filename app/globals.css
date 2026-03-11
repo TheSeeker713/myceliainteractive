@@ -378,6 +378,14 @@
   }
 }
 
+/* F1 revised: hint fades in, holds, then auto-fades out over total 8s */
+@keyframes hint-fade-in-out {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }   /* fully visible at ~1.6s */
+  70%  { opacity: 1; }   /* holds until ~5.6s */
+  100% { opacity: 0; }   /* fully gone at 8s */
+}
+
 /* F5: HUD glitch — low intensity (subtle jitter) */
 @keyframes hud-glitch-low {
   0%,
