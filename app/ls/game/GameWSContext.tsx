@@ -121,7 +121,8 @@ export type ClientEvent =
   | { type: "player_speech"; audio: string; timestamp: number }
   | { type: "player_frame"; jpeg: string; timestamp: number }
   | { type: "session_end" }
-  | { type: "card_collected"; sessionId: string };
+  | { type: "card_collected"; sessionId: string }
+  | { type: "intro_complete" };
 
 // ── Context shape ──────────────────────────────────────────────────────────
 

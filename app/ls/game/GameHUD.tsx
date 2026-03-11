@@ -650,16 +650,16 @@ export default function GameHUD({
 
   return (
     <div
-      className="absolute inset-0"
+      className={`absolute inset-0${glitchClass ? ` ${glitchClass}` : ""}`}
       style={
         glitchClass
           ? {
               animation:
                 glitchClass === "hud-glitch-active-low"
-                  ? "hud-glitch-low 0.08s steps(2) infinite"
+                  ? "hud-glitch-low 0.5s ease-in-out infinite"
                   : glitchClass === "hud-glitch-active-medium"
-                    ? "hud-glitch-medium 0.12s steps(3) infinite"
-                    : "hud-glitch-high 0.1s steps(4) infinite",
+                    ? "hud-glitch-medium 0.7s ease-in-out infinite"
+                    : "hud-glitch-high 0.9s ease-in-out infinite",
             }
           : undefined
       }

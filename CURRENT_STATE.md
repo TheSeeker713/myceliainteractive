@@ -1,7 +1,7 @@
 ﻿# CURRENT_STATE.md — myceliainteractive (Frontend)
 
 > **AI WORKING MEMORY** — Source of truth for frontend state.
-> Last updated: March 10, 2026 — **All FE sprint work COMPLETE. Frontend feature-locked for March 11 cutoff.**
+> Last updated: March 10, 2026 — **Bug-fix patch applied post feature-lock. See BUG FIX LOG below.**
 
 ---
 
@@ -30,6 +30,27 @@
 - **Types**: `HintEvent`, `card_collected` added to GameWSContext; backend `hint` text renders as fading overlay for 6s — DONE
 
 ---
+
+## BUG FIX LOG — March 10, 2026 (Post Feature-Lock Patch)
+
+### Bug 1 FIXED (CRITICAL) — Strobing/flashing `hud_glitch` effect
+**Was:** `hud-glitch-high` keyframes contained `filter: brightness(2)` and `filter: brightness(1.5)` producing a 10 Hz luminance strobe. Animation timing used `steps(4)` at `0.1s` (hard-cuts, no interpolation), making it a clinical strobe hazard. `glitchClass` state was never applied as a DOM `className`, so the FE-7 `::before` red tint safety fallback never fired.
+**Fixed in:** `app/globals.css`, `app/ls/game/GameHUD.tsx`
+- Removed **all** `brightness()` calls from `@keyframes hud-glitch-high`
+- Replaced animation timing with `ease-in-out` at 0.5s / 0.7s / 0.9s (low/med/high)
+- Applied `glitchClass` as actual `className` on GameHUD wrapper div so `.hud-glitch-active-high::before` red-tint rule fires correctly
+
+### Bug 2 FIXED (CRITICAL) — `intro_complete` never sent → GM fires events during cinematic
+**Was:** `intro_complete` was in the WS contract table and `CURRENT_STATE.md` marked DONE, but it was:
+  1. Missing from the `ClientEvent` union type in `GameWSContext.tsx`
+  2. Never called anywhere in the codebase — `IntroSequence.tsx` did not send it
+**Result:** The backend (B8) correctly gates Jason's first speech behind `intro_complete`, but the GM session was ungated — it connected on `session_ready` and immediately started evaluating webcam frames and sending `hud_glitch`, `slotsky_trigger`, etc. while the 11.5s cinematic played. Events arrived before the player saw anything.
+**Fixed in:** `app/ls/game/GameWSContext.tsx`, `app/ls/game/IntroSequence.tsx`
+- Added `| { type: "intro_complete" }` to `ClientEvent` type
+- Added `useGameWS()` import to `IntroSequence.tsx`; calls `send({ type: "intro_complete" })` in the 11.5s completion timer, just before `onComplete()` transitions the game to active phase
+
+### ⚠️ REMAINING BACKEND FIX REQUIRED (see `liminal-sin-gemini/CURRENT_STATE.md`)
+Frontend now correctly sends `intro_complete`. However, the backend GM session is NOT gated behind it. The GM currently connects on `session_ready` and starts processing `player_frame` events immediately — it needs to hold off on forwarding `player_frame` to `gmManager.sendFrame()` until `intro_complete` is received, same as Jason is gated. **See `liminal-sin-gemini/CURRENT_STATE.md` for exact fix instructions.**
 
 ---
 

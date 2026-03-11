@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type MutableRefObject } from "react";
 import { AUDIO_MANIFEST } from "./audioManifest";
+import { useGameWS } from "./GameWSContext";
 
 type IntroPhase = "blank" | "credits" | "title" | "fadeout";
 
@@ -30,6 +31,7 @@ export function IntroSequence({
 }) {
   const [phase, setPhase] = useState<IntroPhase>("blank");
   const [visible, setVisible] = useState(true);
+  const { send } = useGameWS();
 
   const musicSrcRef = useRef<AudioBufferSourceNode | null>(null);
   const windSrcRef = useRef<AudioBufferSourceNode | null>(null);
@@ -53,6 +55,7 @@ export function IntroSequence({
       setTimeout(() => {
         if (!completedRef.current) {
           completedRef.current = true;
+          send({ type: "intro_complete" });
           onComplete();
         }
       }, 11500),
