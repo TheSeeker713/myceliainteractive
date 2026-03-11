@@ -93,6 +93,11 @@ export type CameraObscuredEvent = {
   obscured: boolean;
 };
 
+export type HintEvent = {
+  type: "hint";
+  text: string;
+};
+
 export type ServerEvent =
   | AgentSpeechEvent
   | AgentInterruptEvent
@@ -106,15 +111,17 @@ export type ServerEvent =
   | SceneChangeEvent
   | SceneVideoEvent
   | SlotskyTriggerEvent
-  | CameraObscuredEvent;
+  | CameraObscuredEvent
+  | HintEvent;
 
-// ── Outbound payload types (client → server) ───────────────────────────────
+// ── Outbound payload types (client → server) ─────────────────────────────────────────────────────────────────────
 
 export type ClientEvent =
   | { type: "session_start"; judge_mode: boolean }
   | { type: "player_speech"; audio: string; timestamp: number }
   | { type: "player_frame"; jpeg: string; timestamp: number }
-  | { type: "session_end" };
+  | { type: "session_end" }
+  | { type: "card_collected"; sessionId: string };
 
 // ── Context shape ──────────────────────────────────────────────────────────
 

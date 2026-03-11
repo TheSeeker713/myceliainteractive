@@ -19,6 +19,8 @@ import type {
   SessionReadyEvent,
   SessionErrorEvent,
   SlotskyTriggerEvent,
+  HintEvent,
+  SceneImageEvent,
 } from "./GameWSContext";
 
 /**
@@ -83,6 +85,30 @@ export default function GameHUD({
   const [activeImgLayer, setActiveImgLayer] = useState<0 | 1>(0);
   const activeImgLayerRef = useRef<0 | 1>(0);
   const prevSceneImageRef = useRef<string | null>(null);
+
+  // FE-8 / FE-11: scene container overlay states
+  const [generatorLit, setGeneratorLit] = useState(false);
+  const [generatorAmber, setGeneratorAmber] = useState(false);
+  const [generatorFlickering, setGeneratorFlickering] = useState(false);
+  const generatorFlickerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // FE-9: VHS swap state
+  const [vhsSwapping, setVhsSwapping] = useState(false);
+  const vhsSwapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // FE-10: card collectible state
+  const [showCard, setShowCard] = useState(false);
+  const [cardLabelVisible, setCardLabelVisible] = useState(false);
+  const [cardCollecting, setCardCollecting] = useState(false);
+  const cardLabelTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // hint event (backend B11) — fading text overlay
+  const [serverHint, setServerHint] = useState<string | null>(null);
+  const serverHintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // FE-12: Audrey-specific audio nodes (not cancelled by agent_interrupt)
+  const audreySourceNodesRef = useRef<AudioBufferSourceNode[]>([]);
+  const audreyNextPlayTimeRef = useRef<number>(0);
 
   // F4: scene video
   const sceneVideoRef = useRef<HTMLVideoElement>(null);
@@ -156,6 +182,53 @@ export default function GameHUD({
     clearSceneVideo();
   }, [clearSceneVideo, pushImage]);
 
+  // FE-9: Apply VHS swap animation just before video ends.
+  const handleVideoTimeUpdate = useCallback(() => {
+    const video = sceneVideoRef.current;
+    if (!video || vhsSwapping) return;
+    if (video.duration > 0 && video.currentTime >= video.duration - 0.05) {
+      setVhsSwapping(true);
+      if (vhsSwapTimerRef.current) clearTimeout(vhsSwapTimerRef.current);
+      vhsSwapTimerRef.current = setTimeout(() => {
+        setVhsSwapping(false);
+        vhsSwapTimerRef.current = null;
+      }, 300);
+    }
+  }, [vhsSwapping]);
+
+  // FE-8 / FE-11: Detect generator scene keys on scene_image events.
+  useEffect(() => {
+    if (lastEvent?.type !== "scene_image") return;
+    const ev = lastEvent as SceneImageEvent;
+    const key = ev.payload.sceneKey ?? "";
+    const isGeneratorScene =
+      key.includes("zone_merge") || key.includes("zone_park_shore");
+    if (!isGeneratorScene) return;
+
+    // FE-11: brightness flicker, then fade vignette + warm tint
+    setGeneratorFlickering(true);
+    if (generatorFlickerTimerRef.current)
+      clearTimeout(generatorFlickerTimerRef.current);
+    generatorFlickerTimerRef.current = setTimeout(() => {
+      setGeneratorFlickering(false);
+      setGeneratorLit(true);
+      setTimeout(() => setGeneratorAmber(true), 100);
+      generatorFlickerTimerRef.current = null;
+    }, 1500);
+  }, [lastEvent]);
+
+  // hint event (backend B11) — show server-sent hint text for 6s then fade
+  useEffect(() => {
+    if (lastEvent?.type !== "hint") return;
+    const ev = lastEvent as HintEvent;
+    setServerHint(ev.text);
+    if (serverHintTimerRef.current) clearTimeout(serverHintTimerRef.current);
+    serverHintTimerRef.current = setTimeout(() => {
+      setServerHint(null);
+      serverHintTimerRef.current = null;
+    }, 6000);
+  }, [lastEvent]);
+
   // Create + resume AudioContext inside the Begin Session gesture tick.
   // Must NOT be created lazily in a WS message handler — Chrome's autoplay
   // policy suspends any AudioContext created outside a user gesture.
@@ -171,6 +244,7 @@ export default function GameHUD({
   }, [sessionActive]);
 
   // Barge-in: player spoke over Jason — kill all queued audio immediately.
+  // FE-12: Audrey audio (audreySourceNodesRef) is NOT cancelled here.
   useEffect(() => {
     if (lastEvent?.type !== "agent_interrupt") return;
     playSFX("barge_in");
@@ -185,7 +259,7 @@ export default function GameHUD({
     sourceNodesRef.current = [];
     nextPlayTimeRef.current = 0;
     console.log(
-      `[GameHUD] agent_interrupt — cancelled ${nodes.length} queued audio nodes`,
+      `[GameHUD] agent_interrupt — cancelled ${nodes.length} Jason audio nodes (Audrey preserved)`,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
@@ -338,7 +412,15 @@ export default function GameHUD({
         playSFX("slotsky_bells");
         break;
       case "anomaly_cards":
+        // FE-10: play SFX + show card collectible overlay
         playSFX("slotsky_cards");
+        setShowCard(true);
+        setCardLabelVisible(false);
+        if (cardLabelTimerRef.current) clearTimeout(cardLabelTimerRef.current);
+        cardLabelTimerRef.current = setTimeout(() => {
+          setCardLabelVisible(true);
+          cardLabelTimerRef.current = null;
+        }, 2000);
         break;
       case "anomaly_lights":
         playSFX("slotsky_lights");
@@ -375,11 +457,90 @@ export default function GameHUD({
 
   // Agent audio playback — raw 16-bit little-endian PCM at 24kHz from Gemini Live.
   // decodeAudioData() only handles encoded formats (MP3/WAV) — must decode PCM manually.
+  // FE-12: Audrey uses a separate path with reverb + delay; not cancelled by agent_interrupt.
   useEffect(() => {
     if (lastEvent?.type !== "agent_speech") return;
     const ev = lastEvent as AgentSpeechEvent;
     if (!ev.audio) return;
 
+    // FE-12: Route Audrey through echo pipeline
+    if (ev.agent === "audrey") {
+      (async () => {
+        try {
+          if (!audioCtxRef.current) {
+            audioCtxRef.current = new AudioContext({ sampleRate: 24000 });
+          }
+          const ctx = audioCtxRef.current;
+          if (ctx.state === "suspended") await ctx.resume();
+
+          // Decode PCM
+          const binary = atob(ev.audio);
+          const numSamples = binary.length >> 1;
+          const float32 = new Float32Array(numSamples);
+          for (let i = 0; i < numSamples; i++) {
+            const lo = binary.charCodeAt(i * 2) & 0xff;
+            const hi = binary.charCodeAt(i * 2 + 1) & 0xff;
+            const s16 = (hi << 8) | lo;
+            float32[i] = (s16 > 32767 ? s16 - 65536 : s16) / 32768;
+          }
+          const audioBuf = ctx.createBuffer(1, numSamples, 24000);
+          audioBuf.copyToChannel(float32, 0);
+
+          // Build reverb impulse response (cached lazily per AudioContext)
+          const impulseLen = Math.floor(ctx.sampleRate * 1.5);
+          const impulse = ctx.createBuffer(2, impulseLen, ctx.sampleRate);
+          for (let ch = 0; ch < 2; ch++) {
+            const d = impulse.getChannelData(ch);
+            for (let i = 0; i < impulseLen; i++) {
+              d[i] =
+                (Math.random() * 2 - 1) *
+                Math.pow(1 - i / impulseLen, 2);
+            }
+          }
+          const convolver = ctx.createConvolver();
+          convolver.buffer = impulse;
+
+          const delay = ctx.createDelay(0.5);
+          delay.delayTime.value = 0.15;
+
+          // Routing: source → outputGain → dry(0.4) → dest
+          //                               → delay → convolver → wet(0.6) → dest
+          const source = ctx.createBufferSource();
+          source.buffer = audioBuf;
+          const outputGain = ctx.createGain();
+          outputGain.gain.value = 0.7;
+          const dryGain = ctx.createGain();
+          dryGain.gain.value = 0.4;
+          const wetGain = ctx.createGain();
+          wetGain.gain.value = 0.6;
+
+          source.connect(outputGain);
+          outputGain.connect(dryGain);
+          dryGain.connect(ctx.destination);
+          outputGain.connect(delay);
+          delay.connect(convolver);
+          convolver.connect(wetGain);
+          wetGain.connect(ctx.destination);
+
+          audreySourceNodesRef.current.push(source);
+          source.onended = () => {
+            audreySourceNodesRef.current = audreySourceNodesRef.current.filter(
+              (n) => n !== source,
+            );
+          };
+
+          const now = ctx.currentTime;
+          const startAt = Math.max(audreyNextPlayTimeRef.current, now);
+          source.start(startAt);
+          audreyNextPlayTimeRef.current = startAt + audioBuf.duration;
+        } catch (e) {
+          console.error("[GameHUD] Audrey audio playback error:", e);
+        }
+      })();
+      return;
+    }
+
+    // Jason / default agent path
     // Detect start of a new utterance (audio queue was empty when this chunk arrived).
     // First-ever utterance: voicebox_activate + crossfade to intro music.
     // Subsequent utterances: transmission ping.
@@ -503,37 +664,54 @@ export default function GameHUD({
           : undefined
       }
     >
-      {/* ── Scene image crossfade layers (F3) ──────────────── */}
-      {imgLayerA && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={imgLayerA}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
-          style={{ opacity: activeImgLayer === 0 ? 1 : 0 }}
-        />
-      )}
-      {imgLayerB && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={imgLayerB}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
-          style={{ opacity: activeImgLayer === 1 ? 1 : 0 }}
-        />
-      )}
+      {/* ── Scene image crossfade layers + FE-8 vignette (F3) ── */}
+      <div
+        className={[
+          "scene-container",
+          generatorLit ? "generator-lit" : "",
+          generatorAmber ? "generator-amber" : "",
+          generatorFlickering ? "generator-flicker-anim" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {imgLayerA && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imgLayerA}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
+            style={{ opacity: activeImgLayer === 0 ? 1 : 0 }}
+          />
+        )}
+        {imgLayerB && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imgLayerB}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
+            style={{ opacity: activeImgLayer === 1 ? 1 : 0 }}
+          />
+        )}
+      </div>
 
-      {/* ── Scene video overlay (F4) ──────────────────────── */}
+      {/* ── Scene video overlay (F4 + FE-9 VHS swap) ──────── */}
       <video
         ref={sceneVideoRef}
-        className="absolute inset-0 w-full h-full object-cover z-[5]"
+        className={[
+          "absolute inset-0 w-full h-full object-cover z-[5]",
+          vhsSwapping ? "vhs-swap" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         style={{ display: "none" }}
         playsInline
         muted
         crossOrigin="anonymous"
         onEnded={handleSceneVideoEnded}
+        onTimeUpdate={handleVideoTimeUpdate}
       />
       <canvas ref={canvasRef} className="hidden" />
 
@@ -592,6 +770,22 @@ export default function GameHUD({
             }}
           >
             say something...
+          </p>
+        </div>
+      )}
+
+      {/* ── Backend hint text overlay (B11) ─────────────── */}
+      {serverHint && (
+        <div className="absolute inset-0 z-[26] flex items-end justify-center pb-16 pointer-events-none">
+          <p
+            className="font-mono text-sm tracking-[0.2em] uppercase text-center max-w-md px-4"
+            style={{
+              color: "rgba(192,132,252,0.75)",
+              animation: "hint-fade-in 1s ease-in forwards",
+              textShadow: "0 0 12px rgba(139,44,245,0.4)",
+            }}
+          >
+            {serverHint}
           </p>
         </div>
       )}
@@ -670,6 +864,92 @@ export default function GameHUD({
               />
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ── FE-10: Card collectible overlay ────────────────── */}
+      {showCard && !demoEnded && (
+        <div
+          className="absolute bottom-8 right-8 z-[45] flex flex-col items-center gap-3 pointer-events-auto"
+          style={{
+            animation: cardCollecting ? "card-slide-out 0.5s ease-in forwards" : undefined,
+          }}
+          onClick={() => {
+            if (cardCollecting) return;
+            setCardCollecting(true);
+            if (cardLabelTimerRef.current) clearTimeout(cardLabelTimerRef.current);
+            setTimeout(() => setShowCard(false), 500);
+            const wsSessionId =
+              (lastEvent as { sessionId?: string } | null)?.sessionId ?? "";
+            send({ type: "card_collected", sessionId: wsSessionId });
+          }}
+        >
+          {/* Queen of Spades SVG */}
+          <div
+            style={{
+              animation: cardCollecting
+                ? undefined
+                : "card-glow-pulse 1.8s ease-in-out infinite",
+              cursor: "pointer",
+            }}
+          >
+            <svg
+              width="80"
+              height="112"
+              viewBox="0 0 80 112"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label="Queen of Spades"
+            >
+              <rect
+                width="80"
+                height="112"
+                rx="6"
+                fill="#0e0e1a"
+                stroke="rgba(139,44,245,0.7)"
+                strokeWidth="1.5"
+              />
+              {/* Rank + suit corners */}
+              <text
+                x="6"
+                y="16"
+                fill="white"
+                fontFamily="serif"
+                fontSize="12"
+                fontWeight="bold"
+              >
+                Q
+              </text>
+              <text x="6" y="28" fill="white" fontFamily="serif" fontSize="10">
+                ♠
+              </text>
+              {/* Centre spade */}
+              <text
+                x="40"
+                y="68"
+                fill="white"
+                fontFamily="serif"
+                fontSize="48"
+                textAnchor="middle"
+                dominantBaseline="middle"
+              >
+                ♠
+              </text>
+            </svg>
+          </div>
+
+          {/* "pick it up?" label — fades in after 2s */}
+          {cardLabelVisible && !cardCollecting && (
+            <p
+              className="font-mono text-xs tracking-[0.25em] uppercase"
+              style={{
+                color: "rgba(192,132,252,0.8)",
+                animation: "hint-fade-in 0.8s ease-in forwards",
+              }}
+            >
+              pick it up?
+            </p>
+          )}
         </div>
       )}
 
