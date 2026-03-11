@@ -8,6 +8,102 @@ import { GameErrorBoundary } from "./GameErrorBoundary";
 import { IntroSequence } from "./IntroSequence";
 
 /**
+ * FE-13: Permission gate shown between "waiting" and "intro" phases.
+ * Pre-grants mic/cam so usePlayerMedia's real capture never triggers a second browser prompt.
+ */
+function PermissionsGate({ onGranted }: { onGranted: () => void }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleAllow() {
+    setLoading(true);
+    setError(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      // Release immediately — this just pre-grants the browser permission.
+      stream.getTracks().forEach((t) => t.stop());
+      onGranted();
+    } catch (err) {
+      const name = err instanceof DOMException ? err.name : "";
+      if (name === "NotAllowedError" || name === "PermissionDeniedError") {
+        // Distinguish mic vs webcam denial
+        // Try audio-only to check if mic is the blocker
+        try {
+          const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          audioStream.getTracks().forEach((t) => t.stop());
+          // Webcam denied but mic allowed — continue (webcam is non-fatal)
+          onGranted();
+        } catch {
+          setError("Microphone access is required to proceed.");
+          setLoading(false);
+        }
+      } else {
+        setError("Could not access your devices. Please check your browser settings.");
+        setLoading(false);
+      }
+    }
+  }
+
+  return (
+    <div
+      className="absolute inset-0 z-[90] flex flex-col items-center justify-center gap-6 bg-black px-6"
+      style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+    >
+      <p
+        className="text-xs tracking-[0.35em] uppercase mb-2"
+        style={{ color: "rgba(192,132,252,0.6)" }}
+      >
+        Mycelia Interactive
+      </p>
+
+      {/* Privacy disclaimer */}
+      <div
+        className="max-w-sm text-center text-xs leading-relaxed"
+        style={{ color: "rgba(160,160,160,0.65)" }}
+      >
+        <p>
+          Mycelia Interactive does not store, sell, or share your camera or
+          microphone data. Audio and video are processed in real-time via
+          Google&apos;s Gemini API solely to power this experience. No recordings are
+          retained after your session ends.
+        </p>
+        <a
+          href="/ls/privacy.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-block tracking-widest uppercase text-[10px] hover:text-purple-300 transition-colors duration-200"
+          style={{ color: "rgba(192,132,252,0.5)" }}
+        >
+          Privacy Policy ↗
+        </a>
+      </div>
+
+      {/* Error message */}
+      {error && (
+        <p
+          className="text-xs tracking-wider text-center max-w-xs"
+          style={{ color: "rgba(220,38,38,0.8)" }}
+        >
+          {error}
+        </p>
+      )}
+
+      {/* Allow button */}
+      <button
+        onClick={handleAllow}
+        disabled={loading}
+        className="mt-2 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? "Awaiting permissions…" : "Allow Access & Continue"}
+      </button>
+    </div>
+  );
+}
+
+/**
  * Game UI Shell — /ls/game
  *
  * Dumb terminal. Sends player input, renders what the backend tells it.
@@ -19,9 +115,9 @@ import { IntroSequence } from "./IntroSequence";
 
 function GameInner() {
   const [sessionPhase, setSessionPhase] = useState<
-    "waiting" | "intro" | "active"
+    "waiting" | "permissions" | "intro" | "active"
   >("waiting");
-  const sessionActive = sessionPhase !== "waiting";
+  const sessionActive = sessionPhase === "intro" || sessionPhase === "active";
   const { connect } = useGameWS();
   // Single shared AudioContext for the whole session — passed to both GameHUD
   // (playback) and usePlayerMedia (mic capture) to avoid iOS's concurrent
@@ -29,7 +125,7 @@ function GameInner() {
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   // Start media capture once the user explicitly starts the session
-  const { webcamActive, micDenied, webcamDenied, cameraObscured } =
+  const { webcamActive, micDenied, webcamDenied, cameraObscured, stopAll } =
     usePlayerMedia(sessionActive, audioCtxRef);
 
   return (
@@ -42,6 +138,7 @@ function GameInner() {
         micDenied={micDenied}
         webcamDenied={webcamDenied}
         cameraObscured={cameraObscured}
+        onStopMedia={stopAll}
       />
 
       {/* ── Cinematic intro sequence ────────────────────── */}
@@ -76,14 +173,23 @@ function GameInner() {
           </p>
           <button
             onClick={() => {
-              connect();
-              setSessionPhase("intro");
+              setSessionPhase("permissions");
             }}
             className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
           >
             Begin Session
           </button>
         </div>
+      )}
+
+      {/* ── FE-13: Permission gate + privacy disclaimer ─── */}
+      {sessionPhase === "permissions" && (
+        <PermissionsGate
+          onGranted={() => {
+            connect();
+            setSessionPhase("intro");
+          }}
+        />
       )}
     </div>
   );
