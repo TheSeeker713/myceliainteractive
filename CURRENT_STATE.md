@@ -49,14 +49,19 @@
 - Added `| { type: "intro_complete" }` to `ClientEvent` type
 - Added `useGameWS()` import to `IntroSequence.tsx`; calls `send({ type: "intro_complete" })` in the 11.5s completion timer, just before `onComplete()` transitions the game to active phase
 
-### ⚠️ REMAINING BACKEND FIX REQUIRED (see `liminal-sin-gemini/CURRENT_STATE.md`)
-Frontend now correctly sends `intro_complete`. However, the backend GM session is NOT gated behind it. The GM currently connects on `session_ready` and starts processing `player_frame` events immediately — it needs to hold off on forwarding `player_frame` to `gmManager.sendFrame()` until `intro_complete` is received, same as Jason is gated. **See `liminal-sin-gemini/CURRENT_STATE.md` for exact fix instructions.**
-
 ---
 
-## Backend Status — March 10, 2026
+## Backend Status — March 10, 2026 (liminal-sin-gemini)
 
-All backend work complete as of commit `51b56f7`. All WS events the frontend consumes are live. See `liminal-sin-gemini/CURRENT_STATE.md` for backend details.
+All backend work complete. All WS events the frontend consumes are live. Latest commits: `720fb87`, `2786e81`.
+
+### March 10 Backend Bug Fixes
+
+- **GM model crash fixed**: GM now uses `gemini-2.0-flash-live-001` with `responseModalities: [TEXT]`. Previously used the NPC native-audio model, causing a 1007 crash on connect and a premature Beat 2 scene change before any player input.
+- **Strobe/glitch spam fixed**: `triggerGlitchEvent` is now throttled at a 3s cooldown per session server-side. The GROUP-audience path that was spamming `hud_glitch(high)` continuously is capped. Frontend glitch CSS fixes (FE-7) and this backend throttle together eliminate the strobe hazard.
+- **`fourthWallCount` now persisted**: `updateFourthWallCount()` added to `db.ts` (atomic Firestore increment). Called on `fourth_wall_correction` Slotsky trigger. GM no longer loses count on session reconnect.
+- **GM output gate**: `triggerSceneChange` and `triggerVideoGen` are blocked (silently ACK'd) until `intro_complete` is received — Beat 1 screen stays black as intended.
+- **GM input gate**: `gmManager.sendAudio()` and `gmManager.sendFrame()` are both guarded by `if (gmGated)`. GM receives zero player audio or webcam frames during the 11.5s cinematic. Combined with the frontend `intro_complete` fix (Bug 2 above), the GM is now fully silent in both directions until the cinematic ends.
 
 ---
 
