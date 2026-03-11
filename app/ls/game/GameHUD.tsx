@@ -41,6 +41,7 @@ export default function GameHUD({
   micDenied = false,
   webcamDenied = false,
   cameraObscured = false,
+  onStopMedia,
 }: {
   sessionActive?: boolean;
   audioCtxRef: MutableRefObject<AudioContext | null>;
@@ -48,6 +49,7 @@ export default function GameHUD({
   micDenied?: boolean;
   webcamDenied?: boolean;
   cameraObscured?: boolean;
+  onStopMedia?: () => void;
 }) {
   const {
     lastEvent,
@@ -127,7 +129,10 @@ export default function GameHUD({
   } = useAudioLayers(audioCtxRef);
 
   const { errorQueue, dispatchError, dismissError } = useGameError();
-  const [cameraNudgeDismissed, setCameraNudgeDismissed] = useState(false);
+  const [cameraObscuredVisible, setCameraObscuredVisible] = useState(false);
+  const cameraObscuredTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [webcamDeniedVisible, setWebcamDeniedVisible] = useState(false);
+  const webcamDeniedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Trust/fear tracking — compare to previous values to detect crossings
   const prevTrustRef = useRef<number>(0.5);
@@ -316,21 +321,42 @@ export default function GameHUD({
     if (lastEvent?.type !== "session_ready") return;
     void (lastEvent as SessionReadyEvent);
     startAmbientLoop("ambient_cold_open");
-    // F1: fade in text hint after 10 seconds of silence
-    hintTimerRef.current = setTimeout(() => setShowHint(true), 10000);
-    return () => {
-      if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
-  // F1: hide text hint once player speaks
+  // FE-18: Show hint on player_speak_prompt; auto-hide after 8s
   useEffect(() => {
-    if (playerHasSpoken) {
+    if (lastEvent?.type !== "player_speak_prompt") return;
+    setShowHint(true);
+    if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
+    hintTimerRef.current = setTimeout(() => {
       setShowHint(false);
-      if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
-    }
-  }, [playerHasSpoken]);
+      hintTimerRef.current = null;
+    }, 8000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastEvent]);
+
+  // FE-19: Camera obscured — auto-dismiss after 5s
+  useEffect(() => {
+    if (!cameraObscured) return;
+    setCameraObscuredVisible(true);
+    if (cameraObscuredTimerRef.current) clearTimeout(cameraObscuredTimerRef.current);
+    cameraObscuredTimerRef.current = setTimeout(() => {
+      setCameraObscuredVisible(false);
+      cameraObscuredTimerRef.current = null;
+    }, 5000);
+  }, [cameraObscured]);
+
+  // FE-19: Webcam denied — auto-dismiss after 8s
+  useEffect(() => {
+    if (!webcamDenied) return;
+    setWebcamDeniedVisible(true);
+    if (webcamDeniedTimerRef.current) clearTimeout(webcamDeniedTimerRef.current);
+    webcamDeniedTimerRef.current = setTimeout(() => {
+      setWebcamDeniedVisible(false);
+      webcamDeniedTimerRef.current = null;
+    }, 8000);
+  }, [webcamDenied]);
 
   // F3: crossfade scene images when sceneImage changes
   useEffect(() => {
@@ -759,17 +785,17 @@ export default function GameHUD({
         }}
       />
 
-      {/* ── "say something..." text hint (F1) ─────────────── */}
-      {showHint && !playerHasSpoken && (
+      {/* ── "speak to JASON" text hint (FE-18) ─────────────── */}
+      {showHint && (
         <div className="absolute inset-0 z-25 flex items-center justify-center pointer-events-none">
           <p
             className="font-mono text-sm tracking-[0.3em] uppercase"
             style={{
               color: "rgba(160,160,160,0.5)",
-              animation: "hint-fade-in 2s ease-in forwards",
+              animation: "hint-fade-in-out 8s ease-in-out forwards",
             }}
           >
-            say something...
+            speak to JASON
           </p>
         </div>
       )}
@@ -974,6 +1000,13 @@ export default function GameHUD({
           >
             experience complete
           </p>
+          {/* FE-20: Stop media tracks so browser camera/mic indicator turns off */}
+          <button
+            onClick={() => { onStopMedia?.(); }}
+            className="mt-8 px-6 py-2 font-mono text-xs tracking-[0.25em] uppercase border border-purple-500/40 text-purple-400/70 hover:text-purple-300 hover:border-purple-400 transition-colors duration-300"
+          >
+            Stop Camera &amp; Microphone
+          </button>
         </div>
       )}
 
@@ -986,43 +1019,37 @@ export default function GameHUD({
         </div>
       )}
 
-      {/* ── Camera obscured nudge (non-blocking, dismissible) ─ */}
-      {cameraObscured &&
+      {/* ── Camera obscured nudge (FE-19: auto-dismiss 5s) ─── */}
+      {cameraObscuredVisible &&
         !webcamDenied &&
-        sessionActive &&
-        !cameraNudgeDismissed && (
+        sessionActive && (
           <div
             className="absolute top-16 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-3 px-4 py-2 font-mono text-xs"
             style={{
               background: "rgba(10,10,10,0.9)",
               border: "1px solid rgba(220,38,38,0.5)",
+              animation: "hint-fade-in-out 5s ease-in-out forwards",
             }}
           >
             <span className="text-red-400">⚠</span>
             <span className="text-red-300/80">
-              Camera appears covered. The GM is watching.
+              Camera cannot see you — enabling camera gives a more immersive experience
             </span>
-            <button
-              onClick={() => setCameraNudgeDismissed(true)}
-              className="text-red-500/50 hover:text-red-400 ml-1"
-              aria-label="Dismiss"
-            >
-              ×
-            </button>
           </div>
         )}
 
-      {/* ── Webcam denied indicator (informational) ─────────── */}
-      {webcamDenied && sessionActive && (
+      {/* ── Webcam denied indicator (FE-19: auto-dismiss 8s) ── */}
+      {webcamDeniedVisible && sessionActive && (
         <div
           className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[55] px-4 py-2 font-mono text-[10px] tracking-widest uppercase"
           style={{
             background: "rgba(10,10,10,0.8)",
             border: "1px solid rgba(220,38,38,0.3)",
             color: "rgba(220,38,38,0.6)",
+            animation: "hint-fade-in-out 8s ease-in-out forwards",
           }}
         >
-          Camera offline — audio only
+          Camera access was not granted — the experience will continue with audio only
         </div>
       )}
 
