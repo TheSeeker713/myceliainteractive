@@ -5,15 +5,21 @@ export function CardCollectibleOverlay({
   demoEnded,
   cardCollecting,
   cardLabelVisible,
+  cardId,
   onCollect,
 }: {
   showCard: boolean;
   demoEnded: boolean;
   cardCollecting: boolean;
   cardLabelVisible: boolean;
+  cardId: "card1" | "card2";
   onCollect: () => void;
 }) {
   if (!showCard || demoEnded) return null;
+
+  const rank = cardId === "card1" ? "J" : "Q";
+  const suit = cardId === "card1" ? "♣" : "♠";
+  const cardLabel = cardId === "card1" ? "Jack of Clubs" : "Queen of Spades";
 
   return (
     <div
@@ -39,7 +45,7 @@ export function CardCollectibleOverlay({
           viewBox="0 0 80 112"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          aria-label="Queen of Spades"
+          aria-label={cardLabel}
         >
           <rect
             width="80"
@@ -57,10 +63,10 @@ export function CardCollectibleOverlay({
             fontSize="12"
             fontWeight="bold"
           >
-            Q
+            {rank}
           </text>
           <text x="6" y="28" fill="white" fontFamily="serif" fontSize="10">
-            ♠
+            {suit}
           </text>
           <text
             x="40"
@@ -71,7 +77,7 @@ export function CardCollectibleOverlay({
             textAnchor="middle"
             dominantBaseline="middle"
           >
-            ♠
+            {suit}
           </text>
         </svg>
       </div>

@@ -30,15 +30,21 @@
 	- AGENTS.md
 	- docs/SHOT_SCRIPT.md
 
+## Status Delta — March 11, 2026
+
+- [x] Completed HUD file-splitting compliance pass in `app/ls/game` by extracting focused components/hooks from `GameHUD.tsx`.
+- [x] Reduced `app/ls/game/GameHUD.tsx` to 300 lines (line-cap compliant).
+- [x] Ran required file-scoped validation during each increment: `npx tsc --noEmit`, `npx prettier --write`, `npx eslint --fix`.
+
 ---
 
 ## Phase B Plan — Split Execution Workflow
 
-- [ ] Run two VS Code windows in parallel for delivery.
-- [ ] Frontend window: myceliainteractive handles frontend checklist items only.
-- [ ] Backend window: liminal-sin-gemini handles backend checklist items only.
-- [ ] Keep ownership strict: no cross-window implementation edits.
-- [ ] Sync only through documented WS contract and CURRENT_STATE status deltas.
+- [x] Run two VS Code windows in parallel for delivery.
+- [x] Frontend window: myceliainteractive handles frontend checklist items only.
+- [x] Backend window: liminal-sin-gemini handles backend checklist items only.
+- [x] Keep ownership strict: no cross-window implementation edits.
+- [x] Sync only through documented WS contract and CURRENT_STATE status deltas.
 
 ### Frontend Window Instructions (This Repo)
 
@@ -53,40 +59,40 @@
 
 ### Phase 1-3 Flow and Prompting
 
-- [ ] Implement permission gate flow before intro cinematic starts.
-- [ ] Ensure player_speak_prompt is the activation trigger for first speak hint.
-- [ ] Keep onboarding and intro sequence behavior aligned with SHOT_SCRIPT timing.
+- [x] Implement permission gate flow before intro cinematic starts.
+- [x] Ensure player_speak_prompt is the activation trigger for first speak hint.
+- [x] Keep onboarding and intro sequence behavior aligned with SHOT_SCRIPT timing.
 
 ### Trust Meter (Permanent UI)
 
-- [ ] Add permanent lower-right Trust Meter widget.
-- [ ] Render TRUST and FEAR bars from trust_update values (0.0-1.0).
-- [ ] Add slow pulse animation independent of fill updates.
-- [ ] Keep meter hidden before player_speak_prompt; activate at prompt event.
+- [x] Add permanent lower-right Trust Meter widget.
+- [x] Render TRUST and FEAR bars from trust_update values (0.0-1.0).
+- [x] Add slow pulse animation independent of fill updates.
+- [x] Keep meter hidden before player_speak_prompt; activate at prompt event.
 
 ### Hint and Notification UX
 
-- [ ] Convert hint behavior to event-driven display (player_speak_prompt).
-- [ ] Use fade-in/hold/fade-out animation for hint lifecycle.
-- [ ] Ensure camera status notices auto-dismiss and do not persist as sticky HUD items.
+- [x] Convert hint behavior to event-driven display (player_speak_prompt).
+- [x] Use fade-in/hold/fade-out animation for hint lifecycle.
+- [x] Ensure camera status notices auto-dismiss and do not persist as sticky HUD items.
 
 ### Audio and Intro Polish
 
-- [ ] Add intro wind key usage for cinematic open.
-- [ ] Add timed descent sting near intro transition end.
-- [ ] Keep scene transition SFX convention consistent (glitch_low behavior).
+- [x] Add intro wind key usage for cinematic open.
+- [x] Add timed descent sting near intro transition end.
+- [x] Keep scene transition SFX convention consistent (glitch_low behavior).
 
 ### Card Mechanic and Dread Flow
 
-- [ ] Support card_discovered visual reveal flow for card1 and card2.
-- [ ] Support card_collected messaging path from frontend to backend.
-- [ ] Add dread timer presentation and escalating tension behavior.
+- [x] Support card_discovered visual reveal flow for card1 and card2.
+- [x] Support card_collected messaging path from frontend to backend.
+- [x] Add dread timer presentation and escalating tension behavior.
 
 ### End States
 
-- [ ] Implement GAME OVER visual/audio flow for timer expiry outcome.
-- [ ] Implement GOOD ENDING visual/audio flow for successful outcome.
-- [ ] Add post-ending media stop control path.
+- [x] Implement GAME OVER visual/audio flow for timer expiry outcome.
+- [x] Implement GOOD ENDING visual/audio flow for successful outcome.
+- [x] Add post-ending media stop control path.
 
 ---
 

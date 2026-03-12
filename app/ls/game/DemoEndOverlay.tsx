@@ -2,12 +2,26 @@
 
 export function DemoEndOverlay({
   endOverlayVisible,
+  mode,
+  showPlayAgain,
+  onPlayAgain,
   onStopMedia,
 }: {
   endOverlayVisible: boolean;
+  mode: "complete" | "game_over" | "good_ending";
+  showPlayAgain?: boolean;
+  onPlayAgain?: () => void;
   onStopMedia?: () => void;
 }) {
   if (!endOverlayVisible) return null;
+
+  const title = mode === "game_over" ? "GAME OVER" : "LIMINAL SIN";
+  const subtitle =
+    mode === "game_over"
+      ? "thank you for playing liminal sin"
+      : mode === "good_ending"
+        ? "you made it out"
+        : "experience complete";
 
   return (
     <div
@@ -21,14 +35,22 @@ export function DemoEndOverlay({
             "0 0 40px rgba(220,38,38,0.5), 0 0 80px rgba(139,44,245,0.3)",
         }}
       >
-        LIMINAL SIN
+        {title}
       </h1>
       <p
         className="font-mono text-sm tracking-[0.4em] uppercase"
         style={{ color: "rgba(192,132,252,0.7)" }}
       >
-        experience complete
+        {subtitle}
       </p>
+      {showPlayAgain && onPlayAgain && (
+        <button
+          onClick={onPlayAgain}
+          className="mt-6 px-6 py-2 font-mono text-xs tracking-[0.25em] uppercase border border-red-500/40 text-red-300/80 hover:text-red-200 hover:border-red-300 transition-colors duration-300"
+        >
+          Play Again
+        </button>
+      )}
       <button
         onClick={() => {
           onStopMedia?.();

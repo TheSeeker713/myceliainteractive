@@ -102,6 +102,24 @@ export type PlayerSpeakPromptEvent = {
   type: "player_speak_prompt";
 };
 
+export type CardDiscoveredEvent = {
+  type: "card_discovered";
+  cardId: "card1" | "card2";
+};
+
+export type DreadTimerStartEvent = {
+  type: "dread_timer_start";
+  durationMs: number;
+};
+
+export type GameOverEvent = {
+  type: "game_over";
+};
+
+export type GoodEndingEvent = {
+  type: "good_ending";
+};
+
 export type ServerEvent =
   | AgentSpeechEvent
   | AgentInterruptEvent
@@ -117,7 +135,11 @@ export type ServerEvent =
   | SlotskyTriggerEvent
   | CameraObscuredEvent
   | HintEvent
-  | PlayerSpeakPromptEvent;
+  | PlayerSpeakPromptEvent
+  | CardDiscoveredEvent
+  | DreadTimerStartEvent
+  | GameOverEvent
+  | GoodEndingEvent;
 
 // ── Outbound payload types (client → server) ─────────────────────────────────────────────────────────────────────
 
@@ -126,7 +148,7 @@ export type ClientEvent =
   | { type: "player_speech"; audio: string; timestamp: number }
   | { type: "player_frame"; jpeg: string; timestamp: number }
   | { type: "session_end" }
-  | { type: "card_collected"; sessionId: string }
+  | { type: "card_collected"; cardId: "card1" | "card2" }
   | { type: "intro_complete" };
 
 // ── Context shape ──────────────────────────────────────────────────────────

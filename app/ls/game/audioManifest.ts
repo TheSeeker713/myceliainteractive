@@ -56,10 +56,7 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
     `${S}/sfx_water_echo_4.mp3`,
   ],
   // Session-locked variant of rushing wind for intro cinematic
-  wind_intro: [
-    `${S}/rushing_wind.mp3`,
-    `${S}/rushing_wind_2.mp3`,
-  ],
+  wind_intro: [`${S}/rushing_wind.mp3`, `${S}/rushing_wind_2.mp3`],
 
   // ── SFX: Transmission / Session ─────────────────────────────────────────
   voicebox_activate: [
@@ -97,10 +94,7 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
   fear_critical: [`${S}/fear_critical.mp3`],
 
   // ── SFX: Slotsky anomalies ───────────────────────────────────────────────
-  slotsky_bells: [
-    `${S}/slotsky_bells.mp3`,
-    `${S}/sfx_slotsky.mp3`,
-  ],
+  slotsky_bells: [`${S}/slotsky_bells.mp3`, `${S}/sfx_slotsky.mp3`],
   slotsky_cards: [`${S}/slotsky_cards.mp3`],
   slotsky_lights: [`${S}/slotsky_lights.mp3`],
   slotsky_geometry: [
@@ -110,10 +104,7 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
     `${S}/slotsky_geometry_4.mp3`,
   ],
   // fourth_wall_correction fires bells first, then crackle 1.5 s later
-  fourth_wall_bells: [
-    `${S}/slotsky_bells.mp3`,
-    `${S}/sfx_slotsky.mp3`,
-  ],
+  fourth_wall_bells: [`${S}/slotsky_bells.mp3`, `${S}/sfx_slotsky.mp3`],
   fourth_wall_crackle: [`${S}/fourth_wall_crackle.mp3`],
 
   // ── SFX: Glitch events ───────────────────────────────────────────────────
@@ -131,10 +122,7 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
     `${S}/sfx_glitch_medium_3.mp3`,
     `${S}/sfx_glitch_medium_4.mp3`,
   ],
-  glitch_high: [
-    `${S}/glitch_high.mp3`,
-    `${S}/sfx_glitch_high.mp3`,
-  ],
+  glitch_high: [`${S}/glitch_high.mp3`, `${S}/sfx_glitch_high.mp3`],
 
   // ── SFX: Proximity / Session endings ────────────────────────────────────
   proximity_echo: [`${S}/proximity_echo.mp3`],
@@ -159,11 +147,19 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
 
   // ── SFX: Whisper / Relay ─────────────────────────────────────────────────
   jason_whisper: [`${S}/jason_whisper_mode.mp3`],
-  relay_true: [
-    `${S}/relay_true.mp3`,
-    `${S}/relay_true_2.mp3`,
-  ],
+  relay_true: [`${S}/relay_true.mp3`, `${S}/relay_true_2.mp3`],
   relay_false: [`${S}/relay_false.mp3`],
+
+  // ── SFX: Card + dread timer + endings ───────────────────────────────────
+  card_appear: [`${S}/card_appear.mp3`, `${S}/card_appear_2.mp3`],
+  heartbeat_low: [`${S}/heartbeat_low.mp3`],
+  heartbeat_mid: [`${S}/heartbeat_mid.mp3`],
+  heartbeat_high1: [`${S}/heartbeat_high1.mp3`],
+  heartbeat_high2: [`${S}/heartbeat_high2.mp3`],
+  distant_growl1: [`${S}/distant_growl1.mp3`],
+  distant_growl2: [`${S}/distant_growl2.mp3`],
+  monster_sound1: [`${S}/monster_sound1.mp3`],
+  monster_sound2: [`${S}/monster_sound2.mp3`],
 };
 
 export type MusicTier =
@@ -184,4 +180,7 @@ export const SESSION_LOCKED_KEYS: string[] = [
 ];
 
 // Loaded first in preloadAll so they are ready before first session_ready
-export const PRIORITY_KEYS: string[] = ["ambient_cold_open", "ambient_water_echo"];
+export const PRIORITY_KEYS: string[] = [
+  "ambient_cold_open",
+  "ambient_water_echo",
+];
