@@ -1,0 +1,198 @@
+.hud-glitch-scanlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 0, 0, 0.08) 2px,
+    rgba(255, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hud-glitch-active-high::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 100vmax rgba(180, 0, 0, 0.35);
+  pointer-events: none;
+  z-index: 31;
+}
+
+.scene-container {
+  position: absolute;
+  inset: 0;
+}
+
+.scene-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 38% 32% at 50% 50%,
+    transparent 0%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.55) 75%,
+    rgba(0, 0, 0, 0.92) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 2s ease;
+}
+
+.scene-container.generator-lit::after {
+  opacity: 0;
+}
+
+.scene-container.generator-amber {
+  filter: sepia(0.3) saturate(1.2);
+  transition: filter 3s ease;
+}
+
+.vhs-swap {
+  animation: vhs-swap 0.3s linear forwards;
+}
+
+.generator-flicker-anim {
+  animation: generator-flicker 1.5s ease-out forwards;
+}
+
+.glitch-effect {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-effect::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--hero-magenta-primary);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim-1 5s infinite linear alternate-reverse;
+}
+
+.glitch-effect::after {
+  left: -2px;
+  text-shadow: -2px 0 var(--hero-cyan-primary);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim-2 5s infinite linear alternate-reverse;
+}
+
+.vhs-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.vhs-effect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: var(--z-overlay);
+  animation: vhs-flicker 0.1s infinite;
+}
+
+.split-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.split-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  transition: transform var(--transition-slow) var(--ease-smooth);
+}
+
+.split-panel-left {
+  left: 0;
+  background: linear-gradient(
+    135deg,
+    var(--hero-bg-dark),
+    var(--hero-bg-default)
+  );
+}
+
+.split-panel-right {
+  right: 0;
+  background: linear-gradient(
+    135deg,
+    var(--hero-bg-default),
+    var(--hero-bg-light)
+  );
+}
+
+.split-container:hover .split-panel-left {
+  transform: translateX(-5%);
+}
+
+.split-container:hover .split-panel-right {
+  transform: translateX(5%);
+}
+
+.hero-gradient {
+  background: radial-gradient(
+    circle at 20% 30%,
+    #2c1462 0%,
+    #140a36 45%,
+    #08041a 100%
+  );
+}
+
+.text-gradient-magenta {
+  background: linear-gradient(
+    90deg,
+    var(--hero-magenta-primary),
+    var(--hero-magenta-secondary)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(
+    90deg,
+    var(--hero-cyan-primary),
+    var(--hero-cyan-secondary)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-magenta {
+  box-shadow:
+    0 0 20px rgba(139, 44, 245, 0.45),
+    0 0 40px rgba(139, 44, 245, 0.25);
+}
+
+.glow-cyan {
+  box-shadow:
+    0 0 20px rgba(0, 199, 255, 0.45),
+    0 0 40px rgba(0, 199, 255, 0.25);
+}

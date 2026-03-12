@@ -1,0 +1,211 @@
+@keyframes hud-glitch-low {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-2px, 1px);
+  }
+  30% {
+    transform: translate(1px, -1px);
+  }
+  50% {
+    transform: translate(-1px, 0);
+  }
+  70% {
+    transform: translate(2px, 1px);
+  }
+  90% {
+    transform: translate(0, -1px);
+  }
+}
+
+@keyframes hud-glitch-medium {
+  0%,
+  100% {
+    transform: translate(0, 0) skewX(0deg);
+    filter: none;
+  }
+  10% {
+    transform: translate(-4px, 2px) skewX(0.5deg);
+    filter: hue-rotate(30deg);
+  }
+  20% {
+    transform: translate(3px, -1px) skewX(-0.3deg);
+    filter: hue-rotate(-20deg);
+  }
+  30% {
+    transform: translate(-2px, 3px) skewX(0.8deg);
+    filter: hue-rotate(60deg) saturate(1.5);
+  }
+  40% {
+    transform: translate(4px, -2px) skewX(-0.5deg);
+    filter: none;
+  }
+  50% {
+    transform: translate(-3px, 1px) skewX(1deg);
+    filter: hue-rotate(90deg);
+  }
+  60% {
+    transform: translate(2px, -3px) skewX(-0.8deg);
+    filter: hue-rotate(-40deg);
+  }
+  70% {
+    transform: translate(-1px, 2px) skewX(0.3deg);
+    filter: saturate(2);
+  }
+  80% {
+    transform: translate(3px, -1px) skewX(-0.5deg);
+    filter: hue-rotate(45deg);
+  }
+  90% {
+    transform: translate(-2px, 0) skewX(0.5deg);
+    filter: none;
+  }
+}
+
+@keyframes hud-glitch-high {
+  0%,
+  100% {
+    transform: translate(0, 0) skewX(0deg) scale(1);
+    filter: none;
+  }
+  5% {
+    transform: translate(-6px, 3px) skewX(2deg) scale(1.01);
+    filter: hue-rotate(180deg);
+  }
+  10% {
+    transform: translate(5px, -4px) skewX(-1.5deg) scale(0.99);
+    filter: saturate(3);
+  }
+  15% {
+    transform: translate(-4px, 2px) skewX(3deg) scale(1.02);
+    filter: none;
+  }
+  20% {
+    transform: translate(6px, -2px) skewX(-2deg) scale(1);
+    filter: hue-rotate(90deg);
+  }
+  25% {
+    transform: translate(-3px, 5px) skewX(1deg) scale(0.98);
+    filter: none;
+  }
+  30% {
+    transform: translate(4px, -3px) skewX(-3deg) scale(1.01);
+    filter: saturate(2);
+  }
+  40% {
+    transform: translate(-5px, 1px) skewX(2deg) scale(1);
+    filter: saturate(3) hue-rotate(270deg);
+  }
+  50% {
+    transform: translate(3px, -5px) skewX(-1deg) scale(1.01);
+    filter: none;
+  }
+  60% {
+    transform: translate(-6px, 4px) skewX(2.5deg) scale(0.99);
+    filter: hue-rotate(180deg);
+  }
+  70% {
+    transform: translate(5px, -2px) skewX(-2deg) scale(1.02);
+    filter: saturate(2);
+  }
+  80% {
+    transform: translate(-3px, 3px) skewX(1.5deg) scale(1);
+    filter: saturate(2);
+  }
+  90% {
+    transform: translate(4px, -4px) skewX(-1deg) scale(1.01);
+    filter: none;
+  }
+}
+
+@keyframes trust-meter-pulse {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes demo-end-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vhs-swap {
+  0% {
+    filter: saturate(2) hue-rotate(20deg);
+    transform: scaleX(1.01) translateY(-2px);
+  }
+  33% {
+    filter: saturate(0) brightness(1.4);
+    transform: scaleX(0.995) translateY(3px);
+  }
+  66% {
+    filter: saturate(1.5) hue-rotate(-15deg);
+    transform: scaleX(1.005) translateY(-1px);
+  }
+  100% {
+    filter: none;
+    transform: none;
+  }
+}
+
+@keyframes card-glow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 12px rgba(139, 44, 245, 0.6))
+      drop-shadow(0 0 24px rgba(139, 44, 245, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(139, 44, 245, 0.9))
+      drop-shadow(0 0 40px rgba(139, 44, 245, 0.5));
+  }
+}
+
+@keyframes card-slide-out {
+  from {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate(120%, 40%) rotate(25deg);
+    opacity: 0;
+  }
+}
+
+@keyframes generator-flicker {
+  0% {
+    filter: brightness(0.15);
+  }
+  30% {
+    filter: brightness(0.8);
+  }
+  60% {
+    filter: brightness(0.4);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+@keyframes gm-eye-iris-pulse {
+  0%,
+  100% {
+    r: 5;
+    opacity: 0.8;
+  }
+  50% {
+    r: 6;
+    opacity: 1;
+  }
+}
