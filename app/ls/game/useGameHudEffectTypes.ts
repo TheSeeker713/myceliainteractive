@@ -1,6 +1,7 @@
 "use client";
 
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
+import type { MusicTier } from "./audioManifest";
 import type {
   CardDiscoveredEvent,
   ClientEvent,
@@ -31,7 +32,7 @@ export type UseGameHudEffectsArgs = {
   ensureGainNodes: () => void;
   preloadAll: () => void;
   playSFX: (key: string, volumeScale?: number) => void;
-  crossfadeMusic: (key: string, durationMs?: number) => void;
+  crossfadeMusic: (key: MusicTier, durationMs?: number) => void;
   stopMusic: (fadeDurationMs?: number) => void;
   startAmbientLoop: (key: string) => void;
   stopAmbientLoop: (fadeDurationMs?: number) => void;

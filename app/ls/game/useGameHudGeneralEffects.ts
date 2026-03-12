@@ -2,9 +2,12 @@
 
 import { useEffect } from "react";
 import type {
+  AutoplayAdvanceEvent,
   FmvTriggerEvent,
   HintEvent,
   HudGlitchEvent,
+  NpcIdleNudgeEvent,
+  OverlayTextEvent,
   SceneImageEvent,
   SceneVideoEvent,
   SessionErrorEvent,
@@ -58,7 +61,7 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     const ev = lastEvent as SceneImageEvent;
     const key = ev.payload.sceneKey ?? "";
     const isGeneratorScene =
-      key.includes("zone_merge") || key.includes("zone_park_shore");
+      key.includes("generator_area") || key.includes("zone_park_shore");
     if (!isGeneratorScene) return;
 
     setGeneratorFlickering(true);
@@ -87,6 +90,45 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       setServerHint(null);
       serverHintTimerRef.current = null;
     }, 6000);
+  }, [lastEvent, serverHintTimerRef, setServerHint]);
+
+  useEffect(() => {
+    if (lastEvent?.type !== "overlay_text") return;
+    const ev = lastEvent as OverlayTextEvent;
+    setServerHint(ev.payload.text);
+    if (serverHintTimerRef.current) clearTimeout(serverHintTimerRef.current);
+    serverHintTimerRef.current = setTimeout(() => {
+      setServerHint(null);
+      serverHintTimerRef.current = null;
+    }, Math.max(800, ev.payload.durationMs || 1800));
+  }, [lastEvent, serverHintTimerRef, setServerHint]);
+
+  useEffect(() => {
+    if (lastEvent?.type !== "npc_idle_nudge") return;
+    const ev = lastEvent as NpcIdleNudgeEvent;
+    const text =
+      ev.payload.urgency === "urgent"
+        ? "Talk to Jason now."
+        : "Talk to Jason.";
+    setServerHint(text);
+    if (serverHintTimerRef.current) clearTimeout(serverHintTimerRef.current);
+    serverHintTimerRef.current = setTimeout(() => {
+      setServerHint(null);
+      serverHintTimerRef.current = null;
+    }, ev.payload.urgency === "urgent" ? 2400 : 1800);
+  }, [lastEvent, serverHintTimerRef, setServerHint]);
+
+  useEffect(() => {
+    if (lastEvent?.type !== "autoplay_advance") return;
+    const ev = lastEvent as AutoplayAdvanceEvent;
+    setServerHint(
+      `Autoplay ${ev.payload.fromStep} -> ${ev.payload.toStep} (${ev.payload.reason})`,
+    );
+    if (serverHintTimerRef.current) clearTimeout(serverHintTimerRef.current);
+    serverHintTimerRef.current = setTimeout(() => {
+      setServerHint(null);
+      serverHintTimerRef.current = null;
+    }, 2200);
   }, [lastEvent, serverHintTimerRef, setServerHint]);
 
   useEffect(() => {

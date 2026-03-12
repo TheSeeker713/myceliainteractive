@@ -107,6 +107,33 @@ export type CardDiscoveredEvent = {
   cardId: "card1" | "card2";
 };
 
+export type OverlayTextEvent = {
+  type: "overlay_text";
+  payload: {
+    text: string;
+    variant: string;
+    durationMs: number;
+  };
+};
+
+export type NpcIdleNudgeEvent = {
+  type: "npc_idle_nudge";
+  payload: {
+    phase: string;
+    secondsSilent: number;
+    urgency: "soft" | "urgent";
+  };
+};
+
+export type AutoplayAdvanceEvent = {
+  type: "autoplay_advance";
+  payload: {
+    fromStep: number;
+    toStep: number;
+    reason: "timeout" | "npc_choice";
+  };
+};
+
 export type DreadTimerStartEvent = {
   type: "dread_timer_start";
   durationMs: number;
@@ -137,6 +164,9 @@ export type ServerEvent =
   | HintEvent
   | PlayerSpeakPromptEvent
   | CardDiscoveredEvent
+  | OverlayTextEvent
+  | NpcIdleNudgeEvent
+  | AutoplayAdvanceEvent
   | DreadTimerStartEvent
   | GameOverEvent
   | GoodEndingEvent;

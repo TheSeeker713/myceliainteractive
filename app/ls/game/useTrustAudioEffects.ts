@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { ServerEvent, TrustUpdateEvent } from "./GameWSContext";
+import type { MusicTier } from "./audioManifest";
 
 export function useTrustAudioEffects({
   lastEvent,
@@ -10,7 +11,7 @@ export function useTrustAudioEffects({
 }: {
   lastEvent: ServerEvent | null;
   playSFX: (key: string, volumeScale?: number) => void;
-  crossfadeMusic: (key: string, durationMs?: number) => void;
+  crossfadeMusic: (key: MusicTier, durationMs?: number) => void;
 }) {
   const prevTrustRef = useRef<number>(0.5);
   const prevFearRef = useRef<number>(0.0);
