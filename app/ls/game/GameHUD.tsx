@@ -10,9 +10,12 @@ import {
 import { useGameWS } from "./GameWSContext";
 import { useAudioLayers } from "./useAudioLayers";
 import { useGameError } from "./useGameError";
+import { useAgentAudio } from "./useAgentAudio";
+import { useSceneCallbacks } from "./useSceneCallbacks";
+import { TrustMeter } from "./TrustMeter";
+import { CardCollectibleOverlay } from "./CardCollectibleOverlay";
 import { ErrorOverlay, ErrorModal } from "./ErrorOverlay";
 import type {
-  AgentSpeechEvent,
   FmvTriggerEvent,
   HudGlitchEvent,
   TrustUpdateEvent,
@@ -51,22 +54,10 @@ export default function GameHUD({
   cameraObscured?: boolean;
   onStopMedia?: () => void;
 }) {
-  const {
-    lastEvent,
-    status,
-    sceneImage,
-    sceneVideo,
-    playerHasSpoken,
-    clearSceneVideo,
-    send,
-  } = useGameWS();
+  const { lastEvent, status, sceneImage, sceneVideo, clearSceneVideo, send } =
+    useGameWS();
   const glitchRef = useRef<HTMLDivElement>(null);
   const fmvRef = useRef<HTMLVideoElement>(null);
-  // nextPlayTimeRef schedules chunks end-to-end for gapless playback.
-  const nextPlayTimeRef = useRef<number>(0);
-  // All in-flight scheduled source nodes. Cleared on agent_interrupt so Jason
-  // stops immediately when the player speaks over him.
-  const sourceNodesRef = useRef<AudioBufferSourceNode[]>([]);
 
   // F1: text hint
   const [showHint, setShowHint] = useState(false);
@@ -92,7 +83,9 @@ export default function GameHUD({
   const [generatorLit, setGeneratorLit] = useState(false);
   const [generatorAmber, setGeneratorAmber] = useState(false);
   const [generatorFlickering, setGeneratorFlickering] = useState(false);
-  const generatorFlickerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const generatorFlickerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   // FE-9: VHS swap state
   const [vhsSwapping, setVhsSwapping] = useState(false);
@@ -107,10 +100,6 @@ export default function GameHUD({
   // hint event (backend B11) — fading text overlay
   const [serverHint, setServerHint] = useState<string | null>(null);
   const serverHintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // FE-12: Audrey-specific audio nodes (not cancelled by agent_interrupt)
-  const audreySourceNodesRef = useRef<AudioBufferSourceNode[]>([]);
-  const audreyNextPlayTimeRef = useRef<number>(0);
 
   // F4: scene video
   const sceneVideoRef = useRef<HTMLVideoElement>(null);
@@ -130,9 +119,13 @@ export default function GameHUD({
 
   const { errorQueue, dispatchError, dismissError } = useGameError();
   const [cameraObscuredVisible, setCameraObscuredVisible] = useState(false);
-  const cameraObscuredTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cameraObscuredTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   const [webcamDeniedVisible, setWebcamDeniedVisible] = useState(false);
-  const webcamDeniedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const webcamDeniedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   // Trust/fear tracking — compare to previous values to detect crossings
   const prevTrustRef = useRef<number>(0.5);
@@ -140,66 +133,28 @@ export default function GameHUD({
   const fearThresholdsCrossedRef = useRef<Set<number>>(new Set());
   // Fires once when trust first crosses 0.6 upward (resets if trust drops < 0.5)
   const trustKnowledgeFiredRef = useRef(false);
-  // Fires voicebox_activate + music_intro on Jason's very first utterance
-  const firstJasonSpeechRef = useRef(false);
 
-  // F3: push a new image through the crossfade pipeline
-  const pushImage = useCallback((dataUri: string) => {
-    const current = activeImgLayerRef.current;
-    if (current === 0) {
-      setImgLayerB(dataUri);
-      requestAnimationFrame(() => {
-        setActiveImgLayer(1);
-        activeImgLayerRef.current = 1;
-      });
-    } else {
-      setImgLayerA(dataUri);
-      requestAnimationFrame(() => {
-        setActiveImgLayer(0);
-        activeImgLayerRef.current = 0;
-      });
-    }
-  }, []);
+  useAgentAudio({
+    audioCtxRef,
+    lastEvent,
+    playSFX,
+    crossfadeMusic,
+    dispatchError,
+  });
 
-  // F4: capture last video frame and push through crossfade, then clear video
-  const handleSceneVideoEnded = useCallback(() => {
-    const video = sceneVideoRef.current;
-    const canvas = canvasRef.current;
-    let captured = false;
-    if (video && canvas) {
-      try {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext("2d");
-        if (ctx) {
-          ctx.drawImage(video, 0, 0);
-          const frameDataUri = canvas.toDataURL("image/jpeg", 0.85);
-          pushImage(frameDataUri);
-          captured = true;
-        }
-      } catch {
-        console.warn(
-          "[GameHUD] Canvas tainted — video stays frozen on last frame",
-        );
-      }
-    }
-    if (captured && video) video.style.display = "none";
-    clearSceneVideo();
-  }, [clearSceneVideo, pushImage]);
-
-  // FE-9: Apply VHS swap animation just before video ends.
-  const handleVideoTimeUpdate = useCallback(() => {
-    const video = sceneVideoRef.current;
-    if (!video || vhsSwapping) return;
-    if (video.duration > 0 && video.currentTime >= video.duration - 0.05) {
-      setVhsSwapping(true);
-      if (vhsSwapTimerRef.current) clearTimeout(vhsSwapTimerRef.current);
-      vhsSwapTimerRef.current = setTimeout(() => {
-        setVhsSwapping(false);
-        vhsSwapTimerRef.current = null;
-      }, 300);
-    }
-  }, [vhsSwapping]);
+  const { pushImage, handleSceneVideoEnded, handleVideoTimeUpdate } =
+    useSceneCallbacks({
+      activeImgLayerRef,
+      setImgLayerA,
+      setImgLayerB,
+      setActiveImgLayer,
+      sceneVideoRef,
+      canvasRef,
+      clearSceneVideo,
+      vhsSwapping,
+      setVhsSwapping,
+      vhsSwapTimerRef,
+    });
 
   // FE-8 / FE-11: Detect generator scene keys on scene_image events.
   useEffect(() => {
@@ -247,27 +202,6 @@ export default function GameHUD({
     preloadAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionActive]);
-
-  // Barge-in: player spoke over Jason — kill all queued audio immediately.
-  // FE-12: Audrey audio (audreySourceNodesRef) is NOT cancelled here.
-  useEffect(() => {
-    if (lastEvent?.type !== "agent_interrupt") return;
-    playSFX("barge_in");
-    const nodes = sourceNodesRef.current;
-    for (const node of nodes) {
-      try {
-        node.stop();
-      } catch {
-        /* already stopped or never started */
-      }
-    }
-    sourceNodesRef.current = [];
-    nextPlayTimeRef.current = 0;
-    console.log(
-      `[GameHUD] agent_interrupt — cancelled ${nodes.length} Jason audio nodes (Audrey preserved)`,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastEvent]);
 
   // F5: HUD Glitch effect — applies full-screen CSS animation per intensity
   useEffect(() => {
@@ -333,14 +267,14 @@ export default function GameHUD({
       setShowHint(false);
       hintTimerRef.current = null;
     }, 8000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
   // FE-19: Camera obscured — auto-dismiss after 5s
   useEffect(() => {
     if (!cameraObscured) return;
     setCameraObscuredVisible(true);
-    if (cameraObscuredTimerRef.current) clearTimeout(cameraObscuredTimerRef.current);
+    if (cameraObscuredTimerRef.current)
+      clearTimeout(cameraObscuredTimerRef.current);
     cameraObscuredTimerRef.current = setTimeout(() => {
       setCameraObscuredVisible(false);
       cameraObscuredTimerRef.current = null;
@@ -351,7 +285,8 @@ export default function GameHUD({
   useEffect(() => {
     if (!webcamDenied) return;
     setWebcamDeniedVisible(true);
-    if (webcamDeniedTimerRef.current) clearTimeout(webcamDeniedTimerRef.current);
+    if (webcamDeniedTimerRef.current)
+      clearTimeout(webcamDeniedTimerRef.current);
     webcamDeniedTimerRef.current = setTimeout(() => {
       setWebcamDeniedVisible(false);
       webcamDeniedTimerRef.current = null;
@@ -481,159 +416,21 @@ export default function GameHUD({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
-  // Agent audio playback — raw 16-bit little-endian PCM at 24kHz from Gemini Live.
-  // decodeAudioData() only handles encoded formats (MP3/WAV) — must decode PCM manually.
-  // FE-12: Audrey uses a separate path with reverb + delay; not cancelled by agent_interrupt.
-  useEffect(() => {
-    if (lastEvent?.type !== "agent_speech") return;
-    const ev = lastEvent as AgentSpeechEvent;
-    if (!ev.audio) return;
-
-    // FE-12: Route Audrey through echo pipeline
-    if (ev.agent === "audrey") {
-      (async () => {
-        try {
-          if (!audioCtxRef.current) {
-            audioCtxRef.current = new AudioContext({ sampleRate: 24000 });
-          }
-          const ctx = audioCtxRef.current;
-          if (ctx.state === "suspended") await ctx.resume();
-
-          // Decode PCM
-          const binary = atob(ev.audio);
-          const numSamples = binary.length >> 1;
-          const float32 = new Float32Array(numSamples);
-          for (let i = 0; i < numSamples; i++) {
-            const lo = binary.charCodeAt(i * 2) & 0xff;
-            const hi = binary.charCodeAt(i * 2 + 1) & 0xff;
-            const s16 = (hi << 8) | lo;
-            float32[i] = (s16 > 32767 ? s16 - 65536 : s16) / 32768;
-          }
-          const audioBuf = ctx.createBuffer(1, numSamples, 24000);
-          audioBuf.copyToChannel(float32, 0);
-
-          // Build reverb impulse response (cached lazily per AudioContext)
-          const impulseLen = Math.floor(ctx.sampleRate * 1.5);
-          const impulse = ctx.createBuffer(2, impulseLen, ctx.sampleRate);
-          for (let ch = 0; ch < 2; ch++) {
-            const d = impulse.getChannelData(ch);
-            for (let i = 0; i < impulseLen; i++) {
-              d[i] =
-                (Math.random() * 2 - 1) *
-                Math.pow(1 - i / impulseLen, 2);
-            }
-          }
-          const convolver = ctx.createConvolver();
-          convolver.buffer = impulse;
-
-          const delay = ctx.createDelay(0.5);
-          delay.delayTime.value = 0.15;
-
-          // Routing: source → outputGain → dry(0.4) → dest
-          //                               → delay → convolver → wet(0.6) → dest
-          const source = ctx.createBufferSource();
-          source.buffer = audioBuf;
-          const outputGain = ctx.createGain();
-          outputGain.gain.value = 0.7;
-          const dryGain = ctx.createGain();
-          dryGain.gain.value = 0.4;
-          const wetGain = ctx.createGain();
-          wetGain.gain.value = 0.6;
-
-          source.connect(outputGain);
-          outputGain.connect(dryGain);
-          dryGain.connect(ctx.destination);
-          outputGain.connect(delay);
-          delay.connect(convolver);
-          convolver.connect(wetGain);
-          wetGain.connect(ctx.destination);
-
-          audreySourceNodesRef.current.push(source);
-          source.onended = () => {
-            audreySourceNodesRef.current = audreySourceNodesRef.current.filter(
-              (n) => n !== source,
-            );
-          };
-
-          const now = ctx.currentTime;
-          const startAt = Math.max(audreyNextPlayTimeRef.current, now);
-          source.start(startAt);
-          audreyNextPlayTimeRef.current = startAt + audioBuf.duration;
-        } catch (e) {
-          console.error("[GameHUD] Audrey audio playback error:", e);
-        }
-      })();
-      return;
-    }
-
-    // Jason / default agent path
-    // Detect start of a new utterance (audio queue was empty when this chunk arrived).
-    // First-ever utterance: voicebox_activate + crossfade to intro music.
-    // Subsequent utterances: transmission ping.
-    if (sourceNodesRef.current.length === 0) {
-      if (!firstJasonSpeechRef.current) {
-        firstJasonSpeechRef.current = true;
-        playSFX("voicebox_activate", 0.7);
-        crossfadeMusic("music_intro", 2000);
-      } else {
-        playSFX("transmission_ping", 0.7);
-      }
-    }
-
-    (async () => {
-      try {
-        if (!audioCtxRef.current) {
-          audioCtxRef.current = new AudioContext({ sampleRate: 24000 });
-        }
-        const ctx = audioCtxRef.current;
-        if (ctx.state === "suspended") await ctx.resume();
-
-        // Decode base64 → raw bytes → Int16 → Float32
-        const binary = atob(ev.audio);
-        const numSamples = binary.length >> 1; // 2 bytes per 16-bit sample
-        const float32 = new Float32Array(numSamples);
-        for (let i = 0; i < numSamples; i++) {
-          const lo = binary.charCodeAt(i * 2) & 0xff;
-          const hi = binary.charCodeAt(i * 2 + 1) & 0xff;
-          const s16 = (hi << 8) | lo;
-          float32[i] = (s16 > 32767 ? s16 - 65536 : s16) / 32768;
-        }
-
-        const audioBuf = ctx.createBuffer(1, numSamples, 24000);
-        audioBuf.copyToChannel(float32, 0);
-
-        const source = ctx.createBufferSource();
-        source.buffer = audioBuf;
-        source.connect(ctx.destination);
-        sourceNodesRef.current.push(source);
-        source.onended = () => {
-          sourceNodesRef.current = sourceNodesRef.current.filter(
-            (n) => n !== source,
-          );
-        };
-
-        // Schedule gapless: each chunk starts exactly where the previous ended
-        const now = ctx.currentTime;
-        const startAt = Math.max(nextPlayTimeRef.current, now);
-        source.start(startAt);
-        nextPlayTimeRef.current = startAt + audioBuf.duration;
-      } catch (e) {
-        console.error("[GameHUD] Audio playback error:", e);
-        dispatchError({
-          severity: "recoverable",
-          message: "Audio playback was interrupted.",
-          context: "agent_speech",
-        });
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastEvent]);
-
   // End session helper — graceful WS close then reload
   const handleEndSession = useCallback(() => {
     send({ type: "session_end" });
     setTimeout(() => window.location.reload(), 500);
   }, [send]);
+
+  const handleCollectCard = useCallback(() => {
+    if (cardCollecting) return;
+    setCardCollecting(true);
+    if (cardLabelTimerRef.current) clearTimeout(cardLabelTimerRef.current);
+    setTimeout(() => setShowCard(false), 500);
+    const wsSessionId =
+      (lastEvent as { sessionId?: string } | null)?.sessionId ?? "";
+    send({ type: "card_collected", sessionId: wsSessionId });
+  }, [cardCollecting, lastEvent, send]);
 
   // WS error state → fatal error card
   useEffect(() => {
@@ -867,117 +664,16 @@ export default function GameHUD({
       )}
 
       {/* ── Trust indicator (bottom-right) ─────────────────── */}
-      {trustEvent && (
-        <div className="absolute bottom-6 right-6 z-40 font-mono text-xs text-purple-300/80 flex flex-col items-end gap-1">
-          <span className="tracking-widest uppercase text-[10px] text-purple-400/50">
-            {trustEvent.agent}
-          </span>
-          <div className="flex items-center gap-2">
-            <span className="text-purple-200">TRUST</span>
-            <div className="w-24 h-1 bg-purple-900/60 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-purple-400 transition-all duration-700"
-                style={{ width: `${trustEvent.trust_level * 100}%` }}
-              />
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-red-300">FEAR</span>
-            <div className="w-24 h-1 bg-red-900/60 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-red-500 transition-all duration-700"
-                style={{ width: `${trustEvent.fear_index * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <TrustMeter trustEvent={trustEvent} />
 
       {/* ── FE-10: Card collectible overlay ────────────────── */}
-      {showCard && !demoEnded && (
-        <div
-          className="absolute bottom-8 right-8 z-[45] flex flex-col items-center gap-3 pointer-events-auto"
-          style={{
-            animation: cardCollecting ? "card-slide-out 0.5s ease-in forwards" : undefined,
-          }}
-          onClick={() => {
-            if (cardCollecting) return;
-            setCardCollecting(true);
-            if (cardLabelTimerRef.current) clearTimeout(cardLabelTimerRef.current);
-            setTimeout(() => setShowCard(false), 500);
-            const wsSessionId =
-              (lastEvent as { sessionId?: string } | null)?.sessionId ?? "";
-            send({ type: "card_collected", sessionId: wsSessionId });
-          }}
-        >
-          {/* Queen of Spades SVG */}
-          <div
-            style={{
-              animation: cardCollecting
-                ? undefined
-                : "card-glow-pulse 1.8s ease-in-out infinite",
-              cursor: "pointer",
-            }}
-          >
-            <svg
-              width="80"
-              height="112"
-              viewBox="0 0 80 112"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="Queen of Spades"
-            >
-              <rect
-                width="80"
-                height="112"
-                rx="6"
-                fill="#0e0e1a"
-                stroke="rgba(139,44,245,0.7)"
-                strokeWidth="1.5"
-              />
-              {/* Rank + suit corners */}
-              <text
-                x="6"
-                y="16"
-                fill="white"
-                fontFamily="serif"
-                fontSize="12"
-                fontWeight="bold"
-              >
-                Q
-              </text>
-              <text x="6" y="28" fill="white" fontFamily="serif" fontSize="10">
-                ♠
-              </text>
-              {/* Centre spade */}
-              <text
-                x="40"
-                y="68"
-                fill="white"
-                fontFamily="serif"
-                fontSize="48"
-                textAnchor="middle"
-                dominantBaseline="middle"
-              >
-                ♠
-              </text>
-            </svg>
-          </div>
-
-          {/* "pick it up?" label — fades in after 2s */}
-          {cardLabelVisible && !cardCollecting && (
-            <p
-              className="font-mono text-xs tracking-[0.25em] uppercase"
-              style={{
-                color: "rgba(192,132,252,0.8)",
-                animation: "hint-fade-in 0.8s ease-in forwards",
-              }}
-            >
-              pick it up?
-            </p>
-          )}
-        </div>
-      )}
+      <CardCollectibleOverlay
+        showCard={showCard}
+        demoEnded={demoEnded}
+        cardCollecting={cardCollecting}
+        cardLabelVisible={cardLabelVisible}
+        onCollect={handleCollectCard}
+      />
 
       {/* ── F6: Demo end overlay ────────────────────────── */}
       {endOverlayVisible && (
@@ -1002,7 +698,9 @@ export default function GameHUD({
           </p>
           {/* FE-20: Stop media tracks so browser camera/mic indicator turns off */}
           <button
-            onClick={() => { onStopMedia?.(); }}
+            onClick={() => {
+              onStopMedia?.();
+            }}
             className="mt-8 px-6 py-2 font-mono text-xs tracking-[0.25em] uppercase border border-purple-500/40 text-purple-400/70 hover:text-purple-300 hover:border-purple-400 transition-colors duration-300"
           >
             Stop Camera &amp; Microphone
@@ -1020,23 +718,22 @@ export default function GameHUD({
       )}
 
       {/* ── Camera obscured nudge (FE-19: auto-dismiss 5s) ─── */}
-      {cameraObscuredVisible &&
-        !webcamDenied &&
-        sessionActive && (
-          <div
-            className="absolute top-16 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-3 px-4 py-2 font-mono text-xs"
-            style={{
-              background: "rgba(10,10,10,0.9)",
-              border: "1px solid rgba(220,38,38,0.5)",
-              animation: "hint-fade-in-out 5s ease-in-out forwards",
-            }}
-          >
-            <span className="text-red-400">⚠</span>
-            <span className="text-red-300/80">
-              Camera cannot see you — enabling camera gives a more immersive experience
-            </span>
-          </div>
-        )}
+      {cameraObscuredVisible && !webcamDenied && sessionActive && (
+        <div
+          className="absolute top-16 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-3 px-4 py-2 font-mono text-xs"
+          style={{
+            background: "rgba(10,10,10,0.9)",
+            border: "1px solid rgba(220,38,38,0.5)",
+            animation: "hint-fade-in-out 5s ease-in-out forwards",
+          }}
+        >
+          <span className="text-red-400">⚠</span>
+          <span className="text-red-300/80">
+            Camera cannot see you — enabling camera gives a more immersive
+            experience
+          </span>
+        </div>
+      )}
 
       {/* ── Webcam denied indicator (FE-19: auto-dismiss 8s) ── */}
       {webcamDeniedVisible && sessionActive && (
@@ -1049,7 +746,8 @@ export default function GameHUD({
             animation: "hint-fade-in-out 8s ease-in-out forwards",
           }}
         >
-          Camera access was not granted — the experience will continue with audio only
+          Camera access was not granted — the experience will continue with
+          audio only
         </div>
       )}
 

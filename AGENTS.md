@@ -75,10 +75,14 @@ AGENTS.md             ← This file
   - Capturing microphone input → sending to backend
   - Capturing webcam frames → sending to backend (1 FPS JPEG)
   - Receiving agent audio responses → playing via Web Audio API
-  - Rendering HUD overlays (trust indicator)
+  - Rendering HUD overlays — **Trust Meter is a permanent, always-on UI feature** (see §11 and `documents/SHOT_SCRIPT.md` FRONTEND NOTE section for full spec)
   <!-- DEFERRED: cracked glasses HUD effect — smart glasses system deferred to roadmap (March 7, 2026) -->
-  <!-- DEPRECATED: FMV video sequences — replaced by Imagen 3 live scene generation (March 7, 2026 pivot) -->
-  - Rendering Imagen 3 scene backgrounds triggered by backend `scene_change` events
+  <!-- DEPRECATED: FMV video sequences — replaced by Imagen 4 live scene generation (March 7, 2026 pivot) -->
+  - Rendering **Imagen 4** scene backgrounds triggered by backend `scene_change` and `scene_image` events
+  - Playing **Veo 3.1 Fast** video loops triggered by backend `scene_video` events
+  - Rendering card collectible overlays on `card_discovered` events; sending `card_collected` on player click
+  - Running dread timer SFX escalation autonomously on `dread_timer_start` (no UI indicator — invisible to player)
+  - Rendering GAME OVER and GOOD ENDING screens on `game_over` / `good_ending` events
 
 ### Key Principle
 The game UI is a **dumb terminal**. It sends player input and renders what the backend tells it to render. All game logic, trust state, and agent decisions live in `liminal-sin-gemini`. Never embed game logic in the UI.
@@ -118,6 +122,28 @@ The game UI is a **dumb terminal**. It sends player input and renders what the b
 - Do **NOT** use Cloudflare AI models for any game agent logic — only Google Gemini Live.
 - **Always run `npm run build` before any deploy.** Never call `wrangler deploy` directly. Use `npm run deploy`.
 - **Hallucination recovery** — If about to overwrite existing code due to context loss, comment out the original in-place and add `// [AI: replaced because X — original preserved below for user review]`. Never silently delete working logic.
+
+---
+
+## 6a. Dead End Protocol — Anti-Spiral Rule
+
+**Trigger condition** — STOP and surface to the user if ANY of the following occur:
+- The same error appears after **2 consecutive fix attempts**
+- A fix requires removing or commenting out existing functional code as a "diagnostic step"
+- The root cause cannot be determined from reading the code and error message alone
+
+**Required behavior — report before touching any more code:**
+1. State the exact error message (copy verbatim)
+2. State what was already tried (max 3 bullet points)
+3. State one specific hypothesis about the root cause
+4. Ask the user one targeted question to confirm or deny that hypothesis
+
+**Forbidden responses to errors:**
+- Do **NOT** make destructive changes as diagnostic steps
+- Do **NOT** retry the same approach with minor variations more than once
+- Do **NOT** continue iterating silently until context is exhausted
+
+**Hard limit:** If the error is not resolved after 2 targeted fixes, surface the problem to the user before writing any more code.
 
 ---
 
@@ -170,11 +196,63 @@ npm run deploy
 
 ## 10. Cross-Repo Coordination
 
-See `TEAM_CONTRACT.md` for:
-- The WebSocket event contract between this repo and `liminal-sin-gemini`
-- How to run the mock backend server during frontend development
-- Rules for changes that affect both repos simultaneously
-- The full split of responsibilities between MI and LS
+See `TEAM_CONTRACT.md` for the coordination rules between this repo and `liminal-sin-gemini`.
 
-**CRITICAL REQUIREMENT:** Read \documents/BACKEND_SIGNALS.md\ to understand the WebSocket contract and your VAD (Voice Activity Detection) implementation responsibilities for frontend-backend interaction.
+**CRITICAL REQUIREMENT:** Read `documents/BACKEND_SIGNALS.md` for the WebSocket contract and VAD responsibilities. Read `documents/SHOT_SCRIPT.md` for the complete phase-by-phase frontend implementation spec.
+
+### WebSocket Event Reference (frontend scope)
+
+| Event | Direction | Payload | Frontend Action |
+|---|---|---|---|
+| `session_ready` | BE→FE | `{ session_id }` | Begin credits sequence (Phase 2) |
+| `agent_speech` | BE→FE | `{ agent, audio: base64 }` | Play audio via Web Audio API |
+| `agent_interrupt` | BE→FE | `{ agent }` | Stop current audio playback immediately |
+| `trust_update` | BE→FE | `{ trust_level: number, fear_index: number }` | Update Trust Meter bars (smooth transition) |
+| `hud_glitch` | BE→FE | `{ intensity, duration_ms }` | Trigger screen glitch effect |
+| `scene_change` | BE→FE | `{ payload: { sceneKey } }` | Fire `glitch_low` SFX; apply loading state |
+| `scene_image` | BE→FE | `{ payload: { sceneKey, data: base64 } }` | Display Imagen 4 still; fire `glitch_low` SFX |
+| `scene_video` | BE→FE | `{ payload: { sceneKey, url } }` | Replace still with Veo video loop; fire `glitch_low` SFX |
+| `player_speak_prompt` | BE→FE | `{}` | Reveal mic indicator; show "SPEAK TO JASON" hint; **activate Trust Meter** |
+| `hint` | BE→FE | `{ text }` | Show subtle hint overlay |
+| `audience_update` | BE→FE | `{ payload: { personCount, groupDynamic, observedEmotions } }` | No UI — internal GM data |
+| `card_discovered` | BE→FE | `{ cardId: 'card1'\|'card2' }` | Show floating card overlay (collectible); fire `card_appear` SFX |
+| `dread_timer_start` | BE→FE | `{ durationMs }` | Start invisible SFX escalation timer (no UI indicator) |
+| `game_over` | BE→FE | `{}` | Fire `monster_sound1`+`monster_sound2`; fade to black; show GAME OVER text |
+| `good_ending` | BE→FE | `{}` | Show `[PLAY AGAIN]` button after 5s |
+| `slotsky_trigger` | BE→FE | `{ payload: { anomalyType } }` | Trigger Slotsky anomaly visual |
+| `intro_complete` | FE→BE | `{}` | Send after credits sequence ends |
+| `player_speech` | FE→BE | `{ audio: base64 }` | Send continuously when mic is active |
+| `player_frame` | FE→BE | `{ jpeg: base64 }` | Send at 1 FPS when camera is active |
+| `card_collected` | FE→BE | `{ cardId }` | Send when player clicks a card overlay |
+
+---
+
+## 11. ⚠️ Trust Meter — Permanent UI Spec
+
+The Trust Meter is a **permanent, non-removable UI feature** of the game shell. Full implementation spec lives in `documents/SHOT_SCRIPT.md` under the section `## ⚠️ FRONTEND NOTE — JASON TRUST METER (PERMANENT UI)`.
+
+**Summary:**
+- Fixed widget, lower-right corner. Two bars: `TRUST` and `FEAR` (all caps).
+- Data source: `trust_update` WS event — `{ trust_level: number, fear_index: number }` (both floats 0.0–1.0).
+- Hidden during Phases 1–2. Activates (becomes visible + starts pulsing) on `player_speak_prompt`.
+- Slow CSS `opacity` pulse animation (~5s cycle). Bar fill animates on data change (~500ms CSS transition).
+- Default values before first `trust_update`: `trust_level = 0.5`, `fear_index = 0.3`.
+- Do NOT remove this widget during any refactor. Do NOT gate it behind a feature flag.
+
+---
+
+## 12. SFX Catalog (Frontend Responsibility)
+
+All game SFX are owned and triggered by the frontend. The backend provides the event cue; the frontend plays the file. See `documents/SHOT_SCRIPT.md` for the full per-phase SFX schedule.
+
+**Dread Timer SFX (Phase 7 — invisible to player, frontend-only):**
+| Window | File(s) | Behavior |
+|---|---|---|
+| 0–30s | `heartbeat_low` | Barely audible, ~48 BPM |
+| 30–60s | `heartbeat_mid` | Louder, ~68 BPM |
+| 60–90s | `heartbeat_high1` + `heartbeat_high2` + `distant_growl1` + `distant_growl2` | Full panic, simultaneous |
+
+**Game Over SFX:** `monster_sound1` + `monster_sound2` fired simultaneously on `game_over` — max amplitude, no loop, hard cut to silence.
+
+**Universal Scene Transition SFX:** `glitch_low` (random variant) fires on every `scene_change`, `scene_image`, and `scene_video` event.
 
