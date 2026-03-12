@@ -15,6 +15,10 @@ import { useSceneCallbacks } from "./useSceneCallbacks";
 import { TrustMeter } from "./TrustMeter";
 import { CardCollectibleOverlay } from "./CardCollectibleOverlay";
 import { DemoEndOverlay } from "./DemoEndOverlay";
+import { GMEyeIndicator } from "./GMEyeIndicator";
+import { StatusNotices } from "./StatusNotices";
+import { HintOverlays } from "./HintOverlays";
+import { SceneVisualLayers } from "./SceneVisualLayers";
 import { ErrorOverlay, ErrorModal } from "./ErrorOverlay";
 import type {
   FmvTriggerEvent,
@@ -57,7 +61,6 @@ export default function GameHUD({
 }) {
   const { lastEvent, status, sceneImage, sceneVideo, clearSceneVideo, send } =
     useGameWS();
-  const glitchRef = useRef<HTMLDivElement>(null);
   const fmvRef = useRef<HTMLVideoElement>(null);
 
   // F1: text hint
@@ -488,181 +491,30 @@ export default function GameHUD({
           : undefined
       }
     >
-      {/* ── Scene image crossfade layers + FE-8 vignette (F3) ── */}
-      <div
-        className={[
-          "scene-container",
-          generatorLit ? "generator-lit" : "",
-          generatorAmber ? "generator-amber" : "",
-          generatorFlickering ? "generator-flicker-anim" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        {imgLayerA && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={imgLayerA}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
-            style={{ opacity: activeImgLayer === 0 ? 1 : 0 }}
-          />
-        )}
-        {imgLayerB && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={imgLayerB}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
-            style={{ opacity: activeImgLayer === 1 ? 1 : 0 }}
-          />
-        )}
-      </div>
-
-      {/* ── Scene video overlay (F4 + FE-9 VHS swap) ──────── */}
-      <video
-        ref={sceneVideoRef}
-        className={[
-          "absolute inset-0 w-full h-full object-cover z-[5]",
-          vhsSwapping ? "vhs-swap" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        style={{ display: "none" }}
-        playsInline
-        muted
-        crossOrigin="anonymous"
-        onEnded={handleSceneVideoEnded}
-        onTimeUpdate={handleVideoTimeUpdate}
-      />
-      <canvas ref={canvasRef} className="hidden" />
-
-      {/* ── FMV layer (beneath HUD overlays) ─────────────── */}
-      <video
-        ref={fmvRef}
-        className="absolute inset-0 w-full h-full object-cover z-10"
-        style={{ display: "none" }}
-        playsInline
-        muted={false}
+      <SceneVisualLayers
+        glitchClass={glitchClass}
+        generatorLit={generatorLit}
+        generatorAmber={generatorAmber}
+        generatorFlickering={generatorFlickering}
+        imgLayerA={imgLayerA}
+        imgLayerB={imgLayerB}
+        activeImgLayer={activeImgLayer}
+        sceneVideoRef={sceneVideoRef}
+        canvasRef={canvasRef}
+        vhsSwapping={vhsSwapping}
+        handleSceneVideoEnded={handleSceneVideoEnded}
+        handleVideoTimeUpdate={handleVideoTimeUpdate}
+        fmvRef={fmvRef}
       />
 
-      {/* [REMOVED March 8 2026: Cracked glass overlay deferred to roadmap. Feature removed from demo scope per user directive.
-           Frontend will use a semi-transparent Smart Glasses overlay (future). glitchRef will be null — the
-           hud_glitch useEffect is null-guarded (if (!el) return), so this is safe. Original preserved below via false && pattern. */}
-      {false && (
-        <div
-          ref={glitchRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-200"
-          style={{
-            backgroundImage: "url('/assets/images/cracked-glass.png')",
-            backgroundSize: "cover",
-            opacity: 0,
-          }}
-        />
-      )}
-
-      {/* ── F5: Glitch color/scanline overlay (high intensity only) ── */}
-      {glitchClass === "hud-glitch-active-high" && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-30 hud-glitch-scanlines"
-          style={{ backgroundColor: "rgba(255, 0, 0, 0.06)" }}
-        />
-      )}
-
-      {/* ── Scanline overlay ──────────────────────────────── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-20 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.08) 2px, rgba(255,255,255,0.08) 4px)",
-        }}
-      />
-
-      {/* ── "speak to JASON" text hint (FE-18) ─────────────── */}
-      {showHint && (
-        <div className="absolute inset-0 z-25 flex items-center justify-center pointer-events-none">
-          <p
-            className="font-mono text-sm tracking-[0.3em] uppercase"
-            style={{
-              color: "rgba(160,160,160,0.5)",
-              animation: "hint-fade-in-out 8s ease-in-out forwards",
-            }}
-          >
-            speak to JASON
-          </p>
-        </div>
-      )}
-
-      {/* ── Backend hint text overlay (B11) ─────────────── */}
-      {serverHint && (
-        <div className="absolute inset-0 z-[26] flex items-end justify-center pb-16 pointer-events-none">
-          <p
-            className="font-mono text-sm tracking-[0.2em] uppercase text-center max-w-md px-4"
-            style={{
-              color: "rgba(192,132,252,0.75)",
-              animation: "hint-fade-in 1s ease-in forwards",
-              textShadow: "0 0 12px rgba(139,44,245,0.4)",
-            }}
-          >
-            {serverHint}
-          </p>
-        </div>
-      )}
+      <HintOverlays showHint={showHint} serverHint={serverHint} />
 
       {/* ── GM Eye indicator (F2 redesign) ─────────────── */}
-      {/* Only visible when session is active, WS is open, AND webcam is capturing */}
-      {sessionActive && status === "open" && webcamActive && !demoEnded && (
-        <div
-          aria-hidden="true"
-          className="absolute top-5 right-5 z-40"
-          style={{ animation: "gm-eye-breathe 3.5s ease-in-out infinite" }}
-        >
-          <svg
-            width="44"
-            height="28"
-            viewBox="0 0 44 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Outer eye shape */}
-            <path
-              d="M2 14C2 14 10 2 22 2C34 2 42 14 42 14C42 14 34 26 22 26C10 26 2 14 2 14Z"
-              stroke="#dc2626"
-              strokeWidth="1.5"
-              fill="rgba(220, 38, 38, 0.08)"
-            />
-            {/* Iris */}
-            <circle cx="22" cy="14" r="7" fill="#991b1b" />
-            <circle
-              cx="22"
-              cy="14"
-              r="5"
-              fill="#dc2626"
-              style={{
-                animation: "gm-eye-iris-pulse 3.5s ease-in-out infinite",
-              }}
-            />
-            {/* Pupil */}
-            <circle cx="22" cy="14" r="2.5" fill="#0a0a0a" />
-            {/* Glint */}
-            <circle cx="19" cy="11.5" r="1" fill="rgba(255,255,255,0.5)" />
-          </svg>
-          {/* Red glow behind the eye */}
-          <div
-            className="absolute inset-0 rounded-full"
-            style={{
-              filter: "blur(8px)",
-              background:
-                "radial-gradient(circle, rgba(220,38,38,0.4) 0%, transparent 70%)",
-            }}
-          />
-        </div>
-      )}
+      <GMEyeIndicator
+        visible={
+          sessionActive && status === "open" && webcamActive && !demoEnded
+        }
+      />
 
       {/* ── Trust indicator (bottom-right) ─────────────────── */}
       <TrustMeter trustEvent={trustEvent} />
@@ -682,48 +534,13 @@ export default function GameHUD({
         onStopMedia={onStopMedia}
       />
 
-      {/* ── Connection status banner (dev visibility) ─────── */}
-      {status !== "open" && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-1 rounded bg-black/70 border border-red-500/40 text-red-400 text-xs font-mono tracking-widest uppercase">
-          {status === "connecting" && "Establishing Connection…"}
-          {status === "closed" && "Signal Lost"}
-          {status === "error" && "Connection Error — No Backend"}
-        </div>
-      )}
-
-      {/* ── Camera obscured nudge (FE-19: auto-dismiss 5s) ─── */}
-      {cameraObscuredVisible && !webcamDenied && sessionActive && (
-        <div
-          className="absolute top-16 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-3 px-4 py-2 font-mono text-xs"
-          style={{
-            background: "rgba(10,10,10,0.9)",
-            border: "1px solid rgba(220,38,38,0.5)",
-            animation: "hint-fade-in-out 5s ease-in-out forwards",
-          }}
-        >
-          <span className="text-red-400">⚠</span>
-          <span className="text-red-300/80">
-            Camera cannot see you — enabling camera gives a more immersive
-            experience
-          </span>
-        </div>
-      )}
-
-      {/* ── Webcam denied indicator (FE-19: auto-dismiss 8s) ── */}
-      {webcamDeniedVisible && sessionActive && (
-        <div
-          className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[55] px-4 py-2 font-mono text-[10px] tracking-widest uppercase"
-          style={{
-            background: "rgba(10,10,10,0.8)",
-            border: "1px solid rgba(220,38,38,0.3)",
-            color: "rgba(220,38,38,0.6)",
-            animation: "hint-fade-in-out 8s ease-in-out forwards",
-          }}
-        >
-          Camera access was not granted — the experience will continue with
-          audio only
-        </div>
-      )}
+      <StatusNotices
+        status={status}
+        cameraObscuredVisible={cameraObscuredVisible}
+        webcamDenied={webcamDenied}
+        sessionActive={sessionActive}
+        webcamDeniedVisible={webcamDeniedVisible}
+      />
 
       {/* ── Error toast stack + fatal modals ────────────────── */}
       <ErrorOverlay
