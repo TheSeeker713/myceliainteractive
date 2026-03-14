@@ -1,6 +1,6 @@
 # TEAM_CONTRACT.md — Liminal Sin: Unified Project Coordination
 ### Lives in BOTH repos: `myceliainteractive` AND `liminal-sin-gemini`
-### Version 1.0 | March 5, 2026
+### Version 1.0 | March 13, 2026
 ### Status: ACTIVE
 
 > **This file is identical in both repos. If you update it in one, update it in the other.**
@@ -29,20 +29,15 @@ Neither repo is complete on its own. They are permanently coupled at the API con
 - Cloudflare Workers for signup API
 - Cloudflare D1 database (`liminal-sin-signups`)
 - Brevo transactional email
-- All visual rendering: HUD overlays, glitch animations, Imagen 3 scene backgrounds
-<!-- DEPRECATED: FMV playback — replaced by Imagen 3 live scene generation (March 7, 2026 pivot) -->
-<!-- DEFERRED: cracked glasses effect — smart glasses system deferred to roadmap (March 7, 2026) -->
+- All visual rendering: HUD overlays, glitch animations, Imagen 4 scene backgrounds
 - WebSocket **client** — sends player mic audio and webcam frames, receives agent events
 
 ### `liminal-sin-gemini` owns:
-- All AI agent logic (Game Master, Jason, Audrey, Josh, Slotsky)
+- All AI agent logic (Game Master, Jason, Slotsky)
 - Gemini Live API bidirectional audio pipeline
 - Google Cloud Run backend server
 - Cloud Firestore state (trust, fear, proximity, session)
-<!-- DEFERRED: Vertex AI Memory Bank — long-term storage deferred post-contest; game state stays in Firestore (March 7, 2026) -->
-<!-- - Vertex AI Memory Bank (long-term character memory) -->
-<!-- DEFERRED: Google ADK AutoFlow — not implemented; current stack is direct GenAI SDK + WebSocket (March 7, 2026) -->
-<!-- - Google ADK AutoFlow multi-agent orchestration -->
+- Vertex AI image and video generation (Imagen 4, Veo 3.1 Fast)
 - WebSocket **server** — receives player input, sends agent events back
 
 ### Neither repo touches the other's domain without explicit cross-repo coordination.
@@ -92,8 +87,7 @@ Frontend env var: `NEXT_PUBLIC_GAME_WS_URL`
 | `game_over` | `{}` |
 | `good_ending` | `{}` |
 
-<!-- DEPRECATED (March 7, 2026): fmv_trigger { sequence_id, loop } and fmv_stop {} struck above — FMV pipeline replaced by Imagen 3 live generation. Rows preserved for reference. -->
-> ⚠️ **MARCH 7 PIVOT:** `fmv_trigger` / `fmv_stop` struck above — FMV replaced by Imagen 3. New event `scene_change { scene_key: string }` added. **Both repos must implement before deploying.**
+> ⚠️ **MARCH 7 PIVOT:** `fmv_trigger` / `fmv_stop` struck above — FMV replaced by Imagen 4. New event `scene_change { scene_key: string }` added. **Both repos must implement before deploying.**
 
 ### CONTRACT RULE
 > **Any change to this event schema is a cross-repo breaking change.** Before modifying event names, payloads, or adding new events: flag it, update this file in BOTH repos, and confirm both sides are updated before deploying either.
@@ -169,7 +163,7 @@ Never deploy frontend against a backend that hasn't been updated — event schem
 
 | Milestone | Date |
 |---|---|
-| Internal prototype-ready | March 11, 2026 |
+| Internal prototype-ready | March 14, 2026 |
 | Internal completion target | March 15, 2026 EOD |
 | Contest deadline (hard) | March 16, 2026 5:00 PM PDT |
 

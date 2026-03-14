@@ -3,17 +3,24 @@
 import { useEffect } from "react";
 import type {
   AutoplayAdvanceEvent,
-  FmvTriggerEvent,
   HintEvent,
   HudGlitchEvent,
   NpcIdleNudgeEvent,
   OverlayTextEvent,
+  SceneChangeEvent,
   SceneImageEvent,
   SceneVideoEvent,
   SessionErrorEvent,
   SessionReadyEvent,
 } from "./GameWSContext";
 import type { UseGameHudEffectsArgs } from "./useGameHudEffectTypes";
+import {
+  MORPHIC_MEDIA_IDS,
+  MORPHIC_CLIP_IDS,
+  getStillUrl,
+  getClipUrl,
+  PRELOAD_STILLS,
+} from "./mediaManifest";
 
 export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
   const {
@@ -27,7 +34,6 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     webcamDenied,
     micDenied,
     audioCtxRef,
-    fmvRef,
     sceneVideoRef,
     ensureGainNodes,
     preloadAll,
@@ -54,7 +60,43 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     setTrustLevel,
     setFearIndex,
     setTrustAgentLabel,
+    send,
   } = args;
+
+  // ── Morphic media loading from GCS on scene_change ──────────────────────
+  useEffect(() => {
+    if (lastEvent?.type !== "scene_change") return;
+    if (demoEnded) return;
+    const ev = lastEvent as SceneChangeEvent;
+    const mediaId = ev.payload.mediaId;
+    if (!mediaId) return;
+
+    // Only load Morphic media from GCS for known pre-built IDs
+    if (MORPHIC_MEDIA_IDS.has(mediaId)) {
+      if (MORPHIC_CLIP_IDS.has(mediaId)) {
+        // Play the clip from GCS
+        const video = sceneVideoRef.current;
+        if (video) {
+          video.src = getClipUrl(mediaId);
+          video.style.display = "block";
+          video.muted = true;
+          video.play().catch((e) =>
+            console.error("[SceneChange] clip play error:", e),
+          );
+        }
+      } else {
+        // Show the still from GCS
+        pushImage(getStillUrl(mediaId));
+      }
+    }
+
+    // Emit hallway_pov_02_ready when that media is displayed
+    if (mediaId === "hallway_pov_02") {
+      setTimeout(() => {
+        send({ type: "hallway_pov_02_ready" });
+      }, 500);
+    }
+  }, [demoEnded, lastEvent, pushImage, sceneVideoRef, send]);
 
   useEffect(() => {
     if (lastEvent?.type !== "scene_image") return;
@@ -170,20 +212,8 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
-  useEffect(() => {
-    if (!fmvRef.current) return;
-    if (lastEvent?.type === "fmv_trigger") {
-      const ev = lastEvent as FmvTriggerEvent;
-      fmvRef.current.src = `/assets/fmv/${ev.sequence_id}.mp4`;
-      fmvRef.current.loop = ev.loop;
-      fmvRef.current.style.display = "block";
-      fmvRef.current.play().catch(() => {});
-    }
-    if (lastEvent?.type === "fmv_stop") {
-      fmvRef.current.pause();
-      fmvRef.current.style.display = "none";
-    }
-  }, [fmvRef, lastEvent]);
+  // [AI: removed dead fmv_trigger / fmv_stop handlers — backend never sends these events,
+  //  paths /assets/fmv/ don't exist. Original code preserved in git history.]
 
   useEffect(() => {
     if (lastEvent?.type !== "session_ready") return;
@@ -243,14 +273,24 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     }, 8000);
   }, [setWebcamDeniedVisible, webcamDenied, webcamDeniedTimerRef]);
 
+  // ── scene_image: only for wildcard live-gen, not Morphic stills ──────────
   useEffect(() => {
     if (demoEnded) return;
     if (sceneImage === prevSceneImageRef.current) return;
     prevSceneImageRef.current = sceneImage;
     if (!sceneImage) return;
+
+    // Check if the latest scene_image event has a Morphic mediaId — if so, ignore
+    // (GCS still is already showing from scene_change handler)
+    if (lastEvent?.type === "scene_image") {
+      const ev = lastEvent as SceneImageEvent;
+      const mediaId = ev.payload && (ev.payload as Record<string, unknown>).mediaId;
+      if (typeof mediaId === "string" && MORPHIC_MEDIA_IDS.has(mediaId)) return;
+    }
+
     pushImage(`data:image/jpeg;base64,${sceneImage}`);
     if (sceneVideoRef.current) sceneVideoRef.current.style.display = "none";
-  }, [demoEnded, prevSceneImageRef, pushImage, sceneImage, sceneVideoRef]);
+  }, [demoEnded, lastEvent, prevSceneImageRef, pushImage, sceneImage, sceneVideoRef]);
 
   useEffect(() => {
     if (demoEnded) return;
@@ -296,4 +336,12 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [micDenied]);
+
+  // ── Preload first 3 Morphic stills for instant display ───────────────────
+  useEffect(() => {
+    for (const id of PRELOAD_STILLS) {
+      const img = new Image();
+      img.src = getStillUrl(id);
+    }
+  }, []);
 }

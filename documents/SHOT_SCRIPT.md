@@ -35,18 +35,85 @@ All Imagen 4 / Veo scene keys used in this script. Must exist in both `ZONE_PROM
 
 | Key | Phase | Status | Notes |
 |---|---|---|---|
-| `zone_tunnel_entry` | Legacy Beat 2 | ✅ Existing | Now unused in primary flow; kept as ambient fallback |
-| `zone_tunnel_mid` | Ambient fallback | ✅ Existing | Unused in primary flow |
-| `zone_merge` | Legacy Beat 3 | ✅ Existing | Unused in primary flow; kept |
-| `zone_park_shore` | Phase 6 | ✅ **Updated** | Prompt reworked — paradise-trap aesthetic |
-| `zone_park_shallow` | Ambient fallback | ✅ Existing | |
-| `zone_park_slides` | Ambient fallback | ✅ Existing | |
-| `zone_park_deep` | Ambient / Act 2 seed | ✅ Existing | |
-| `slotsky_card` | Phase 7 | ✅ Existing | Three-card triangular arrangement |
-| `flashlight_beam` | Phase 5 | 🆕 **New** | First visual moment; added to prewarm |
-| `generator_area` | Phase 5B | 🆕 **New** | Card 1 (Jack of Clubs) in scene |
-| `maintenance_area` | Phase 7 | 🆕 **New** | Horror-paradise contrast |
-| `card2_closeup` | Phase 8 | 🆕 **New** | Queen of Spades in Jason's hand |
+| `flashlight_beam` | Phase 5 | ✅ Canonical | `i1` / `v1` |
+| `generator_area_start` | Phase 5B | ✅ Canonical | `i2` / `v2` |
+| `generator_area_operational` | Phase 5B | ✅ Canonical | `i3` / `v3` |
+| `generator_card_reveal` | Phase 5B | ✅ Canonical | State reached from `v3` -> `i4` |
+| `card1_pickup_pov` | Phase 5B | ✅ Canonical | `i4` / `v4`; no close-up |
+| `vision_flash` | Phase 5C | ✅ Canonical | `i5`; fourth-wall flash still |
+| `tunnel_to_park_transition` | Phase 6 | ✅ Canonical | `i6` / `v6` |
+| `park_transition_reveal` | Phase 6 | ✅ Canonical | `i7` / `v7` |
+| `park_entrance` | Phase 6A | ✅ Canonical | `i8` / `v8` |
+| `park_walkway` | Phase 6B | ✅ Canonical | `i9` / `v9` |
+| `park_shaft_view` | Phase 6C | ✅ Canonical | `i10` / `v10` |
+| `maintenance_entry` | Phase 7 | ✅ Canonical | `i11` / `v11` |
+| `maintenance_panel` | Phase 7 | ✅ Canonical | `i12` / `v12` |
+| `card2_pickup_pov` | Phase 8 | ✅ Canonical | `i13` / `v13`; no close-up |
+| `wildcard_vision_feed` | Phase 5C | ✅ Canonical | Live anomaly image/video pair built from player camera |
+| `wildcard_game_over` | Phase 7B | ✅ Canonical | Live anomaly image/video pair for bad ending |
+
+---
+
+## ACT 1 MEDIA REGISTRY — AUTHORITATIVE
+
+This section supersedes any earlier reduced 5-scene interpretation. The canonical Act 1 media plan is:
+
+- 13 scripted images
+- 13 scripted videos
+- 2 wildcard images
+- 2 wildcard videos
+
+### Hard Invariants
+
+- All scenes, images, and videos are **16:9, high-quality, photorealistic, cinematic**.
+- Everything is **Jason's first-person POV**.
+- **No close-up shots** are allowed anywhere in Act 1.
+- Darkness phase has **zero visual generations**. Screen remains black until flashlight activation.
+- Jason must not be given environmental visual knowledge before flashlight activation.
+- `i1` is the only fully fresh scripted image generation in the chained sequence.
+- Every scripted still image after `i1` is conceptually the **last frame extracted from the previous scripted video**.
+- The missing `v5` is intentional. That slot is replaced by the **live wildcard smartglasses anomaly video**.
+- Every still-frame gameplay node after TALK opens has a **60-second autoplay timer**. If the player does not say the correct trigger phrase, or trust gating blocks the branch, the paired `vX` triggers automatically.
+- Every idle still-frame node also supports **15-second NPC automation** so Jason can talk to himself, call for Audrey/Josh, or address the player if the player remains silent.
+
+### Canonical Sequencing
+
+| Order | Slot | Key | Meaning |
+|---|---|---|---|
+| 1 | `i1` / `v1` | `flashlight_beam` | Flashlight turns on; Jason gets bearings in darkness |
+| 2 | `i2` / `v2` | `generator_area_start` | Generator area first discovered |
+| 3 | `i3` / `v3` | `generator_area_operational` | Generator area stabilized; lead-in to turn-on moment |
+| 4 | `i4` | `generator_card_reveal` | End-state extracted from `v3`; Joker card now present |
+| 5 | `v4` | `card1_pickup_pov` | Joker card pickup video; no close-up |
+| 6 | `i5` | `vision_flash` | Post-pickup still; warped player flash / feed disruption |
+| 7 | `wildcard1 image/video` | `wildcard_vision_feed` | Live smartglasses anomaly built from player camera extraction |
+| 8 | `i6` / `v6` | `tunnel_to_park_transition` | Jason explores forward from tunnel into larger space |
+| 9 | `i7` / `v7` | `park_transition_reveal` | Reveal hold between tunnel and paradise park |
+| 10 | `i8` / `v8` | `park_entrance` | Perfect waterpark crashed into boring tunnel |
+| 11 | `i9` / `v9` | `park_walkway` | Jason exploring massive walkways between water features |
+| 12 | `i10` / `v10` | `park_shaft_view` | Maintenance shaft visible in distance from park |
+| 13 | `i11` / `v11` | `maintenance_entry` | Jason commits to maintenance path |
+| 14 | `i12` / `v12` | `maintenance_panel` | Something must be uncovered or moved to find last card |
+| 15 | `wildcard2 image/video` | `wildcard_game_over` | Live anomaly bad-ending branch |
+| 16 | `i13` / `v13` | `card2_pickup_pov` | Final card pickup / collection; no close-up |
+
+### Darkness-Phase Rule
+
+The Darkness Scene includes no generated stills or videos. Before TALK opens and before flashlight activation:
+
+- Jason is injured, alone, and in pitch blackness.
+- He can call for Audrey and Josh.
+- He can report only sound, touch-level sensation, pain, breath, and spatial echo.
+- He must not describe tunnels, slides, maintenance shafts, pools, waterpark structures, cards, or lights.
+
+### Wildcard Event Rules
+
+- `wildcard_vision_feed` is a live fourth-wall anomaly event. It uses a first frame extracted from the player's camera feed and presents it as an unexpected smartglasses popup. Prompt language must avoid direct horror keywords like `horror` or `monster`.
+- `wildcard_game_over` is the live anomaly ending branch. It can use the player's real-world room framing as the basis for the generated intrusion event.
+
+### Waterpark Rule
+
+The waterpark is a **functional paradise**. It is liminal, perfect, immense, and operational. It is not abandoned, rotted, ruined, wasted, flooded-out, or dead. Prompt language must preserve that distinction.
 
 ---
 
@@ -70,12 +137,15 @@ Extends the contract defined in `CURRENT_STATE.md`. Items marked ⚠️ Backend 
 | `slotsky_trigger` | BE→FE | `{ payload: { anomalyType: string } }` | ✅ Existing |
 | `hint` | BE→FE | `{ text: string }` | ✅ Existing |
 | `player_speak_prompt` | BE→FE | `{}` | ✅ Existing |
+| `overlay_text` | BE→FE | `{ payload: { text: string, variant: string, durationMs: number } }` | ✅ Existing |
+| `npc_idle_nudge` | BE→FE | `{ payload: { phase: string, secondsSilent: number, urgency: 'soft'\|'urgent' } }` | ✅ Existing |
+| `autoplay_advance` | BE→FE | `{ payload: { fromStep: number, toStep: number, reason: 'timeout'\|'npc_choice' } }` | ✅ Existing |
 | `audience_update` | BE→FE | `{ payload: { personCount, groupDynamic, observedEmotions } }` | ✅ Existing |
-| `card_discovered` | BE→FE | `{ cardId: 'card1'\|'card2' }` | ⚠️ Backend TBD |
-| `card_collected` | FE→BE | `{ cardId: 'card1'\|'card2' }` | ⚠️ Backend TBD |
-| `dread_timer_start` | BE→FE | `{ durationMs: number }` | ⚠️ Backend TBD |
-| `game_over` | BE→FE | `{}` | ⚠️ Backend TBD |
-| `good_ending` | BE→FE | `{}` | ⚠️ Backend TBD |
+| `card_discovered` | BE→FE | `{ cardId: 'card1'\|'card2' }` | ✅ Existing |
+| `card_collected` | FE→BE | `{ cardId: 'card1'\|'card2' }` | ✅ Existing |
+| `dread_timer_start` | BE→FE | `{ durationMs: number }` | ✅ Existing |
+| `game_over` | BE→FE | `{}` | ✅ Existing |
+| `good_ending` | BE→FE | `{}` | ✅ Existing |
 
 > **SFX CONVENTION — Universal Scene Transition:** `glitch_low` (random variant) fires on every `scene_change`, `scene_image`, and `scene_video` event, and on every VHS-swap (video-to-still) transition. It is the **only** SFX used for visual scene transitions. No other SFX replaces this role.
 
@@ -122,11 +192,13 @@ Updating the GM playbook is tracked as a separate backend sprint. Do not modify 
 | Beat | Trigger | GM Function Calls | Duration |
 |---|---|---|---|
 | 1 — DARKNESS | Session start | `triggerAudienceUpdate`, `triggerTrustChange` (once) | 0:00–~0:40 |
-| 2 — FLASHLIGHT | Player mentions light | `triggerSceneChange("flashlight_beam")`, `triggerVideoGen("flashlight_beam")` | ~0:40–~1:00 |
-| 3 — GENERATOR / CARD 1 | Player guides Jason to generator | `triggerSceneChange("generator_area")`, `triggerVideoGen("generator_area")`, `card_discovered({cardId:'card1'})` | ~1:00–~1:30 |
-| 4 — WATER PARK REVEALED | Player tells Jason to start generator | `triggerSceneChange("zone_park_shore")`, `triggerVideoGen("zone_park_shore")` | ~1:30–~2:00 |
-| 5 — MAINTENANCE / DREAD | Player guides Jason to maintenance area | `triggerSceneChange("maintenance_area")`, `triggerVideoGen("maintenance_area")`, `dread_timer_start`, `triggerSlotsky("anomaly_cards")`, `triggerSceneChange("slotsky_card")`, `triggerVideoGen("slotsky_card")`, `card_discovered({cardId:'card2'})` | ~2:00–~2:30 |
-| 6 — ENDING | Card 2 collected OR timer expires | `triggerSceneChange("card2_closeup")`, `triggerVideoGen("card2_closeup")`, `triggerAudreyVoice`, `triggerSlotsky("found_transition")` | ~2:30–~3:00 |
+| 2 — FLASHLIGHT ON | Player mentions light / visibility | `triggerSceneChange("flashlight_beam")`, `triggerVideoGen("flashlight_beam")` | ~0:40–~1:00 |
+| 3 — GENERATOR / JOKER CARD | Player guides Jason to generator | `triggerSceneChange("generator_area")`, `triggerVideoGen("generator_area")`, `card_discovered({cardId:'card1'})` | ~1:00–~1:30 |
+| 4 — WATERPARK ENTRANCE | Player tells Jason to start generator | `triggerSceneChange("park_entrance")`, `triggerVideoGen("park_entrance")` | ~1:30–~2:00 |
+| 5 — WATERPARK INTERIOR | Player / Jason explores the park | `triggerSceneChange("park_walkway")`, `triggerVideoGen("park_walkway")` | ~2:00–~2:30 |
+| 6 — MAINTENANCE DISCOVERY | Player guides Jason to maintenance shaft | `triggerSceneChange("maintenance_area")`, `triggerVideoGen("maintenance_area")`, `dread_timer_start({durationMs:60000})`, `triggerAudreyVoice` (distant cue) | ~2:30–~3:00 |
+| 7 — CARD 2 HUNT | Jason searches; player instructs | `card_discovered({cardId:'card2'})` | ~3:00–~3:30 |
+| 8 — ENDING | Card 2 collected before timer expires | `triggerSlotsky("found_transition")` | ~3:30–~4:00 |
 
 **GAME OVER VARIANT (timer expires in Beat 5 before Card 2 collected):**
 - Backend sends `game_over` (⚠️ Backend TBD)
@@ -199,7 +271,7 @@ Powered by Google Gemini.
 **Backend on `intro_complete`:**
 - `jasonIntroFired = true`
 - `gmGated = true` (GM may now fire scene/video events)
-- `prewarmImageCache()` fires — generates `flashlight_beam`, `zone_merge`, `zone_park_shore` in parallel
+- `prewarmImageCache()` fires — generates `flashlight_beam`, `generator_area`, `park_entrance` in parallel
 - Jason `SEQUENCE_TRIGGER` text is injected (Phase 3)
 - `jasonReadyTimer` (18s) starts
 
@@ -253,8 +325,9 @@ STEP 7 — FIRST AWARENESS:
 
 **Player audio during Phase 3:**
 - All `player_speech` events are **dropped** for 18 seconds (existing `jasonReadyForPlayer` gate in `server.ts`)
-- Mic is ACTIVE on frontend but audio is not yet streamed to Jason
+- Mic and camera are runtime-blocked until interaction opens; frontend may hold permissions but must not present active interaction indicators
 - Mic visualization / "speak" prompt should NOT appear yet
+- No player webcam or speech is processed by gameplay logic during this phase
 
 **On 18s timer expiry:**
 - `jasonReadyForPlayer = true`
@@ -272,14 +345,18 @@ STEP 7 — FIRST AWARENESS:
 
 **Frontend activates:**
 - Subtle "SPEAK TO JASON" hint appears
-- Camera indicator visible (GM now receives webcam frames)
-- Microphone indicator visible (player audio now streams to Jason)
+- Camera indicator becomes active for the first time (GM now receives webcam frames)
+- Microphone indicator becomes active for the first time (player audio now streams to Jason)
+- Live styled text overlay is allowed here (`overlay_text`) for TALK prompt variants
 
 **Backend:**
 - Player audio gate is open (`jasonReadyForPlayer = true`)
 - GM receives audio + webcam frames from this point forward
 - GM calls `triggerAudienceUpdate` within 10 seconds (MANDATORY — Beat 1)
 - GM calls `triggerTrustChange` once based on the player's first words
+- Start repeating idle-silence protocol from this point forward:
+  - Every 15s of no player speech: send `npc_idle_nudge` and/or `overlay_text`
+  - Every 60s of inactive phase time: commit one `autoplay_advance` to prevent deadlock
 
 **Beat 1 ends here. Beat 2 activates (GM watches).**
 
@@ -291,21 +368,26 @@ STEP 7 — FIRST AWARENESS:
 
 **Trigger (GM):** Player says anything light-related — "flashlight", "light", "can you see", "look around", "is it dark", "phone", "lighter", etc. ANY light reference is the GM's cue.
 
+**Autoplay fallback:** If no light-related command is received within 60 seconds after Phase 4 opens, Jason self-initiates flashlight use and GM executes Beat 2 automatically.
+
 **GM calls (in order):**
 1. `triggerSceneChange({ sceneKey: "flashlight_beam" })`
 2. `triggerVideoGen({ sceneKey: "flashlight_beam" })`
 
-**Screen:** Transitions from BLACK to `flashlight_beam` image. This is the demo's first visual. The still image appears immediately; the video from Veo arrives ~45–90s later and replaces it.
+**Screen:** Transitions from BLACK to `flashlight_beam` still image. This is the demo's first visual. The still appears immediately (served from prewarm cache). Veo generates **up to two sequential videos** for this beat:
+- Video 1: Jason getting his bearings — beam sweeps the space, catching water droplets in mid-air
+- Video 2 (if GM fires a second `triggerVideoGen("flashlight_beam")`): Jason actively searching for the generator — beam probing the industrial distance
 
-**Jason in character (free dialogue — no script, he's discovered who the voice is by now):**
-- Tone: relief mixed with awe at the scale of what he sees
-- Example: *"Okay. I've got the flashlight. Oh— this place is— this place is huge."*
+**Jason in character (free dialogue — no script):**
+- He describes only what the flashlight beam directly touches. Never narrates what is beyond the beam.
+- Tone: relief mixed with disorientation at the scale of the echo
+- Example: *"Okay. I've got the flashlight. I can see— concrete. Just concrete. It goes a long way."*
 
 **SFX:**
 - `[SFX: glitch_low]` — fires on scene transition to `flashlight_beam` (universal transition SFX — random variant)
 - `[SFX: drip_loop]` — continues
 
-**B11 flashlight hint (existing):**
+**Flashlight hint (existing):**
 - If no scene change fires within 45s of `intro_complete`, the backend sends `{ type: 'hint', text: 'ask him if he has a flashlight' }` to nudge the player.
 
 ---
@@ -319,34 +401,44 @@ STEP 7 — FIRST AWARENESS:
 **GM calls (in order):**
 1. `triggerSceneChange({ sceneKey: "generator_area" })`
 2. `triggerVideoGen({ sceneKey: "generator_area" })`
-3. `card_discovered({ cardId: 'card1' })` — **[⚠️ Backend TBD — new WS event]**
+3. `card_discovered({ cardId: 'card1' })`
+
+**Still image → Video sequence:**
+- Still: generator area with joker card visible at the base
+- Video: Veo animation covers both the generator discovery and the card reveal in one sequence (flashlight sweeps down to card; generator activation vibration if player instructed it)
 
 **Frontend on `card_discovered({ cardId: 'card1' })`:**
-- Floating **Joker Card** playing card overlay appears on screen
-- Card animates gently (spin or float) — indicates it is collectible
+- Floating **Joker Card** overlay appears on screen (animated, collectible)
 - GM fires NO further scene/video events until `card_collected({ cardId: 'card1' })` is received
-- Jason continues reacting to player speech freely; the game is not frozen — just the visual progression is paused
+- Jason continues reacting to player speech freely; visual progression pauses
 
-**Player clicks the card:**
-- Frontend sends `card_collected({ cardId: 'card1' })` to backend — **[⚠️ Backend TBD]**
+**Player clicks the card overlay:**
+- Frontend sends `card_collected({ cardId: 'card1' })` to backend
 - Card overlay disappears; card stored in frontend collected state
 
-**Backend on `card_collected({ cardId: 'card1' }):`** — **[⚠️ Backend TBD]**
-- GM injects a SITUATION_UPDATE into Jason with the player's appearance (GM vision data from webcam)
+**Card timeout (60s):**
+- If card is not clicked within 60 seconds, Jason auto-collects it.
+- During this window, backend emits 15-second silence nudges (`npc_idle_nudge` / `overlay_text`) if player does not speak.
+
+**Backend on `card_collected({ cardId: 'card1' })`:**
+- GM injects a SITUATION_UPDATE into Jason with the player's appearance (GM vision from webcam)
+- This is the **AI Vision Proof moment** — proves to the player that Jason can see them
 - Injection format:
   ```
   [SITUATION_UPDATE: GM_VISION — You have a sudden disorienting flash of partial sight
   through the device. You sense — or see — the person on the other end for one moment.
   Describe exactly ONE specific visual detail about them: what they are wearing, their
   hair, one concrete thing you noticed. Then ask: "Are you wearing a ___?" or
-  "I saw— are you [descriptive detail]?" React as if this is real and shocking.
+  "I saw — are you [descriptive detail]?" React as if this is real and shocking.
   One moment of recognition, then it is gone. Maximum 2 sentences total.]
   ```
+- If no camera feed is available: Jason acknowledges his smartglasses feed lit up but he cannot see anyone; addresses player by name or nickname
+- Frontend triggers: `hud_glitch` + brief warped player image flash on screen
 
 **Jason's scripted moment:**
-> *"I just— I had a flash. Are you wearing [what the GM saw]?"*
+> *"I just— I had a flash. Are you wearing [detail the GM saw]?"*
 
-This proves to the player: **the AI can see them**. The AI can hear them (it responds to their voice). The AI can see them (it describes them). The player can interrupt it (barge-in is active). This is the core contest proof-of-concept.
+This proves to the player: the AI can hear them AND see them. The player can interrupt it (barge-in is active). Core contest proof-of-concept.
 
 **SFX:**
 - `[SFX: glitch_low]` — fires on scene transition to `generator_area` (universal transition SFX — random variant)
@@ -355,65 +447,88 @@ This proves to the player: **the AI can see them**. The AI can hear them (it res
 
 ---
 
-## PHASE 6 — GENERATOR ON: THE WATER PARK REVEALED
+## PHASE 6 — GENERATOR ON: WATERPARK ENTRANCE
 
-**[Beat 4 — Paradise Trap]**
+**[Beat 4 — Paradise Reveal]**
 
 **Trigger (GM):** Player tells Jason to start the generator / Jason powers it on.
 
 **GM calls (in order):**
-1. `triggerSceneChange({ sceneKey: "zone_park_shore" })`
-2. `triggerVideoGen({ sceneKey: "zone_park_shore" })`
-3. `triggerFearChange({ newFearLevel: 0.3, reason: "player reacts to the beauty of the water park" })` — optional; fire only if player reacts with awe or unease
+1. `triggerSceneChange({ sceneKey: "park_entrance" })`
+2. `triggerVideoGen({ sceneKey: "park_entrance" })`
+3. `triggerFearChange({ newFearLevel: 0.3, reason: "player reacts to the impossible beauty" })` — optional
 
-**Screen:** Transitions from the industrial generator area to the full paradise-trap reveal.
+**Screen:** Transitions from the industrial generator area to the full paradise reveal. The waterpark is **not abandoned**. It is functional, beautiful, and perfect — it looks like a paradise waterpark that has simply crashed through a concrete wall. Vivid neon, clean slides, working pool systems, real tropical plants.
 
 **Jason in character (free dialogue):**
-> *"Oh my god... it's— it's beautiful. What is this place? Why is it down here?"*
+> *"Oh my god. There's— it's a water park. It's running. The lights are on."*
 > *(beat)*
-> *"...Why is nobody here?"*
+> *"...It's beautiful. Why is it down here?"*
 
 **SFX:**
-- `[SFX: glitch_low]` — fires on scene transition to `zone_park_shore` (universal transition SFX — random variant)
+- `[SFX: glitch_low]` — fires on scene transition to `park_entrance` (universal transition SFX — random variant)
 - `[SFX: generator_start]` — industrial generator spool-up, 4 seconds, fires on scene transition
 - `[SFX: neon_hum]` — faint electrical neon hum, low, continuous under this phase
 - `[SFX: drip_loop]` — continues but shifts register (now mixed with the neon environment)
 
 ---
 
+## PHASE 6B — WATERPARK INTERIOR
+
+**[Beat 5 — Scale Reveal]**
+
+**Trigger (GM):** Player tells Jason to explore / Jason advances on his own.
+
+**GM calls (in order):**
+1. `triggerSceneChange({ sceneKey: "park_walkway" })`
+2. `triggerVideoGen({ sceneKey: "park_walkway" })`
+
+**Screen:** Jason is on the dry walkways of the park, moving between operating water features. THIS WATERPARK IS HUGE — the scale of an actual outdoor theme park, but underground. Cascading waterfalls, lazy rivers, curving slides, lit pools. In the far background: a maintenance corridor entrance cut into the cavern wall.
+
+**Jason in character (free dialogue):**
+- He describes the park as he moves through it. The scale catches him off-guard.
+- He notices the maintenance shaft in the distance. He may ask the player whether to investigate.
+- Autoplay fallback: if inactivity hits 60s, Jason moves toward the maintenance corridor on his own.
+
+**SFX:**
+- `[SFX: glitch_low]` — fires on scene transition to `park_walkway`
+- `[SFX: neon_hum]` — continues
+- `[SFX: waterfall_ambient]` — begins here; vast, low-register cascade sound
+
+---
+
 ## PHASE 7 — MAINTENANCE AREA: DREAD TIMER
 
-**[Beat 5 — Invisible pressure / two-ending branch]**
+**[Beat 6 → Beat 7 — Invisible pressure / two-ending branch]**
 
-**Trigger (GM):** Player guides Jason through the water park i havetoward the maintenance area.
+**Trigger (GM):** Player guides Jason toward the maintenance shaft / Jason moves there on his own.
 
 **GM calls (in order):**
 1. `triggerSceneChange({ sceneKey: "maintenance_area" })`
 2. `triggerVideoGen({ sceneKey: "maintenance_area" })`
-3. `dread_timer_start({ durationMs: 90000 })` — **[⚠️ Backend TBD]** — 90-second countdown, invisible
-4. *(after brief interval)* `triggerSlotsky({ anomalyType: "anomaly_cards" })`
-5. `triggerSceneChange({ sceneKey: "slotsky_card" })`
-6. `triggerVideoGen({ sceneKey: "slotsky_card" })`
-7. `card_discovered({ cardId: 'card2' })` — **[⚠️ Backend TBD]** — fires after `slotsky_card` scene loads
+3. `dread_timer_start({ durationMs: 60000 })` — 60-second countdown, invisible, starts immediately
+4. `triggerAudreyVoice` — a distant female voice fires at the moment of maintenance discovery
+5. `card_discovered({ cardId: 'card2' })` — fires once Jason begins actively searching
 
 **Scene Transition SFX:**
-- `[SFX: glitch_low]` — fires on scene transition to `maintenance_area` (universal transition SFX — random variant)
-- `[SFX: glitch_low]` — fires on scene transition to `slotsky_card` (universal transition SFX — random variant)
+- `[SFX: glitch_low]` — fires on scene transition to `maintenance_area`
 
-**Dread Timer behavior (frontend) — [⚠️ Backend TBD for trigger event; SFX is frontend:]**
-Note: the card should be hidden, Jason needs to find it and needs the help of the Player to find it, but the dread timer is ticking down in the background, creating pressure. The player can only see the card if he instructs Jason to remove a panel. The timer is invisible to the player, but the SFX escalates as it counts down, creating a sense of rising dread. If the timer expires before the card is collected, the game ends with the "bad" ending (Game Over branch). If the player finds and collects the card before the timer expires, they proceed to Phase 8 (good ending).
-
-- Timer runs invisibly — **zero UI indicator**-
-- SFX escalates autonomously over 90 seconds:
-  - 0–30s: `[SFX: heartbeat_low]` — barely audible, slow pulse
-  - 30–60s: `[SFX: heartbeat_mid]` — louder, slightly faster
-  - 60–90s: `[SFX: heartbeat_high1]` + `[SFX: heartbeat_high2]` + `[SFX: distant_growl1]` + `[SFX: distant_growl2]` — (growl1 and growl2 will play simultaneously) urgent pressure, rising
+**Dread Timer behavior (frontend):**
+- The card is **hidden** — under or behind something in the maintenance corridor. Jason must be instructed by the player (or act on his own) to move/uncover it. There is no card visible in the scene image.
+- Timer runs invisibly — **zero UI indicator**
+- SFX escalates autonomously over 60 seconds:
+  - 0–20s: `[SFX: heartbeat_low]` — barely audible, slow pulse
+  - 20–40s: `[SFX: heartbeat_mid]` — louder, slightly faster
+  - 40–60s: `[SFX: heartbeat_high1]` + `[SFX: heartbeat_high2]` + `[SFX: distant_growl1]` + `[SFX: distant_growl2]` — urgent pressure, rising
 - Timer is **cancelled** when `card_collected({ cardId: 'card2' })` is sent to backend
 
-**Card 2 overlay:**
-- Floating **Queen of Spades** overlay appears on screen
-- Same mechanic as Card 1: GM pauses scene progression until player clicks
-- Player clicks → `card_collected({ cardId: 'card2' })` FE→BE → Phase 8
+**Card 2 overlay (Queen of Spades):**
+- Floating overlay appears on screen when Jason uncovers the card location
+- Same mechanic as Card 1: player clicks → `card_collected({ cardId: 'card2' })` FE→BE → Phase 8
+
+**Card 2 timeout (60s):**
+- If card is not collected before the dread timer expires, Jason makes an autonomous choice.
+- Timer outcome is deterministic: timer expiry → game over; card before expiry → good ending.
 
 ---
 
@@ -437,18 +552,18 @@ Note: the card should be hidden, Jason needs to find it and needs the help of th
 
 ## PHASE 8 — THE ENDING (Card 2 Found)
 
-**[Beat 6 — "To Be Continued"]**
+**[Beat 8 — "To Be Continued"]**
 
 **Trigger:** Frontend sends `card_collected({ cardId: 'card2' })` to backend.
 
 **GM calls (in order):**
-1. `triggerSceneChange({ sceneKey: "card2_closeup" })`
-2. `triggerVideoGen({ sceneKey: "card2_closeup" })`
-3. `triggerAudreyVoice({ trustLevel: <current_trust_level> })`
-4. `triggerSlotsky({ anomalyType: "found_transition" })` — **ONE-WAY DOOR. No GM calls after this.**
+1. `triggerAudreyVoice({ trustLevel: <current_trust_level> })` — if not already fired in Beat 6
+2. `triggerSlotsky({ anomalyType: "found_transition" })` — **ONE-WAY DOOR. No GM calls after this.**
+
+**No new scene change.** The ending plays out over the `maintenance_area` scene — Jason holds the card in his hand, still in the industrial corridor. No close-up. No new camera angle. His POV.
 
 **Audrey's voice (trust-adaptive):**
-Note: The trust score only detect's Jason's trust score. Jason's trust score is the only input to Audrey's dialogue variation at the ending. The fear index has no impact on this moment. The player may have influenced the fear index through their choices, but it does not affect the ending dialogue.
+Note: Jason's trust score is the only input to Audrey's dialogue. Fear index has no impact.
 | Trust | Audrey's line |
 |---|---|
 | ≥ 0.7 (High) | *"Jason?"* — soft, hopeful, as if she just heard something. She says his name. |
@@ -456,19 +571,18 @@ Note: The trust score only detect's Jason's trust score. Jason's trust score is 
 | < 0.4 (Low) | Quiet crying. No name. A single exhale of despair. She sounds very far away. |
 
 **SFX:**
-- `[SFX: glitch_low]` — fires on scene transition to `card2_closeup` (universal transition SFX — random variant)
 - `[SFX: found_water_rise]` — the Nature Vault water sound from deep below; vast, slow-moving, rising from beneath. Beautiful. Wrong. Rises then fades over ~8 seconds. (random variant from `found_water_rise` pool)
 - Audrey's voice plays over this wash.
 
 **Screen transition:**
-1. Scene image (`card2_closeup`) fades slowly to black (4s)
+1. `maintenance_area` scene fades slowly to black (4s)
 2. Over black, text appears (white on black, centered):
    ```
    TO BE CONTINUED.
 
    THANK YOU FOR PLAYING LIMINAL SIN.
    ```
-3. Backend sends `good_ending` — **[⚠️ Backend TBD]**
+3. Backend sends `good_ending` ✅
 4. Frontend shows `[PLAY AGAIN]` button after 5s
 
 **Jason (optional closing line — free character choice):**
@@ -617,10 +731,10 @@ at face-up position and camera holds perfectly still on the revealed queen of sp
 
 `PREWARM_SCENE_KEYS` in `server/services/imagen.ts` should contain:
 ```typescript
-const PREWARM_SCENE_KEYS = ['flashlight_beam', 'zone_merge', 'zone_park_shore'] as const;
+const PREWARM_SCENE_KEYS = ['flashlight_beam', 'generator_area', 'zone_park_shore'] as const;
 ```
 
-**Rationale:** `flashlight_beam` replaces `zone_tunnel_entry` in the prewarm because it is now the first visual moment (Beat 2). `zone_merge` and `zone_park_shore` remain valuable as early-session ambient fallbacks. `generator_area`, `maintenance_area`, and `card2_closeup` are mid-to-late game — on-demand generation has enough time to complete before they are needed.
+**Rationale:** `flashlight_beam` is the first visual moment (Beat 2), and `generator_area` follows immediately in the primary flow, so both are prewarmed. `zone_park_shore` remains the first large reveal anchor. `maintenance_area` and `card2_closeup` are later-game beats where on-demand generation has enough time to complete.
 
 ---
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GameWSProvider, useGameWS } from "./GameWSContext";
 import GameHUD from "./GameHUD";
 import { usePlayerMedia } from "./usePlayerMedia";
@@ -32,7 +32,9 @@ function PermissionsGate({ onGranted }: { onGranted: () => void }) {
         // Distinguish mic vs webcam denial
         // Try audio-only to check if mic is the blocker
         try {
-          const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const audioStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
           audioStream.getTracks().forEach((t) => t.stop());
           // Webcam denied but mic allowed — continue (webcam is non-fatal)
           onGranted();
@@ -41,7 +43,9 @@ function PermissionsGate({ onGranted }: { onGranted: () => void }) {
           setLoading(false);
         }
       } else {
-        setError("Could not access your devices. Please check your browser settings.");
+        setError(
+          "Could not access your devices. Please check your browser settings.",
+        );
         setLoading(false);
       }
     }
@@ -67,8 +71,8 @@ function PermissionsGate({ onGranted }: { onGranted: () => void }) {
         <p>
           Mycelia Interactive does not store, sell, or share your camera or
           microphone data. Audio and video are processed in real-time via
-          Google&apos;s Gemini API solely to power this experience. No recordings are
-          retained after your session ends.
+          Google&apos;s Gemini API solely to power this experience. No
+          recordings are retained after your session ends.
         </p>
         <a
           href="/ls/privacy.html"
@@ -115,8 +119,10 @@ function PermissionsGate({ onGranted }: { onGranted: () => void }) {
 
 function GameInner() {
   const [sessionPhase, setSessionPhase] = useState<
-    "waiting" | "permissions" | "intro" | "active"
+    "waiting" | "permissions" | "ready" | "intro" | "active"
   >("waiting");
+  const [permissionsChecked, setPermissionsChecked] = useState(false);
+  const [canStartDirectly, setCanStartDirectly] = useState(false);
   const sessionActive = sessionPhase === "intro" || sessionPhase === "active";
   const { connect } = useGameWS();
   // Single shared AudioContext for the whole session — passed to both GameHUD
@@ -127,6 +133,44 @@ function GameInner() {
   // Start media capture once the user explicitly starts the session
   const { webcamActive, micDenied, webcamDenied, cameraObscured, stopAll } =
     usePlayerMedia(sessionActive, audioCtxRef);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkMediaPermissions() {
+      if (!navigator.permissions?.query) {
+        if (!cancelled) setPermissionsChecked(true);
+        return;
+      }
+
+      try {
+        const [mic, cam] = await Promise.all([
+          navigator.permissions.query({
+            name: "microphone" as PermissionName,
+          }),
+          navigator.permissions.query({
+            name: "camera" as PermissionName,
+          }),
+        ]);
+
+        if (!cancelled) {
+          setCanStartDirectly(
+            mic.state === "granted" && cam.state === "granted",
+          );
+        }
+      } catch {
+        // Graceful fallback for browsers with partial/blocked Permissions API support.
+      } finally {
+        if (!cancelled) setPermissionsChecked(true);
+      }
+    }
+
+    checkMediaPermissions();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
@@ -173,11 +217,21 @@ function GameInner() {
           </p>
           <button
             onClick={() => {
+              if (canStartDirectly) {
+                setSessionPhase("ready");
+                return;
+              }
+
               setSessionPhase("permissions");
             }}
+            disabled={!permissionsChecked}
             className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
           >
-            Begin Session
+            {permissionsChecked
+              ? canStartDirectly
+                ? "Play"
+                : "Begin Session"
+              : "Checking devices…"}
           </button>
         </div>
       )}
@@ -186,10 +240,43 @@ function GameInner() {
       {sessionPhase === "permissions" && (
         <PermissionsGate
           onGranted={() => {
-            connect();
-            setSessionPhase("intro");
+            setCanStartDirectly(true);
+            setSessionPhase("ready");
           }}
         />
+      )}
+
+      {/* ── Ready gate (shown after permissions are granted) ─── */}
+      {sessionPhase === "ready" && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black/90">
+          <p
+            className="text-xs tracking-[0.35em] uppercase"
+            style={{
+              color: "rgba(192,132,252,0.6)",
+              fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
+            }}
+          >
+            Liminal Sin — Systems Online
+          </p>
+          <h1
+            className="text-5xl md:text-7xl font-black text-white tracking-widest uppercase"
+            style={{ textShadow: "0 0 30px rgba(255,0,50,0.4)" }}
+          >
+            PLAY
+          </h1>
+          <p className="text-sm text-gray-400 font-mono max-w-xs text-center leading-relaxed">
+            Camera and microphone are ready.
+          </p>
+          <button
+            onClick={() => {
+              connect();
+              setSessionPhase("intro");
+            }}
+            className="mt-4 px-10 py-4 rounded bg-gradient-to-r from-purple-800 to-purple-600 border border-purple-400/40 text-white font-mono font-bold tracking-[0.2em] uppercase text-sm hover:from-purple-700 hover:to-purple-500 transition-all duration-300"
+          >
+            Play
+          </button>
+        </div>
       )}
     </div>
   );

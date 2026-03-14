@@ -40,13 +40,7 @@ export type TrustUpdateEvent = {
   fear_index: number;
 };
 
-export type FmvTriggerEvent = {
-  type: "fmv_trigger";
-  sequence_id: string;
-  loop: boolean;
-};
-
-export type FmvStopEvent = { type: "fmv_stop" };
+// [AI: removed FmvTriggerEvent + FmvStopEvent — dead code, backend never sends these]
 
 export type HudGlitchEvent = {
   type: "hud_glitch";
@@ -75,12 +69,24 @@ export type SceneImageEvent = {
 
 export type SceneChangeEvent = {
   type: "scene_change";
-  payload: { sceneKey: string };
+  payload: {
+    sceneKey: string;
+    mediaId: string;
+    triggerType: "chained_auto" | "hold_for_input";
+    timeoutSeconds: number;
+  };
 };
 
 export type SceneVideoEvent = {
   type: "scene_video";
-  payload: { sceneKey: string; url: string };
+  payload: {
+    sceneKey: string;
+    mediaId: string;
+    triggerType: "chained_auto" | "hold_for_input";
+    timeoutSeconds: number;
+    audioMode: "native_audio" | "muted" | "silent_source";
+    url: string;
+  };
 };
 
 export type SlotskyTriggerEvent = {
@@ -88,10 +94,7 @@ export type SlotskyTriggerEvent = {
   payload: { anomalyType: string };
 };
 
-export type CameraObscuredEvent = {
-  type: "camera_obscured";
-  obscured: boolean;
-};
+// [AI: removed CameraObscuredEvent — backend never sends this; detection is client-side only]
 
 export type HintEvent = {
   type: "hint";
@@ -147,12 +150,41 @@ export type GoodEndingEvent = {
   type: "good_ending";
 };
 
+export type AcecardKeywordTimerStartEvent = {
+  type: "acecard_keyword_timer_start";
+  payload: { durationMs: number };
+};
+
+export type AcecardRevealStartEvent = {
+  type: "acecard_reveal_start";
+  payload: { mediaId: string };
+};
+
+export type CardPickup02ReadyEvent = {
+  type: "card_pickup_02_ready";
+  payload: { mediaId: string; durationMs: number };
+};
+
+export type Wildcard3TriggerEvent = {
+  type: "wildcard3_trigger";
+  payload: { sceneKey: string };
+};
+
+export type VideoGenStartedEvent = {
+  type: "video_gen_started";
+  payload: {
+    sceneKey: string;
+    mediaId: string;
+    triggerType: string;
+    timeoutSeconds: number;
+    audioMode: string;
+  };
+};
+
 export type ServerEvent =
   | AgentSpeechEvent
   | AgentInterruptEvent
   | TrustUpdateEvent
-  | FmvTriggerEvent
-  | FmvStopEvent
   | HudGlitchEvent
   | SessionReadyEvent
   | SessionErrorEvent
@@ -160,7 +192,6 @@ export type ServerEvent =
   | SceneChangeEvent
   | SceneVideoEvent
   | SlotskyTriggerEvent
-  | CameraObscuredEvent
   | HintEvent
   | PlayerSpeakPromptEvent
   | CardDiscoveredEvent
@@ -169,7 +200,12 @@ export type ServerEvent =
   | AutoplayAdvanceEvent
   | DreadTimerStartEvent
   | GameOverEvent
-  | GoodEndingEvent;
+  | GoodEndingEvent
+  | AcecardKeywordTimerStartEvent
+  | AcecardRevealStartEvent
+  | CardPickup02ReadyEvent
+  | Wildcard3TriggerEvent
+  | VideoGenStartedEvent;
 
 // ── Outbound payload types (client → server) ─────────────────────────────────────────────────────────────────────
 
@@ -177,9 +213,10 @@ export type ClientEvent =
   | { type: "session_start"; judge_mode: boolean }
   | { type: "player_speech"; audio: string; timestamp: number }
   | { type: "player_frame"; jpeg: string; timestamp: number }
-  | { type: "session_end" }
   | { type: "card_collected"; cardId: "card1" | "card2" }
-  | { type: "intro_complete" };
+  | { type: "intro_complete" }
+  | { type: "hallway_pov_02_ready" }
+  | { type: "acecard_reveal_complete" };
 
 // ── Context shape ──────────────────────────────────────────────────────────
 
@@ -252,34 +289,60 @@ export function GameWSProvider({
   useEffect(() => {
     if (!wsUrl || !shouldConnect) return;
 
-    const ws = new WebSocket(wsUrl);
-    wsRef.current = ws;
+    const url = wsUrl; // narrow for closure
+    let attempt = 0;
+    const maxRetries = 3;
+    const backoffMs = [1000, 3000, 5000];
+    let currentWs: WebSocket | null = null;
+    let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
-    ws.onopen = () => {
-      setStatus("open");
-      send({ type: "session_start", judge_mode: judgeMode });
-    };
+    function connectWs() {
+      const ws = new WebSocket(url);
+      currentWs = ws;
+      wsRef.current = ws;
 
-    ws.onmessage = (ev) => {
-      try {
-        const parsed: ServerEvent = JSON.parse(ev.data as string);
-        setLastEvent(parsed);
-        if (parsed.type === "scene_image") {
-          setSceneImage(parsed.payload.data);
+      ws.onopen = () => {
+        attempt = 0; // reset on successful connect
+        setStatus("open");
+        send({ type: "session_start", judge_mode: judgeMode });
+      };
+
+      ws.onmessage = (ev) => {
+        try {
+          const parsed: ServerEvent = JSON.parse(ev.data as string);
+          setLastEvent(parsed);
+          if (parsed.type === "scene_image") {
+            setSceneImage(parsed.payload.data);
+          }
+          if (parsed.type === "scene_video") {
+            setSceneVideo((parsed as SceneVideoEvent).payload);
+          }
+        } catch {
+          console.error("[GameWS] Failed to parse message:", ev.data);
         }
-        if (parsed.type === "scene_video") {
-          setSceneVideo((parsed as SceneVideoEvent).payload);
-        }
-      } catch {
-        console.error("[GameWS] Failed to parse message:", ev.data);
-      }
-    };
+      };
 
-    ws.onerror = () => setStatus("error");
-    ws.onclose = () => setStatus("closed");
+      ws.onerror = () => {
+        // onerror fires before onclose — let onclose handle reconnect
+      };
+
+      ws.onclose = () => {
+        if (attempt < maxRetries) {
+          setStatus("connecting");
+          const delay = backoffMs[attempt] ?? 5000;
+          attempt++;
+          reconnectTimer = setTimeout(connectWs, delay);
+        } else {
+          setStatus("error");
+        }
+      };
+    }
+
+    connectWs();
 
     return () => {
-      ws.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      currentWs?.close();
     };
   }, [wsUrl, judgeMode, send, shouldConnect]);
 

@@ -160,6 +160,15 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
   distant_growl2: [`${S}/distant_growl2.mp3`],
   monster_sound1: [`${S}/monster_sound1.mp3`],
   monster_sound2: [`${S}/monster_sound2.mp3`],
+
+  // Wildcard scare SFX — loud, close, in-ear burst
+  scare_wildcard: [
+    `${S}/fear_spike.mp3`,
+    `${S}/sfx_fear_spike.mp3`,
+    `${S}/sfx_fear_spike_2.mp3`,
+    `${S}/sfx_fear_spike_3.mp3`,
+    `${S}/sfx_fear_spike_4.mp3`,
+  ],
 };
 
 export type MusicTier =

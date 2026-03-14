@@ -1,7 +1,7 @@
 # AGENTS.md — Mycelia Interactive (Frontend Repo)
 
 > **This file lives permanently at the project source root.**
-> `AGENTS.md`, `README.md`, and `TEAM_CONTRACT.md` cannot be moved, renamed, replaced, or deleted without the user's explicit command or permission.
+> `AGENTS.md`, `README.md`, `SHOT_SCRIPT.MD` and `CURRENT_STATE.md` cannot be moved, renamed, replaced, or deleted without the user's explicit command or permission.
 
 ---
 
@@ -12,7 +12,7 @@
 | Surface | Path | Status |
 |---|---|---|
 | **Marketing shell** | `myceliainteractive.com/ls` | Live |
-| **Game UI shell** | `myceliainteractive.com/ls/game` | Pending |
+| **Game UI shell** | `myceliainteractive.com/ls/game` | Live |
 | **Judge panel** | `myceliainteractive.com/ls/judges` | Live |
 | **Company homepage** | `myceliainteractive.com` | Live |
 
@@ -44,7 +44,7 @@ app/
   ls/
     page.tsx          ← Landing page (marketing shell)
     SignupForms.tsx   ← Signup form component
-    game/             ← Game UI shell (PENDING — connects to LS backend)
+    game/             ← Game UI shell (Live — connects to LS backend)
   layout.tsx
   globals.css
 workers/
@@ -76,8 +76,6 @@ AGENTS.md             ← This file
   - Capturing webcam frames → sending to backend (1 FPS JPEG)
   - Receiving agent audio responses → playing via Web Audio API
   - Rendering HUD overlays — **Trust Meter is a permanent, always-on UI feature** (see §11 and `documents/SHOT_SCRIPT.md` FRONTEND NOTE section for full spec)
-  <!-- DEFERRED: cracked glasses HUD effect — smart glasses system deferred to roadmap (March 7, 2026) -->
-  <!-- DEPRECATED: FMV video sequences — replaced by Imagen 4 live scene generation (March 7, 2026 pivot) -->
   - Rendering **Imagen 4** scene backgrounds triggered by backend `scene_change` and `scene_image` events
   - Playing **Veo 3.1 Fast** video loops triggered by backend `scene_video` events
   - Rendering card collectible overlays on `card_discovered` events; sending `card_collected` on player click

@@ -181,10 +181,10 @@ export default function GameHUD({
     onStopMedia,
     wsCloseTimerRef,
   });
-  const handleEndSession = useCallback(() => {
-    send({ type: "session_end" });
-    setTimeout(() => window.location.reload(), 500);
-  }, [send]);
+  // [AI: removed dead handleEndSession that sent session_end — backend ignores it]
+  const handleReload = useCallback(() => {
+    window.location.reload();
+  }, []);
 
   const handleCollectCard = useCallback(() => {
     if (cardCollecting) return;
@@ -263,13 +263,13 @@ export default function GameHUD({
       <ErrorOverlay
         errorQueue={errorQueue}
         onDismiss={dismissError}
-        onEndSession={handleEndSession}
+        onEndSession={handleReload}
       />
       {micDenied && !demoEnded && (
         <ErrorModal
           title="No Signal"
           message="Microphone access was denied. This experience requires your voice to proceed. We apologise — the session cannot continue without it."
-          onEndSession={handleEndSession}
+          onEndSession={handleReload}
         />
       )}
     </div>

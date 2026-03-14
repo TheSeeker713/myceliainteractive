@@ -20,7 +20,7 @@ export function DemoEndOverlay({
     mode === "game_over"
       ? "thank you for playing liminal sin"
       : mode === "good_ending"
-        ? "you made it out"
+        ? "to be continued"
         : "experience complete";
 
   return (
@@ -42,6 +42,12 @@ export function DemoEndOverlay({
         style={{ color: "rgba(192,132,252,0.7)" }}
       >
         {subtitle}
+      </p>
+      <p
+        className="font-mono text-xs tracking-[0.3em] uppercase mt-2"
+        style={{ color: "rgba(192,132,252,0.5)" }}
+      >
+        thank you for playing liminal sin
       </p>
       {showPlayAgain && onPlayAgain && (
         <button
