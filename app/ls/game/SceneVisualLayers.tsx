@@ -76,7 +76,6 @@ export function SceneVisualLayers({
         style={{ display: "none" }}
         playsInline
         muted
-        crossOrigin="anonymous"
         onEnded={handleSceneVideoEnded}
         onTimeUpdate={handleVideoTimeUpdate}
       />
