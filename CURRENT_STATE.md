@@ -1,22 +1,115 @@
-﻿# CURRENT_STATE.md — Liminal Sin Gemini (Backend)
+﻿# CURRENT_STATE.md — Liminal Sin Frontend (myceliainteractive)
 
-> Setup-phase working memory for backend execution.
-> Last updated: March 11, 2026.
-
----
-
-## Scope
-
-- This document contains backend TODO checklist items and execution instructions only.
-- Do not place frontend implementation steps here.
-- Setup phase only: planning and checklist alignment, no coding in this step.
+> **UPDATE RULE:** Replace the previous content and write a single current-state snapshot. Do NOT append. Historical logs belong in git history.
+> Last updated: March 14, 2026 (post-onboarding fix + credits rewrite).
 
 ---
 
 ## Deadlines
 
-- Soft deadline: Friday, March 13, 2026 at 7:13 PM.
-- Hard deadline: March 16, 2026 at 5:00 PM PDT.
+- **Hard deadline:** March 16, 2026 at 5:00 PM PDT (Google Gemini Live Agent Challenge).
+
+---
+
+## Infrastructure
+
+| Item | Value |
+|---|---|
+| Deploy target | Cloudflare Pages (Workers) |
+| Live Worker URL | `https://myceliainteractive.digitalartifact11.workers.dev` |
+| Latest Version ID | `cc735cb5-2063-45d2-9f7a-824a45f44a36` |
+| Framework | Next.js 16.1.6 + React 19 + TypeScript + Tailwind CSS 4 |
+| Game route | `/ls/game/` |
+| Judges route | `/ls/judges/game/` |
+| Backend WS | `wss://liminal-sin-server-1071754889104.us-west1.run.app/game` |
+| GCS Base URL | `https://storage.googleapis.com/liminal-sin-assets/` |
+
+---
+
+## Current Live State (March 14, 2026 — POST-ONBOARDING FIX + CREDITS REWRITE)
+
+### Onboarding & Session Flow (Fixed March 14)
+- **Root cause fixed:** PLAY click used to directly start `IntroSequence`, sending `intro_complete` before the WS was open. Backend gates everything behind `intro_complete` — Jason and all GM scene events were permanently blocked.
+- **New phase flow:** `waiting → connecting → intro → active`
+  - `waiting`: Single consolidated onboarding screen. Shows `GRANT PERMISSIONS` button if mic/cam not yet granted. Auto-transitions button to `PLAY` once granted (or shows `PLAY` directly if already granted). Includes privacy disclaimer and error state.
+  - `connecting`: Black screen with "connecting…" pulse while WS opens and backend initialises. Shows until backend sends `session_ready`.
+  - `intro`: `session_ready` is the trigger that starts `IntroSequence`. `intro_complete` is now always sent over an open WS.
+  - `active`: Game HUD takes over after credits end.
+
+### Credits (Rewritten March 14)
+- **New 9-line script in 3 sequential fade blocks + title card (total 19s):**
+  - t=1.0s — Block 1: `MYCELIA INTERACTIVE / PRESENTS`
+  - t=5.0s — Block 2: `LIMINAL SIN / A voice psychological-horror experience. / Powered by Google Gemini.`
+  - t=9.5s — Block 3: `Directed by J.W. / Written by J.W. and A.L. / Music by THE S33K3R`
+  - t=14.0s — Big `LIMINAL SIN` title card
+  - t=17.0s — Fade to black, audio fades
+  - t=19.0s — `intro_complete` fires → game begins
+
+### WS Event & Media System (From March 14 earlier session)
+- **GCS Morphic media loading live:** Frontend loads stills/clips from GCS on `scene_change` events.
+- **All WS event types synchronized:** 100% contract compliance (29 events matched).
+- **2 critical P0 bugs fixed:** `found_transition` (was ending session), `anomaly_cards` (was showing card overlay).
+- **Acecard flow fully wired:** keyword timer heartbeat, reveal clip + completion event, card2 pickup window.
+- **7 wildcard slotsky handlers** implemented (vision feed, scare SFX, game_over/good_ending loading/start).
+- **Wildcard3 trigger handler** implemented.
+- **WS reconnect backoff:** 3 attempts at 1s, 3s, 5s delays.
+- **DemoEndOverlay:** Play Again on both endings. Good ending: "to be continued".
+
+---
+
+## Frontend Status — 100% COMPLETE (March 14, 2026)
+
+Zero TypeScript errors. Zero ESLint errors. Zero warnings.
+
+| System | Status |
+|---|---|
+| Onboarding (permissions gate + PLAY flow) | ✅ Live — single screen, auto-detect PLAY |
+| Connecting screen (waiting for session_ready) | ✅ Live |
+| Credits sequence (3 blocks + title card, 19s) | ✅ Live — correct 9-line script |
+| session_ready → intro trigger | ✅ Fixed — intro only starts after WS open |
+| intro_complete delivery | ✅ Fixed — always sent over open WS |
+| WS transport (GameWSContext) | ✅ Live — all event types, reconnect backoff |
+| GCS Morphic media loading | ✅ Live — 16 stills + 18 clips from bucket |
+| Scenario effects (slotsky, cards, timers) | ✅ Live — all handlers wired |
+| General effects (scene loading, glitch, trust) | ✅ Live |
+| Acecard keyword timer | ✅ Live — 30s heartbeat escalation |
+| Acecard reveal playback | ✅ Live — GCS clip + completion event |
+| Card pickup overlay | ✅ Live |
+| Wildcard CSS effects | ✅ Live — 7 new CSS classes |
+| Demo end overlay | ✅ Live — Play Again for both endings |
+| Audio SFX manifest | ✅ Live — scare_wildcard added |
+
+---
+
+## Files Modified — This Session (March 14, 2026)
+
+| File | Change |
+|---|---|
+| `app/ls/game/page.tsx` | Rewritten: single onboarding screen, connecting phase, session_ready→intro wiring |
+| `app/ls/game/IntroSequence.tsx` | Rewritten: 9-line 3-block credits, 19s total timing, correct script |
+
+## Files Modified — Earlier (March 14, 2026)
+
+| File | Change |
+|---|---|
+| `app/ls/game/mediaManifest.ts` | **NEW** — GCS constants, Morphic media IDs, helper functions |
+| `app/ls/game/GameWSContext.tsx` | 5 new event types, expanded payloads, reconnect backoff, removed dead types |
+| `app/ls/game/useGameHudScenarioEffects.ts` | Fixed 2 P0 bugs, added 7 slotsky/acecard/wildcard handlers |
+| `app/ls/game/useGameHudGeneralEffects.ts` | GCS Morphic loading, hallway_pov_02_ready emission, preload stills |
+| `app/ls/game/DemoEndOverlay.tsx` | Play Again for both endings, "to be continued" text |
+| `app/ls/game/GameHUD.tsx` | Removed dead handleEndSession |
+| `app/styles/game-effects.css` | 7 new wildcard CSS classes |
+| `app/ls/game/audioManifest.ts` | Added scare_wildcard SFX key |
+
+---
+
+## Active Constraints
+
+- Lyria 3 audio deferred. No audio generation until `docs/AUDIO_DESIGN.md` exists.
+- ADK/AutoFlow NOT implemented. Direct GenAI SDK + WebSocket only.
+- All game state in backend (Firestore). Frontend is a dumb terminal.
+- `docs/Contest.md` — do not archive until after March 16 5PM PDT deadline.
+
 
 ---
 
