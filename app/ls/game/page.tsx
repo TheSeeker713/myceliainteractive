@@ -20,14 +20,14 @@ import { IntroSequence } from "./IntroSequence";
 
 function GameInner() {
   const [sessionPhase, setSessionPhase] = useState<
-    "waiting" | "connecting" | "intro" | "active"
+    "waiting" | "intro" | "active"
   >("waiting");
   const [permissionsChecked, setPermissionsChecked] = useState(false);
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   const [grantingPerms, setGrantingPerms] = useState(false);
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const sessionActive = sessionPhase === "intro" || sessionPhase === "active";
-  const { connect, lastEvent } = useGameWS();
+  const { connect } = useGameWS();
   // Single shared AudioContext for the whole session — passed to both GameHUD
   // (playback) and usePlayerMedia (mic capture) to avoid iOS's concurrent
   // AudioContext limit.
@@ -72,12 +72,6 @@ function GameInner() {
     };
   }, []);
 
-  // Backend sends session_ready once GM + NPCs are initialised → start credits
-  useEffect(() => {
-    if (lastEvent?.type !== "session_ready") return;
-    if (sessionPhase === "connecting") setSessionPhase("intro");
-  }, [lastEvent, sessionPhase]);
-
   async function handleGrantPermissions() {
     setGrantingPerms(true);
     setPermissionError(null);
@@ -109,9 +103,10 @@ function GameInner() {
     }
   }
 
+  // PLAY: connect WS in background, start credits immediately.
   function handlePlay() {
     connect();
-    setSessionPhase("connecting");
+    setSessionPhase("intro");
   }
 
   return (
@@ -211,20 +206,7 @@ function GameInner() {
         </div>
       )}
 
-      {/* ── Connecting screen (waiting for session_ready from backend) ─ */}
-      {sessionPhase === "connecting" && (
-        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black">
-          <p
-            className="text-xs tracking-[0.45em] uppercase animate-pulse"
-            style={{
-              color: "rgba(192,132,252,0.35)",
-              fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
-            }}
-          >
-            connecting…
-          </p>
-        </div>
-      )}
+
     </div>
   );
 }
