@@ -4,17 +4,19 @@ import { useEffect, useRef, useState, type MutableRefObject } from "react";
 import { AUDIO_MANIFEST } from "./audioManifest";
 import { useGameWS } from "./GameWSContext";
 
-type IntroPhase = "blank" | "credits" | "title" | "fadeout";
+type IntroPhase = "blank" | "block1" | "block2" | "block3" | "title" | "fadeout";
 
 /**
  * IntroSequence — Cinematic opening before the game session begins.
  *
  * Sequence (total ~11.5s):
  *  0.0s  — Black screen + audio starts (intro music 0.37 gain, wind/drip 0.65 gain)
- *  1.2s  — Production credits fade in
- *  6.5s  — Credits fade out, "LIMINAL SIN" title fades in
- * 10.0s  — Title fades to black, audio fades out
- * 11.5s  — onComplete fires (game session takes over)
+ *  1.0s  — Block 1: MYCELIA INTERACTIVE / PRESENTS
+ *  5.0s  — Block 2: LIMINAL SIN + tagline
+ *  9.5s  — Block 3: Directed / Written / Music
+ * 14.0s  — Big LIMINAL SIN title card
+ * 17.0s  — Title fades to black, audio fades out
+ * 19.0s  — onComplete fires (game session takes over)
  *
  * Audio runs on dedicated gain nodes attached directly to the shared AudioContext.
  * The main audio layer system (useAudioLayers) is untouched — it takes over
@@ -43,13 +45,15 @@ export function IntroSequence({
     const timers: ReturnType<typeof setTimeout>[] = [];
 
     // ── Sequence timing ────────────────────────────────────────────────────
-    timers.push(setTimeout(() => setPhase("credits"), 1200));
-    timers.push(setTimeout(() => setPhase("title"), 6500));
+    timers.push(setTimeout(() => setPhase("block1"), 1000));
+    timers.push(setTimeout(() => setPhase("block2"), 5000));
+    timers.push(setTimeout(() => setPhase("block3"), 9500));
+    timers.push(setTimeout(() => setPhase("title"), 14000));
     timers.push(
       setTimeout(() => {
         setPhase("fadeout");
         setVisible(false);
-      }, 10000),
+      }, 17000),
     );
     timers.push(
       setTimeout(() => {
@@ -58,13 +62,13 @@ export function IntroSequence({
           send({ type: "intro_complete" });
           onComplete();
         }
-      }, 11500),
+      }, 19000),
     );
 
     // ── Audio ─────────────────────────────────────────────────────────────
     const ctx = audioCtxRef.current;
 
-    // FE-16B: Descent impact thud at t=10.8s (fires in the silence after wind fades)
+    // FE-16B: Descent impact thud at t=17.8s (fires in the silence after wind fades)
     if (ctx) {
       timers.push(
         setTimeout(() => {
@@ -87,7 +91,7 @@ export function IntroSequence({
               /* silent degradation — missing file does not affect intro */
             }
           })();
-        }, 10800),
+        }, 17800),
       );
     }
     if (ctx) {
@@ -101,16 +105,16 @@ export function IntroSequence({
       wGain.connect(ctx.destination);
       windGainRef.current = wGain;
 
-      // Begin fading out audio at t=10s (matches container fade)
+      // Begin fading out audio at t=17s (matches container fade)
       timers.push(
         setTimeout(() => {
           const now = ctx.currentTime;
           for (const gn of [iGain, wGain]) {
             gn.gain.cancelScheduledValues(now);
             gn.gain.setValueAtTime(gn.gain.value, now);
-            gn.gain.linearRampToValueAtTime(0, now + 1.2);
+            gn.gain.linearRampToValueAtTime(0, now + 1.8);
           }
-        }, 10000),
+        }, 17000),
       );
 
       async function startAudio(actx: AudioContext) {
@@ -180,7 +184,6 @@ export function IntroSequence({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const creditsShown = phase === "credits";
   const titleShown = phase === "title";
 
   return (
@@ -192,36 +195,80 @@ export function IntroSequence({
         pointerEvents: visible ? "auto" : "none",
       }}
     >
-      {/* ── Production credits ─────────────────────────────── */}
+      {/* ── Block 1: Studio credit ──────────────────────────── */}
       <div
-        className="text-center font-mono"
+        className="absolute text-center font-mono flex flex-col items-center gap-3"
         style={{
-          opacity: creditsShown ? 1 : 0,
+          opacity: phase === "block1" ? 1 : 0,
           transition: "opacity 1.5s ease-in-out",
         }}
       >
         <p
-          className="text-xs tracking-[0.35em] uppercase mb-8"
-          style={{ color: "rgba(192,132,252,0.55)" }}
+          className="text-sm tracking-[0.5em] uppercase"
+          style={{ color: "rgba(192,132,252,0.7)" }}
         >
-          A MYCELIA INTERACTIVE EXPERIENCE
+          MYCELIA INTERACTIVE
         </p>
-        <div className="flex flex-col gap-2">
-          {["Directed by J.W.", "Produced by A.L.", "Music by THE S33K3R"].map(
-            (line) => (
-              <p
-                key={line}
-                className="text-xs tracking-[0.25em]"
-                style={{ color: "rgba(160,160,160,0.45)" }}
-              >
-                {line}
-              </p>
-            ),
-          )}
-        </div>
+        <p
+          className="text-xs tracking-[0.4em] uppercase"
+          style={{ color: "rgba(160,160,160,0.55)" }}
+        >
+          PRESENTS
+        </p>
       </div>
 
-      {/* ── LIMINAL SIN title ──────────────────────────────── */}
+      {/* ── Block 2: Title + tagline ────────────────────────── */}
+      <div
+        className="absolute text-center font-mono flex flex-col items-center gap-3"
+        style={{
+          opacity: phase === "block2" ? 1 : 0,
+          transition: "opacity 1.5s ease-in-out",
+        }}
+      >
+        <p
+          className="text-4xl md:text-5xl font-black tracking-[0.25em] uppercase text-white"
+          style={{ textShadow: "0 0 30px rgba(220,38,38,0.35)" }}
+        >
+          LIMINAL SIN
+        </p>
+        <p
+          className="text-xs tracking-[0.2em] mt-2"
+          style={{ color: "rgba(160,160,160,0.55)" }}
+        >
+          A voice psychological-horror experience.
+        </p>
+        <p
+          className="text-xs tracking-[0.2em]"
+          style={{ color: "rgba(160,160,160,0.4)" }}
+        >
+          Powered by Google Gemini.
+        </p>
+      </div>
+
+      {/* ── Block 3: Creative credits ───────────────────────── */}
+      <div
+        className="absolute text-center font-mono flex flex-col items-center gap-2"
+        style={{
+          opacity: phase === "block3" ? 1 : 0,
+          transition: "opacity 1.5s ease-in-out",
+        }}
+      >
+        {[
+          "Directed by J.W.",
+          "Written by J.W. and A.L.",
+          "Music by THE S33K3R",
+        ].map((line) => (
+          <p
+            key={line}
+            className="text-xs tracking-[0.25em]"
+            style={{ color: "rgba(160,160,160,0.45)" }}
+          >
+            {line}
+          </p>
+        ))}
+      </div>
+
+      {/* ── LIMINAL SIN title card ──────────────────────────── */}
       <div
         className="absolute text-center"
         style={{
