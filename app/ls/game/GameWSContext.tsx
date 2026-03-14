@@ -18,6 +18,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { MORPHIC_MEDIA_IDS } from "./mediaManifest";
 
 // ── Inbound event types (server → client) ──────────────────────────────────
 
@@ -312,7 +313,13 @@ export function GameWSProvider({
           const parsed: ServerEvent = JSON.parse(ev.data as string);
           setLastEvent(parsed);
           if (parsed.type === "scene_image") {
-            setSceneImage(parsed.payload.data);
+            // Skip Morphic media — frontend loads clips/stills directly from GCS.
+            // Setting sceneImage for Morphic IDs causes a React batching race
+            // where the display effect hides the playing video clip.
+            const mediaId = (parsed.payload as Record<string, unknown>)?.mediaId;
+            if (!(typeof mediaId === "string" && MORPHIC_MEDIA_IDS.has(mediaId))) {
+              setSceneImage(parsed.payload.data);
+            }
           }
           if (parsed.type === "scene_video") {
             setSceneVideo((parsed as SceneVideoEvent).payload);
