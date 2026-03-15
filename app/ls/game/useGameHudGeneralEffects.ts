@@ -115,6 +115,17 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
         generatorFlickerTimerRef.current = null;
       }
     }
+
+    // Force-clear any lingering wildcard/glitch CSS on every scene_change.
+    // The slotsky_trigger handler should have already removed these, but
+    // this catches edge cases where the event was missed or batched.
+    document.body.classList.remove(
+      "wildcard-hud-active",
+      "wildcard2-loading",
+      "wildcard2-active",
+      "wildcard3-loading",
+      "wildcard3-active",
+    );
   }, [demoEnded, generatorFlickerTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit]);
 
   useEffect(() => {
