@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mycelia Interactive
 
-## Getting Started
+Mycelia Interactive is an independent interactive narrative and experimental media studio focused on branching story systems, alternate reality design, interactive cinema, and emotionally reactive player experiences.
 
-First, run the development server:
+This repository is the **frontend/site repo** for Mycelia Interactive. It contains the public-facing website plus the browser client for **Liminal Sin**, an interactive FMV psychological horror experience built for the Gemini Live Agent Challenge.
+
+## Ownership
+
+Mycelia Interactive is owned and operated by **Jeremy W. Robards**.
+
+**Liminal Sin** was developed by Jeremy W. Robards with **Adrianna Loya** credited as creative consultant.
+
+## What This Repo Contains
+
+This repository includes:
+
+- the Mycelia Interactive website front end
+- the Liminal Sin landing page
+- the Liminal Sin playable browser client
+- the judges route for the Liminal Sin submission build
+- runtime UI systems such as onboarding, credits, card overlays, timers, and visual effects
+
+## Live Links
+
+- Studio site: [https://www.myceliainteractive.com](https://www.myceliainteractive.com)
+- Liminal Sin landing page: [https://www.myceliainteractive.com/ls](https://www.myceliainteractive.com/ls)
+- Liminal Sin game: [https://www.myceliainteractive.com/ls/game](https://www.myceliainteractive.com/ls/game)
+- Liminal Sin judges build: [https://www.myceliainteractive.com/ls/judges/game](https://www.myceliainteractive.com/ls/judges/game)
+
+## Related Repositories
+
+- Frontend/site repo: [TheSeeker713/myceliainteractive](https://github.com/TheSeeker713/myceliainteractive)
+- Backend/runtime repo: [TheSeeker713/liminal-sin-gemini](https://github.com/TheSeeker713/liminal-sin-gemini)
+
+The backend repo contains the Gemini Live multi-agent runtime, WebSocket server, Google Cloud deployment, Firestore session state, and canonical media orchestration for Liminal Sin.
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Cloudflare Workers / Pages deployment via Wrangler
+
+## Local Development
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/TheSeeker713/myceliainteractive.git
+cd myceliainteractive
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the frontend locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Important: Full Liminal Sin Reproduction
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This repo is the **frontend only**.
 
-## Learn More
+To fully reproduce the Liminal Sin project locally, you also need the backend repo:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+git clone https://github.com/TheSeeker713/liminal-sin-gemini.git
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You need both repositories for the full end-to-end experience:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- this repo provides the browser UI and presentation layer
+- the backend repo provides the live AI runtime, Google Cloud services, and WebSocket game server
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is deployed through Cloudflare using Wrangler.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run deploy
+```
+
+That command builds the static export and deploys the site.
+
+## Primary Frontend Routes
+
+- `/` — Mycelia Interactive home page
+- `/mycelia` — studio page
+- `/ls` — Liminal Sin landing page
+- `/ls/game` — public Liminal Sin game route
+- `/ls/judges/game` — judges route
+- `/ls/lsr.html` — Liminal Sin runtime/status report
