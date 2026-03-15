@@ -96,17 +96,24 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       }, 500);
     }
 
-    // When generator clip plays, start the flicker → lit → amber transition
-    if (mediaId === "tunnel_generator_01") {
-      setGeneratorFlickering(true);
-      if (generatorFlickerTimerRef.current)
+    // When generator clip plays, start the flicker → lit → amber transition.
+    // Also force-clear the flashlight vignette for ANY post-tunnel scene in case
+    // the generator scene_change was missed (e.g. GM-triggered flashlight skip).
+    const POST_TUNNEL_IDS = new Set([
+      "tunnel_generator_01", "card_joker_01", "card_pickup_01",
+      "tunnel_transition_01", "park_reveal_01", "park_walkway_01",
+      "park_walkway_02", "park_liminal_01", "shaft_maintenance_01",
+      "elevator_entry_01", "elevator_inside_01", "elevator_inside_02",
+      "hallway_pov_01", "hallway_pov_02", "acecard_reveal_01", "card_pickup_02",
+    ]);
+    if (POST_TUNNEL_IDS.has(mediaId)) {
+      setGeneratorLit(true);
+      setGeneratorAmber(true);
+      setGeneratorFlickering(false);
+      if (generatorFlickerTimerRef.current) {
         clearTimeout(generatorFlickerTimerRef.current);
-      generatorFlickerTimerRef.current = setTimeout(() => {
-        setGeneratorFlickering(false);
-        setGeneratorLit(true);
-        setTimeout(() => setGeneratorAmber(true), 100);
         generatorFlickerTimerRef.current = null;
-      }, 1500);
+      }
     }
   }, [demoEnded, generatorFlickerTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit]);
 
