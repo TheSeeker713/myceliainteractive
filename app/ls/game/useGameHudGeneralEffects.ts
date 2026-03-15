@@ -7,7 +7,6 @@ import type {
   HudGlitchEvent,
   NpcIdleNudgeEvent,
   OverlayTextEvent,
-  SceneChangeEvent,
   SceneImageEvent,
   SceneVideoEvent,
   SessionErrorEvent,
@@ -25,6 +24,7 @@ import {
 export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
   const {
     lastEvent,
+    sceneChangeEvent,
     status,
     sceneImage,
     sceneVideo,
@@ -65,10 +65,9 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
 
   // ── Morphic media loading from GCS on scene_change ──────────────────────
   useEffect(() => {
-    if (lastEvent?.type !== "scene_change") return;
+    if (!sceneChangeEvent) return;
     if (demoEnded) return;
-    const ev = lastEvent as SceneChangeEvent;
-    const mediaId = ev.payload.mediaId;
+    const mediaId = sceneChangeEvent.payload.mediaId;
     if (!mediaId) return;
 
     // Only load Morphic media from GCS for known pre-built IDs
@@ -96,7 +95,7 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
         send({ type: "hallway_pov_02_ready" });
       }, 500);
     }
-  }, [demoEnded, lastEvent, pushImage, sceneVideoRef, send]);
+  }, [demoEnded, sceneChangeEvent, pushImage, sceneVideoRef, send]);
 
   useEffect(() => {
     if (lastEvent?.type !== "scene_image") return;

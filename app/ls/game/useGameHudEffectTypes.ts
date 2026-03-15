@@ -6,6 +6,7 @@ import type {
   CardDiscoveredEvent,
   ClientEvent,
   ConnectionStatus,
+  SceneChangeEvent,
   ServerEvent,
 } from "./GameWSContext";
 import type { GameError } from "./useGameError";
@@ -18,6 +19,7 @@ export type HudEventRefs = {
 
 export type UseGameHudEffectsArgs = {
   lastEvent: ServerEvent | null;
+  sceneChangeEvent: SceneChangeEvent | null;
   status: ConnectionStatus;
   sceneImage: string | null;
   sceneVideo: { sceneKey: string; url: string } | null;

@@ -226,6 +226,7 @@ export type ConnectionStatus = "connecting" | "open" | "closed" | "error";
 interface GameWSContextValue {
   status: ConnectionStatus;
   lastEvent: ServerEvent | null;
+  sceneChangeEvent: SceneChangeEvent | null;
   sceneImage: string | null; // base64 JPEG from latest SCENE_IMAGE event; persists across events
   sceneVideo: { sceneKey: string; url: string } | null;
   playerHasSpoken: boolean;
@@ -237,6 +238,7 @@ interface GameWSContextValue {
 const GameWSContext = createContext<GameWSContextValue>({
   status: "closed",
   lastEvent: null,
+  sceneChangeEvent: null,
   sceneImage: null,
   sceneVideo: null,
   playerHasSpoken: false,
@@ -259,6 +261,8 @@ export function GameWSProvider({
   const [status, setStatus] = useState<ConnectionStatus>("closed");
   const [shouldConnect, setShouldConnect] = useState(false);
   const [lastEvent, setLastEvent] = useState<ServerEvent | null>(null);
+  const [sceneChangeEvent, setSceneChangeEvent] = useState<SceneChangeEvent | null>(null);
+  const sceneChangeSeqRef = useRef(0);
   const [sceneImage, setSceneImage] = useState<string | null>(null);
   const [sceneVideo, setSceneVideo] = useState<{
     sceneKey: string;
@@ -312,6 +316,17 @@ export function GameWSProvider({
         try {
           const parsed: ServerEvent = JSON.parse(ev.data as string);
           setLastEvent(parsed);
+          if (parsed.type === "scene_change") {
+            // Dedicated state for scene_change events. React 18+ automatic
+            // batching can swallow scene_change when a subsequent event
+            // (video_gen_started, card_discovered) overwrites lastEvent in
+            // the same batch. This ensures scene_change is never lost.
+            sceneChangeSeqRef.current++;
+            setSceneChangeEvent({
+              ...(parsed as SceneChangeEvent),
+              _seq: sceneChangeSeqRef.current,
+            } as SceneChangeEvent);
+          }
           if (parsed.type === "scene_image") {
             // Skip Morphic media — frontend loads clips/stills directly from GCS.
             // Setting sceneImage for Morphic IDs causes a React batching race
@@ -358,6 +373,7 @@ export function GameWSProvider({
       value={{
         status,
         lastEvent,
+        sceneChangeEvent,
         sceneImage,
         sceneVideo,
         playerHasSpoken,

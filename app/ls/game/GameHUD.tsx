@@ -34,7 +34,7 @@ export default function GameHUD({
   cameraObscured?: boolean;
   onStopMedia?: () => void;
 }) {
-  const { lastEvent, status, sceneImage, sceneVideo, clearSceneVideo, send } =
+  const { lastEvent, sceneChangeEvent, status, sceneImage, sceneVideo, clearSceneVideo, send } =
     useGameWS();
   const fmvRef = useRef<HTMLVideoElement>(null);
   const [showHint, setShowHint] = useState(false);
@@ -129,6 +129,7 @@ export default function GameHUD({
 
   useGameHudEffects({
     lastEvent,
+    sceneChangeEvent,
     status,
     sceneImage,
     sceneVideo,
