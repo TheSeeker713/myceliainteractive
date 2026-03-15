@@ -1,7 +1,7 @@
 ﻿# CURRENT_STATE.md — Liminal Sin Frontend (myceliainteractive)
 
 > **UPDATE RULE:** Replace the previous content and write a single current-state snapshot. Do NOT append. Historical logs belong in git history.
-> Last updated: March 15, 2026 (Bug 2/3 fixes — glitch persistence + slow motion video).
+> Last updated: March 15, 2026 (Bug 4 backend deploy + Bug 2/3 fixes — glitch persistence + slow motion video).
 
 ---
 
@@ -89,3 +89,4 @@ Zero TypeScript errors. Zero ESLint errors. Zero warnings.
 - ADK/AutoFlow NOT implemented. Direct GenAI SDK + WebSocket only.
 - All game state in backend (Firestore). Frontend is a dumb terminal.
 - `docs/Contest.md` — do not archive until after March 16 5PM PDT deadline.
+
