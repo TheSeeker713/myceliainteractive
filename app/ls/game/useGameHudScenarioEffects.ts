@@ -232,6 +232,7 @@ export function useGameHudScenarioEffects(
     video.src = clipUrl;
     video.style.display = "block";
     video.muted = true;
+    video.playbackRate = 1.0;
     video.play().catch((e) =>
       console.error("[Acecard] clip play error:", e),
     );

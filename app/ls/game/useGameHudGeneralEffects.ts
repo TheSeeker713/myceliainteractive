@@ -79,6 +79,7 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
           video.src = getClipUrl(mediaId);
           video.style.display = "block";
           video.muted = true;
+          video.playbackRate = 1.0;
           video.play().catch((e) =>
             console.error("[SceneChange] clip play error:", e),
           );
@@ -126,7 +127,15 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       "wildcard3-loading",
       "wildcard3-active",
     );
-  }, [demoEnded, generatorFlickerTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit]);
+
+    // Also clear the React-managed glitch animation state.
+    // The hud_glitch timer may have been interrupted by rapid event sequencing.
+    if (glitchTimerRef.current) {
+      clearTimeout(glitchTimerRef.current);
+      glitchTimerRef.current = null;
+    }
+    setGlitchClass(null);
+  }, [demoEnded, generatorFlickerTimerRef, glitchTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit, setGlitchClass]);
 
   useEffect(() => {
     if (lastEvent?.type !== "scene_image") return;
@@ -235,10 +244,6 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       setGlitchClass(null);
       glitchTimerRef.current = null;
     }, duration);
-
-    return () => {
-      if (glitchTimerRef.current) clearTimeout(glitchTimerRef.current);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastEvent]);
 
@@ -330,6 +335,7 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     const payload = sceneVideo as SceneVideoEvent["payload"];
     video.src = payload.url;
     video.style.display = "block";
+    video.playbackRate = 1.0;
     video
       .play()
       .catch((e) => console.error("[GameHUD] scene_video play error:", e));
