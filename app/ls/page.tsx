@@ -21,7 +21,7 @@ export default function LiminalSinLanding() {
 
         <div className="flex items-center gap-3 sm:gap-6 lg:gap-8 flex-wrap justify-end">
           <a
-            href="/roadmap/roadmap.html"
+            href="/roadmap"
             className="hidden sm:inline uppercase tracking-[0.125em] text-white hover:text-purple-400 transition-colors text-sm font-medium"
           >
             Roadmap
@@ -33,7 +33,7 @@ export default function LiminalSinLanding() {
             Play Liminal Sin Demo
           </a>
           <a
-            href="/ls/lsr.html"
+            href="/ls/lsr"
             className="hidden sm:inline-flex px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-hero-bg-light/50 border border-hero-cyan-400/30 text-cyan-50 text-xs sm:text-sm font-medium hover:bg-hero-cyan-900/40 hover:border-hero-cyan-300 hover:text-white transition-all duration-300"
           >
             Learn More

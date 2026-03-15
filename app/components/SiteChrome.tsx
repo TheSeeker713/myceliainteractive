@@ -33,7 +33,7 @@ export function SiteHeader() {
         </div>
         <div className="hidden sm:flex gap-6 items-center">
           <a
-            href="/roadmap/roadmap.html"
+            href="/roadmap"
             className="px-4 py-2 text-sm font-medium text-cyan-200/70 hover:text-cyan-300 transition-colors duration-200 font-[family-name:var(--font-geist-mono)] tracking-wide"
           >
             Roadmap
@@ -45,7 +45,7 @@ export function SiteHeader() {
             Play Liminal Sin Demo
           </a>
           <a
-            href="/ls/lsr.html"
+            href="/ls/lsr"
             className="px-6 py-2.5 rounded-lg bg-hero-bg-light/50 border border-hero-cyan-400/30 text-cyan-50 font-medium hover:bg-hero-cyan-900/40 hover:border-hero-cyan-300 hover:text-white transition-all duration-300"
           >
             Learn More
@@ -65,7 +65,7 @@ export function SiteFooter() {
     <footer className="site-gutter site-footer-py sticky bottom-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 mt-auto">
       <div className="max-w-7xl mx-auto flex items-center justify-between text-cyan-50/70 text-sm">
         <span>&copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.</span>
-        <a href="/ls/privacy.html" className="hover:text-cyan-300 transition-colors duration-200">Privacy Policy</a>
+        <a href="/ls/privacy" className="hover:text-cyan-300 transition-colors duration-200">Privacy Policy</a>
       </div>
     </footer>
   );

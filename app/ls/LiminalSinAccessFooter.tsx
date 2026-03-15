@@ -53,7 +53,7 @@ export function LiminalSinAccessFooter() {
             </span>
             <span className="hidden sm:inline text-purple-900/60">|</span>
             <a
-              href="/ls/privacy.html"
+              href="/ls/privacy"
               className="hover:text-cyan-300 transition-colors"
             >
               Privacy Policy
