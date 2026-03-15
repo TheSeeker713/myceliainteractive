@@ -95,6 +95,6 @@ That command builds the static export and deploys the site.
 - `/` — Mycelia Interactive home page
 - `/mycelia` — studio page
 - `/ls` — Liminal Sin landing page
-- `/ls/game` — public Liminal Sin game route
-- `/ls/judges/game` — judges route
+- `/ls/[redacted]` — public Liminal Sin game route
+- `/ls/judges/[redacted]` — judges route
 - `/ls/lsr.html` — Liminal Sin runtime/status report
