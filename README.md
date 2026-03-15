@@ -24,8 +24,8 @@ This repository includes:
 
 - Studio site: [https://www.myceliainteractive.com](https://www.myceliainteractive.com)
 - Liminal Sin landing page: [https://www.myceliainteractive.com/ls](https://www.myceliainteractive.com/ls)
-- Liminal Sin game: [https://www.myceliainteractive.com/ls/game](https://www.myceliainteractive.com/ls/[REDACTED])
-- Liminal Sin judges build: [https://www.myceliainteractive.com/ls/judges/game](https://www.myceliainteractive.com/ls/judges/[REDACTED)
+- Liminal Sin game: [redacted](https://www.myceliainteractive.com/ls/[REDACTED])
+- Liminal Sin judges build: [redacted](https://www.myceliainteractive.com/ls/judges/[REDACTED)
 (LINKS WILL BE UNREDACTED ON MARCH 16TH at 5pm)
 ## Related Repositories
 
