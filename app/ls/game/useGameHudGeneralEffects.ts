@@ -95,7 +95,20 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
         send({ type: "hallway_pov_02_ready" });
       }, 500);
     }
-  }, [demoEnded, sceneChangeEvent, pushImage, sceneVideoRef, send]);
+
+    // When generator clip plays, start the flicker → lit → amber transition
+    if (mediaId === "tunnel_generator_01") {
+      setGeneratorFlickering(true);
+      if (generatorFlickerTimerRef.current)
+        clearTimeout(generatorFlickerTimerRef.current);
+      generatorFlickerTimerRef.current = setTimeout(() => {
+        setGeneratorFlickering(false);
+        setGeneratorLit(true);
+        setTimeout(() => setGeneratorAmber(true), 100);
+        generatorFlickerTimerRef.current = null;
+      }, 1500);
+    }
+  }, [demoEnded, generatorFlickerTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit]);
 
   useEffect(() => {
     if (lastEvent?.type !== "scene_image") return;
