@@ -296,8 +296,8 @@ export function GameWSProvider({
 
     const url = wsUrl; // narrow for closure
     let attempt = 0;
-    const maxRetries = 3;
-    const backoffMs = [1000, 3000, 5000];
+    const maxRetries = 10;
+    const backoffMs = [1000, 2000, 3000, 4000, 5000];
     let currentWs: WebSocket | null = null;
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -349,10 +349,12 @@ export function GameWSProvider({
       };
 
       ws.onclose = () => {
+        wsRef.current = null;
         if (attempt < maxRetries) {
           setStatus("connecting");
-          const delay = backoffMs[attempt] ?? 5000;
+          const delay = backoffMs[Math.min(attempt, backoffMs.length - 1)] ?? 5000;
           attempt++;
+          console.warn(`[GameWS] Connection lost. Reconnect attempt ${attempt}/${maxRetries} in ${delay}ms...`);
           reconnectTimer = setTimeout(connectWs, delay);
         } else {
           setStatus("error");
