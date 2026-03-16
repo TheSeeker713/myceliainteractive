@@ -369,3 +369,18 @@
   white-space: nowrap;
   animation: matrix-overlay-fade 6s ease-out forwards;
 }
+
+/* ── Panel Overlay — floating interactive panel for acecard sequence ── */
+@keyframes panel-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes panel-glow-pulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(139,92,246,0.4)); }
+  50% { filter: drop-shadow(0 0 20px rgba(139,92,246,0.8)); }
+}
+@keyframes panel-hint-pulse {
+  0%, 100% { opacity: 0; }
+  30% { opacity: 1; }
+  70% { opacity: 1; }
+}

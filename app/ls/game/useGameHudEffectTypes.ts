@@ -78,4 +78,5 @@ export type UseGameHudEffectsArgs = {
   onStopMedia?: () => void;
   wsCloseTimerRef: MutableRefObject<ReturnType<typeof setTimeout> | null>;
   setCurrentMediaId: (mediaId: string | null) => void;
+  setShowPanelOverlay: Dispatch<SetStateAction<boolean>>;
 };

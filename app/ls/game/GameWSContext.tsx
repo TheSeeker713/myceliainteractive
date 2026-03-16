@@ -223,7 +223,8 @@ export type ClientEvent =
   | { type: "card_collected"; cardId: "card1" | "card2" }
   | { type: "intro_complete" }
   | { type: "hallway_pov_02_ready" }
-  | { type: "acecard_reveal_complete" };
+  | { type: "acecard_reveal_complete" }
+  | { type: "panel_clicked" };
 
 // ── Context shape ──────────────────────────────────────────────────────────
 

@@ -101,6 +101,10 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       setTimeout(() => {
         send({ type: "hallway_pov_02_ready" });
       }, 500);
+      // Show the clickable panel overlay after a short delay
+      setTimeout(() => {
+        args.setShowPanelOverlay(true);
+      }, 1500);
     }
 
     // When generator clip plays, start the flicker → lit → amber transition.

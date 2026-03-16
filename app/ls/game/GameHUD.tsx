@@ -17,6 +17,7 @@ import { useGameHudEffects } from "./useGameHudEffects";
 import { useTrustAudioEffects } from "./useTrustAudioEffects";
 import { ErrorOverlay, ErrorModal } from "./ErrorOverlay";
 import { PlayerSubtitles } from "./PlayerSubtitles";
+import { PanelOverlay } from "./PanelOverlay";
 
 export default function GameHUD({
   sessionActive = false,
@@ -77,6 +78,7 @@ export default function GameHUD({
   const [showPlayAgain, setShowPlayAgain] = useState(false);
   const [serverHint, setServerHint] = useState<string | null>(null);
   const serverHintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showPanelOverlay, setShowPanelOverlay] = useState(false);
   const sceneVideoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const {
@@ -190,6 +192,7 @@ export default function GameHUD({
     onStopMedia,
     wsCloseTimerRef,
     setCurrentMediaId,
+    setShowPanelOverlay,
   });
   // [AI: removed dead handleEndSession that sent session_end — backend ignores it]
   const handleReload = useCallback(() => {
@@ -203,6 +206,11 @@ export default function GameHUD({
     setTimeout(() => setShowCard(false), 500);
     send({ type: "card_collected", cardId: currentCardId });
   }, [cardCollecting, currentCardId, send]);
+
+  const handlePanelClick = useCallback(() => {
+    setShowPanelOverlay(false);
+    send({ type: "panel_clicked" });
+  }, [send]);
 
   return (
     <div
@@ -237,6 +245,7 @@ export default function GameHUD({
       />
 
       <HintOverlays showHint={showHint} serverHint={serverHint} />
+      <PanelOverlay visible={showPanelOverlay} onPanelClick={handlePanelClick} />
       <PlayerSubtitles active={sessionActive && !demoEnded} />
       <GMEyeIndicator
         visible={

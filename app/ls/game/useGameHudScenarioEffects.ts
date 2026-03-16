@@ -224,6 +224,7 @@ export function useGameHudScenarioEffects(
     if (lastEvent?.type !== "acecard_reveal_start") return;
     const ev = lastEvent as AcecardRevealStartEvent;
     clearDreadTimers(); // stop heartbeat SFX
+    args.setShowPanelOverlay(false); // hide the clickable panel SVG
 
     const video = sceneVideoRef.current;
     if (!video) return;
