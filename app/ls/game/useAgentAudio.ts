@@ -43,22 +43,11 @@ export function useAgentAudio({
   // Fires voicebox_activate + music_intro on Jason's very first utterance.
   const firstJasonSpeechRef = useRef(false);
 
-  // Throttle transmission_ping: skip if last ping was < 4s ago.
-  const lastPingTimeRef = useRef<number>(0);
-
-  // Debounce agent_interrupt: ignore if one fired < 5s ago.
-  const lastInterruptAtRef = useRef<number>(0);
-
   // Barge-in: player spoke over Jason — kill all queued Jason audio immediately.
+  // Radio static SFX removed — plays once at session start via backend clip_sfx only.
   useEffect(() => {
     if (lastEvent?.type !== "agent_interrupt") return;
 
-    // 5s debounce — prevents interrupt flood from freezing the audio pipeline.
-    const now = Date.now();
-    if (now - lastInterruptAtRef.current < 5000) return;
-    lastInterruptAtRef.current = now;
-
-    playSFX("barge_in", 0.25);
     const nodes = sourceNodesRef.current;
     for (const node of nodes) {
       try {
@@ -73,7 +62,7 @@ export function useAgentAudio({
     console.log(
       `[useAgentAudio] agent_interrupt - cancelled ${nodes.length} Jason audio nodes (Audrey preserved)`,
     );
-  }, [lastEvent, playSFX]);
+  }, [lastEvent]);
 
   // Agent audio playback — raw 16-bit little-endian PCM at 24kHz.
   useEffect(() => {
@@ -168,12 +157,6 @@ export function useAgentAudio({
         firstJasonSpeechRef.current = true;
         playSFX("voicebox_activate", 0.7);
         crossfadeMusic("music_intro", 2000);
-      } else {
-        const now = Date.now();
-        if (now - lastPingTimeRef.current > 4000) {
-          lastPingTimeRef.current = now;
-          playSFX("transmission_ping", 0.18);
-        }
       }
     }
 

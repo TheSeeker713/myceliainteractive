@@ -9,6 +9,53 @@ import {
 } from "react";
 import { useGameWS } from "./GameWSContext";
 
+type SendFn = ReturnType<typeof useGameWS>["send"];
+
+/** ScriptProcessorNode fallback for browsers without AudioWorklet support. */
+function setupScriptProcessor(
+  ctx: AudioContext,
+  source: MediaStreamAudioSourceNode,
+  actualRate: number,
+  targetRate: number,
+  send: SendFn,
+) {
+  const processor = ctx.createScriptProcessor(4096, 1, 1);
+  source.connect(processor);
+  processor.connect(ctx.destination); // must be connected to fire onaudioprocess
+
+  processor.onaudioprocess = (e: AudioProcessingEvent) => {
+    const raw32 = e.inputBuffer.getChannelData(0);
+
+    let pcm16k: Float32Array;
+    if (actualRate === targetRate) {
+      pcm16k = raw32;
+    } else {
+      const ratio = actualRate / targetRate;
+      const outLen = Math.floor(raw32.length / ratio);
+      pcm16k = new Float32Array(outLen);
+      for (let i = 0; i < outLen; i++) {
+        pcm16k[i] = raw32[Math.round(i * ratio)];
+      }
+    }
+
+    const int16 = new Int16Array(pcm16k.length);
+    for (let i = 0; i < pcm16k.length; i++) {
+      const s = Math.max(-1, Math.min(1, pcm16k[i]));
+      int16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
+    }
+    const bytes = new Uint8Array(int16.buffer);
+    let raw = "";
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      raw += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+    }
+    send({
+      type: "player_speech",
+      audio: btoa(raw),
+      timestamp: Date.now(),
+    });
+  };
+}
+
 /**
  * usePlayerMedia — Captures microphone and webcam, emits events to the backend.
  *
@@ -113,7 +160,7 @@ export function usePlayerMedia(
           };
         }
 
-        // ── Microphone: ScriptProcessor → raw PCM 16kHz Int16 ────────────────
+        // ── Microphone: AudioWorkletNode → raw PCM 16kHz Int16 ─────────────
         // Gemini Live requires audio/pcm;rate=16000 — raw linear PCM only.
         // Step H: Reuse the shared AudioContext (24kHz) created by GameHUD inside
         // the Begin Session gesture. iOS Safari silently suspends a second
@@ -130,44 +177,78 @@ export function usePlayerMedia(
         console.log(`[usePlayerMedia] AudioContext sampleRate: ${actualRate}`);
         const micSource = micCtx.createMediaStreamSource(audioStream);
 
-        const processor = micCtx.createScriptProcessor(4096, 1, 1);
-        micSource.connect(processor);
-        processor.connect(micCtx.destination); // must be connected to fire onaudioprocess
+        // AudioWorkletNode replaces deprecated ScriptProcessorNode.
+        // The worklet runs on the audio thread — lower latency, no main-thread jank.
+        // Blob URL avoids a separate file; fallback to ScriptProcessor for old browsers.
+        const targetRate = 16000;
+        const sendRef = send; // capture for worklet message handler
 
-        processor.onaudioprocess = (e) => {
-          const raw32 = e.inputBuffer.getChannelData(0);
+        if (typeof AudioWorkletNode !== "undefined" && micCtx.audioWorklet) {
+          try {
+            const processorCode = `
+              class PCMProcessor extends AudioWorkletProcessor {
+                constructor() {
+                  super();
+                }
+                process(inputs) {
+                  const input = inputs[0];
+                  if (!input || !input[0] || input[0].length === 0) return true;
+                  const raw32 = input[0];
+                  // Downsample to 16kHz if needed
+                  const ratio = sampleRate / ${targetRate};
+                  let pcm16k;
+                  if (sampleRate === ${targetRate}) {
+                    pcm16k = raw32;
+                  } else {
+                    const outLen = Math.floor(raw32.length / ratio);
+                    pcm16k = new Float32Array(outLen);
+                    for (let i = 0; i < outLen; i++) {
+                      pcm16k[i] = raw32[Math.round(i * ratio)];
+                    }
+                  }
+                  // Convert to Int16
+                  const int16 = new Int16Array(pcm16k.length);
+                  for (let i = 0; i < pcm16k.length; i++) {
+                    const s = Math.max(-1, Math.min(1, pcm16k[i]));
+                    int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+                  }
+                  this.port.postMessage(int16.buffer, [int16.buffer]);
+                  return true;
+                }
+              }
+              registerProcessor("pcm-processor", PCMProcessor);
+            `;
+            const blob = new Blob([processorCode], { type: "application/javascript" });
+            const workletUrl = URL.createObjectURL(blob);
+            await micCtx.audioWorklet.addModule(workletUrl);
+            URL.revokeObjectURL(workletUrl);
 
-          // If Chrome honored sampleRate:16000, raw32 IS 16kHz — use directly.
-          // If Chrome used its native rate instead, downsample to 16kHz explicitly.
-          let pcm16k: Float32Array;
-          if (actualRate === 16000) {
-            pcm16k = raw32;
-          } else {
-            const ratio = actualRate / 16000;
-            const outLen = Math.floor(raw32.length / ratio);
-            pcm16k = new Float32Array(outLen);
-            for (let i = 0; i < outLen; i++) {
-              pcm16k[i] = raw32[Math.round(i * ratio)];
-            }
-          }
+            const workletNode = new AudioWorkletNode(micCtx, "pcm-processor");
+            micSource.connect(workletNode);
+            workletNode.connect(micCtx.destination);
 
-          const int16 = new Int16Array(pcm16k.length);
-          for (let i = 0; i < pcm16k.length; i++) {
-            const s = Math.max(-1, Math.min(1, pcm16k[i]));
-            int16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
+            workletNode.port.onmessage = (e: MessageEvent<ArrayBuffer>) => {
+              const bytes = new Uint8Array(e.data);
+              let raw = "";
+              for (let i = 0; i < bytes.length; i += 0x8000) {
+                raw += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+              }
+              sendRef({
+                type: "player_speech",
+                audio: btoa(raw),
+                timestamp: Date.now(),
+              });
+            };
+
+            console.log("[usePlayerMedia] AudioWorkletNode active");
+          } catch (workletErr) {
+            console.warn("[usePlayerMedia] AudioWorklet failed, falling back to ScriptProcessor:", workletErr);
+            setupScriptProcessor(micCtx, micSource, actualRate, targetRate, sendRef);
           }
-          // Encode in 32KB chunks to avoid call-stack overflow on spread
-          const bytes = new Uint8Array(int16.buffer);
-          let raw = "";
-          for (let i = 0; i < bytes.length; i += 0x8000) {
-            raw += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-          }
-          send({
-            type: "player_speech",
-            audio: btoa(raw),
-            timestamp: Date.now(),
-          });
-        };
+        } else {
+          console.warn("[usePlayerMedia] AudioWorklet not supported, using ScriptProcessor");
+          setupScriptProcessor(micCtx, micSource, actualRate, targetRate, sendRef);
+        }
 
         // ── Webcam: optional, non-blocking if denied ──────────
         try {

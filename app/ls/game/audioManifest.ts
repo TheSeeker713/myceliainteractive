@@ -68,14 +68,9 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
     `${S}/sfx_voicebox_activate_1.mp3`,
     `${S}/sfx_voicebox_activate_2.mp3`,
   ],
-  // Used for BOTH transmission start ping AND barge-in (same pool, different context)
-  transmission_ping: [
-    `${S}/sfx_radio_static.mp3`,
-    `${S}/sfx_radio_static_2.mp3`,
-    `${S}/sfx_radio_static_3.mp3`,
-    `${S}/sfx_radio_static_4.mp3`,
-  ],
-  barge_in: [
+  // Radio static plays once at session start via backend clip_sfx event only.
+  // transmission_ping and barge_in removed — no repeated radio static.
+  radio_static: [
     `${S}/sfx_radio_static.mp3`,
     `${S}/sfx_radio_static_2.mp3`,
     `${S}/sfx_radio_static_3.mp3`,
