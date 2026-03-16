@@ -17,9 +17,9 @@ export function CardCollectibleOverlay({
 }) {
   if (!showCard || demoEnded) return null;
 
-  const rank = cardId === "card1" ? "J" : "Q";
-  const suit = cardId === "card1" ? "♣" : "♠";
-  const cardLabel = cardId === "card1" ? "Jack of Clubs" : "Queen of Spades";
+  const rank = cardId === "card1" ? "★" : "A";
+  const suit = cardId === "card1" ? "" : "♠";
+  const cardLabel = cardId === "card1" ? "Joker" : "Ace of Spades";
 
   return (
     <div
@@ -77,7 +77,7 @@ export function CardCollectibleOverlay({
             textAnchor="middle"
             dominantBaseline="middle"
           >
-            {suit}
+            {cardId === "card1" ? "★" : "♠"}
           </text>
         </svg>
       </div>

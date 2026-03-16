@@ -1,3 +1,13 @@
+/* White fade-in overlay for tunnel_transition_01 (Pipeline step 11). */
+.white-fade-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  pointer-events: none;
+  z-index: 55;
+  animation: white-fade-in 1.8s ease-out forwards;
+}
+
 .hud-glitch-scanlines::before {
   content: "";
   position: absolute;

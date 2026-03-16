@@ -68,11 +68,11 @@ export function IntroSequence({
     // ── Audio ─────────────────────────────────────────────────────────────
     const ctx = audioCtxRef.current;
 
-    // FE-16B: Descent impact thud at t=17.8s (fires in the silence after wind fades)
+    // FE-16B: Floor crack impact at t=17.8s (fires in the silence after wind fades)
     if (ctx) {
       timers.push(
         setTimeout(() => {
-          const stingPool = AUDIO_MANIFEST["descent_sting"];
+          const stingPool = AUDIO_MANIFEST["floor_crack"];
           if (!stingPool?.length || !audioCtxRef.current) return;
           const url = stingPool[Math.floor(Math.random() * stingPool.length)];
           (async () => {

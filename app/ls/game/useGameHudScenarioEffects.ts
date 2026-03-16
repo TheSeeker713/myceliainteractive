@@ -15,7 +15,7 @@ import type {
   HudEventRefs,
   UseGameHudEffectsArgs,
 } from "./useGameHudEffectTypes";
-import { GCS_BASE } from "./mediaManifest";
+import { GCS_BASE, MUTED_CLIP_IDS } from "./mediaManifest";
 
 export function useGameHudScenarioEffects(
   args: UseGameHudEffectsArgs,
@@ -231,7 +231,7 @@ export function useGameHudScenarioEffects(
     const clipUrl = `${GCS_BASE}/clips/${ev.payload.mediaId}.mp4`;
     video.src = clipUrl;
     video.style.display = "block";
-    video.muted = true;
+    video.muted = MUTED_CLIP_IDS.has(ev.payload.mediaId);
     video.playbackRate = 1.0;
     video.play().catch((e) =>
       console.error("[Acecard] clip play error:", e),

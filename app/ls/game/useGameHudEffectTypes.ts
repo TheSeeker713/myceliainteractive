@@ -77,4 +77,5 @@ export type UseGameHudEffectsArgs = {
   setTrustAgentLabel: Dispatch<SetStateAction<string>>;
   onStopMedia?: () => void;
   wsCloseTimerRef: MutableRefObject<ReturnType<typeof setTimeout> | null>;
+  setCurrentMediaId: (mediaId: string | null) => void;
 };

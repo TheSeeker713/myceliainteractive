@@ -18,6 +18,7 @@ export const GCS_BASE = "https://storage.googleapis.com/liminal-sin-assets";
  */
 export const MORPHIC_MEDIA_IDS = new Set([
   "tunnel_darkness_01",
+  "flashlight_sweep_01",
   "tunnel_flashlight_01",
   "tunnel_generator_01",
   "card_joker_01",
@@ -43,7 +44,7 @@ export const MORPHIC_MEDIA_IDS = new Set([
  * Some IDs only have stills (no clip). This set tracks which have clips.
  */
 export const MORPHIC_CLIP_IDS = new Set([
-  "tunnel_darkness_01",
+  "flashlight_sweep_01",
   "tunnel_flashlight_01",
   "tunnel_generator_01",
   "card_joker_01",
@@ -60,7 +61,7 @@ export const MORPHIC_CLIP_IDS = new Set([
   "elevator_inside_01",
   "elevator_inside_02",
   "hallway_pov_01",
-  "hallway_pov_02",
+  "acecard_reveal_01",
 ]);
 
 /** Build the GCS URL for a Morphic still by mediaId. */
@@ -73,9 +74,16 @@ export function getClipUrl(mediaId: string): string {
   return `${GCS_BASE}/clips/${mediaId}.mp4`;
 }
 
-/** First 3 stills to preload on page load for instant first-frame display. */
+/** Clips that should play muted (no built-in audio). */
+export const MUTED_CLIP_IDS = new Set([
+  "flashlight_sweep_01",
+]);
+
 export const PRELOAD_STILLS: string[] = [
-  "tunnel_darkness_01",
   "tunnel_flashlight_01",
   "tunnel_generator_01",
+  "card_joker_01",
+  "park_liminal_01",
+  "elevator_entry_01",
+  "hallway_pov_02",
 ];

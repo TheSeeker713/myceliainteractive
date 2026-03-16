@@ -75,7 +75,6 @@ export function SceneVisualLayers({
           .join(" ")}
         style={{ display: "none" }}
         playsInline
-        muted
         onEnded={handleSceneVideoEnded}
         onTimeUpdate={handleVideoTimeUpdate}
       />

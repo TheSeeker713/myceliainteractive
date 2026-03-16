@@ -7,6 +7,7 @@ import type {
   HudGlitchEvent,
   NpcIdleNudgeEvent,
   OverlayTextEvent,
+  SceneChangeEvent,
   SceneImageEvent,
   SceneVideoEvent,
   SessionErrorEvent,
@@ -16,6 +17,7 @@ import type { UseGameHudEffectsArgs } from "./useGameHudEffectTypes";
 import {
   MORPHIC_MEDIA_IDS,
   MORPHIC_CLIP_IDS,
+  MUTED_CLIP_IDS,
   getStillUrl,
   getClipUrl,
   PRELOAD_STILLS,
@@ -61,6 +63,7 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     setFearIndex,
     setTrustAgentLabel,
     send,
+    setCurrentMediaId,
   } = args;
 
   // ── Morphic media loading from GCS on scene_change ──────────────────────
@@ -76,9 +79,10 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
         // Play the clip from GCS
         const video = sceneVideoRef.current;
         if (video) {
+          setCurrentMediaId(mediaId);
           video.src = getClipUrl(mediaId);
           video.style.display = "block";
-          video.muted = true;
+          video.muted = MUTED_CLIP_IDS.has(mediaId);
           video.playbackRate = 1.0;
           video.play().catch((e) =>
             console.error("[SceneChange] clip play error:", e),
@@ -135,7 +139,7 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       glitchTimerRef.current = null;
     }
     setGlitchClass(null);
-  }, [demoEnded, generatorFlickerTimerRef, glitchTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit, setGlitchClass]);
+  }, [demoEnded, generatorFlickerTimerRef, glitchTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setCurrentMediaId, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit, setGlitchClass]);
 
   useEffect(() => {
     if (lastEvent?.type !== "scene_image") return;
@@ -282,7 +286,20 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       lastEvent.type === "scene_image" ||
       lastEvent.type === "scene_video"
     ) {
-      playSFX("glitch_low", 0.7);
+      // Pipeline step 11: tunnel_transition_01 must NOT fire glitch SFX.
+      const mediaId =
+        lastEvent.type === "scene_change"
+          ? (lastEvent as SceneChangeEvent).payload?.mediaId
+          : undefined;
+      if (mediaId === "tunnel_transition_01") {
+        // White fade-in overlay instead of glitch.
+        const overlay = document.createElement("div");
+        overlay.className = "white-fade-overlay";
+        document.body.appendChild(overlay);
+        setTimeout(() => overlay.remove(), 2000);
+      } else {
+        playSFX("glitch_low", 0.7);
+      }
     }
   }, [lastEvent, playSFX]);
 

@@ -107,7 +107,7 @@ export default function GameHUD({
     dispatchError,
   });
 
-  const { pushImage, handleSceneVideoEnded, handleVideoTimeUpdate } =
+  const { pushImage, handleSceneVideoEnded, handleVideoTimeUpdate, setCurrentMediaId } =
     useSceneCallbacks({
       activeImgLayerRef,
       setImgLayerA,
@@ -119,6 +119,13 @@ export default function GameHUD({
       vhsSwapping,
       setVhsSwapping,
       vhsSwapTimerRef,
+      playSFX,
+      setGlitchClass,
+      glitchTimerRef,
+      setGeneratorLit,
+      setGeneratorAmber,
+      setGeneratorFlickering,
+      generatorFlickerTimerRef,
     });
 
   useTrustAudioEffects({
@@ -181,6 +188,7 @@ export default function GameHUD({
     setTrustAgentLabel,
     onStopMedia,
     wsCloseTimerRef,
+    setCurrentMediaId,
   });
   // [AI: removed dead handleEndSession that sent session_end — backend ignores it]
   const handleReload = useCallback(() => {

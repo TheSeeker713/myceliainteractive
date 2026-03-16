@@ -59,6 +59,19 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
   wind_intro: [`${S}/rushing_wind.mp3`, `${S}/rushing_wind_2.mp3`],
 
   // ── SFX: Transmission / Session ─────────────────────────────────────────
+  // Walking / footstep loops (pipeline: flashlight_sweep, tunnel clips, park_walkway_02)
+  footsteps_walk_loop: [`${S}/footsteps_walk_loop.mp3`],
+
+  // Floor crack impact (pipeline Phase 2: fires once as final credit fades)
+  floor_crack: [`${S}/floor_crack.mp3`],
+
+  // Low building hum ambient (pipeline Phase 3 start)
+  structural_hum: [`${S}/structural_hum.mp3`],
+
+  // Water/park environment SFX (pipeline step 14: park_walkway_02)
+  water_fountain: [`${S}/water_fountain.mp3`],
+  wet_concrete: [`${S}/wet_concrete.mp3`],
+
   voicebox_activate: [
     `${S}/voicebox_activate.mp3`,
     `${S}/sfx_voicebox_activate.mp3`,

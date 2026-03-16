@@ -43,12 +43,6 @@ export function DemoEndOverlay({
       >
         {subtitle}
       </p>
-      <p
-        className="font-mono text-xs tracking-[0.3em] uppercase mt-2"
-        style={{ color: "rgba(192,132,252,0.5)" }}
-      >
-        thank you for playing liminal sin
-      </p>
       {showPlayAgain && onPlayAgain && (
         <button
           onClick={onPlayAgain}
@@ -60,10 +54,11 @@ export function DemoEndOverlay({
       <button
         onClick={() => {
           onStopMedia?.();
+          window.location.href = "/ls";
         }}
-        className="mt-8 px-6 py-2 font-mono text-xs tracking-[0.25em] uppercase border border-purple-500/40 text-purple-400/70 hover:text-purple-300 hover:border-purple-400 transition-colors duration-300"
+        className="mt-4 px-6 py-2 font-mono text-xs tracking-[0.25em] uppercase border border-purple-500/40 text-purple-400/70 hover:text-purple-300 hover:border-purple-400 transition-colors duration-300"
       >
-        Stop Camera &amp; Microphone
+        Quit Game
       </button>
     </div>
   );
