@@ -73,7 +73,7 @@ export function usePlayerSubtitles(active: boolean) {
     clearFadeTimer();
     fadeTimerRef.current = setTimeout(() => {
       setVisible(false);
-    }, 2000);
+    }, 3000);
   }, [clearFadeTimer]);
 
   useEffect(() => {
@@ -128,7 +128,7 @@ export function usePlayerSubtitles(active: boolean) {
       restartTimerRef.current = setTimeout(() => {
         if (!activeRef.current || !recognitionRef.current) return;
         try { recognitionRef.current.start(); } catch { /* already running */ }
-      }, 300);
+      }, 50);
     };
 
     try { recognition.start(); } catch { /* may already be running */ }

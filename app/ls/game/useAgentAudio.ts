@@ -50,7 +50,7 @@ export function useAgentAudio({
   useEffect(() => {
     if (lastEvent?.type !== "agent_interrupt") return;
 
-    playSFX("barge_in");
+    playSFX("barge_in", 0.25);
     const nodes = sourceNodesRef.current;
     for (const node of nodes) {
       try {
@@ -164,7 +164,7 @@ export function useAgentAudio({
         const now = Date.now();
         if (now - lastPingTimeRef.current > 4000) {
           lastPingTimeRef.current = now;
-          playSFX("transmission_ping", 0.4);
+          playSFX("transmission_ping", 0.18);
         }
       }
     }
