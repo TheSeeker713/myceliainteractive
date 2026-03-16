@@ -79,7 +79,7 @@ export function useSceneCallbacks({
       try {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (ctx) {
           ctx.drawImage(video, 0, 0);
           const frameDataUri = canvas.toDataURL("image/jpeg", 0.85);

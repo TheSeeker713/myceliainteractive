@@ -46,9 +46,17 @@ export function useAgentAudio({
   // Throttle transmission_ping: skip if last ping was < 4s ago.
   const lastPingTimeRef = useRef<number>(0);
 
+  // Debounce agent_interrupt: ignore if one fired < 5s ago.
+  const lastInterruptAtRef = useRef<number>(0);
+
   // Barge-in: player spoke over Jason — kill all queued Jason audio immediately.
   useEffect(() => {
     if (lastEvent?.type !== "agent_interrupt") return;
+
+    // 5s debounce — prevents interrupt flood from freezing the audio pipeline.
+    const now = Date.now();
+    if (now - lastInterruptAtRef.current < 5000) return;
+    lastInterruptAtRef.current = now;
 
     playSFX("barge_in", 0.25);
     const nodes = sourceNodesRef.current;

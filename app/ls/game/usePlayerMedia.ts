@@ -199,7 +199,7 @@ export function usePlayerMedia(
 
           darkFrameCountRef.current = 0;
           frameIntervalRef.current = setInterval(() => {
-            const ctx2d = canvas.getContext("2d");
+            const ctx2d = canvas.getContext("2d", { willReadFrequently: true });
             if (!ctx2d || video.readyState < 2) return;
             ctx2d.drawImage(video, 0, 0, 320, 240);
 
