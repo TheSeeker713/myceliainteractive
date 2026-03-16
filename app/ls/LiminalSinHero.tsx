@@ -1,6 +1,22 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
+/** March 16, 2026, 7:13 PM MDT (UTC-6) = March 17, 2026, 01:13:00 UTC */
+const UNLOCK_UTC = Date.UTC(2026, 2, 17, 1, 13, 0); // month is 0-indexed
+
 export function LiminalSinHero() {
+  const [unlocked, setUnlocked] = useState(() => Date.now() >= UNLOCK_UTC);
+
+  useEffect(() => {
+    if (unlocked) return;
+    const remaining = UNLOCK_UTC - Date.now();
+    if (remaining <= 0) return;
+    const timer = setTimeout(() => setUnlocked(true), remaining);
+    return () => clearTimeout(timer);
+  }, [unlocked]);
+
   return (
     <section className="relative h-screen w-full overflow-hidden">
       <style>{`
@@ -99,11 +115,19 @@ export function LiminalSinHero() {
       </div>
 
       <div className="absolute top-[62vh] left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-4">
-        <a href="#content">
-          <button className="double-down-btn">[ LOCKED ]</button>
-        </a>
+        {unlocked ? (
+          <a href="/ls/game">
+            <button className="double-down-btn">[ PLAY LIMINAL SIN NOW ]</button>
+          </a>
+        ) : (
+          <a href="#content">
+            <button className="double-down-btn">[ LOCKED ]</button>
+          </a>
+        )}
         <p className="text-sm sm:text-base font-mono tracking-[0.18em] uppercase text-purple-300/80 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
-          Prototype available &mdash; March 16th
+          {unlocked
+            ? "Game available to try out for one week only"
+            : "Prototype available \u2014 March 16th"}
         </p>
       </div>
 

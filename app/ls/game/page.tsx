@@ -6,6 +6,7 @@ import GameHUD from "./GameHUD";
 import { usePlayerMedia } from "./usePlayerMedia";
 import { GameErrorBoundary } from "./GameErrorBoundary";
 import { IntroSequence } from "./IntroSequence";
+import { GamePageShell } from "./GamePageShell";
 
 
 /**
@@ -17,6 +18,35 @@ import { IntroSequence } from "./IntroSequence";
  * Per TEAM_CONTRACT.md §2 and AGENTS.md §4:
  * This page must NEVER embed agent decisions, trust logic, or narrative state.
  */
+
+/** March 23, 2026, 11:11 AM MDT (UTC-6) = March 23, 2026, 17:11:00 UTC */
+const CUTOFF_UTC = Date.UTC(2026, 2, 23, 17, 11, 0);
+
+function AccessExpired() {
+  return (
+    <div
+      className="flex flex-col items-center justify-center h-screen bg-black text-center px-6"
+      style={{ fontFamily: "var(--font-geist-mono), 'Courier New', monospace" }}
+    >
+      <p
+        className="text-xs tracking-[0.35em] uppercase mb-4"
+        style={{ color: "rgba(192,132,252,0.6)" }}
+      >
+        Mycelia Interactive
+      </p>
+      <h1
+        className="text-4xl md:text-6xl font-black text-white tracking-widest uppercase mb-6"
+        style={{ textShadow: "0 0 30px rgba(255,0,50,0.4)" }}
+      >
+        ACCESS EXPIRED
+      </h1>
+      <p className="text-sm text-purple-300/70 max-w-sm leading-relaxed">
+        The public demo period for Liminal Sin has ended. Thank you for
+        exploring the underground.
+      </p>
+    </div>
+  );
+}
 
 function GameInner() {
   const [sessionPhase, setSessionPhase] = useState<
@@ -212,11 +242,17 @@ function GameInner() {
 }
 
 export default function GamePage() {
+  const [expired] = useState(() => Date.now() >= CUTOFF_UTC);
+
+  if (expired) return <AccessExpired />;
+
   return (
-    <GameErrorBoundary>
-      <GameWSProvider judgeMode={false}>
-        <GameInner />
-      </GameWSProvider>
-    </GameErrorBoundary>
+    <GamePageShell>
+      <GameErrorBoundary>
+        <GameWSProvider judgeMode={false}>
+          <GameInner />
+        </GameWSProvider>
+      </GameErrorBoundary>
+    </GamePageShell>
   );
 }

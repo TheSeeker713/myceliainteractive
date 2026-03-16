@@ -6,6 +6,7 @@ import GameHUD from "../../game/GameHUD";
 import { usePlayerMedia } from "../../game/usePlayerMedia";
 import { GameErrorBoundary } from "../../game/GameErrorBoundary";
 import { IntroSequence } from "../../game/IntroSequence";
+import { GamePageShell } from "../../game/GamePageShell";
 
 /**
  * Judge Game Shell — /ls/judges/game
@@ -214,10 +215,12 @@ function JudgeGameInner() {
 
 export default function JudgeGamePage() {
   return (
-    <GameErrorBoundary>
-      <GameWSProvider judgeMode={true}>
-        <JudgeGameInner />
-      </GameWSProvider>
-    </GameErrorBoundary>
+    <GamePageShell>
+      <GameErrorBoundary>
+        <GameWSProvider judgeMode={true}>
+          <JudgeGameInner />
+        </GameWSProvider>
+      </GameErrorBoundary>
+    </GamePageShell>
   );
 }

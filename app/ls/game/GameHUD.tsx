@@ -16,6 +16,7 @@ import { SceneVisualLayers } from "./SceneVisualLayers";
 import { useGameHudEffects } from "./useGameHudEffects";
 import { useTrustAudioEffects } from "./useTrustAudioEffects";
 import { ErrorOverlay, ErrorModal } from "./ErrorOverlay";
+import { PlayerSubtitles } from "./PlayerSubtitles";
 
 export default function GameHUD({
   sessionActive = false,
@@ -236,6 +237,7 @@ export default function GameHUD({
       />
 
       <HintOverlays showHint={showHint} serverHint={serverHint} />
+      <PlayerSubtitles active={sessionActive && !demoEnded} />
       <GMEyeIndicator
         visible={
           sessionActive && status === "open" && webcamActive && !demoEnded
