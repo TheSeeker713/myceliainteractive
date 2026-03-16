@@ -193,7 +193,9 @@ export function usePlayerMedia(
           video.muted = true;
           video.playsInline = true;
           videoRef.current = video;
-          await video.play();
+          await video.play().catch((e) => {
+            if ((e as DOMException).name !== "AbortError") throw e;
+          });
 
           darkFrameCountRef.current = 0;
           frameIntervalRef.current = setInterval(() => {

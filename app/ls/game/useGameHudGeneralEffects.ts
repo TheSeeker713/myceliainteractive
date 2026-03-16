@@ -84,9 +84,10 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
           video.style.display = "block";
           video.muted = MUTED_CLIP_IDS.has(mediaId);
           video.playbackRate = 1.0;
-          video.play().catch((e) =>
-            console.error("[SceneChange] clip play error:", e),
-          );
+          video.play().catch((e) => {
+            if ((e as DOMException).name === "AbortError") return; // Scene changed before playback began — safe to ignore
+            console.error("[SceneChange] clip play error:", e);
+          });
         }
       } else {
         // Show the still from GCS
@@ -355,7 +356,10 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
     video.playbackRate = 1.0;
     video
       .play()
-      .catch((e) => console.error("[GameHUD] scene_video play error:", e));
+      .catch((e) => {
+        if ((e as DOMException).name === "AbortError") return; // Scene changed before playback began — safe to ignore
+        console.error("[GameHUD] scene_video play error:", e);
+      });
   }, [demoEnded, sceneVideo, sceneVideoRef]);
 
   useEffect(() => {

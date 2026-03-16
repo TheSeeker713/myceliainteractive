@@ -233,9 +233,10 @@ export function useGameHudScenarioEffects(
     video.style.display = "block";
     video.muted = MUTED_CLIP_IDS.has(ev.payload.mediaId);
     video.playbackRate = 1.0;
-    video.play().catch((e) =>
-      console.error("[Acecard] clip play error:", e),
-    );
+    video.play().catch((e) => {
+      if ((e as DOMException).name === "AbortError") return; // Scene changed before playback began — safe to ignore
+      console.error("[Acecard] clip play error:", e);
+    });
 
     const onEnded = () => {
       video.removeEventListener("ended", onEnded);
