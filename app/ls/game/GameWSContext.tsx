@@ -182,6 +182,11 @@ export type VideoGenStartedEvent = {
   };
 };
 
+export type MatrixEasterEggEvent = {
+  type: "matrix_easter_egg";
+  payload: { durationMs: number };
+};
+
 export type ServerEvent =
   | AgentSpeechEvent
   | AgentInterruptEvent
@@ -206,7 +211,8 @@ export type ServerEvent =
   | AcecardRevealStartEvent
   | CardPickup02ReadyEvent
   | Wildcard3TriggerEvent
-  | VideoGenStartedEvent;
+  | VideoGenStartedEvent
+  | MatrixEasterEggEvent;
 
 // ── Outbound payload types (client → server) ─────────────────────────────────────────────────────────────────────
 

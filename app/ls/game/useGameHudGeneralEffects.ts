@@ -5,6 +5,7 @@ import type {
   AutoplayAdvanceEvent,
   HintEvent,
   HudGlitchEvent,
+  MatrixEasterEggEvent,
   NpcIdleNudgeEvent,
   OverlayTextEvent,
   SceneChangeEvent,
@@ -401,4 +402,16 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       img.src = getStillUrl(id);
     }
   }, []);
+
+  // ── Matrix easter egg — green screen overlay for durationMs ─────────────
+  useEffect(() => {
+    if (lastEvent?.type !== "matrix_easter_egg") return;
+    const ev = lastEvent as MatrixEasterEggEvent;
+    document.body.classList.add("matrix-easter-egg-active");
+    const t = setTimeout(
+      () => document.body.classList.remove("matrix-easter-egg-active"),
+      ev.payload.durationMs,
+    );
+    return () => clearTimeout(t);
+  }, [lastEvent]);
 }

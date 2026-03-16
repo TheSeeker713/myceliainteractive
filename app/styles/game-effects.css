@@ -320,3 +320,52 @@
   pointer-events: none;
   text-transform: uppercase;
 }
+
+/* ── Matrix easter egg — green digital-rain overlay ─────────────────────── */
+@keyframes matrix-rain-fade {
+  0%   { opacity: 0; filter: hue-rotate(0deg) brightness(1.4); }
+  10%  { opacity: 1; }
+  80%  { opacity: 1; filter: hue-rotate(10deg) brightness(1.2); }
+  100% { opacity: 0; filter: hue-rotate(0deg) brightness(1); }
+}
+.matrix-easter-egg-active {
+  animation: matrix-rain-fade 6s ease-out forwards;
+}
+.matrix-easter-egg-active::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 255, 65, 0.08) 3px,
+      rgba(0, 255, 65, 0.08) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 6px,
+      rgba(0, 255, 65, 0.03) 6px,
+      rgba(0, 255, 65, 0.03) 7px
+    );
+  pointer-events: none;
+  z-index: 8888;
+}
+.matrix-easter-egg-active::after {
+  content: "// REALITY.exe — SIMULATION DETECTED //";
+  position: fixed;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: rgba(0, 255, 65, 0.85);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.7);
+  z-index: 8889;
+  pointer-events: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
