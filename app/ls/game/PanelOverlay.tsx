@@ -26,7 +26,7 @@ export function PanelOverlay({
     onPanelClick();
   }, [clicked, onPanelClick]);
 
-  if (!visible && !clicked) return null;
+  if (!visible) return null;
 
   return (
     <div

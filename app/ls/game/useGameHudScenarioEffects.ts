@@ -276,6 +276,17 @@ export function useGameHudScenarioEffects(
       clearInterval(high);
     }, ev.payload.durationMs || 15000);
     dreadTimeoutRefs.current.push(tend);
+
+    // Frontend auto-collect safety: if card2 not clicked within 8s, auto-click it.
+    // Prevents game_over when card overlay is hard to reach or disappears.
+    const autoCollectTimer = setTimeout(() => {
+      send({ type: "card_collected", cardId: "card2" });
+      setShowCard(false);
+    }, 8_000);
+
+    return () => {
+      clearTimeout(autoCollectTimer);
+    };
   }, [
     cardLabelTimerRef,
     clearDreadTimers,
@@ -284,6 +295,7 @@ export function useGameHudScenarioEffects(
     lastEvent,
     playSFX,
     pushImage,
+    send,
     setCardLabelVisible,
     setCurrentCardId,
     setShowCard,
