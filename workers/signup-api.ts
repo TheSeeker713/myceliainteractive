@@ -309,6 +309,69 @@ async function handleLogError(request: Request, env: Env): Promise<Response> {
   return Response.json({ ok: true });
 }
 
+// ── Comments ──────────────────────────────────────────────────────────
+
+const COMMENTS_TABLE_DDL = `CREATE TABLE IF NOT EXISTS comments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  text TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+)`;
+
+async function ensureCommentsTable(db: D1Database): Promise<void> {
+  await db.prepare(COMMENTS_TABLE_DDL).run();
+}
+
+async function handleGetComments(env: Env): Promise<Response> {
+  await ensureCommentsTable(env.liminal_sin_signups);
+  const { results } = await env.liminal_sin_signups
+    .prepare(
+      "SELECT id, text, created_at FROM comments ORDER BY created_at DESC LIMIT 200",
+    )
+    .all<{ id: number; text: string; created_at: string }>();
+  return Response.json({ comments: results }, {
+    headers: { "Cache-Control": "no-cache" },
+  });
+}
+
+async function handlePostComment(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const contentType = request.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    return Response.json(
+      { error: "Expected application/json" },
+      { status: 415 },
+    );
+  }
+
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const { text } = body as Partial<{ text: string }>;
+  if (typeof text !== "string" || text.trim().length === 0) {
+    return Response.json({ error: "Text is required" }, { status: 400 });
+  }
+
+  const trimmed = text.trim().slice(0, 2000);
+
+  await ensureCommentsTable(env.liminal_sin_signups);
+  const result = await env.liminal_sin_signups
+    .prepare("INSERT INTO comments (text) VALUES (?)")
+    .bind(trimmed)
+    .run();
+
+  if (!result.success) {
+    return Response.json({ error: "Database error" }, { status: 500 });
+  }
+
+  return Response.json({ ok: true }, { status: 201 });
+}
+
 const handler = {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -344,6 +407,17 @@ const handler = {
       return handleLogError(request, env);
     }
     if (url.pathname === "/api/log-error") {
+      return Response.json({ error: "Method not allowed" }, { status: 405 });
+    }
+
+    // Comments
+    if (url.pathname === "/api/comments" && request.method === "GET") {
+      return handleGetComments(env);
+    }
+    if (url.pathname === "/api/comments" && request.method === "POST") {
+      return handlePostComment(request, env);
+    }
+    if (url.pathname === "/api/comments") {
       return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
 

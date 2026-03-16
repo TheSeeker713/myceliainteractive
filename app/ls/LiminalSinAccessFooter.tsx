@@ -31,6 +31,13 @@ export function LiminalSinAccessFooter() {
               Privacy Policy
             </a>
             <span className="hidden sm:inline text-purple-900/60">|</span>
+            <a
+              href="/ls/comments"
+              className="hover:text-cyan-300 transition-colors"
+            >
+              Comments
+            </a>
+            <span className="hidden sm:inline text-purple-900/60">|</span>
             <span className="text-purple-400/60">v0.1 - Early Access</span>
           </div>
         </div>
