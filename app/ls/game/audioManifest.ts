@@ -82,6 +82,10 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
     `${S}/sfx_radio_static_4.mp3`,
   ],
 
+  // ── SFX: Clip cue environmental (pending GCS upload) ──────────────────
+  footsteps_walk_loop: [`${S}/footsteps_walk_loop.mp3`],
+  water_fountain: [`${S}/water_fountain.mp3`],
+
   // ── SFX: Trust / Fear ────────────────────────────────────────────────────
   knowledge_unlock: [
     `${S}/knowledge_unlock.mp3`,
@@ -154,8 +158,16 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
   relay_false: [`${S}/relay_false.mp3`],
 
   // ── SFX: Card + dread timer + endings ───────────────────────────────────
-  // NOTE: card_appear, heartbeat_*, distant_growl*, monster_sound* removed
-  // — audio files were never generated/uploaded. Keys will silently no-op.
+  // Audio files pending upload — preloader skips 404s gracefully.
+  card_appear: [`${S}/card_appear.mp3`, `${S}/card_appear_2.mp3`],
+  heartbeat_low: [`${S}/heartbeat_low.mp3`],
+  heartbeat_mid: [`${S}/heartbeat_mid.mp3`],
+  heartbeat_high1: [`${S}/heartbeat_high1.mp3`],
+  heartbeat_high2: [`${S}/heartbeat_high2.mp3`],
+  distant_growl1: [`${S}/distant_growl1.mp3`],
+  distant_growl2: [`${S}/distant_growl2.mp3`],
+  monster_sound1: [`${S}/monster_sound1.mp3`],
+  monster_sound2: [`${S}/monster_sound2.mp3`],
 
   // Wildcard scare SFX — loud, close, in-ear burst
   scare_wildcard: [
@@ -163,6 +175,7 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
     `${S}/sfx_fear_spike_2.mp3`,
     `${S}/sfx_fear_spike_3.mp3`,
     `${S}/sfx_fear_spike_4.mp3`,
+    `${S}/fear_spike.mp3`,
   ],
 };
 
