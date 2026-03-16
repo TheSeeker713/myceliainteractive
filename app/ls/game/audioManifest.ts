@@ -59,18 +59,8 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
   wind_intro: [`${S}/rushing_wind.mp3`, `${S}/rushing_wind_2.mp3`],
 
   // ── SFX: Transmission / Session ─────────────────────────────────────────
-  // Walking / footstep loops (pipeline: flashlight_sweep, tunnel clips, park_walkway_02)
-  footsteps_walk_loop: [`${S}/footsteps_walk_loop.mp3`],
-
   // Floor crack impact (pipeline Phase 2: fires once as final credit fades)
   floor_crack: [`${S}/floor_crack.mp3`],
-
-  // Low building hum ambient (pipeline Phase 3 start)
-  structural_hum: [`${S}/structural_hum.mp3`],
-
-  // Water/park environment SFX (pipeline step 14: park_walkway_02)
-  water_fountain: [`${S}/water_fountain.mp3`],
-  wet_concrete: [`${S}/wet_concrete.mp3`],
 
   voicebox_activate: [
     `${S}/voicebox_activate.mp3`,
@@ -164,19 +154,11 @@ export const AUDIO_MANIFEST: Record<string, string[]> = {
   relay_false: [`${S}/relay_false.mp3`],
 
   // ── SFX: Card + dread timer + endings ───────────────────────────────────
-  card_appear: [`${S}/card_appear.mp3`, `${S}/card_appear_2.mp3`],
-  heartbeat_low: [`${S}/heartbeat_low.mp3`],
-  heartbeat_mid: [`${S}/heartbeat_mid.mp3`],
-  heartbeat_high1: [`${S}/heartbeat_high1.mp3`],
-  heartbeat_high2: [`${S}/heartbeat_high2.mp3`],
-  distant_growl1: [`${S}/distant_growl1.mp3`],
-  distant_growl2: [`${S}/distant_growl2.mp3`],
-  monster_sound1: [`${S}/monster_sound1.mp3`],
-  monster_sound2: [`${S}/monster_sound2.mp3`],
+  // NOTE: card_appear, heartbeat_*, distant_growl*, monster_sound* removed
+  // — audio files were never generated/uploaded. Keys will silently no-op.
 
   // Wildcard scare SFX — loud, close, in-ear burst
   scare_wildcard: [
-    `${S}/fear_spike.mp3`,
     `${S}/sfx_fear_spike.mp3`,
     `${S}/sfx_fear_spike_2.mp3`,
     `${S}/sfx_fear_spike_3.mp3`,

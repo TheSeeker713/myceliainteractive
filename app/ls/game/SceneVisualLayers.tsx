@@ -67,6 +67,7 @@ export function SceneVisualLayers({
 
       <video
         ref={sceneVideoRef}
+        crossOrigin="anonymous"
         className={[
           "absolute inset-0 w-full h-full object-cover z-[5]",
           vhsSwapping ? "vhs-swap" : "",
@@ -82,6 +83,7 @@ export function SceneVisualLayers({
 
       <video
         ref={fmvRef}
+        crossOrigin="anonymous"
         className="absolute inset-0 w-full h-full object-cover z-10"
         style={{ display: "none" }}
         playsInline
