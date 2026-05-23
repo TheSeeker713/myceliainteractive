@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
  * (e.g. /ls) can supply their own navigation.
  */
 
-const NO_CHROME_ROUTES = ["/ls"];
+const NO_CHROME_ROUTES = ["/ls", "/roadmap"];
 
 export function SiteHeader() {
   const pathname = usePathname();
