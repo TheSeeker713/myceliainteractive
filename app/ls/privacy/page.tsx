@@ -7,102 +7,115 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-neutral-900 to-black text-zinc-100 antialiased">
-      <header className="sticky top-0 z-10 bg-black/85 backdrop-blur border-b border-amber-400/50 shadow-[0_0_18px_rgba(250,204,21,0.22)]">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <h1 className="text-lg font-bold tracking-wide bg-gradient-to-b from-amber-100 via-yellow-300 to-amber-600 bg-clip-text text-transparent">
+    <div className="site-gutter py-12 sm:py-16 min-h-[80vh]">
+      <article className="studio-section max-w-3xl">
+        <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+          <h1 className="text-2xl font-semibold text-studio-text">
             Liminal Sin · Privacy Policy
           </h1>
-          <div className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-amber-100/60 hover:text-amber-200 transition-colors">
-              ← Home
-            </Link>
-            <Link href="/ls/lsr" className="text-amber-100 hover:text-cyan-300 transition-colors">
-              Back to Report
-            </Link>
-          </div>
+          <Link
+            href="/"
+            className="text-sm text-studio-text-muted hover:text-studio-accent transition-colors"
+          >
+            ← Home
+          </Link>
         </div>
-      </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-10">
-        <article className="rounded-2xl border border-cyan-300/30 bg-zinc-900/80 shadow-[0_0_26px_rgba(6,182,212,0.16)] p-6 md:p-10 space-y-6 leading-relaxed">
-          <p className="text-sm text-zinc-300">
-            <strong>Effective Date:</strong> March 3, 2026<br />
-            <strong>Project Owner:</strong> J.W. / Mycelia Interactive
+        <div className="studio-card p-6 sm:p-10 space-y-6 leading-relaxed text-studio-text-muted">
+          <p className="text-sm">
+            <strong className="text-studio-text">Effective Date:</strong> March
+            3, 2026
+            <br />
+            <strong className="text-studio-text">Project Owner:</strong>{" "}
+            Mycelia Interactive LLC
           </p>
 
           <section>
-            <h2 className="text-xl font-semibold text-amber-200 mb-2">1) Plain-English Summary</h2>
-            <ul className="list-disc pl-6 space-y-1 text-zinc-200">
-              <li>We do not intentionally store your raw camera feed or microphone recordings.</li>
+            <h2 className="text-lg font-semibold text-studio-text mb-2">
+              1) Plain-English Summary
+            </h2>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>
+                We do not intentionally store your raw camera feed or microphone
+                recordings.
+              </li>
               <li>We do not sell, rent, trade, or broker your personal data.</li>
-              <li>We do not use personal data from camera/audio interactions to train our own AI models.</li>
-              <li>We design the system for minimum collection and minimum retention.</li>
+              <li>
+                We do not use personal data from camera/audio interactions to
+                train our own AI models.
+              </li>
+              <li>
+                We design the system for minimum collection and minimum retention.
+              </li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-amber-200 mb-2">2) What We Process</h2>
-            <p className="text-zinc-200">
-              To provide live gameplay features, we may process microphone input, camera input, and limited technical telemetry (such as timestamped request/health/error logs).
+            <h2 className="text-lg font-semibold text-studio-text mb-2">
+              2) What We Process
+            </h2>
+            <p>
+              To provide live gameplay features, we may process microphone input,
+              camera input, and limited technical telemetry (such as timestamped
+              request/health/error logs).
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-amber-200 mb-2">3) Camera and Audio Handling</h2>
-            <p className="text-zinc-200">
-              Our implementation target is ephemeral stream processing for active sessions only. We do not intentionally persist raw camera frames or raw microphone recordings in project-controlled storage.
+            <h2 className="text-lg font-semibold text-studio-text mb-2">
+              3) Camera and Audio Handling
+            </h2>
+            <p>
+              Our implementation target is ephemeral stream processing for active
+              sessions only. We do not intentionally persist raw camera frames or
+              raw microphone recordings in project-controlled storage.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-amber-200 mb-2">4) No Sale / No Data Brokerage</h2>
-            <p className="text-zinc-200">
-              Mycelia Interactive does not sell, rent, trade, or broker personal data from Liminal Sin users.
+            <h2 className="text-lg font-semibold text-studio-text mb-2">
+              4) No Sale / No Data Brokerage
+            </h2>
+            <p>
+              Mycelia Interactive LLC does not sell, rent, trade, or broker
+              personal data from Liminal Sin users.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-amber-200 mb-2">5) Third-Party Services</h2>
-            <p className="text-zinc-200">
-              Liminal Sin may rely on third-party AI/cloud services, including Google Cloud and Gemini APIs, to deliver real-time features. These providers may process data in transit under their own terms and privacy policies.
-            </p>
-            <p className="text-zinc-200 mt-2">
-              <strong>Responsibility Boundary:</strong> J.W. and Mycelia Interactive are not responsible for independent data practices of Google, Gemini, or their affiliates.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-semibold text-amber-200 mb-2">6) Data Minimization and Security</h2>
-            <p className="text-zinc-200">
-              We apply reasonable safeguards and strive to minimize data exposure, retention, and sharing. No internet-connected service can guarantee absolute security.
+            <h2 className="text-lg font-semibold text-studio-text mb-2">
+              5) Third-Party Services
+            </h2>
+            <p>
+              Liminal Sin may rely on third-party AI/cloud services, including
+              Google Cloud and Gemini APIs, to deliver real-time features. These
+              providers may process data in transit under their own terms and
+              privacy policies.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-amber-200 mb-2">7) Full Policy</h2>
-            <p className="text-zinc-200">
-              For the full legal-text policy, see the root repository policy file.
+            <h2 className="text-lg font-semibold text-studio-text mb-2">
+              6) Data Minimization and Security
+            </h2>
+            <p>
+              We apply reasonable safeguards and strive to minimize data exposure,
+              retention, and sharing. No internet-connected service can guarantee
+              absolute security.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-amber-200 mb-2">8) Updates</h2>
-            <p className="text-zinc-200">
-              This policy may be updated from time to time. Revised versions will include an updated effective date.
+            <h2 className="text-lg font-semibold text-studio-text mb-2">
+              7) Updates
+            </h2>
+            <p>
+              This policy may be updated from time to time. Revised versions will
+              include an updated effective date.
             </p>
           </section>
-        </article>
-      </main>
-
-      <footer className="border-t border-amber-400/40 mt-10 py-6 text-center text-sm text-amber-100/80 bg-black/80">
-        <p>Mycelia Interactive · Liminal Sin</p>
-        <p className="mt-2">
-          <Link href="/" className="underline hover:text-cyan-300 transition-colors">
-            myceliainteractive.com
-          </Link>
-        </p>
-      </footer>
+        </div>
+      </article>
     </div>
   );
 }

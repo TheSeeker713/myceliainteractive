@@ -10,8 +10,18 @@ export interface Env {
 interface SignupBody {
   name: string;
   email: string;
-  type: "judge" | "tester";
+  type: "access_request" | "tester";
 }
+
+const ACCESS_TOKENS_DDL = `CREATE TABLE IF NOT EXISTS access_tokens (
+  token TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
+  name TEXT,
+  expires_at INTEGER NOT NULL,
+  created_at INTEGER NOT NULL,
+  used_at INTEGER,
+  revoked INTEGER DEFAULT 0
+)`;
 
 async function sendBrevo(
   apiKey: string,
@@ -38,32 +48,21 @@ async function sendBrevo(
   }
 }
 
-const EMAIL1_HTML = (name: string, type: "judge" | "tester") => `
+const EMAIL1_HTML = (name: string) => `
 <!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#08041a;font-family:'Courier New',monospace;color:#e9d5ff;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:40px auto;background:#0a0514;border:1px solid rgba(139,0,255,0.3);border-radius:12px;overflow:hidden;">
+<body style="margin:0;padding:0;background:#fafaf8;font-family:system-ui,sans-serif;color:#171717;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:40px auto;background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:12px;">
     <tr><td style="padding:32px 40px;">
-      <p style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(192,132,252,0.5);margin:0 0 20px;">Liminal Sin — Signal Received</p>
-      <h1 style="font-size:22px;font-weight:900;color:#e9d5ff;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 16px;">
-        ${type === "judge" ? "Clearance Authorized" : "Application Received"}
-      </h1>
-      <p style="font-size:14px;color:rgba(196,181,253,0.7);line-height:1.7;margin:0 0 24px;">
-        <strong style="color:#e9d5ff;">${name}</strong>,<br>
-        Your access request has been logged in the system.
-        ${
-          type === "judge"
-            ? "Direct entry credentials will be issued before the experience goes live."
-            : "You are on the list. We will contact you when a slot opens. Do not expect conventional onboarding."
-        }
+      <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#5c5c5c;margin:0 0 20px;">Liminal Sin — Access Request Received</p>
+      <h1 style="font-size:22px;font-weight:600;color:#171717;margin:0 0 16px;">Thank you, ${name}</h1>
+      <p style="font-size:14px;color:#5c5c5c;line-height:1.7;margin:0 0 24px;">
+        Your prototype access request has been received. If approved, you will receive a private play link within 24 hours.
       </p>
-      <div style="border-top:1px solid rgba(139,0,255,0.2);padding-top:20px;margin-top:8px;">
-        <p style="font-size:11px;color:rgba(139,92,246,0.7);letter-spacing:0.15em;margin:0;">
-          LIMINAL SIN — MYCELIA INTERACTIVE — 2026<br>
-          This message was sent because you requested access. You will not receive further unsolicited contact.
-        </p>
-      </div>
+      <p style="font-size:12px;color:#5c5c5c;margin:0;">
+        Mycelia Interactive LLC · This message was sent because you requested access.
+      </p>
     </td></tr>
   </table>
 </body>
@@ -99,17 +98,13 @@ const EMAIL2_HTML = (name: string) => `<!DOCTYPE html>
 </body>
 </html>`;
 
-async function sendEmail1(
-  env: Env,
-  to: string,
-  name: string,
-  type: "judge" | "tester",
-): Promise<void> {
-  const subject =
-    type === "judge"
-      ? "Clearance Authorized — Liminal Sin Judge Access"
-      : "Signal Received — Liminal Sin Beta Access Request Logged";
-  await sendBrevo(env.BREVO_API_KEY, to, subject, EMAIL1_HTML(name, type));
+async function sendEmail1(env: Env, to: string, name: string): Promise<void> {
+  await sendBrevo(
+    env.BREVO_API_KEY,
+    to,
+    "Access Request Received — Liminal Sin Prototype",
+    EMAIL1_HTML(name),
+  );
 }
 
 async function sendEmail2(env: Env, to: string, name: string): Promise<void> {
@@ -144,10 +139,13 @@ async function handleSignup(request: Request, env: Env): Promise<Response> {
   if (
     typeof name !== "string" ||
     typeof email !== "string" ||
-    (type !== "judge" && type !== "tester")
+    (type !== "access_request" && type !== "tester")
   ) {
     return Response.json({ error: "Invalid request body" }, { status: 400 });
   }
+
+  const signupType =
+    type === "tester" ? "access_request" : type;
 
   const trimmedName = name.trim().slice(0, 120);
   const trimmedEmail = email.trim().toLowerCase().slice(0, 254);
@@ -167,7 +165,7 @@ async function handleSignup(request: Request, env: Env): Promise<Response> {
       .prepare(
         "INSERT INTO signups (name, email, type, created_at) VALUES (?, ?, ?, ?)",
       )
-      .bind(trimmedName, trimmedEmail, type, new Date().toISOString())
+      .bind(trimmedName, trimmedEmail, signupType, new Date().toISOString())
       .run();
   } catch (err) {
     // Unique constraint or other DB error
@@ -183,7 +181,7 @@ async function handleSignup(request: Request, env: Env): Promise<Response> {
 
   // Send Email 1 — non-blocking; signup is already persisted
   try {
-    await sendEmail1(env, trimmedEmail, trimmedName, type);
+    await sendEmail1(env, trimmedEmail, trimmedName);
     await env.liminal_sin_signups
       .prepare("UPDATE signups SET email1_sent = 1 WHERE email = ?")
       .bind(trimmedEmail)
@@ -309,67 +307,67 @@ async function handleLogError(request: Request, env: Env): Promise<Response> {
   return Response.json({ ok: true });
 }
 
-// ── Comments ──────────────────────────────────────────────────────────
+// ── Access tokens ────────────────────────────────────────────────────
 
-const COMMENTS_TABLE_DDL = `CREATE TABLE IF NOT EXISTS comments (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  text TEXT NOT NULL,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-)`;
-
-async function ensureCommentsTable(db: D1Database): Promise<void> {
-  await db.prepare(COMMENTS_TABLE_DDL).run();
+async function ensureAccessTokensTable(db: D1Database): Promise<void> {
+  await db.prepare(ACCESS_TOKENS_DDL).run();
 }
 
-async function handleGetComments(env: Env): Promise<Response> {
-  await ensureCommentsTable(env.liminal_sin_signups);
-  const { results } = await env.liminal_sin_signups
-    .prepare(
-      "SELECT id, text, created_at FROM comments ORDER BY created_at DESC LIMIT 200",
-    )
-    .all<{ id: number; text: string; created_at: string }>();
-  return Response.json({ comments: results }, {
-    headers: { "Cache-Control": "no-cache" },
-  });
-}
-
-async function handlePostComment(
+async function handleValidateAccess(
   request: Request,
   env: Env,
 ): Promise<Response> {
-  const contentType = request.headers.get("content-type") ?? "";
-  if (!contentType.includes("application/json")) {
+  const url = new URL(request.url);
+  const token = url.searchParams.get("access")?.trim() ?? "";
+
+  if (!token || token.length > 128) {
     return Response.json(
-      { error: "Expected application/json" },
-      { status: 415 },
+      { valid: false, reason: "not_found" },
+      { headers: { "Cache-Control": "no-store" } },
     );
   }
 
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+  await ensureAccessTokensTable(env.liminal_sin_signups);
+
+  const row = await env.liminal_sin_signups
+    .prepare(
+      "SELECT token, expires_at, revoked FROM access_tokens WHERE token = ?",
+    )
+    .bind(token)
+    .first<{ token: string; expires_at: number; revoked: number }>();
+
+  if (!row) {
+    return Response.json(
+      { valid: false, reason: "not_found" },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   }
 
-  const { text } = body as Partial<{ text: string }>;
-  if (typeof text !== "string" || text.trim().length === 0) {
-    return Response.json({ error: "Text is required" }, { status: 400 });
+  if (row.revoked === 1) {
+    return Response.json(
+      { valid: false, reason: "revoked" },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   }
 
-  const trimmed = text.trim().slice(0, 2000);
+  if (Date.now() > row.expires_at) {
+    return Response.json(
+      { valid: false, reason: "expired" },
+      { headers: { "Cache-Control": "no-store" } },
+    );
+  }
 
-  await ensureCommentsTable(env.liminal_sin_signups);
-  const result = await env.liminal_sin_signups
-    .prepare("INSERT INTO comments (text) VALUES (?)")
-    .bind(trimmed)
+  await env.liminal_sin_signups
+    .prepare(
+      "UPDATE access_tokens SET used_at = ? WHERE token = ? AND used_at IS NULL",
+    )
+    .bind(Date.now(), token)
     .run();
 
-  if (!result.success) {
-    return Response.json({ error: "Database error" }, { status: 500 });
-  }
-
-  return Response.json({ ok: true }, { status: 201 });
+  return Response.json(
+    { valid: true },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 }
 
 const handler = {
@@ -410,14 +408,11 @@ const handler = {
       return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
 
-    // Comments
-    if (url.pathname === "/api/comments" && request.method === "GET") {
-      return handleGetComments(env);
+    // Access token validation
+    if (url.pathname === "/api/access/validate" && request.method === "GET") {
+      return handleValidateAccess(request, env);
     }
-    if (url.pathname === "/api/comments" && request.method === "POST") {
-      return handlePostComment(request, env);
-    }
-    if (url.pathname === "/api/comments") {
+    if (url.pathname === "/api/access/validate") {
       return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
 

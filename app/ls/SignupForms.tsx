@@ -1,101 +1,101 @@
 'use client';
+
 import { useState } from 'react';
-import { CTAButton } from '@/components/Hero';
+import { Button } from '@/app/components/studio/Button';
 
 export default function SignupForms() {
-  const [judgeForm, setJudgeForm] = useState({ name: '', email: '' });
-  const [testerForm, setTesterForm] = useState({ name: '', email: '' });
+  const [form, setForm] = useState({ name: '', email: '' });
   const [status, setStatus] = useState({ type: '', message: '' });
 
-  const handleJudgeSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus({ type: 'loading', message: 'Encrypting connection...' });
+    setStatus({ type: 'loading', message: 'Submitting request…' });
     try {
       const res = await fetch('/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: judgeForm.name, email: judgeForm.email, type: 'judge' }),
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          type: 'access_request',
+        }),
       });
       if (res.status === 409) {
-        setStatus({ type: 'error', message: 'This signal is already registered.' });
+        setStatus({ type: 'error', message: 'This email is already registered.' });
         return;
       }
       if (!res.ok) throw new Error('API error');
-      setStatus({ type: 'success', message: 'Judge access logged successfully.' });
-      setJudgeForm({ name: '', email: '' });
-    } catch {
-      setStatus({ type: 'error', message: 'Connection failed. Try again.' });
-    }
-  };
-
-  const handleTesterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus({ type: 'loading', message: 'Encrypting connection...' });
-    try {
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: testerForm.name, email: testerForm.email, type: 'tester' }),
+      setStatus({
+        type: 'success',
+        message:
+          'Request received. If approved, you will receive a private play link within 24 hours.',
       });
-      if (res.status === 409) {
-        setStatus({ type: 'error', message: 'This signal is already registered.' });
-        return;
-      }
-      if (!res.ok) throw new Error('API error');
-      setStatus({ type: 'success', message: 'Tester position reserved. Awaiting origin coordinates.' });
-      setTesterForm({ name: '', email: '' });
+      setForm({ name: '', email: '' });
     } catch {
-      setStatus({ type: 'error', message: 'Connection failed. Try again.' });
+      setStatus({ type: 'error', message: 'Submission failed. Please try again.' });
     }
   };
 
   return (
-    <div className="w-full space-y-12">
-      <div className="max-w-xl mx-auto">
-        {/* Tester Form */}
-        <div className="rounded-xl border border-hero-magenta-500/30 bg-hero-bg-default/40 backdrop-blur-md p-6 sm:p-8 flex flex-col relative overflow-hidden group">
-          <div className="absolute top-0 right-0 bg-hero-magenta-600 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-lg">
-            Limit: 30 Slots
+    <div className="w-full max-w-xl mx-auto">
+      <div className="studio-card p-6 sm:p-8">
+        <h3 className="text-xl font-semibold text-studio-text mb-2">
+          Request Prototype Access
+        </h3>
+        <p className="text-sm text-studio-text-muted mb-6 leading-relaxed">
+          The Liminal Sin prototype is available by invitation only. Submit your
+          name and email and we will respond within 24 hours with a private play
+          link if approved.
+        </p>
+        <p className="text-xs text-studio-text-muted mb-6">
+          Desktop browsers recommended. Mobile play is not supported.
+        </p>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-studio-text mb-1">
+              Name
+            </label>
+            <input
+              type="text"
+              required
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-studio-text focus:outline-none focus:ring-2 focus:ring-studio-accent/30"
+              placeholder="Your name"
+            />
           </div>
-          <h3 className="text-2xl font-bold text-hero-magenta-300 mb-2">Early Access — Prototype Build</h3>
-          <p className="text-magenta-100/70 text-sm mb-4">Request access to the prototype. Slots are strictly limited to the first 30 suitable candidates.</p>
-          <p className="text-magenta-100/40 text-xs mb-6">⚠ This prototype is optimized for desktop. Playing on a mobile device may result in an unintended experience.</p>
-          <form onSubmit={handleTesterSubmit} className="space-y-4 mt-auto">
-            <div>
-              <label className="block text-xs font-medium text-magenta-200 uppercase tracking-wider mb-1">Subject Designation</label>
-              <input 
-                type="text" 
-                required
-                value={testerForm.name}
-                onChange={(e) => setTesterForm({...testerForm, name: e.target.value})}
-                className="w-full bg-hero-bg-dark/80 border border-hero-magenta-900 rounded p-3 text-magenta-50 focus:border-hero-magenta-400 focus:outline-none focus:ring-1 focus:ring-hero-magenta-400 transition-colors"
-                placeholder="Anon-01" 
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-magenta-200 uppercase tracking-wider mb-1">Drop Point (Email)</label>
-              <input 
-                type="email" 
-                required
-                value={testerForm.email}
-                onChange={(e) => setTesterForm({...testerForm, email: e.target.value})}
-                className="w-full bg-hero-bg-dark/80 border border-hero-magenta-900 rounded p-3 text-magenta-50 focus:border-hero-magenta-400 focus:outline-none focus:ring-1 focus:ring-hero-magenta-400 transition-colors"
-                placeholder="shadow@network.com" 
-              />
-            </div>
-            <button type="submit" className="w-full mt-4 bg-hero-magenta-600 hover:bg-hero-magenta-500 text-white font-semibold py-3 px-4 rounded transition-all shadow-[0_0_15px_rgba(139,44,245,0.3)] hover:shadow-[0_0_25px_rgba(139,44,245,0.5)]">
-              Submit Application
-            </button>
-          </form>
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-studio-text mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              required
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-studio-text focus:outline-none focus:ring-2 focus:ring-studio-accent/30"
+              placeholder="you@example.com"
+            />
+          </div>
+          <Button type="submit" className="w-full mt-2">
+            Submit request
+          </Button>
+        </form>
       </div>
 
       {status.message && (
-        <div className="text-center w-full max-w-sm mx-auto p-3 rounded-lg border border-cyan-500/50 bg-cyan-900/20 text-cyan-200 animate-pulse mt-8">
+        <p
+          className={`text-center text-sm mt-6 p-3 rounded-lg border ${
+            status.type === 'error'
+              ? 'border-red-200 bg-red-50 text-red-800'
+              : status.type === 'success'
+                ? 'border-green-200 bg-green-50 text-green-800'
+                : 'border-black/8 bg-white text-studio-text-muted'
+          }`}
+        >
           {status.message}
-        </div>
+        </p>
       )}
-
     </div>
   );
 }

@@ -1,32 +1,39 @@
-# Mycelia Interactive
+# Mycelia Interactive LLC
 
-Mycelia Interactive is an independent interactive narrative and experimental media studio focused on branching story systems, alternate reality design, interactive cinema, and emotionally reactive player experiences.
+Mycelia Interactive LLC is an entertainment company developing original intellectual property across film, interactive experiences, games, and music. Our defining focus is real-time AI-driven response systems that use voice and vision — entertainment where the audience participates and stories respond in real time.
 
-This repository is the **frontend/site repo** for Mycelia Interactive. It contains the public-facing website plus the browser client for **Liminal Sin**, an interactive FMV psychological horror experience built for the Gemini Live Agent Challenge.
+This repository is the **frontend/site repo**. It contains the public marketing website and the browser client for **Liminal Sin**, a psychological interactive experience built for the Gemini Live Agent Challenge.
 
-## Ownership
+## Team
 
-Mycelia Interactive is owned and operated by **Jeremy W. Robards**.
+**Mycelia Interactive LLC** — incorporated in New Mexico, May 2026 · Albuquerque, New Mexico
 
-**Liminal Sin** was developed by Jeremy W. Robards with **Adrianna Loya** credited as creative consultant.
+- **Adrianna Loya** — Co-founder; CEO, CCO, CFO
+- **Jeremy Robards** — Founder; CTO, CAIO, CCO
 
 ## What This Repo Contains
 
-This repository includes:
-
-- the Mycelia Interactive website front end
-- the Liminal Sin landing page
-- the Liminal Sin playable browser client
-- the judges route for the Liminal Sin submission build
-- runtime UI systems such as onboarding, credits, card overlays, timers, and visual effects
+- Mycelia Interactive LLC studio homepage (`/`)
+- Liminal Sin landing page (`/ls`) — story, access request form, FPV carousel
+- Liminal Sin request gate (`/ls/game`) — closed prototype; directs visitors to request access
+- Liminal Sin private play entry (`/ls/play?access=token`) — token-gated browser client (team-issued links only)
+- Cloudflare Worker (`workers/signup-api.ts`) — signup API, access token validation, D1
 
 ## Live Links
 
 - Studio site: [https://www.myceliainteractive.com](https://www.myceliainteractive.com)
-- Liminal Sin landing page: [https://www.myceliainteractive.com/ls](https://www.myceliainteractive.com/ls)
-- Liminal Sin game: [redacted](https://www.myceliainteractive.com/ls/[REDACTED])
-- Liminal Sin judges build: [redacted](https://www.myceliainteractive.com/ls/judges/[REDACTED)
-(LINKS WILL BE UNREDACTED ON MARCH 16TH at 5pm)
+- Liminal Sin landing: [https://www.myceliainteractive.com/ls](https://www.myceliainteractive.com/ls)
+- Liminal Sin access requests: [https://www.myceliainteractive.com/ls/game](https://www.myceliainteractive.com/ls/game)
+- The S33k3r Transmission (external): [https://www.thes33k3r.com](https://www.thes33k3r.com)
+
+Private play links are issued by the development team only (`/ls/play?access=...`).
+
+## Contact
+
+- contact@myceliainteractive.com
+- jeremy@myceliainteractive.com
+- adrianna@myceliainteractive.com
+
 ## Related Repositories
 
 - Frontend/site repo: [TheSeeker713/myceliainteractive](https://github.com/TheSeeker713/myceliainteractive)
@@ -36,65 +43,60 @@ The backend repo contains the Gemini Live multi-agent runtime, WebSocket server,
 
 ## Tech Stack
 
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- Cloudflare Workers / Pages deployment via Wrangler
+- Next.js 16.2.x
+- React 19.2.x
+- TypeScript 5.9.x
+- Tailwind CSS 4.3.x
+- Cloudflare Workers / Pages deployment via Wrangler 4.98.x
 
 ## Local Development
-
-### 1. Clone the repo
 
 ```bash
 git clone https://github.com/TheSeeker713/myceliainteractive.git
 cd myceliainteractive
-```
-
-### 2. Install dependencies
-
-```bash
 npm install
-```
-
-### 3. Run the frontend locally
-
-```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Important: Full Liminal Sin Reproduction
+## Full Liminal Sin Reproduction
 
-This repo is the **frontend only**.
-
-To fully reproduce the Liminal Sin project locally, you also need the backend repo:
+This repo is the **frontend only**. To reproduce the full experience locally, also clone the backend:
 
 ```bash
 git clone https://github.com/TheSeeker713/liminal-sin-gemini.git
 ```
 
-You need both repositories for the full end-to-end experience:
-
-- this repo provides the browser UI and presentation layer
-- the backend repo provides the live AI runtime, Google Cloud services, and WebSocket game server
-
 ## Deployment
-
-This project is deployed through Cloudflare using Wrangler.
 
 ```bash
 npm run deploy
 ```
 
-That command builds the static export and deploys the site.
+Builds the static export and deploys via Wrangler.
 
 ## Primary Frontend Routes
 
-- `/` — Mycelia Interactive home page
-- `/mycelia` — studio page
-- `/ls` — Liminal Sin landing page
-- `/ls/[redacted]` — public Liminal Sin game route
-- `/ls/judges/[redacted]` — judges route
-- `/ls/lsr.html` — Liminal Sin runtime/status report
+| Route | Description |
+|---|---|
+| `/` | Mycelia Interactive LLC studio homepage |
+| `/ls` | Liminal Sin landing page + access request form |
+| `/ls/game` | Closed prototype gate — request access (not playable) |
+| `/ls/play` | Private play entry — requires `?access=token` issued by team |
+| `/ls/privacy` | Liminal Sin privacy policy |
+
+## Issuing prototype access (team)
+
+1. Review access requests in the D1 `signups` table.
+2. Insert a token into `access_tokens` (via Cloudflare D1 dashboard or `wrangler d1 execute`).
+3. Email the requester: `https://www.myceliainteractive.com/ls/play?access=<token>`
+
+Example D1 insert:
+
+```sql
+INSERT INTO access_tokens (token, email, name, expires_at, created_at, revoked)
+VALUES ('your-random-token-here', 'requester@example.com', 'Name', 1735689600000, 1704067200000, 0);
+```
+
+Set `expires_at` to a Unix timestamp in milliseconds (e.g. 7–14 days from now).

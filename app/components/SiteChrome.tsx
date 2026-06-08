@@ -4,53 +4,52 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-/**
- * SiteChrome — renders the global sticky header and footer.
- * Hidden on routes listed in NO_CHROME_ROUTES so self-contained pages
- * (e.g. /ls) can supply their own navigation.
- */
+const NO_CHROME_ROUTES = ["/ls/play"];
 
-const NO_CHROME_ROUTES = ["/ls", "/roadmap"];
+function shouldHideChrome(pathname: string) {
+  return NO_CHROME_ROUTES.some(
+    (r) => pathname === r || pathname.startsWith(`${r}/`),
+  );
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
-  if (NO_CHROME_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/"))) {
-    return null;
-  }
+  if (shouldHideChrome(pathname)) return null;
+
   return (
-    <header className="site-gutter site-header-py sticky top-0 z-50 w-full backdrop-blur-xl bg-[#08041a]/90 border-b border-hero-cyan-500/20 shadow-[0_4px_30px_rgba(0,199,255,0.15)] transition-all">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex-shrink-0">
-          <Link href="/" aria-label="Return to home">
-            <Image
-              src="/assets/images/Mycelia Interactive Banner.png"
-              alt="Mycelia Interactive"
-              width={360}
-              height={100}
-              className="h-16 lg:h-20 w-auto object-contain rounded drop-shadow-[0_0_10px_rgba(139,44,245,0.3)] transition-transform hover:scale-105"
-            />
+    <header className="site-gutter site-header-py sticky top-0 z-50 w-full border-b border-black/8 bg-white/75 backdrop-blur-xl">
+      <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-between gap-4">
+        <Link href="/" aria-label="Mycelia Interactive LLC home">
+          <Image
+            src="/assets/images/Mycelia Interactive Banner.png"
+            alt="Mycelia Interactive LLC"
+            width={280}
+            height={72}
+            className="h-10 sm:h-12 w-auto object-contain"
+          />
+        </Link>
+        <nav className="flex items-center gap-4 sm:gap-6 text-sm">
+          <Link
+            href="/#projects"
+            className="text-studio-text-muted hover:text-studio-text transition-colors"
+          >
+            Projects
           </Link>
-        </div>
-        <div className="hidden sm:flex gap-6 items-center">
-          <a
-            href="/roadmap"
-            className="px-4 py-2 text-sm font-medium text-cyan-200/70 hover:text-cyan-300 transition-colors duration-200 font-[family-name:var(--font-geist-mono)] tracking-wide"
-          >
-            Roadmap
-          </a>
-          <a
+          <Link
             href="/ls"
-            className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-hero-magenta-600 to-hero-cyan-600 font-semibold text-white hover:from-hero-magenta-500 hover:to-hero-cyan-500 hover:shadow-[0_0_20px_rgba(139,44,245,0.5)] transition-all duration-300"
+            className="text-studio-text-muted hover:text-studio-text transition-colors"
           >
-            Play Liminal Sin Demo
-          </a>
+            Liminal Sin
+          </Link>
           <a
-            href="/ls/lsr"
-            className="px-6 py-2.5 rounded-lg bg-hero-bg-light/50 border border-hero-cyan-400/30 text-cyan-50 font-medium hover:bg-hero-cyan-900/40 hover:border-hero-cyan-300 hover:text-white transition-all duration-300"
+            href="https://www.thes33k3r.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline text-studio-text-muted hover:text-studio-text transition-colors"
           >
-            Learn More
+            The S33k3r
           </a>
-        </div>
+        </nav>
       </div>
     </header>
   );
@@ -58,14 +57,21 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   const pathname = usePathname();
-  if (NO_CHROME_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/"))) {
-    return null;
-  }
+  if (shouldHideChrome(pathname)) return null;
+
   return (
-    <footer className="site-gutter site-footer-py sticky bottom-0 z-50 w-full backdrop-blur-md bg-[#140a36]/80 border-t border-hero-cyan-300/30 mt-auto">
-      <div className="max-w-7xl mx-auto flex items-center justify-between text-cyan-50/70 text-sm">
-        <span>&copy; {new Date().getFullYear()} Mycelia Interactive. All rights reserved.</span>
-        <a href="/ls/privacy" className="hover:text-cyan-300 transition-colors duration-200">Privacy Policy</a>
+    <footer className="site-gutter site-footer-py sticky bottom-0 z-50 w-full border-t border-black/8 bg-white/80 backdrop-blur-md mt-auto">
+      <div className="max-w-[var(--content-max-width)] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm text-studio-text-muted">
+        <span>
+          &copy; {new Date().getFullYear()} Mycelia Interactive LLC. All rights
+          reserved.
+        </span>
+        <Link
+          href="/ls/privacy"
+          className="hover:text-studio-accent transition-colors"
+        >
+          Privacy Policy
+        </Link>
       </div>
     </footer>
   );

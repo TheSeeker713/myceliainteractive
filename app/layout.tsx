@@ -14,34 +14,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mycelia Interactive | Interactive Cinema & Branching Narratives",
+  title: "Mycelia Interactive LLC | Interactive Entertainment",
   description:
-    "Step into alternate realities. Experience interactive cinema where your choices shape the story. Full motion video meets branching narratives.",
-  keywords: [
-    "interactive cinema",
-    "branching narratives",
-    "FMV games",
-    "choose your own adventure",
-    "alternate reality",
-    "interactive storytelling",
-    "transmedia",
-  ],
-  authors: [{ name: "Mycelia Interactive" }],
-  creator: "Mycelia Interactive",
+    "Mycelia Interactive LLC develops original interactive entertainment where audiences participate in real time — characters hear you, stories respond through AI-driven voice and vision systems.",
+  authors: [{ name: "Mycelia Interactive LLC" }],
+  creator: "Mycelia Interactive LLC",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://myceliainteractive.com",
-    title: "Mycelia Interactive | Interactive Cinema",
+    title: "Mycelia Interactive LLC | Interactive Entertainment",
     description:
-      "Experience interactive cinema where your choices shape the story.",
-    siteName: "Mycelia Interactive",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Mycelia Interactive | Interactive Cinema",
-    description:
-      "Experience interactive cinema where your choices shape the story.",
+      "Original interactive entertainment across film, games, music, and immersive experiences.",
+    siteName: "Mycelia Interactive LLC",
   },
 };
 
@@ -49,7 +34,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#140a36",
+  themeColor: "#FAFAF8",
 };
 
 export default function RootLayout({
@@ -60,12 +45,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-hero-bg-default text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <SiteHeader />
-
         <main className="flex-grow">{children}</main>
-
         <SiteFooter />
       </body>
     </html>

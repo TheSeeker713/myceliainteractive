@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * GamePageShell — Minimal header + footer chrome for /ls/game and /ls/judges/game.
+ * GamePageShell — Minimal header + footer chrome for private play at /ls/play.
  *
  * Overlays on top of the full-screen game area so the game fills the viewport.
  * Header auto-hides after 4 s of inactivity and reappears on mouse move or tap
