@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SiteMotionShell } from "./components/motion/SiteMotionShell";
 import { SiteHeader, SiteFooter } from "./components/SiteChrome";
 import "./globals.css";
 
@@ -48,7 +49,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <SiteHeader />
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow">
+          <SiteMotionShell>{children}</SiteMotionShell>
+        </main>
         <SiteFooter />
       </body>
     </html>

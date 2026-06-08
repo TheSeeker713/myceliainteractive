@@ -28,7 +28,7 @@ export function SiteHeader() {
             className="h-10 sm:h-12 w-auto object-contain"
           />
         </Link>
-        <nav className="flex items-center gap-4 sm:gap-6 text-sm">
+        <nav className="flex items-center gap-3 sm:gap-5 text-sm">
           <Link
             href="/#projects"
             className="text-studio-text-muted hover:text-studio-text transition-colors"
@@ -36,16 +36,28 @@ export function SiteHeader() {
             Projects
           </Link>
           <Link
+            href="/#roadmap"
+            className="hidden sm:inline text-studio-text-muted hover:text-studio-text transition-colors"
+          >
+            Roadmap
+          </Link>
+          <Link
             href="/ls"
             className="text-studio-text-muted hover:text-studio-text transition-colors"
           >
             Liminal Sin
           </Link>
+          <Link
+            href="/vision"
+            className="hidden md:inline text-studio-text-muted hover:text-studio-text transition-colors"
+          >
+            10-Year Vision
+          </Link>
           <a
             href="https://www.thes33k3r.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline text-studio-text-muted hover:text-studio-text transition-colors"
+            className="hidden lg:inline text-studio-text-muted hover:text-studio-text transition-colors"
           >
             The S33k3r
           </a>
@@ -66,12 +78,20 @@ export function SiteFooter() {
           &copy; {new Date().getFullYear()} Mycelia Interactive LLC. All rights
           reserved.
         </span>
-        <Link
-          href="/ls/privacy"
-          className="hover:text-studio-accent transition-colors"
-        >
-          Privacy Policy
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/vision"
+            className="hover:text-studio-accent transition-colors"
+          >
+            10-Year Vision
+          </Link>
+          <Link
+            href="/ls/privacy"
+            className="hover:text-studio-accent transition-colors"
+          >
+            Privacy Policy
+          </Link>
+        </div>
       </div>
     </footer>
   );

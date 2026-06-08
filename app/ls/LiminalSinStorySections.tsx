@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { SectionReveal } from "@/app/components/motion/SectionReveal";
+import { StudioCard } from "@/app/components/motion/StudioCard";
 import SignupForms from "@/app/ls/SignupForms";
 
 const featureCards = [
@@ -31,7 +35,7 @@ const featureCards = [
 export function LiminalSinStorySections() {
   return (
     <>
-      <section id="content" className="ls-section-py">
+      <SectionReveal id="content" className="ls-section-py scroll-mt-24">
         <div className="ls-gutter studio-section">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-5 text-studio-text-muted leading-relaxed">
@@ -60,9 +64,9 @@ export function LiminalSinStorySections() {
             </div>
           </div>
         </div>
-      </section>
+      </SectionReveal>
 
-      <section className="ls-section-py bg-white/40">
+      <SectionReveal className="ls-section-py bg-white/40">
         <div className="ls-gutter studio-section">
           <h2 className="text-2xl font-semibold text-studio-text mb-3">
             The Trust System
@@ -87,38 +91,38 @@ export function LiminalSinStorySections() {
                 text: "They may disobey, hide information, or spiral into paranoia.",
               },
             ].map((item) => (
-              <article key={item.title} className="studio-card p-6">
+              <StudioCard key={item.title} className="p-6">
                 <h3 className="font-semibold text-studio-text">{item.title}</h3>
                 <p className="mt-2 text-sm text-studio-text-muted leading-relaxed">
                   {item.text}
                 </p>
-              </article>
+              </StudioCard>
             ))}
           </div>
         </div>
-      </section>
+      </SectionReveal>
 
-      <section className="ls-section-py">
+      <SectionReveal className="ls-section-py">
         <div className="ls-gutter studio-section">
           <h2 className="text-2xl font-semibold text-studio-text mb-8">
             System capabilities
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {featureCards.map(({ label, desc }) => (
-              <article key={label} className="studio-card p-5">
+              <StudioCard key={label} className="p-5">
                 <h3 className="text-sm font-semibold text-studio-text">
                   {label}
                 </h3>
                 <p className="mt-2 text-sm text-studio-text-muted leading-relaxed">
                   {desc}
                 </p>
-              </article>
+              </StudioCard>
             ))}
           </div>
         </div>
-      </section>
+      </SectionReveal>
 
-      <section id="access" className="ls-section-py bg-white/40 scroll-mt-24">
+      <SectionReveal id="access" className="ls-section-py bg-white/40 scroll-mt-24">
         <div className="ls-gutter studio-section">
           <div className="text-center mb-10 max-w-xl mx-auto">
             <h2 className="text-2xl font-semibold text-studio-text">
@@ -131,7 +135,7 @@ export function LiminalSinStorySections() {
           </div>
           <SignupForms />
         </div>
-      </section>
+      </SectionReveal>
     </>
   );
 }

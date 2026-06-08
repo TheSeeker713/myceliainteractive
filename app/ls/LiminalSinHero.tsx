@@ -26,6 +26,9 @@ export function LiminalSinHero() {
               <Link href="#access">
                 <Button>Request access</Button>
               </Link>
+              <Link href="#experience">
+                <Button variant="secondary">What you&apos;ll experience</Button>
+              </Link>
               <Link href="/ls/game">
                 <Button variant="secondary">About prototype access</Button>
               </Link>
