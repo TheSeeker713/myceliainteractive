@@ -1,15 +1,14 @@
 "use client";
 
-import { SectionReveal } from "@/app/components/motion/SectionReveal";
-import { StudioCard } from "@/app/components/motion/StudioCard";
-import { Button } from "@/app/components/studio/Button";
 import Link from "next/link";
+import { FoldCard } from "@/app/components/motion/FoldCard";
+import { Button } from "@/app/components/studio/Button";
 
-export function ContactSection() {
+export function ContactContent() {
   return (
-    <SectionReveal className="studio-section">
+    <>
       <h2 className="text-2xl font-semibold mb-4">Contact</h2>
-      <StudioCard className="p-6 sm:p-8 space-y-4 text-studio-text-muted">
+      <FoldCard index={0} total={1} className="p-6 sm:p-8 space-y-4 text-studio-text-muted">
         <p>
           <span className="font-medium text-studio-text">General inquiries:</span>{" "}
           <a
@@ -47,7 +46,7 @@ export function ContactSection() {
             </Button>
           </a>
         </div>
-      </StudioCard>
-    </SectionReveal>
+      </FoldCard>
+    </>
   );
 }

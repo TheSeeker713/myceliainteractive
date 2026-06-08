@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { SectionReveal } from "@/app/components/motion/SectionReveal";
 import { Button } from "@/app/components/studio/Button";
 
-export function HeroSection() {
+export function HeroContent() {
   return (
-    <SectionReveal className="studio-section pt-16 sm:pt-24 pb-16 sm:pb-20">
+    <>
       <p className="text-sm font-medium tracking-wide text-studio-accent uppercase mb-4">
         New Mexico · Est. 2026
       </p>
@@ -27,6 +26,6 @@ export function HeroSection() {
           </Button>
         </a>
       </div>
-    </SectionReveal>
+    </>
   );
 }

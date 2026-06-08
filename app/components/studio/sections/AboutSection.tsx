@@ -1,13 +1,12 @@
 "use client";
 
-import { SectionReveal } from "@/app/components/motion/SectionReveal";
-import { StudioCard } from "@/app/components/motion/StudioCard";
+import { FoldCard } from "@/app/components/motion/FoldCard";
 
-export function AboutSection() {
+export function AboutContent() {
   return (
-    <SectionReveal className="studio-section pb-16">
+    <>
       <h2 className="text-2xl font-semibold mb-4">About</h2>
-      <StudioCard className="p-6 sm:p-8 space-y-4 text-studio-text-muted max-w-3xl">
+      <FoldCard index={0} total={1} className="p-6 sm:p-8 space-y-4 text-studio-text-muted max-w-3xl">
         <p>
           Mycelia Interactive LLC is an entertainment company developing
           original intellectual property across film, interactive experiences,
@@ -20,7 +19,7 @@ export function AboutSection() {
           is owned in full by the company. We do not develop licensed or adapted
           third-party properties.
         </p>
-      </StudioCard>
-    </SectionReveal>
+      </FoldCard>
+    </>
   );
 }

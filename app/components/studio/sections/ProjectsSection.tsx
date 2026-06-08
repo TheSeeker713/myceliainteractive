@@ -2,19 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { SectionReveal } from "@/app/components/motion/SectionReveal";
-import { StudioCard } from "@/app/components/motion/StudioCard";
+import { FoldCard } from "@/app/components/motion/FoldCard";
 import { PROJECTS } from "@/app/components/studio/data";
 
-export function ProjectsSection() {
+export function ProjectsContent() {
   return (
-    <SectionReveal id="projects" className="studio-section pb-16 scroll-mt-24">
+    <>
       <h2 className="text-2xl font-semibold mb-6">Projects</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {PROJECTS.map((project) => (
-          <StudioCard
+        {PROJECTS.map((project, index) => (
+          <FoldCard
             key={project.name}
-            featured={"featured" in project && project.featured}
+            index={index}
+            total={PROJECTS.length}
             className={`p-6 flex flex-col gap-3 ${
               "featured" in project && project.featured
                 ? "md:col-span-2 md:grid md:grid-cols-2 md:gap-8 md:items-center"
@@ -63,9 +63,9 @@ export function ProjectsSection() {
                 </p>
               )}
             </div>
-          </StudioCard>
+          </FoldCard>
         ))}
       </div>
-    </SectionReveal>
+    </>
   );
 }

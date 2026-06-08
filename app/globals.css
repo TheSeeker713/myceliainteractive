@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "lenis/dist/lenis.css";
 @import "./styles/game-animations.css";
 @import "./styles/game-animations-hud.css";
 @import "./styles/game-effects.css";
@@ -100,12 +99,28 @@ body {
   backdrop-filter: blur(8px);
 }
 
-.motion-line-glow {
-  filter: drop-shadow(0 0 6px rgba(45, 106, 126, 0.15));
+.scroll-fold-scene {
+  position: relative;
 }
 
-.section-bridge {
-  pointer-events: none;
+.scroll-fold-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1400px;
+}
+
+.scroll-fold-layer {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.scroll-fold-static .studio-section {
+  max-width: var(--content-max-width);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

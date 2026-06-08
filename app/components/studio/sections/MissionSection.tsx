@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { SectionReveal } from "@/app/components/motion/SectionReveal";
 
-export function MissionSection() {
+export function MissionContent() {
   return (
-    <SectionReveal className="studio-section pb-16">
+    <>
       <h2 className="text-2xl font-semibold mb-4">Mission</h2>
       <p className="text-studio-text-muted max-w-3xl leading-relaxed">
         Our work is defined by one design principle: the audience participates.
@@ -19,6 +18,6 @@ export function MissionSection() {
           Explore our 10-year north star horizon →
         </Link>
       </p>
-    </SectionReveal>
+    </>
   );
 }

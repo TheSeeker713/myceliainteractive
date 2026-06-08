@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { SectionReveal } from "@/app/components/motion/SectionReveal";
-import { StudioCard } from "@/app/components/motion/StudioCard";
+import { FoldCard } from "@/app/components/motion/FoldCard";
 import SignupForms from "@/app/ls/SignupForms";
 
 const featureCards = [
@@ -32,110 +31,108 @@ const featureCards = [
   },
 ] as const;
 
-export function LiminalSinStorySections() {
+const trustCards = [
+  {
+    title: "Neutral",
+    text: "The characters are cautious but willing to listen. Every interaction is a calculation.",
+  },
+  {
+    title: "High Trust",
+    text: "Environmental clues surface. Survival hints are shared. The characters follow your lead.",
+  },
+  {
+    title: "Low Trust",
+    text: "They may disobey, hide information, or spiral into paranoia.",
+  },
+] as const;
+
+export function LiminalSinStoryContent() {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="space-y-5 text-studio-text-muted leading-relaxed">
+        <p>
+          <strong className="text-studio-text">Liminal Sin</strong> is Mycelia
+          Interactive LLC&apos;s primary technology demonstration — a
+          psychological interactive experience set in the Vegas Underground. You
+          become a disembodied voice woven into a living story. Three people are
+          trapped. They can hear you. Whether they trust you is entirely up to
+          them.
+        </p>
+        <p>
+          This is real-time AI-driven narrative — where voice, emotion, and
+          trust reshape the story as it unfolds. Not a branching menu. Not a
+          chatbot. A system that watches, listens, and responds.
+        </p>
+      </div>
+      <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8">
+        <Image
+          src="/assets/images/Liminal_Sin_Title.jpg"
+          alt="Liminal Sin"
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 50vw"
+        />
+      </div>
+    </div>
+  );
+}
+
+export function LiminalSinTrustContent() {
   return (
     <>
-      <SectionReveal id="content" className="ls-section-py scroll-mt-24">
-        <div className="ls-gutter studio-section">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-5 text-studio-text-muted leading-relaxed">
-              <p>
-                <strong className="text-studio-text">Liminal Sin</strong> is
-                Mycelia Interactive LLC&apos;s primary technology demonstration
-                — a psychological interactive experience set in the Vegas
-                Underground. You become a disembodied voice woven into a living
-                story. Three people are trapped. They can hear you. Whether they
-                trust you is entirely up to them.
-              </p>
-              <p>
-                This is real-time AI-driven narrative — where voice, emotion,
-                and trust reshape the story as it unfolds. Not a branching menu.
-                Not a chatbot. A system that watches, listens, and responds.
-              </p>
-            </div>
-            <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8">
-              <Image
-                src="/assets/images/Liminal_Sin_Title.jpg"
-                alt="Liminal Sin"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-          </div>
-        </div>
-      </SectionReveal>
-
-      <SectionReveal className="ls-section-py bg-white/40">
-        <div className="ls-gutter studio-section">
-          <h2 className="text-2xl font-semibold text-studio-text mb-3">
-            The Trust System
-          </h2>
-          <p className="text-studio-text-muted max-w-2xl mb-10 leading-relaxed">
-            The characters are agents, not actors. Their behavior shifts with
-            every word you speak. Build trust through honesty. Destroy it through
-            manipulation.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              {
-                title: "Neutral",
-                text: "The characters are cautious but willing to listen. Every interaction is a calculation.",
-              },
-              {
-                title: "High Trust",
-                text: "Environmental clues surface. Survival hints are shared. The characters follow your lead.",
-              },
-              {
-                title: "Low Trust",
-                text: "They may disobey, hide information, or spiral into paranoia.",
-              },
-            ].map((item) => (
-              <StudioCard key={item.title} className="p-6">
-                <h3 className="font-semibold text-studio-text">{item.title}</h3>
-                <p className="mt-2 text-sm text-studio-text-muted leading-relaxed">
-                  {item.text}
-                </p>
-              </StudioCard>
-            ))}
-          </div>
-        </div>
-      </SectionReveal>
-
-      <SectionReveal className="ls-section-py">
-        <div className="ls-gutter studio-section">
-          <h2 className="text-2xl font-semibold text-studio-text mb-8">
-            System capabilities
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {featureCards.map(({ label, desc }) => (
-              <StudioCard key={label} className="p-5">
-                <h3 className="text-sm font-semibold text-studio-text">
-                  {label}
-                </h3>
-                <p className="mt-2 text-sm text-studio-text-muted leading-relaxed">
-                  {desc}
-                </p>
-              </StudioCard>
-            ))}
-          </div>
-        </div>
-      </SectionReveal>
-
-      <SectionReveal id="access" className="ls-section-py bg-white/40 scroll-mt-24">
-        <div className="ls-gutter studio-section">
-          <div className="text-center mb-10 max-w-xl mx-auto">
-            <h2 className="text-2xl font-semibold text-studio-text">
-              Request access
-            </h2>
-            <p className="mt-3 text-studio-text-muted">
-              The prototype is closed to the public. Approved requesters receive
-              a private play link within 24 hours.
+      <h2 className="text-2xl font-semibold text-studio-text mb-3">
+        The Trust System
+      </h2>
+      <p className="text-studio-text-muted max-w-2xl mb-10 leading-relaxed">
+        The characters are agents, not actors. Their behavior shifts with every
+        word you speak. Build trust through honesty. Destroy it through
+        manipulation.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {trustCards.map((item, index) => (
+          <FoldCard key={item.title} index={index} total={trustCards.length} className="p-6">
+            <h3 className="font-semibold text-studio-text">{item.title}</h3>
+            <p className="mt-2 text-sm text-studio-text-muted leading-relaxed">
+              {item.text}
             </p>
-          </div>
-          <SignupForms />
-        </div>
-      </SectionReveal>
+          </FoldCard>
+        ))}
+      </div>
+    </>
+  );
+}
+
+export function LiminalSinCapabilitiesContent() {
+  return (
+    <>
+      <h2 className="text-2xl font-semibold text-studio-text mb-8">
+        System capabilities
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {featureCards.map((card, index) => (
+          <FoldCard key={card.label} index={index} total={featureCards.length} className="p-5">
+            <h3 className="text-sm font-semibold text-studio-text">{card.label}</h3>
+            <p className="mt-2 text-sm text-studio-text-muted leading-relaxed">
+              {card.desc}
+            </p>
+          </FoldCard>
+        ))}
+      </div>
+    </>
+  );
+}
+
+export function LiminalSinAccessContent() {
+  return (
+    <>
+      <div className="text-center mb-10 max-w-xl mx-auto">
+        <h2 className="text-2xl font-semibold text-studio-text">Request access</h2>
+        <p className="mt-3 text-studio-text-muted">
+          The prototype is closed to the public. Approved requesters receive a
+          private play link within 24 hours.
+        </p>
+      </div>
+      <SignupForms />
     </>
   );
 }

@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
-import FPVCarousel from "@/app/components/FPVCarousel";
-import { SectionBridge } from "@/app/components/motion/SectionBridge";
-import { LiminalSinAccessFooter } from "@/app/ls/LiminalSinAccessFooter";
-import { LiminalSinArchitecture } from "@/app/ls/LiminalSinArchitecture";
-import { LiminalSinExperienceTeaser } from "@/app/ls/LiminalSinExperienceTeaser";
-import { LiminalSinHero } from "@/app/ls/LiminalSinHero";
-import { LiminalSinSliceScope } from "@/app/ls/LiminalSinSliceScope";
-import { LiminalSinStorySections } from "@/app/ls/LiminalSinStorySections";
+import { LiminalSinLanding } from "@/app/ls/LiminalSinLanding";
 
 export const metadata: Metadata = {
   title: "Liminal Sin | Mycelia Interactive LLC",
@@ -20,21 +13,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LiminalSinLanding() {
-  return (
-    <div className="min-h-screen">
-      <LiminalSinHero />
-      <SectionBridge variant={0} />
-      <LiminalSinExperienceTeaser />
-      <SectionBridge variant={1} />
-      <FPVCarousel />
-      <SectionBridge variant={2} />
-      <LiminalSinStorySections />
-      <SectionBridge variant={0} />
-      <LiminalSinArchitecture />
-      <SectionBridge variant={1} />
-      <LiminalSinSliceScope />
-      <LiminalSinAccessFooter />
-    </div>
-  );
+export default function LiminalSinPage() {
+  return <LiminalSinLanding />;
 }
