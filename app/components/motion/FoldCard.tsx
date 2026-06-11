@@ -7,6 +7,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { cn } from "@/utils/cn";
+import { Card } from "@/app/components/studio/Card";
 import { useFoldSceneProgress } from "./FoldSceneContext";
 import { useCardFoldTransforms } from "./useFoldProgress";
 
@@ -41,12 +42,16 @@ export function FoldCard({
   );
 
   if (isStatic) {
-    return <article className={cn("studio-card", className)}>{children}</article>;
+    return (
+      <Card variant="glass" className={className}>
+        {children}
+      </Card>
+    );
   }
 
   return (
-    <motion.article
-      className={cn("studio-card scroll-fold-layer", className)}
+    <motion.div
+      className={cn("scroll-fold-layer", className)}
       style={{
         opacity,
         scaleY,
@@ -59,7 +64,9 @@ export function FoldCard({
         transition: { duration: 0.25 },
       }}
     >
-      {children}
-    </motion.article>
+      <Card variant="glass" className="h-full">
+        {children}
+      </Card>
+    </motion.div>
   );
 }

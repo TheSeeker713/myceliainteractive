@@ -96,7 +96,13 @@ body {
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--color-studio-border);
   border-radius: 1rem;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.studio-card:hover {
+  box-shadow: 0 12px 40px rgba(45, 106, 126, 0.06);
 }
 
 .scroll-fold-scene {

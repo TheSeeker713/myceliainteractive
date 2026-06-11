@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const NO_CHROME_ROUTES = ["/ls/play"];
 
@@ -14,7 +15,51 @@ function shouldHideChrome(pathname: string) {
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   if (shouldHideChrome(pathname)) return null;
+
+  const navLinks = (
+    <>
+      <Link
+        href="/#projects"
+        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        onClick={() => setMobileOpen(false)}
+      >
+        Projects
+      </Link>
+      <Link
+        href="/#roadmap"
+        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        onClick={() => setMobileOpen(false)}
+      >
+        Roadmap
+      </Link>
+      <Link
+        href="/ls"
+        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        onClick={() => setMobileOpen(false)}
+      >
+        Liminal Sin
+      </Link>
+      <Link
+        href="/vision"
+        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        onClick={() => setMobileOpen(false)}
+      >
+        10-Year Vision
+      </Link>
+      <a
+        href="https://www.thes33k3r.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        onClick={() => setMobileOpen(false)}
+      >
+        The S33k3r
+      </a>
+    </>
+  );
 
   return (
     <header className="site-gutter site-header-py sticky top-0 z-50 w-full border-b border-black/8 bg-white/75 backdrop-blur-xl">
@@ -28,41 +73,52 @@ export function SiteHeader() {
             className="h-10 sm:h-12 w-auto object-contain"
           />
         </Link>
-        <nav className="flex items-center gap-3 sm:gap-5 text-sm">
-          <Link
-            href="/#projects"
-            className="text-studio-text-muted hover:text-studio-text transition-colors"
-          >
-            Projects
-          </Link>
-          <Link
-            href="/#roadmap"
-            className="hidden sm:inline text-studio-text-muted hover:text-studio-text transition-colors"
-          >
-            Roadmap
-          </Link>
-          <Link
-            href="/ls"
-            className="text-studio-text-muted hover:text-studio-text transition-colors"
-          >
-            Liminal Sin
-          </Link>
-          <Link
-            href="/vision"
-            className="hidden md:inline text-studio-text-muted hover:text-studio-text transition-colors"
-          >
-            10-Year Vision
-          </Link>
-          <a
-            href="https://www.thes33k3r.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden lg:inline text-studio-text-muted hover:text-studio-text transition-colors"
-          >
-            The S33k3r
-          </a>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-5 text-sm">
+          {navLinks}
         </nav>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="md:hidden p-2 -mr-2 text-studio-text-muted hover:text-studio-text"
+          aria-label="Toggle navigation"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            {mobileOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {mobileOpen && (
+        <div className="md:hidden border-t border-black/8 bg-white/95 backdrop-blur-xl">
+          <nav className="site-gutter py-4 flex flex-col gap-3 text-sm">
+            {navLinks}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
