@@ -10,9 +10,10 @@ type VideoPlaneProps = {
   scrollProgress: number;
   texture: THREE.VideoTexture | null;
   parallaxPos: { x: number; y: number };
+  parallaxMultiplier: number;
 };
 
-function VideoPlane({ scrollProgress, texture, parallaxPos }: VideoPlaneProps) {
+function VideoPlane({ scrollProgress, texture, parallaxPos, parallaxMultiplier }: VideoPlaneProps) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { viewport } = useThree();
@@ -45,12 +46,12 @@ function VideoPlane({ scrollProgress, texture, parallaxPos }: VideoPlaneProps) {
     }
   }, [scrollProgress, texture]);
 
-  // Mouse + Touch parallax
+  // Mouse + Touch parallax (scaled by device type)
   useFrame(() => {
     if (!meshRef.current) return;
 
-    const targetX = parallaxPos.x * 0.12;
-    const targetY = parallaxPos.y * 0.08;
+    const targetX = parallaxPos.x * 0.12 * parallaxMultiplier;
+    const targetY = parallaxPos.y * 0.08 * parallaxMultiplier;
 
     meshRef.current.position.x = THREE.MathUtils.lerp(
       meshRef.current.position.x,
@@ -85,8 +86,21 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
   const [parallaxPos, setParallaxPos] = useState({ x: 0, y: 0 });
   const [hasError, setHasError] = useState(false);
+  const [parallaxMultiplier, setParallaxMultiplier] = useState(1);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const textureRef = useRef<THREE.VideoTexture | null>(null);
+
+  // Mobile detection for performance + reduced parallax
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobile = window.innerWidth < 768;
+      setParallaxMultiplier(isMobile ? 0.35 : 1); // Significantly reduced on mobile
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
@@ -178,7 +192,12 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
         style={{ background: "transparent" }}
         gl={{ alpha: true, antialias: false }}
       >
-        <VideoPlane scrollProgress={progress} texture={texture} parallaxPos={parallaxPos} />
+        <VideoPlane 
+          scrollProgress={progress} 
+          texture={texture} 
+          parallaxPos={parallaxPos} 
+          parallaxMultiplier={parallaxMultiplier} 
+        />
       </Canvas>
     </div>
   );
