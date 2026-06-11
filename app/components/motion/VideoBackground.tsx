@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useScroll } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
@@ -9,9 +9,10 @@ import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 type VideoPlaneProps = {
   scrollProgress: number;
   texture: THREE.VideoTexture | null;
+  mousePos: { x: number; y: number };
 };
 
-function VideoPlane({ scrollProgress, texture }: VideoPlaneProps) {
+function VideoPlane({ scrollProgress, texture, mousePos }: VideoPlaneProps) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { viewport } = useThree();
@@ -46,6 +47,25 @@ function VideoPlane({ scrollProgress, texture }: VideoPlaneProps) {
     }
   }, [scrollProgress, texture]);
 
+  // Mouse parallax
+  useFrame(() => {
+    if (!meshRef.current) return;
+
+    const targetX = mousePos.x * 0.12;
+    const targetY = mousePos.y * 0.08;
+
+    meshRef.current.position.x = THREE.MathUtils.lerp(
+      meshRef.current.position.x,
+      targetX,
+      0.08
+    );
+    meshRef.current.position.y = THREE.MathUtils.lerp(
+      meshRef.current.position.y,
+      targetY,
+      0.08
+    );
+  });
+
   if (!texture) return null;
 
   return (
@@ -65,6 +85,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   const { scrollYProgress } = useScroll();
   const [progress, setProgress] = useState(0);
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
@@ -73,6 +94,20 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
     });
     return unsubscribe;
   }, [scrollYProgress]);
+
+  // Mouse parallax tracking
+  useEffect(() => {
+    if (!enabled || reducedMotion) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = -(e.clientY / window.innerHeight - 0.5) * 2;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [enabled, reducedMotion]);
 
   // Load video
   useEffect(() => {
@@ -113,7 +148,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
         style={{ background: "transparent" }}
         gl={{ alpha: true, antialias: false }}
       >
-        <VideoPlane scrollProgress={progress} texture={texture} />
+        <VideoPlane scrollProgress={progress} texture={texture} mousePos={mousePos} />
       </Canvas>
     </div>
   );
