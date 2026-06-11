@@ -16,22 +16,33 @@ function VideoPlane({ scrollProgress, texture }: VideoPlaneProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { viewport } = useThree();
 
-  // Basic scroll scrubbing
+  // Scroll scrubbing with direction detection + lerp
+  const prevProgressRef = useRef(0);
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !texture) return;
 
-    const targetTime = scrollProgress * (video.duration || 10);
+    const prev = prevProgressRef.current;
+    const direction = scrollProgress > prev ? 1 : -1;
+    prevProgressRef.current = scrollProgress;
+
+    const duration = video.duration || 10;
+    const targetTime = scrollProgress * duration;
+
+    // Improved lerp based on direction
+    const lerpFactor = direction > 0 ? 0.18 : 0.22;
     video.currentTime = THREE.MathUtils.lerp(
       video.currentTime,
       targetTime,
-      0.2
+      lerpFactor
     );
 
-    if (Math.abs(video.currentTime - targetTime) > 0.05) {
-      video.play().catch(() => {});
-    } else {
+    // Pause when scroll stops
+    if (Math.abs(scrollProgress - prev) < 0.001) {
       video.pause();
+    } else {
+      video.play().catch(() => {});
     }
   }, [scrollProgress, texture]);
 
