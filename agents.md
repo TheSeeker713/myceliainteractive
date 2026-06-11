@@ -34,3 +34,14 @@ This file is immutable. Do not edit, delete, or overwrite this file unless expli
    - `npm run build`
    - `npm run lint`
    - Any other relevant tests (runtime, visual, mobile) as appropriate for the step.
+
+10. **Full Testing Methodology** (adopted 2026-06-11)
+   The project follows a Testing Pyramid approach:
+
+   - **Unit Tests**: Pure functions, utilities, hooks (Vitest + jsdom)
+   - **Component Tests**: React components in isolation (Vitest + @testing-library)
+   - **Integration Tests**: Multiple components + data flow (Vitest + MSW)
+   - **E2E Tests**: Critical user journeys only (Playwright preferred)
+   - **Additional Checks**: TypeScript (`tsc --noEmit`), ESLint, Prettier, Lighthouse, a11y (axe-core), bundle analysis, security (`npm audit`)
+
+   Full details are documented in the project testing strategy.
