@@ -5,9 +5,9 @@ import { useRef } from "react";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 /**
- * Scroll-driven Mycelial Background SVG
- * Main animated layer — branches grow + nodes pulse with colorful glow on scroll.
- * Content cards sit above this layer.
+ * Delicate, realistic mycelium network background
+ * Matches the premium light aesthetic from the reference screenshot.
+ * Scroll-driven growth + subtle node pulses.
  */
 export function MyceliumBackground() {
   const reducedMotion = usePrefersReducedMotion();
@@ -18,12 +18,11 @@ export function MyceliumBackground() {
     offset: ["start start", "end end"],
   });
 
-  // Overall growth phase
   const phase = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   if (reducedMotion) {
     return (
-      <div className="pointer-events-none fixed inset-0 z-[-1] opacity-30">
+      <div className="pointer-events-none fixed inset-0 z-[-1] opacity-25">
         <svg viewBox="0 0 1400 1000" className="w-full h-full">
           <MyceliumStatic />
         </svg>
@@ -39,26 +38,11 @@ export function MyceliumBackground() {
       <svg
         viewBox="0 0 1400 1000"
         className="w-full h-full"
-        style={{ opacity: 0.42 }}
+        style={{ opacity: 0.38 }}
       >
         <defs>
-          {/* Colorful glow filters for nodes */}
-          <filter id="glowTeal" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <filter id="glowCyan" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <filter id="glowMagenta" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3.2" result="blur" />
+          <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -66,198 +50,130 @@ export function MyceliumBackground() {
           </filter>
         </defs>
 
-        <g>
-          {/* === MAIN TRUNK === */}
+        <g stroke="#6b6b6b" strokeLinecap="round" strokeLinejoin="round">
+          {/* === MAIN ORGANIC TRUNK === */}
           <motion.path
-            d="M700 920 Q710 780 695 620 Q680 470 705 320 Q715 180 700 80"
+            d="M720 940 Q705 820 695 680 Q710 520 685 380 Q695 220 710 90"
             fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeWidth="1.4"
             style={{ pathLength: phase }}
           />
 
-          {/* === LEFT PRIMARY BRANCHES === */}
+          {/* === LEFT BRANCHING NETWORK === */}
           <motion.path
-            d="M695 620 Q580 580 460 540 Q380 510 310 470"
+            d="M695 680 Q580 640 470 590 Q380 550 300 500"
             fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.12, 0.58], [0, 1]) }}
-          />
-          <motion.path
-            d="M695 620 Q570 660 450 720 Q370 780 290 840"
-            fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="2.1"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.18, 0.62], [0, 1]) }}
-          />
-
-          {/* Left secondary branches */}
-          <motion.path
-            d="M460 540 Q400 500 340 460 Q290 430 240 400"
-            fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.32, 0.78], [0, 1]) }}
-          />
-          <motion.path
-            d="M450 720 Q390 700 320 680 Q260 660 200 640"
-            fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.38, 0.82], [0, 1]) }}
-          />
-
-          {/* === RIGHT PRIMARY BRANCHES === */}
-          <motion.path
-            d="M705 620 Q820 575 940 530 Q1020 500 1100 460"
-            fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.12, 0.58], [0, 1]) }}
-          />
-          <motion.path
-            d="M705 620 Q830 670 950 740 Q1040 810 1120 880"
-            fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="2.1"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.18, 0.62], [0, 1]) }}
-          />
-
-          {/* Right secondary branches */}
-          <motion.path
-            d="M940 530 Q1000 490 1070 450 Q1130 420 1190 390"
-            fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.32, 0.78], [0, 1]) }}
-          />
-          <motion.path
-            d="M950 740 Q1020 710 1090 680 Q1160 650 1220 620"
-            fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.38, 0.82], [0, 1]) }}
-          />
-
-          {/* === DELICATE TERTIARY BRANCHES (left) === */}
-          <motion.path
-            d="M310 470 Q270 440 230 410 Q200 385 170 360"
-            fill="none"
-            stroke="#2d6a7e"
             strokeWidth="1.1"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.48, 0.92], [0, 1]) }}
+            style={{ pathLength: useTransform(phase, [0.08, 0.52], [0, 1]) }}
           />
           <motion.path
-            d="M240 400 Q200 370 160 340 Q130 315 100 290"
+            d="M695 680 Q560 710 450 760 Q360 810 280 870"
             fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="0.95"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.55, 0.95], [0, 1]) }}
+            strokeWidth="1.0"
+            style={{ pathLength: useTransform(phase, [0.12, 0.56], [0, 1]) }}
+          />
+          <motion.path
+            d="M470 590 Q400 555 330 510 Q270 475 210 440"
+            fill="none"
+            strokeWidth="0.85"
+            style={{ pathLength: useTransform(phase, [0.28, 0.72], [0, 1]) }}
+          />
+          <motion.path
+            d="M450 760 Q380 730 310 700 Q250 670 190 640"
+            fill="none"
+            strokeWidth="0.8"
+            style={{ pathLength: useTransform(phase, [0.32, 0.76], [0, 1]) }}
           />
 
-          {/* === DELICATE TERTIARY BRANCHES (right) === */}
+          {/* Left fine twigs */}
           <motion.path
-            d="M1100 460 Q1150 430 1200 400 Q1240 375 1280 350"
+            d="M300 500 Q260 470 220 440 Q185 415 150 390"
             fill="none"
-            stroke="#2d6a7e"
+            strokeWidth="0.65"
+            style={{ pathLength: useTransform(phase, [0.45, 0.85], [0, 1]) }}
+          />
+          <motion.path
+            d="M210 440 Q175 410 140 380 Q110 355 80 330"
+            fill="none"
+            strokeWidth="0.55"
+            style={{ pathLength: useTransform(phase, [0.52, 0.9], [0, 1]) }}
+          />
+
+          {/* === RIGHT BRANCHING NETWORK === */}
+          <motion.path
+            d="M710 680 Q830 635 950 580 Q1040 540 1130 490"
+            fill="none"
             strokeWidth="1.1"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.48, 0.92], [0, 1]) }}
+            style={{ pathLength: useTransform(phase, [0.08, 0.52], [0, 1]) }}
           />
           <motion.path
-            d="M1120 880 Q1170 850 1220 820 Q1260 795 1300 770"
+            d="M710 680 Q840 720 960 780 Q1050 840 1140 900"
             fill="none"
-            stroke="#2d6a7e"
-            strokeWidth="0.95"
-            strokeLinecap="round"
-            style={{ pathLength: useTransform(phase, [0.55, 0.95], [0, 1]) }}
+            strokeWidth="1.0"
+            style={{ pathLength: useTransform(phase, [0.12, 0.56], [0, 1]) }}
+          />
+          <motion.path
+            d="M950 580 Q1020 545 1090 505 Q1160 470 1230 430"
+            fill="none"
+            strokeWidth="0.85"
+            style={{ pathLength: useTransform(phase, [0.28, 0.72], [0, 1]) }}
+          />
+          <motion.path
+            d="M960 780 Q1030 750 1100 720 Q1170 690 1240 660"
+            fill="none"
+            strokeWidth="0.8"
+            style={{ pathLength: useTransform(phase, [0.32, 0.76], [0, 1]) }}
           />
 
-          {/* === NODES WITH COLORFUL GLOWING PULSES === */}
-
-          {/* Main trunk nodes */}
-          <motion.circle
-            cx="700" cy="920" r="5.5"
-            fill="#2d6a7e"
-            style={{ opacity: useTransform(phase, [0, 0.1], [0, 1]) }}
+          {/* Right fine twigs */}
+          <motion.path
+            d="M1130 490 Q1180 460 1230 430 Q1270 405 1310 380"
+            fill="none"
+            strokeWidth="0.65"
+            style={{ pathLength: useTransform(phase, [0.45, 0.85], [0, 1]) }}
           />
-          <motion.circle
-            cx="695" cy="620" r="4.8"
-            fill="#2d6a7e"
-            style={{ opacity: useTransform(phase, [0.12, 0.35], [0, 1]) }}
-          />
-          <motion.circle
-            cx="705" cy="320" r="4.2"
-            fill="#2d6a7e"
-            style={{ opacity: useTransform(phase, [0.45, 0.75], [0, 1]) }}
+          <motion.path
+            d="M1140 900 Q1190 870 1240 840 Q1280 815 1320 790"
+            fill="none"
+            strokeWidth="0.55"
+            style={{ pathLength: useTransform(phase, [0.52, 0.9], [0, 1]) }}
           />
 
-          {/* Left side glowing nodes (teal + cyan) */}
-          <motion.circle
-            cx="460" cy="540" r="3.8"
-            fill="#00c7ff"
-            filter="url(#glowCyan)"
-            style={{ opacity: useTransform(phase, [0.28, 0.65], [0, 0.9]) }}
+          {/* === UPPER DELICATE BRANCHES === */}
+          <motion.path
+            d="M695 380 Q620 340 540 300 Q470 265 400 230"
+            fill="none"
+            strokeWidth="0.75"
+            style={{ pathLength: useTransform(phase, [0.38, 0.78], [0, 1]) }}
           />
-          <motion.circle
-            cx="450" cy="720" r="3.5"
-            fill="#2d6a7e"
-            filter="url(#glowTeal)"
-            style={{ opacity: useTransform(phase, [0.35, 0.72], [0, 0.85]) }}
-          />
-          <motion.circle
-            cx="310" cy="470" r="3.2"
-            fill="#8b2cf5"
-            filter="url(#glowMagenta)"
-            style={{ opacity: useTransform(phase, [0.52, 0.88], [0, 0.95]) }}
+          <motion.path
+            d="M710 380 Q790 340 870 300 Q940 265 1010 230"
+            fill="none"
+            strokeWidth="0.75"
+            style={{ pathLength: useTransform(phase, [0.38, 0.78], [0, 1]) }}
           />
 
-          {/* Right side glowing nodes (cyan + magenta) */}
-          <motion.circle
-            cx="940" cy="530" r="3.8"
-            fill="#00c7ff"
-            filter="url(#glowCyan)"
-            style={{ opacity: useTransform(phase, [0.28, 0.65], [0, 0.9]) }}
-          />
-          <motion.circle
-            cx="950" cy="740" r="3.5"
-            fill="#2d6a7e"
-            filter="url(#glowTeal)"
-            style={{ opacity: useTransform(phase, [0.35, 0.72], [0, 0.85]) }}
-          />
-          <motion.circle
-            cx="1100" cy="460" r="3.2"
-            fill="#8b2cf5"
-            filter="url(#glowMagenta)"
-            style={{ opacity: useTransform(phase, [0.52, 0.88], [0, 0.95]) }}
-          />
+          {/* === NODES (subtle dots) === */}
+          {/* Main nodes */}
+          <motion.circle cx="720" cy="940" r="2.8" fill="#6b6b6b" style={{ opacity: useTransform(phase, [0, 0.08], [0, 1]) }} />
+          <motion.circle cx="695" cy="680" r="2.5" fill="#6b6b6b" style={{ opacity: useTransform(phase, [0.1, 0.38], [0, 1]) }} />
+          <motion.circle cx="710" cy="380" r="2.2" fill="#6b6b6b" style={{ opacity: useTransform(phase, [0.42, 0.78], [0, 1]) }} />
 
-          {/* Delicate tip nodes with soft pulses */}
-          <motion.circle
-            cx="170" cy="360" r="2.6"
-            fill="#00c7ff"
-            filter="url(#glowCyan)"
-            style={{ opacity: useTransform(phase, [0.68, 0.98], [0, 0.8]) }}
-          />
-          <motion.circle
-            cx="1280" cy="350" r="2.6"
-            fill="#8b2cf5"
-            filter="url(#glowMagenta)"
-            style={{ opacity: useTransform(phase, [0.68, 0.98], [0, 0.8]) }}
-          />
+          {/* Left nodes with soft glow */}
+          <motion.circle cx="470" cy="590" r="2.0" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.22, 0.68], [0, 0.85]) }} />
+          <motion.circle cx="450" cy="760" r="1.9" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.28, 0.72], [0, 0.8]) }} />
+          <motion.circle cx="300" cy="500" r="1.7" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.48, 0.88], [0, 0.75]) }} />
+          <motion.circle cx="210" cy="440" r="1.5" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.58, 0.95], [0, 0.7]) }} />
+
+          {/* Right nodes with soft glow */}
+          <motion.circle cx="950" cy="580" r="2.0" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.22, 0.68], [0, 0.85]) }} />
+          <motion.circle cx="960" cy="780" r="1.9" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.28, 0.72], [0, 0.8]) }} />
+          <motion.circle cx="1130" cy="490" r="1.7" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.48, 0.88], [0, 0.75]) }} />
+          <motion.circle cx="1140" cy="900" r="1.5" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.58, 0.95], [0, 0.7]) }} />
+
+          {/* Upper delicate nodes */}
+          <motion.circle cx="540" cy="300" r="1.6" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.55, 0.92], [0, 0.7]) }} />
+          <motion.circle cx="870" cy="300" r="1.6" fill="#6b6b6b" filter="url(#softGlow)" style={{ opacity: useTransform(phase, [0.55, 0.92], [0, 0.7]) }} />
         </g>
       </svg>
     </div>
@@ -266,15 +182,14 @@ export function MyceliumBackground() {
 
 function MyceliumStatic() {
   return (
-    <g>
-      <path d="M700 920 Q710 780 695 620 Q680 470 705 320 Q715 180 700 80" fill="none" stroke="#2d6a7e" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M695 620 Q580 580 460 540 Q380 510 310 470" fill="none" stroke="#2d6a7e" strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M695 620 Q570 660 450 720 Q370 780 290 840" fill="none" stroke="#2d6a7e" strokeWidth="2.1" strokeLinecap="round" />
-      <path d="M705 620 Q820 575 940 530 Q1020 500 1100 460" fill="none" stroke="#2d6a7e" strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M705 620 Q830 670 950 740 Q1040 810 1120 880" fill="none" stroke="#2d6a7e" strokeWidth="2.1" strokeLinecap="round" />
-      <circle cx="700" cy="920" r="5.5" fill="#2d6a7e" />
-      <circle cx="695" cy="620" r="4.8" fill="#2d6a7e" />
-      <circle cx="705" cy="320" r="4.2" fill="#2d6a7e" />
+    <g stroke="#6b6b6b" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M720 940 Q705 820 695 680 Q710 520 685 380 Q695 220 710 90" fill="none" strokeWidth="1.4" />
+      <path d="M695 680 Q580 640 470 590 Q380 550 300 500" fill="none" strokeWidth="1.1" />
+      <path d="M695 680 Q560 710 450 760 Q360 810 280 870" fill="none" strokeWidth="1.0" />
+      <path d="M710 680 Q830 635 950 580 Q1040 540 1130 490" fill="none" strokeWidth="1.1" />
+      <path d="M710 680 Q840 720 960 780 Q1050 840 1140 900" fill="none" strokeWidth="1.0" />
+      <circle cx="720" cy="940" r="2.8" fill="#6b6b6b" />
+      <circle cx="695" cy="680" r="2.5" fill="#6b6b6b" />
     </g>
   );
 }
