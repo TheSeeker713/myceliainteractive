@@ -84,6 +84,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   const [progress, setProgress] = useState(0);
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
   const [parallaxPos, setParallaxPos] = useState({ x: 0, y: 0 });
+  const [hasError, setHasError] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const textureRef = useRef<THREE.VideoTexture | null>(null);
 
@@ -152,6 +153,11 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
       textureRef.current = tex;
     };
 
+    video.onerror = () => {
+      console.error("[VideoBackground] Failed to load mycelia_bg.mp4");
+      setHasError(true);
+    };
+
     return () => {
       if (videoRef.current) {
         videoRef.current.pause();
@@ -163,7 +169,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
     };
   }, []);
 
-  if (!enabled || reducedMotion) return null;
+  if (!enabled || reducedMotion || hasError) return null;
 
   return (
     <div className="fixed inset-0 z-[-10] pointer-events-none">
