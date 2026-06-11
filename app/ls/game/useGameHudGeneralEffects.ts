@@ -145,7 +145,7 @@ export function useGameHudGeneralEffects(args: UseGameHudEffectsArgs) {
       glitchTimerRef.current = null;
     }
     setGlitchClass(null);
-  }, [demoEnded, generatorFlickerTimerRef, glitchTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setCurrentMediaId, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit, setGlitchClass]);
+  }, [demoEnded, generatorFlickerTimerRef, glitchTimerRef, sceneChangeEvent, pushImage, sceneVideoRef, send, setCurrentMediaId, setGeneratorAmber, setGeneratorFlickering, setGeneratorLit, setGlitchClass]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (lastEvent?.type !== "scene_image") return;

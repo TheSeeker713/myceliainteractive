@@ -1,8 +1,6 @@
 "use client";
 
 import FPVCarousel from "@/app/components/FPVCarousel";
-import { ScrollFoldScene } from "@/app/components/motion/ScrollFoldScene";
-import { usePrefersReducedMotion } from "@/app/components/motion/usePrefersReducedMotion";
 import { LiminalSinAccessFooter } from "@/app/ls/LiminalSinAccessFooter";
 import { LiminalSinArchitectureContent } from "@/app/ls/LiminalSinArchitecture";
 import { LiminalSinExperienceContent } from "@/app/ls/LiminalSinExperienceTeaser";
@@ -73,62 +71,5 @@ function LiminalSinPageStatic() {
 }
 
 export function LiminalSinLanding() {
-  const reducedMotion = usePrefersReducedMotion();
-
-  if (reducedMotion) {
-    return <LiminalSinPageStatic />;
-  }
-
-  return (
-    <div className="min-h-screen pb-8">
-      <ScrollFoldScene
-        outgoing={<LiminalSinHeroContent />}
-        incoming={<LiminalSinExperienceContent />}
-        id="experience"
-        layout="cards"
-        sceneHeight="200vh"
-      />
-      <ScrollFoldScene
-        outgoing={<LiminalSinExperienceContent />}
-        incoming={<FPVBandContent />}
-        layout="band"
-        sceneHeight="160vh"
-      />
-      <ScrollFoldScene
-        outgoing={<FPVBandContent />}
-        incoming={<LiminalSinStoryContent />}
-        layout="plain"
-      />
-      <ScrollFoldScene
-        outgoing={<LiminalSinStoryContent />}
-        incoming={<LiminalSinTrustContent />}
-        layout="cards"
-      />
-      <ScrollFoldScene
-        outgoing={<LiminalSinTrustContent />}
-        incoming={<LiminalSinCapabilitiesContent />}
-        layout="grid"
-        sceneHeight="220vh"
-      />
-      <ScrollFoldScene
-        outgoing={<LiminalSinCapabilitiesContent />}
-        incoming={<LiminalSinArchitectureContent />}
-        layout="cards"
-        sceneHeight="200vh"
-      />
-      <ScrollFoldScene
-        outgoing={<LiminalSinArchitectureContent />}
-        incoming={<LiminalSinSliceScopeContent />}
-        layout="grid"
-        sceneHeight="200vh"
-      />
-      <ScrollFoldScene
-        outgoing={<LiminalSinSliceScopeContent />}
-        incoming={<LiminalSinAccessContent />}
-        id="access"
-        layout="plain"
-      />
-      <LiminalSinAccessFooter />
-    </div>
-  );
+  return <LiminalSinPageStatic />;
 }

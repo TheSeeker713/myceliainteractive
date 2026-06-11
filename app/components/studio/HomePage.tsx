@@ -1,7 +1,6 @@
 "use client";
 
-import { ScrollFoldScene } from "@/app/components/motion/ScrollFoldScene";
-import { usePrefersReducedMotion } from "@/app/components/motion/usePrefersReducedMotion";
+
 import { AboutContent } from "@/app/components/studio/sections/AboutSection";
 import { ContactContent } from "@/app/components/studio/sections/ContactSection";
 import { HeroContent } from "@/app/components/studio/sections/HeroSection";

@@ -17,7 +17,7 @@ function VideoPlane({ scrollProgress, texture, mousePos }: VideoPlaneProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { viewport } = useThree();
 
-  // Scroll scrubbing with direction detection + lerp
+  // Responsive scroll scrubbing (wheel-driven)
   const prevProgressRef = useRef(0);
 
   useEffect(() => {
@@ -25,25 +25,23 @@ function VideoPlane({ scrollProgress, texture, mousePos }: VideoPlaneProps) {
     if (!video || !texture) return;
 
     const prev = prevProgressRef.current;
-    const direction = scrollProgress > prev ? 1 : -1;
     prevProgressRef.current = scrollProgress;
 
     const duration = video.duration || 10;
     const targetTime = scrollProgress * duration;
 
-    // Improved lerp based on direction
-    const lerpFactor = direction > 0 ? 0.18 : 0.22;
-    video.currentTime = THREE.MathUtils.lerp(
-      video.currentTime,
-      targetTime,
-      lerpFactor
-    );
+    // Much more direct mapping for responsive wheel feel
+    const diff = targetTime - video.currentTime;
 
-    // Pause when scroll stops
-    if (Math.abs(scrollProgress - prev) < 0.001) {
-      video.pause();
-    } else {
+    if (Math.abs(diff) > 0.008) {
+      video.currentTime = video.currentTime + diff * 0.6;
+    }
+
+    // Only play while actively scrolling
+    if (Math.abs(scrollProgress - prev) > 0.0005) {
       video.play().catch(() => {});
+    } else {
+      video.pause();
     }
   }, [scrollProgress, texture]);
 
@@ -87,6 +85,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const textureRef = useRef<THREE.VideoTexture | null>(null);
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
@@ -126,6 +125,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
       tex.format = THREE.RGBAFormat;
 
       setTexture(tex);
+      textureRef.current = tex;
     };
 
     return () => {
@@ -133,8 +133,8 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
         videoRef.current.pause();
         videoRef.current.src = "";
       }
-      if (texture) {
-        texture.dispose();
+      if (textureRef.current) {
+        textureRef.current.dispose();
       }
     };
   }, []);

@@ -244,7 +244,7 @@ export function useGameHudScenarioEffects(
       send({ type: "acecard_reveal_complete" });
     };
     video.addEventListener("ended", onEnded);
-  }, [clearDreadTimers, lastEvent, sceneVideoRef, send]);
+  }, [clearDreadTimers, lastEvent, sceneVideoRef, send]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Card pickup 02 ready (show still + card2 overlay) ────────────────────
   useEffect(() => {
