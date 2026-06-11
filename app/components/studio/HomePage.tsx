@@ -43,54 +43,7 @@ function HomePageStatic() {
 }
 
 export function HomePage() {
-  const reducedMotion = usePrefersReducedMotion();
-
-  if (reducedMotion) {
-    return <HomePageStatic />;
-  }
-
-  return (
-    <div className="pb-20">
-      <ScrollFoldScene
-        outgoing={<HeroContent />}
-        incoming={<ProofPointsContent />}
-        layout="cards"
-        sceneHeight="180vh"
-      />
-      <ScrollFoldScene
-        outgoing={<ProofPointsContent />}
-        incoming={<AboutContent />}
-        layout="cards"
-      />
-      <ScrollFoldScene
-        outgoing={<AboutContent />}
-        incoming={<MissionContent />}
-        layout="plain"
-      />
-      <ScrollFoldScene
-        outgoing={<MissionContent />}
-        incoming={<ProjectsContent />}
-        id="projects"
-        layout="grid"
-        sceneHeight="220vh"
-      />
-      <ScrollFoldScene
-        outgoing={<ProjectsContent />}
-        incoming={<RoadmapContent />}
-        id="roadmap"
-        layout="grid"
-        sceneHeight="220vh"
-      />
-      <ScrollFoldScene
-        outgoing={<RoadmapContent />}
-        incoming={<TeamContent />}
-        layout="cards"
-      />
-      <ScrollFoldScene
-        outgoing={<TeamContent />}
-        incoming={<ContactContent />}
-        layout="cards"
-      />
-    </div>
-  );
+  // Scroll-fold collapsing animations removed per request.
+  // Background mycelium SVG now handles all scroll-reactive life.
+  return <HomePageStatic />;
 }

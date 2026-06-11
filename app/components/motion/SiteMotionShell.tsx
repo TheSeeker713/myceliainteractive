@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { shouldUseMotionShell } from "@/app/utils/motionRoutes";
 import { BokehParticles } from "./BokehParticles";
+import { MyceliumBackground } from "./MyceliumBackground";
 
 type SiteMotionShellProps = {
   children: ReactNode;
@@ -20,6 +21,7 @@ export function SiteMotionShell({ children }: SiteMotionShellProps) {
   return (
     <>
       <BokehParticles enabled={enabled} />
+      <MyceliumBackground />
       <div className="relative z-[1]">{children}</div>
     </>
   );
