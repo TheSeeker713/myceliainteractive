@@ -9,10 +9,10 @@ import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 type VideoPlaneProps = {
   scrollProgress: number;
   texture: THREE.VideoTexture | null;
-  mousePos: { x: number; y: number };
+  parallaxPos: { x: number; y: number };
 };
 
-function VideoPlane({ scrollProgress, texture, mousePos }: VideoPlaneProps) {
+function VideoPlane({ scrollProgress, texture, parallaxPos }: VideoPlaneProps) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { viewport } = useThree();
@@ -45,12 +45,12 @@ function VideoPlane({ scrollProgress, texture, mousePos }: VideoPlaneProps) {
     }
   }, [scrollProgress, texture]);
 
-  // Mouse parallax
+  // Mouse + Touch parallax
   useFrame(() => {
     if (!meshRef.current) return;
 
-    const targetX = mousePos.x * 0.12;
-    const targetY = mousePos.y * 0.08;
+    const targetX = parallaxPos.x * 0.12;
+    const targetY = parallaxPos.y * 0.08;
 
     meshRef.current.position.x = THREE.MathUtils.lerp(
       meshRef.current.position.x,
@@ -83,7 +83,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   const { scrollYProgress } = useScroll();
   const [progress, setProgress] = useState(0);
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [parallaxPos, setParallaxPos] = useState({ x: 0, y: 0 });
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const textureRef = useRef<THREE.VideoTexture | null>(null);
 
@@ -94,18 +94,42 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
     return unsubscribe;
   }, [scrollYProgress]);
 
-  // Mouse parallax tracking
+  // Unified mouse + touch parallax tracking
   useEffect(() => {
     if (!enabled || reducedMotion) return;
 
+    const updateParallax = (clientX: number, clientY: number) => {
+      const x = (clientX / window.innerWidth - 0.5) * 2;
+      const y = -(clientY / window.innerHeight - 0.5) * 2;
+      setParallaxPos({ x, y });
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = -(e.clientY / window.innerHeight - 0.5) * 2;
-      setMousePos({ x, y });
+      updateParallax(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        updateParallax(touch.clientX, touch.clientY);
+      }
+    };
+
+    const resetParallax = () => {
+      setParallaxPos({ x: 0, y: 0 });
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", resetParallax, { passive: true });
+    window.addEventListener("mouseleave", resetParallax);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", resetParallax);
+      window.removeEventListener("mouseleave", resetParallax);
+    };
   }, [enabled, reducedMotion]);
 
   // Load video
@@ -148,7 +172,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
         style={{ background: "transparent" }}
         gl={{ alpha: true, antialias: false }}
       >
-        <VideoPlane scrollProgress={progress} texture={texture} mousePos={mousePos} />
+        <VideoPlane scrollProgress={progress} texture={texture} parallaxPos={parallaxPos} />
       </Canvas>
     </div>
   );
