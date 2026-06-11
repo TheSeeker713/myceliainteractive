@@ -28,3 +28,9 @@ This file is immutable. Do not edit, delete, or overwrite this file unless expli
 
 8. **Follow project AGENTS.md first**  
    Always check and follow the rules in this file before taking any action.
+
+9. **Testing Requirements**  
+   After every approved step, the following must be run and pass before CDP:
+   - `npm run build`
+   - `npm run lint`
+   - Any other relevant tests (runtime, visual, mobile) as appropriate for the step.
