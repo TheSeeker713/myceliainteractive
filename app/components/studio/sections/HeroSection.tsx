@@ -7,13 +7,13 @@ import { Card } from "@/app/components/studio/Card";
 
 export function HeroContent() {
   return (
-    <div className="relative min-h-[80vh] flex items-center justify-center py-24 px-6">
+    <div className="relative min-h-[80vh] flex items-center justify-center py-16 px-3 sm:px-5">
       {/* The mycelium + bokeh layers are provided globally via SiteMotionShell */}
 
       <Card
         variant="glass"
         padding="xl"
-        className="max-w-[min(96%,1400px)] mx-auto text-center relative z-10 border-studio-accent/10"
+        className="w-[92%] max-w-[none] mx-auto text-center relative z-10 border-studio-accent/10"
       >
         <div className="space-y-6">
           <div>
