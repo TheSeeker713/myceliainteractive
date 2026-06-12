@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import * as THREE from "three";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
@@ -58,6 +58,9 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const textureRef = useRef<THREE.VideoTexture | null>(null);
   const scrubTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const targetTimeRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
+  const isActiveRef = useRef(false);
 
   // Mobile detection for reduced parallax
   useEffect(() => {
@@ -103,8 +106,60 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
     };
   }, [enabled, reducedMotion]);
 
-  // === DIRECT WHEEL-DRIVEN SCRUBBING ===
-  // This is the critical part that was not working before.
+  // === SMOOTHED WHEEL-DRIVEN SCRUBBING ===
+  // Accumulate target time from wheel events, then smoothly lerp in a RAF loop.
+  const startScrubLoop = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || isActiveRef.current) return;
+
+    isActiveRef.current = true;
+
+    const scrubLoop = () => {
+      if (!video) {
+        isActiveRef.current = false;
+        return;
+      }
+
+      const current = video.currentTime;
+      const target = targetTimeRef.current;
+      const diff = target - current;
+
+      // Smooth lerp toward target. Lower = smoother but more laggy.
+      // 0.25 feels responsive while removing most jitter.
+      const lerpFactor = 0.28;
+      const newTime = current + diff * lerpFactor;
+
+      // Only update if there's meaningful movement (prevents micro-jitter)
+      if (Math.abs(diff) > 0.001) {
+        video.currentTime = newTime;
+      }
+
+      // Keep the video element "awake" so the texture gets new frames
+      if (video.paused) {
+        video.play().catch(() => {});
+      }
+
+      if (isActiveRef.current) {
+        rafRef.current = requestAnimationFrame(scrubLoop);
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(scrubLoop);
+  }, []);
+
+  const stopScrubLoop = useCallback(() => {
+    isActiveRef.current = false;
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+    }
+  }, []);
+
   useEffect(() => {
     if (!enabled || reducedMotion) return;
 
@@ -112,46 +167,39 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
       const video = videoRef.current;
       if (!video || !texture) return;
 
-      // Cancel any pending auto-pause
+      const duration = video.duration || 10;
+
+      // Sensitivity - tune this value for feel
+      const scrubSecondsPerTick = 0.105;
+      const delta = (e.deltaY / 120) * scrubSecondsPerTick;
+
+      // Accumulate target time (instead of setting immediately)
+      let newTarget = targetTimeRef.current + delta;
+      newTarget = Math.max(0, Math.min(duration - 0.02, newTarget));
+      targetTimeRef.current = newTarget;
+
+      // Ensure the smooth loop is running
+      startScrubLoop();
+
+      // Reset inactivity timer
       if (scrubTimeoutRef.current) {
         clearTimeout(scrubTimeoutRef.current);
       }
 
-      const duration = video.duration || 10;
-
-      // Sensitivity: how many seconds to scrub per wheel "tick"
-      // deltaY is usually ~100-120 per notch. We want fine control.
-      const scrubSecondsPerTick = 0.12;
-      const delta = (e.deltaY / 120) * scrubSecondsPerTick;
-
-      let newTime = video.currentTime + delta;
-      newTime = Math.max(0, Math.min(duration - 0.01, newTime));
-
-      // Directly set the time — this is what actually scrubs the frame
-      video.currentTime = newTime;
-
-      // "Kick" the video so the VideoTexture updates the current frame.
-      // We play briefly then will pause after inactivity.
-      video.play().catch(() => {});
-
-      // After a short period of no wheel activity, pause the video.
-      // This gives the "pause at current frame when scrolling stops" behavior.
+      // After inactivity, smoothly stop scrubbing and pause
       scrubTimeoutRef.current = setTimeout(() => {
-        if (video) {
-          video.pause();
-        }
-      }, 160);
+        stopScrubLoop();
+      }, 220);
     };
 
     window.addEventListener("wheel", handleWheel, { passive: true });
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
-      if (scrubTimeoutRef.current) {
-        clearTimeout(scrubTimeoutRef.current);
-      }
+      if (scrubTimeoutRef.current) clearTimeout(scrubTimeoutRef.current);
+      stopScrubLoop();
     };
-  }, [enabled, reducedMotion, texture]);
+  }, [enabled, reducedMotion, texture, startScrubLoop, stopScrubLoop]);
 
   // Load video
   useEffect(() => {
