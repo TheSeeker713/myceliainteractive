@@ -1,50 +1,19 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useScroll } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 type VideoPlaneProps = {
-  scrollProgress: number;
   texture: THREE.VideoTexture | null;
   parallaxPos: { x: number; y: number };
   parallaxMultiplier: number;
 };
 
-function VideoPlane({ scrollProgress, texture, parallaxPos, parallaxMultiplier }: VideoPlaneProps) {
+function VideoPlane({ texture, parallaxPos, parallaxMultiplier }: VideoPlaneProps) {
   const meshRef = useRef<THREE.Mesh>(null!);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const { viewport } = useThree();
-
-  // Responsive scroll scrubbing (wheel-driven)
-  const prevProgressRef = useRef(0);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !texture) return;
-
-    const prev = prevProgressRef.current;
-    prevProgressRef.current = scrollProgress;
-
-    const duration = video.duration || 10;
-    const targetTime = scrollProgress * duration;
-
-    // Much more direct mapping for responsive wheel feel
-    const diff = targetTime - video.currentTime;
-
-    if (Math.abs(diff) > 0.008) {
-      video.currentTime = video.currentTime + diff * 0.6;
-    }
-
-    // Only play while actively scrolling
-    if (Math.abs(scrollProgress - prev) > 0.0005) {
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, [scrollProgress, texture]);
 
   // Mouse + Touch parallax (scaled by device type)
   useFrame(() => {
@@ -81,33 +50,26 @@ type VideoBackgroundProps = {
 
 export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   const reducedMotion = usePrefersReducedMotion();
-  const { scrollYProgress } = useScroll();
-  const [progress, setProgress] = useState(0);
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
   const [parallaxPos, setParallaxPos] = useState({ x: 0, y: 0 });
   const [hasError, setHasError] = useState(false);
   const [parallaxMultiplier, setParallaxMultiplier] = useState(1);
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const textureRef = useRef<THREE.VideoTexture | null>(null);
+  const scrubTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Mobile detection for performance + reduced parallax
+  // Mobile detection for reduced parallax
   useEffect(() => {
     const checkMobile = () => {
       const isMobile = window.innerWidth < 768;
-      setParallaxMultiplier(isMobile ? 0.35 : 1); // Significantly reduced on mobile
+      setParallaxMultiplier(isMobile ? 0.35 : 1);
     };
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      setProgress(latest);
-    });
-    return unsubscribe;
-  }, [scrollYProgress]);
 
   // Unified mouse + touch parallax tracking
   useEffect(() => {
@@ -119,20 +81,14 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
       setParallaxPos({ x, y });
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      updateParallax(e.clientX, e.clientY);
-    };
-
+    const handleMouseMove = (e: MouseEvent) => updateParallax(e.clientX, e.clientY);
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
         const touch = e.touches[0];
         updateParallax(touch.clientX, touch.clientY);
       }
     };
-
-    const resetParallax = () => {
-      setParallaxPos({ x: 0, y: 0 });
-    };
+    const resetParallax = () => setParallaxPos({ x: 0, y: 0 });
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
@@ -146,6 +102,56 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
       window.removeEventListener("mouseleave", resetParallax);
     };
   }, [enabled, reducedMotion]);
+
+  // === DIRECT WHEEL-DRIVEN SCRUBBING ===
+  // This is the critical part that was not working before.
+  useEffect(() => {
+    if (!enabled || reducedMotion) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      const video = videoRef.current;
+      if (!video || !texture) return;
+
+      // Cancel any pending auto-pause
+      if (scrubTimeoutRef.current) {
+        clearTimeout(scrubTimeoutRef.current);
+      }
+
+      const duration = video.duration || 10;
+
+      // Sensitivity: how many seconds to scrub per wheel "tick"
+      // deltaY is usually ~100-120 per notch. We want fine control.
+      const scrubSecondsPerTick = 0.12;
+      const delta = (e.deltaY / 120) * scrubSecondsPerTick;
+
+      let newTime = video.currentTime + delta;
+      newTime = Math.max(0, Math.min(duration - 0.01, newTime));
+
+      // Directly set the time — this is what actually scrubs the frame
+      video.currentTime = newTime;
+
+      // "Kick" the video so the VideoTexture updates the current frame.
+      // We play briefly then will pause after inactivity.
+      video.play().catch(() => {});
+
+      // After a short period of no wheel activity, pause the video.
+      // This gives the "pause at current frame when scrolling stops" behavior.
+      scrubTimeoutRef.current = setTimeout(() => {
+        if (video) {
+          video.pause();
+        }
+      }, 160);
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      if (scrubTimeoutRef.current) {
+        clearTimeout(scrubTimeoutRef.current);
+      }
+    };
+  }, [enabled, reducedMotion, texture]);
 
   // Load video
   useEffect(() => {
@@ -192,11 +198,10 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
         style={{ background: "transparent" }}
         gl={{ alpha: true, antialias: false }}
       >
-        <VideoPlane 
-          scrollProgress={progress} 
-          texture={texture} 
-          parallaxPos={parallaxPos} 
-          parallaxMultiplier={parallaxMultiplier} 
+        <VideoPlane
+          texture={texture}
+          parallaxPos={parallaxPos}
+          parallaxMultiplier={parallaxMultiplier}
         />
       </Canvas>
     </div>
