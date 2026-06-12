@@ -13,7 +13,7 @@ export function HeroContent() {
       <Card
         variant="glass"
         padding="xl"
-        className="max-w-[1100px] mx-auto text-center relative z-10 border-studio-accent/10"
+        className="max-w-[min(96%,1400px)] mx-auto text-center relative z-10 border-studio-accent/10"
       >
         <div className="space-y-6">
           <div>
