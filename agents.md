@@ -1,5 +1,7 @@
 # AGENTS.md — Mycelia Interactive Project Rules
 
+**CDP** = Commit, Deploy, then Push (in that exact order).
+
 This file is immutable. Do not edit, delete, or overwrite this file unless explicitly directed by the user.
 
 ## Core Operating Rules
@@ -13,8 +15,8 @@ This file is immutable. Do not edit, delete, or overwrite this file unless expli
 3. **Testing after every step**  
    After completing an approved step, full build + integrity tests must be run before moving to the next step.
 
-4. **Commit / Deploy / Push sequence**  
-   After every approved and tested step, the sequence must be: commit → deploy → push.  
+4. **CDP (Commit → Deploy → Push) sequence**  
+   After every approved and tested step, the sequence must be: CDP.  
    This sequence must receive explicit user approval before execution.
 
 5. **No assumptions**  
