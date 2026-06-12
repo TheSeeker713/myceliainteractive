@@ -22,7 +22,7 @@ export function Card({
   const variantClasses = {
     default: "bg-white border border-studio-border",
     glass:
-      "bg-white/40 border border-white/25 backdrop-blur-[22px] shadow-[0_8px_32px_rgb(0,0,0,0.12),inset_0_1px_0_rgb(255,255,255,0.5),inset_0_-1px_0_rgb(255,255,255,0.1)] relative overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-1/2 before:bg-gradient-to-b before:from-white/30 before:to-transparent before:pointer-events-none after:absolute after:inset-0 after:bg-[radial-gradient(#fff_0.5px,transparent_1px)] after:bg-[length:4px_4px] after:opacity-[0.06] after:pointer-events-none",
+      "bg-white/12 border border-white/22 backdrop-blur-[24px] saturate-[1.8] shadow-[0_8px_32px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.35),inset_0_-1px_0_rgba(255,255,255,0.08)] relative overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-1/2 before:bg-gradient-to-b before:from-white/25 before:to-transparent before:pointer-events-none",
     elevated:
       "bg-white border border-studio-border shadow-md hover:shadow-lg transition-shadow",
   };
