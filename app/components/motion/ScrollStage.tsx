@@ -11,6 +11,7 @@ import {
   getSectionFadeOpacities,
   getSectionFromProgress,
   getSectionLayers,
+  getViewportRatio,
 } from "./useSectionFade";
 
 export type ScrollStageSection = {
@@ -31,6 +32,7 @@ export function ScrollStage({
 }: ScrollStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [viewportRatio, setViewportRatio] = useState(1);
   const [stageState, setStageState] = useState<ScrollStageState>(() => ({
     sectionIndex: 0,
     localT: 0,
@@ -49,6 +51,23 @@ export function ScrollStage({
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  useEffect(() => {
+    const updateViewportRatio = () => {
+      const headerHRaw = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--header-h"),
+      );
+      const headerH = Number.isFinite(headerHRaw) ? headerHRaw * 16 : 72;
+      const sectionHeightVh = isMobile ? 100 : 110;
+      setViewportRatio(
+        getViewportRatio(window.innerHeight, headerH, sectionHeightVh),
+      );
+    };
+
+    updateViewportRatio();
+    window.addEventListener("resize", updateViewportRatio);
+    return () => window.removeEventListener("resize", updateViewportRatio);
+  }, [isMobile]);
+
   const sectionHeight = isMobile ? sectionHeightMobile : sectionHeightDesktop;
   const totalHeight = `calc(${sections.length} * ${sectionHeight})`;
   const sectionCount = sections.length;
@@ -59,17 +78,17 @@ export function ScrollStage({
   });
 
   const primaryOpacity = useTransform(scrollYProgress, (p) => {
-    const { index, localT } = getSectionFromProgress(p, sectionCount);
+    const { index, localT } = getSectionFromProgress(p, sectionCount, viewportRatio);
     return getSectionLayers(index, localT, sectionCount).primaryOpacity;
   });
 
   const secondaryOpacity = useTransform(scrollYProgress, (p) => {
-    const { index, localT } = getSectionFromProgress(p, sectionCount);
+    const { index, localT } = getSectionFromProgress(p, sectionCount, viewportRatio);
     return getSectionLayers(index, localT, sectionCount).secondaryOpacity;
   });
 
   useMotionValueEvent(scrollYProgress, "change", (p) => {
-    const { index, localT } = getSectionFromProgress(p, sectionCount);
+    const { index, localT } = getSectionFromProgress(p, sectionCount, viewportRatio);
     const fade =
       index >= sectionCount - 1
         ? {
@@ -94,6 +113,7 @@ export function ScrollStage({
   const { index, localT } = getSectionFromProgress(
     stageState.scrollProgress,
     sectionCount,
+    viewportRatio,
   );
   const layers = getSectionLayers(index, localT, sectionCount);
   const primarySection = sections[layers.primaryIndex];

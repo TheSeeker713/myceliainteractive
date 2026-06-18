@@ -66,18 +66,73 @@ export function getSectionFadeOpacities(
 }
 
 /**
+ * Viewport height / section height, accounting for sticky header overlap.
+ * @param windowInnerHeight window.innerHeight in px
+ * @param headerHeightPx Sticky header height in px (--header-h)
+ * @param sectionHeightVhPercent Section track height as % of viewport (100 or 110)
+ */
+export function getViewportRatio(
+  windowInnerHeight: number,
+  headerHeightPx: number,
+  sectionHeightVhPercent: number,
+): number {
+  if (!Number.isFinite(windowInnerHeight) || windowInnerHeight <= 0) {
+    return 1;
+  }
+
+  const safeHeader = Number.isFinite(headerHeightPx) ? headerHeightPx : 72;
+  const effectiveViewport = windowInnerHeight - safeHeader;
+  const sectionHeightPx =
+    (windowInnerHeight * sectionHeightVhPercent) / 100;
+
+  if (!Number.isFinite(sectionHeightPx) || sectionHeightPx <= 0) {
+    return 1;
+  }
+
+  const ratio = effectiveViewport / sectionHeightPx;
+  return Number.isFinite(ratio) ? ratio : 1;
+}
+
+/**
+ * Scrollable span in section units: n sections minus viewport/section ratio.
+ * Matches Framer scrollYProgress over container height n*H minus viewport V.
+ */
+export function getScrollableSpan(
+  sectionCount: number,
+  viewportRatio = 1,
+): number {
+  if (sectionCount <= 0) return 0;
+  return Math.max(0, sectionCount - viewportRatio);
+}
+
+/**
  * Map global scroll progress [0,1] to section index and local t.
+ * @param viewportRatio Viewport height / section height (V/H). Default 1 = 100dvh viewport, 100dvh sections.
  */
 export function getSectionFromProgress(
   scrollProgress: number,
   sectionCount: number,
+  viewportRatio = 1,
 ): { index: number; localT: number } {
   if (sectionCount <= 0) {
     return { index: 0, localT: 0 };
   }
 
+  if (!Number.isFinite(scrollProgress) || !Number.isFinite(viewportRatio)) {
+    return { index: 0, localT: 0 };
+  }
+
   const clamped = clamp01(scrollProgress);
-  const scaled = clamped * sectionCount;
+  const span = getScrollableSpan(sectionCount, viewportRatio);
+
+  if (span <= 0) {
+    return { index: sectionCount - 1, localT: 0 };
+  }
+
+  const scaledRaw = clamped * span;
+  const nearest = Math.round(scaledRaw);
+  const scaled =
+    Math.abs(scaledRaw - nearest) < 1e-9 ? nearest : scaledRaw;
   const index = Math.min(sectionCount - 1, Math.floor(scaled));
   const localT = scaled - index;
 
@@ -88,10 +143,16 @@ export function getScrollProgressFromSection(
   sectionIndex: number,
   localT: number,
   sectionCount: number,
+  viewportRatio = 1,
 ): number {
   if (sectionCount <= 0) return 0;
+  if (!Number.isFinite(viewportRatio)) return 0;
+
   const index = Math.min(sectionCount - 1, Math.max(0, sectionIndex));
-  return clamp01((index + clamp01(localT)) / sectionCount);
+  const span = getScrollableSpan(sectionCount, viewportRatio);
+  if (span <= 0) return 0;
+
+  return clamp01((index + clamp01(localT)) / span);
 }
 
 export type SectionLayers = {
