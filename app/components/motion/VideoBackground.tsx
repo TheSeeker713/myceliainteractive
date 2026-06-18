@@ -42,6 +42,10 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
     const video = videoRef.current;
     if (!video) return;
 
+    if (video.networkState !== HTMLMediaElement.NETWORK_EMPTY) {
+      return;
+    }
+
     video.load();
   }, [shouldPreload]);
 
@@ -49,7 +53,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
     const video = videoRef.current;
     if (!video) return;
 
-    const onReady = () => {
+    const onCanPlay = () => {
       video.pause();
       video.currentTime = 0;
       setReady(true);
@@ -61,15 +65,15 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
       setHasError(true);
     };
 
-    video.addEventListener("loadeddata", onReady);
+    video.addEventListener("canplay", onCanPlay);
     video.addEventListener("error", onError);
 
     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      onReady();
+      onCanPlay();
     }
 
     return () => {
-      video.removeEventListener("loadeddata", onReady);
+      video.removeEventListener("canplay", onCanPlay);
       video.removeEventListener("error", onError);
     };
   }, []);
