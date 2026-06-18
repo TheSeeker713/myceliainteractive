@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import type { ScrollStageSection } from "./ScrollStage";
-import { getScrollProgressFromSection } from "./useSectionFade";
 
 const HASH_TO_SECTION_ID: Record<string, string> = {
   projects: "projects",
@@ -21,13 +20,13 @@ export function useHashScrollToSection(
       const targetId = HASH_TO_SECTION_ID[hash];
       if (!targetId) return;
 
-      const index = sections.findIndex((section) => section.id === targetId);
-      if (index < 0) return;
+      const sectionIndex = sections.findIndex(
+        (section) => section.id === targetId,
+      );
+      if (sectionIndex < 0) return;
 
-      const progress = getScrollProgressFromSection(index, 0.1, sections.length);
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const top = progress * maxScroll;
+      const sectionHeightPx = window.innerHeight;
+      const top = sectionIndex * sectionHeightPx;
 
       window.scrollTo({ top, behavior: "smooth" });
     };

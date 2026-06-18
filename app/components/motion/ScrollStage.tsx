@@ -149,7 +149,7 @@ export function ScrollStage({
         style={{ height: totalHeight }}
         className="relative w-full"
       >
-        <div className="sticky top-0 h-[100dvh] w-full overflow-hidden">
+        <div className="sticky top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] w-full overflow-hidden">
           <motion.div
             className="absolute inset-0 z-10"
             style={{ opacity: primaryOpacity }}

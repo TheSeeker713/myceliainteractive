@@ -32,7 +32,14 @@
   --font-mono: var(--font-geist-mono, monospace);
   --content-max-width: 1120px;
   --header-h: 4.5rem;
+  --footer-h: 5.375rem;
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --footer-h: 4rem;
+  }
 }
 
 @media (min-width: 768px) {
