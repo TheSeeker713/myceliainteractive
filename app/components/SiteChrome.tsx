@@ -136,6 +136,12 @@ export function SiteFooter() {
         </span>
         <div className="flex items-center gap-4">
           <Link
+            href="/privacy"
+            className="hover:text-studio-accent transition-colors"
+          >
+            Privacy
+          </Link>
+          <Link
             href="/vision"
             className="hover:text-studio-accent transition-colors"
           >
@@ -145,7 +151,7 @@ export function SiteFooter() {
             href="/ls/privacy"
             className="hover:text-studio-accent transition-colors"
           >
-            Privacy Policy
+            Liminal Sin Privacy
           </Link>
         </div>
       </div>

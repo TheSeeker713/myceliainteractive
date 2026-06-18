@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: "Liminal Sin | Mycelia Interactive LLC",
     description:
       "Real-time AI-driven narrative where voice, trust, and behavior reshape the story. Gemini Live Agent Challenge 2026.",
-    url: "https://myceliainteractive.com/ls",
+    url: "https://www.myceliainteractive.com/ls",
   },
 };
 

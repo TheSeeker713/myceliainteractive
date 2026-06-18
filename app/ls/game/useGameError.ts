@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { deriveGameHttpBase } from "./deriveGameHttpBase";
 
 export type GameErrorSeverity = "recoverable" | "fatal";
 
@@ -13,11 +14,6 @@ export interface GameError {
 }
 
 const MAX_VISIBLE = 3;
-
-function deriveHttpBase(): string {
-  const wsUrl = process.env.NEXT_PUBLIC_GAME_WS_URL ?? "";
-  return wsUrl.replace(/^wss:\/\//, "https://").replace(/^ws:\/\//, "http://");
-}
 
 export function useGameError() {
   const [errorQueue, setErrorQueue] = useState<GameError[]>([]);
@@ -42,7 +38,7 @@ export function useGameError() {
     }).catch(() => {});
 
     // Pre-wire Firestore log via Cloud Run (silent 404 until B7 backend session)
-    const httpBase = deriveHttpBase();
+    const httpBase = deriveGameHttpBase();
     if (httpBase) {
       void fetch(`${httpBase}/log-client-error`, {
         method: "POST",

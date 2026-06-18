@@ -17,6 +17,6 @@
     "binding": "AI",
   },
   "triggers": {
-    "crons": ["* * * * *"],
+    "crons": ["*/15 * * * *"],
   },
 }

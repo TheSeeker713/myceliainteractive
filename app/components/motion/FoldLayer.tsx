@@ -9,6 +9,8 @@ import type { ReactNode } from "react";
 import {
   useBandInTransforms,
   useBandOutTransforms,
+  useFadeInTransforms,
+  useFadeOutTransforms,
   useFoldInTransforms,
   useFoldOutTransforms,
 } from "./useFoldProgress";
@@ -16,7 +18,7 @@ import {
 type FoldLayerProps = {
   progress: MotionValue<number>;
   phase: "out" | "in";
-  variant?: "fold" | "band";
+  variant?: "fold" | "band" | "fade";
   use3D?: boolean;
   className?: string;
   children: ReactNode;
@@ -36,28 +38,45 @@ export function FoldLayer({
   const inFold = useFoldInTransforms(progress, use3D);
   const outBand = useBandOutTransforms(progress);
   const inBand = useBandInTransforms(progress);
+  const outFade = useFadeOutTransforms(progress);
+  const inFade = useFadeInTransforms(progress);
 
   const isOut = phase === "out";
   const isBand = variant === "band";
+  const isFade = variant === "fade";
 
   const opacity = isOut
-    ? isBand
-      ? outBand.opacity
-      : outFold.opacity
-    : isBand
-      ? inBand.opacity
-      : inFold.opacity;
+    ? isFade
+      ? outFade.opacity
+      : isBand
+        ? outBand.opacity
+        : outFold.opacity
+    : isFade
+      ? inFade.opacity
+      : isBand
+        ? inBand.opacity
+        : inFold.opacity;
 
   const scaleY = isOut
-    ? isBand
-      ? outBand.scaleY
-      : outFold.scaleY
-    : isBand
-      ? inBand.scaleY
-      : inFold.scaleY;
+    ? isFade
+      ? outFade.scaleY
+      : isBand
+        ? outBand.scaleY
+        : outFold.scaleY
+    : isFade
+      ? inFade.scaleY
+      : isBand
+        ? inBand.scaleY
+        : inFold.scaleY;
 
-  const rotateX = isOut ? outFold.rotateX : inFold.rotateX;
-  const filter = useMotionTemplate`blur(${isOut && !isBand ? outFold.blur : 0}px)`;
+  const rotateX = isOut
+    ? isFade
+      ? outFade.rotateX
+      : outFold.rotateX
+    : isFade
+      ? inFade.rotateX
+      : inFold.rotateX;
+  const filter = useMotionTemplate`blur(${isOut && !isBand && !isFade ? outFold.blur : 0}px)`;
 
   return (
     <motion.div
@@ -66,7 +85,7 @@ export function FoldLayer({
         opacity,
         scaleY,
         rotateX,
-        filter: isOut && !isBand ? filter : undefined,
+        filter: isOut && !isBand && !isFade ? filter : undefined,
         transformOrigin: isOut ? "center top" : "center bottom",
         pointerEvents: isOut ? "none" : "auto",
       }}

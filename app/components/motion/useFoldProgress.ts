@@ -55,6 +55,23 @@ export function useBandOutTransforms(progress: MotionValue<number>) {
   return { opacity, scaleY };
 }
 
+export function useFadeOutTransforms(progress: MotionValue<number>) {
+  const opacity = useTransform(progress, [0, 0.5], [1, 0]);
+  const scaleY = useTransform(progress, [0, 1], [1, 1]);
+  const rotateX = useTransform(progress, [0, 1], [0, 0]);
+  const blur = useTransform(progress, [0, 1], [0, 0]);
+
+  return { opacity, scaleY, rotateX, blur };
+}
+
+export function useFadeInTransforms(progress: MotionValue<number>) {
+  const opacity = useTransform(progress, [0.35, 1], [0, 1]);
+  const scaleY = useTransform(progress, [0, 1], [1, 1]);
+  const rotateX = useTransform(progress, [0, 1], [0, 0]);
+
+  return { opacity, scaleY, rotateX };
+}
+
 export function useCardFoldTransforms(
   progress: MotionValue<number>,
   index: number,

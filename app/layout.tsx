@@ -15,19 +15,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.myceliainteractive.com"),
   title: "Mycelia Interactive LLC | Interactive Entertainment",
   description:
     "Mycelia Interactive LLC develops original interactive entertainment where audiences participate in real time — characters hear you, stories respond through AI-driven voice and vision systems.",
   authors: [{ name: "Mycelia Interactive LLC" }],
   creator: "Mycelia Interactive LLC",
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: "/assets/images/Mycelia_Interactive_Logo.jpg",
+    apple: "/assets/images/Mycelia_Interactive_Logo.jpg",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://myceliainteractive.com",
+    url: "https://www.myceliainteractive.com",
     title: "Mycelia Interactive LLC | Interactive Entertainment",
     description:
       "Original interactive entertainment across film, games, music, and immersive experiences.",
     siteName: "Mycelia Interactive LLC",
+    images: [
+      {
+        url: "/assets/images/Liminal_Sin_Title.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Mycelia Interactive LLC",
+      },
+    ],
   },
 };
 

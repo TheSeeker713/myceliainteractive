@@ -88,11 +88,28 @@ Builds the static export and deploys via Wrangler.
 
 ## Issuing prototype access (team)
 
-1. Review access requests in the D1 `signups` table.
-2. Insert a token into `access_tokens` (via Cloudflare D1 dashboard or `wrangler d1 execute`).
-3. Email the requester: `https://www.myceliainteractive.com/ls/play?access=<token>`
+1. Review pending requests in the D1 `signups` table (`status = 'pending'`).
+2. Approve a requester with the admin grant API (generates a secure token and sends Email 2 with the private play link):
 
-Example D1 insert:
+```bash
+curl -X POST "https://www.myceliainteractive.com/api/access/grant" \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"requester@example.com","expiresInDays":14}'
+```
+
+3. The requester receives Email 2 with `https://www.myceliainteractive.com/ls/play?access=<token>` (default expiry: 14 days, max 30).
+
+To revoke a token:
+
+```bash
+curl -X POST "https://www.myceliainteractive.com/api/access/revoke" \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"token":"<token>"}'
+```
+
+**Emergency fallback** — manual D1 insert (then email the play link yourself):
 
 ```sql
 INSERT INTO access_tokens (token, email, name, expires_at, created_at, revoked)
@@ -100,3 +117,5 @@ VALUES ('your-random-token-here', 'requester@example.com', 'Name', 1735689600000
 ```
 
 Set `expires_at` to a Unix timestamp in milliseconds (e.g. 7–14 days from now).
+
+`POST /api/set-game-live` is deprecated; use per-user `/api/access/grant` instead.

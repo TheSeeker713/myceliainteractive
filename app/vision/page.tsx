@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: "10-Year Vision | Mycelia Interactive LLC",
     description:
       "Aspirational long-term direction for participatory presence and agentic systems — not part of the near-term MVP.",
-    url: "https://myceliainteractive.com/vision",
+    url: "https://www.myceliainteractive.com/vision",
   },
 };
 

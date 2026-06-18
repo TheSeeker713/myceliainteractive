@@ -1,6 +1,7 @@
 "use client";
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { deriveGameHttpBase } from "./deriveGameHttpBase";
 
 interface Props {
   children: ReactNode;
@@ -41,10 +42,7 @@ export class GameErrorBoundary extends Component<Props, State> {
       body: JSON.stringify(payload),
     }).catch(() => {});
 
-    const wsUrl = process.env.NEXT_PUBLIC_GAME_WS_URL ?? "";
-    const httpBase = wsUrl
-      .replace(/^wss:\/\//, "https://")
-      .replace(/^ws:\/\//, "http://");
+    const httpBase = deriveGameHttpBase();
     if (httpBase) {
       void fetch(`${httpBase}/log-client-error`, {
         method: "POST",

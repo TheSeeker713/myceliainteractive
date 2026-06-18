@@ -8,7 +8,7 @@ import { FoldSceneProvider } from "./FoldSceneContext";
 import { StaticSection } from "./StaticSection";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
-export type ScrollFoldLayout = "plain" | "cards" | "grid" | "band";
+export type ScrollFoldLayout = "plain" | "cards" | "grid" | "band" | "fade";
 
 type ScrollFoldSceneProps = {
   outgoing?: ReactNode;
@@ -65,7 +65,9 @@ export function ScrollFoldScene({
   }
 
   const height = isMobile ? sceneHeightMobile : sceneHeight;
-  const variant = layout === "band" ? "band" : "fold";
+  const variant =
+    layout === "band" ? "band" : layout === "fade" ? "fade" : "fold";
+  const enable3D = !isMobile && layout !== "band" && layout !== "fade";
 
   return (
     <div
@@ -81,7 +83,7 @@ export function ScrollFoldScene({
             progress={scrollYProgress}
             phase="out"
             variant={variant}
-            use3D={!isMobile && layout !== "band"}
+            use3D={enable3D}
             className="z-10"
           >
             <div className="site-gutter w-full">
@@ -93,7 +95,7 @@ export function ScrollFoldScene({
           progress={scrollYProgress}
           phase="in"
           variant={variant}
-          use3D={!isMobile && layout !== "band"}
+          use3D={enable3D}
           className={outgoing ? "z-20" : "z-10"}
         >
           <FoldSceneProvider progress={scrollYProgress}>
