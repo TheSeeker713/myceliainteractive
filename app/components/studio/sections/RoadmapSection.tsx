@@ -9,7 +9,7 @@ import { SceneCard } from "@/app/components/studio/SceneCard";
 
 export function RoadmapContent() {
   return (
-    <SceneCard className="max-w-4xl">
+    <SceneCard>
       <h2 className="text-2xl font-semibold text-studio-text mb-3">
         MVP Roadmap &amp; AI/Cloud Resource Needs
       </h2>

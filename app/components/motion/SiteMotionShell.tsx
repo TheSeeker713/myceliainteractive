@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { shouldUseMotionShell } from "@/app/utils/motionRoutes";
+import { ScrollStageRootProvider } from "./ScrollStageContext";
 import { BokehParticles } from "./BokehParticles";
 import { VideoBackground } from "./VideoBackground";
 
@@ -19,10 +20,10 @@ export function SiteMotionShell({ children }: SiteMotionShellProps) {
   }
 
   return (
-    <>
+    <ScrollStageRootProvider>
       <VideoBackground enabled={enabled} />
       <BokehParticles enabled={enabled} />
       <div className="relative z-[1]">{children}</div>
-    </>
+    </ScrollStageRootProvider>
   );
 }

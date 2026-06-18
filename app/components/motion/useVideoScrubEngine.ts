@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import type { ScrollStageState } from "./ScrollStageContext";
 
 const SCRUB_SENSITIVITY = 0.0009;
 const VELOCITY_DECAY = 0.9;
 const LERP_FACTOR = 0.28;
 const VELOCITY_EPSILON = 0.00005;
 const IDLE_PAUSE_MS = 350;
+const KEYFRAME_LERP = 0.12;
 
 function normalizeWheelDelta(e: WheelEvent): number {
   let delta = e.deltaY;
@@ -18,27 +20,45 @@ function normalizeWheelDelta(e: WheelEvent): number {
   return delta;
 }
 
+function getSectionKeyframeTime(
+  sectionIndex: number,
+  sectionCount: number,
+  duration: number,
+): number {
+  if (sectionCount <= 1) return 0;
+  const ratio = sectionIndex / (sectionCount - 1);
+  return Math.max(0, Math.min(duration - 0.02, duration * ratio));
+}
+
 type UseVideoScrubEngineOptions = {
   enabled: boolean;
   videoRef: React.RefObject<HTMLVideoElement | null>;
   ready: boolean;
+  scrollStage: ScrollStageState | null;
 };
 
 export function useVideoScrubEngine({
   enabled,
   videoRef,
   ready,
+  scrollStage,
 }: UseVideoScrubEngineOptions) {
   const targetTimeRef = useRef(0);
   const velocityRef = useRef(0);
-  const lastScrollYRef = useRef(0);
   const rafRef = useRef<number | null>(null);
   const lastFrameRef = useRef<number | null>(null);
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isRunningRef = useRef(false);
+  const scrollStageRef = useRef(scrollStage);
 
-  const applyScrollDelta = useCallback((deltaY: number) => {
+  useEffect(() => {
+    scrollStageRef.current = scrollStage;
+  }, [scrollStage]);
+
+  const applyWheelDelta = useCallback((deltaY: number) => {
+    const stage = scrollStageRef.current;
     if (!enabled || !ready) return;
+    if (stage?.isTransitioning) return;
 
     const video = videoRef.current;
     if (!video || !Number.isFinite(video.duration) || video.duration <= 0) {
@@ -73,7 +93,6 @@ export function useVideoScrubEngine({
     const video = videoRef.current;
     if (video) {
       targetTimeRef.current = video.currentTime;
-      lastScrollYRef.current = window.scrollY;
     }
 
     isRunningRef.current = true;
@@ -93,21 +112,34 @@ export function useVideoScrubEngine({
         return;
       }
 
-      let velocity = velocityRef.current;
-      velocity *= VELOCITY_DECAY ** (dt * 60);
-      velocityRef.current = velocity;
+      const stage = scrollStageRef.current;
 
-      if (Math.abs(velocity) > VELOCITY_EPSILON) {
-        let nextTarget = targetTimeRef.current + velocity * dt * 60;
-        nextTarget = Math.max(0, Math.min(duration - 0.02, nextTarget));
-        targetTimeRef.current = nextTarget;
+      if (stage?.isTransitioning) {
+        velocityRef.current = 0;
+        const keyframe = getSectionKeyframeTime(
+          stage.sectionIndex,
+          stage.sectionCount,
+          duration,
+        );
+        targetTimeRef.current +=
+          (keyframe - targetTimeRef.current) * KEYFRAME_LERP;
+      } else {
+        let velocity = velocityRef.current;
+        velocity *= VELOCITY_DECAY ** (dt * 60);
+        velocityRef.current = velocity;
+
+        if (Math.abs(velocity) > VELOCITY_EPSILON) {
+          let nextTarget = targetTimeRef.current + velocity * dt * 60;
+          nextTarget = Math.max(0, Math.min(duration - 0.02, nextTarget));
+          targetTimeRef.current = nextTarget;
+        }
       }
 
       const current = currentVideo.currentTime;
       const target = targetTimeRef.current;
       const diff = target - current;
 
-      if (Math.abs(diff) > 0.001 || Math.abs(velocity) > VELOCITY_EPSILON) {
+      if (Math.abs(diff) > 0.001 || Math.abs(velocityRef.current) > VELOCITY_EPSILON) {
         currentVideo.currentTime = current + diff * LERP_FACTOR;
         if (currentVideo.paused) {
           void currentVideo.play().catch(() => {});
@@ -122,26 +154,15 @@ export function useVideoScrubEngine({
     rafRef.current = requestAnimationFrame(scrubFrame);
 
     const handleWheel = (e: WheelEvent) => {
-      applyScrollDelta(normalizeWheelDelta(e));
-    };
-
-    const handleScroll = () => {
-      const currentY = window.scrollY;
-      const deltaY = currentY - lastScrollYRef.current;
-      lastScrollYRef.current = currentY;
-      if (deltaY !== 0) {
-        applyScrollDelta(deltaY);
-      }
+      applyWheelDelta(normalizeWheelDelta(e));
     };
 
     window.addEventListener("wheel", handleWheel, { passive: true });
-    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("scroll", handleScroll);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       stopLoop();
     };
-  }, [enabled, ready, applyScrollDelta, stopLoop, videoRef]);
+  }, [enabled, ready, applyWheelDelta, stopLoop, videoRef]);
 }

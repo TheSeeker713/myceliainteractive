@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
+import { useScrollStage } from "./ScrollStageContext";
 import { useVideoScrubEngine } from "./useVideoScrubEngine";
 
-const VIDEO_SRC = "/assets/video/mycelia_bg.mp4";
+const VIDEO_MP4 = "/assets/video/mycelia_bg.mp4";
+const VIDEO_WEBM = "/assets/video/mycelia_bg.webm";
 const POSTER_SRC = "/assets/images/Mycelia_Interactive_Logo.jpg";
 
 type VideoBackgroundProps = {
@@ -13,9 +15,35 @@ type VideoBackgroundProps = {
 
 export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   const reducedMotion = usePrefersReducedMotion();
+  const scrollStage = useScrollStage();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [videoVisible, setVideoVisible] = useState(false);
+  const [shouldPreload, setShouldPreload] = useState(false);
+
+  useEffect(() => {
+    if (!enabled || reducedMotion) return;
+
+    const startPreload = () => setShouldPreload(true);
+
+    if (typeof window.requestIdleCallback === "function") {
+      const idleId = window.requestIdleCallback(startPreload, { timeout: 2500 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timer = setTimeout(startPreload, 1200);
+    return () => clearTimeout(timer);
+  }, [enabled, reducedMotion]);
+
+  useEffect(() => {
+    if (!shouldPreload) return;
+
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.load();
+  }, [shouldPreload]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -25,10 +53,11 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
       video.pause();
       video.currentTime = 0;
       setReady(true);
+      setVideoVisible(true);
     };
 
     const onError = () => {
-      console.error("[VideoBackground] Failed to load mycelia_bg.mp4");
+      console.error("[VideoBackground] Failed to load background video");
       setHasError(true);
     };
 
@@ -49,6 +78,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
     enabled: enabled && !reducedMotion && ready && !hasError,
     videoRef,
     ready,
+    scrollStage,
   });
 
   if (!enabled) return null;
@@ -65,16 +95,27 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
 
   return (
     <div className="fixed inset-0 z-[-10] pointer-events-none overflow-hidden bg-[#fafaf8]">
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500"
+        style={{
+          backgroundImage: `url(${POSTER_SRC})`,
+          opacity: videoVisible ? 0 : 1,
+        }}
+        aria-hidden
+      />
       <video
         ref={videoRef}
-        src={VIDEO_SRC}
         poster={POSTER_SRC}
         muted
         playsInline
-        preload="auto"
-        className="h-full w-full object-cover"
+        preload={shouldPreload ? "auto" : "metadata"}
+        className="h-full w-full object-cover transition-opacity duration-500"
+        style={{ opacity: videoVisible ? 1 : 0 }}
         aria-hidden
-      />
+      >
+        <source src={VIDEO_WEBM} type="video/webm" />
+        <source src={VIDEO_MP4} type="video/mp4" />
+      </video>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
+import { useScrollStage } from "./ScrollStageContext";
 
 type Particle = {
   x: number;
@@ -34,6 +35,13 @@ type BokehParticlesProps = {
 export function BokehParticles({ enabled = true }: BokehParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reducedMotion = usePrefersReducedMotion();
+  const scrollStage = useScrollStage();
+  const isPausedRef = useRef(false);
+
+  useEffect(() => {
+    isPausedRef.current =
+      Boolean(scrollStage?.isTransitioning) || document.hidden;
+  }, [scrollStage?.isTransitioning]);
 
   useEffect(() => {
     if (!enabled || reducedMotion) return;
@@ -64,7 +72,7 @@ export function BokehParticles({ enabled = true }: BokehParticlesProps) {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = isMobile ? 12 : 20;
+      const count = isMobile ? 8 : 20;
       particles = createParticles(count, width, height);
     };
 
@@ -73,8 +81,13 @@ export function BokehParticles({ enabled = true }: BokehParticlesProps) {
       targetMouseY = (e.clientY / height - 0.5) * 24;
     };
 
+    const onVisibilityChange = () => {
+      isPausedRef.current =
+        Boolean(scrollStage?.isTransitioning) || document.hidden;
+    };
+
     const draw = (time: number) => {
-      if (document.hidden) {
+      if (isPausedRef.current || document.hidden) {
         rafId = requestAnimationFrame(draw);
         return;
       }
@@ -114,6 +127,7 @@ export function BokehParticles({ enabled = true }: BokehParticlesProps) {
     resize();
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", onMouseMove, { passive: true });
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     rafId = requestAnimationFrame(draw);
 
@@ -121,8 +135,9 @@ export function BokehParticles({ enabled = true }: BokehParticlesProps) {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [enabled, reducedMotion]);
+  }, [enabled, reducedMotion, scrollStage?.isTransitioning]);
 
   if (!enabled || reducedMotion) return null;
 

@@ -5,7 +5,7 @@ import { SceneCard } from "@/app/components/studio/SceneCard";
 
 export function TeamContent() {
   return (
-    <SceneCard className="max-w-4xl">
+    <SceneCard>
       <h2 className="text-2xl font-semibold text-studio-text mb-6">Team</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {TEAM.map((member) => (

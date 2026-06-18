@@ -1,7 +1,13 @@
 "use client";
 
-import { ScrollFoldScene } from "@/app/components/motion/ScrollFoldScene";
+import { useMemo } from "react";
 import { usePrefersReducedMotion } from "@/app/components/motion/usePrefersReducedMotion";
+import {
+  ScrollStage,
+  type ScrollStageSection,
+} from "@/app/components/motion/ScrollStage";
+import { useHashScrollToSection } from "@/app/components/motion/useHashScrollToSection";
+import { CardSlot } from "@/app/components/studio/CardSlot";
 import { AboutContent } from "@/app/components/studio/sections/AboutSection";
 import { ContactContent } from "@/app/components/studio/sections/ContactSection";
 import { HeroContent } from "@/app/components/studio/sections/HeroSection";
@@ -15,38 +21,46 @@ import { RoadmapContent } from "@/app/components/studio/sections/RoadmapSection"
 import { TeamContent } from "@/app/components/studio/sections/TeamSection";
 import { PROJECTS } from "@/app/components/studio/data";
 
-const FADE_SCENE_PROPS = {
-  layout: "fade" as const,
-  sceneHeight: "160vh",
-  sceneHeightMobile: "120vh",
-};
-
 function HomePageStatic() {
   return (
     <div className="site-gutter pb-20 space-y-16 sm:space-y-20">
       <section className="studio-section pt-16 sm:pt-24 min-h-[80dvh] flex items-center">
-        <HeroContent />
+        <CardSlot>
+          <HeroContent />
+        </CardSlot>
       </section>
       <section className="studio-section">
-        <ProofPointsContent />
+        <CardSlot>
+          <ProofPointsContent />
+        </CardSlot>
       </section>
       <section className="studio-section">
-        <AboutContent />
+        <CardSlot>
+          <AboutContent />
+        </CardSlot>
       </section>
       <section className="studio-section">
-        <MissionContent />
+        <CardSlot>
+          <MissionContent />
+        </CardSlot>
       </section>
       <section id="projects" className="studio-section scroll-mt-24 space-y-6">
         <ProjectsContent />
       </section>
       <section id="roadmap" className="studio-section scroll-mt-24">
-        <RoadmapContent />
+        <CardSlot scrollable>
+          <RoadmapContent />
+        </CardSlot>
       </section>
       <section className="studio-section">
-        <TeamContent />
+        <CardSlot>
+          <TeamContent />
+        </CardSlot>
       </section>
       <section className="studio-section">
-        <ContactContent />
+        <CardSlot>
+          <ContactContent />
+        </CardSlot>
       </section>
     </div>
   );
@@ -54,72 +68,102 @@ function HomePageStatic() {
 
 export function HomePage() {
   const reducedMotion = usePrefersReducedMotion();
+  const [liminalSin, s33k3r, kaia, ais] = PROJECTS;
+
+  const sections: ScrollStageSection[] = useMemo(
+    () => [
+      {
+        content: (
+          <CardSlot>
+            <HeroContent />
+          </CardSlot>
+        ),
+      },
+      {
+        content: (
+          <CardSlot>
+            <ProofPointsContent />
+          </CardSlot>
+        ),
+      },
+      {
+        content: (
+          <CardSlot>
+            <AboutContent />
+          </CardSlot>
+        ),
+      },
+      {
+        content: (
+          <CardSlot>
+            <MissionContent />
+          </CardSlot>
+        ),
+      },
+      {
+        id: "projects",
+        content: (
+          <CardSlot>
+            <ProjectSceneContent project={liminalSin} />
+          </CardSlot>
+        ),
+      },
+      {
+        content: (
+          <CardSlot>
+            <ProjectSceneContent project={s33k3r} />
+          </CardSlot>
+        ),
+      },
+      {
+        content: (
+          <CardSlot>
+            <ProjectSceneContent project={kaia} />
+          </CardSlot>
+        ),
+      },
+      {
+        content: (
+          <CardSlot>
+            <ProjectSceneContent project={ais} />
+          </CardSlot>
+        ),
+      },
+      {
+        id: "roadmap",
+        content: (
+          <CardSlot scrollable>
+            <RoadmapContent />
+          </CardSlot>
+        ),
+      },
+      {
+        content: (
+          <CardSlot>
+            <TeamContent />
+          </CardSlot>
+        ),
+      },
+      {
+        content: (
+          <CardSlot>
+            <ContactContent />
+          </CardSlot>
+        ),
+      },
+    ],
+    [liminalSin, s33k3r, kaia, ais],
+  );
+
+  useHashScrollToSection(sections, !reducedMotion);
 
   if (reducedMotion) {
     return <HomePageStatic />;
   }
 
-  const [liminalSin, s33k3r, kaia, ais] = PROJECTS;
-
   return (
-    <div className="pb-20">
-      <ScrollFoldScene
-        isFirst
-        incoming={<HeroContent />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        outgoing={<HeroContent />}
-        incoming={<ProofPointsContent />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        outgoing={<ProofPointsContent />}
-        incoming={<AboutContent />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        outgoing={<AboutContent />}
-        incoming={<MissionContent />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        id="projects"
-        outgoing={<MissionContent />}
-        incoming={<ProjectSceneContent project={liminalSin} />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        outgoing={<ProjectSceneContent project={liminalSin} />}
-        incoming={<ProjectSceneContent project={s33k3r} />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        outgoing={<ProjectSceneContent project={s33k3r} />}
-        incoming={<ProjectSceneContent project={kaia} />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        outgoing={<ProjectSceneContent project={kaia} />}
-        incoming={<ProjectSceneContent project={ais} />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        id="roadmap"
-        outgoing={<ProjectSceneContent project={ais} />}
-        incoming={<RoadmapContent />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        outgoing={<RoadmapContent />}
-        incoming={<TeamContent />}
-        {...FADE_SCENE_PROPS}
-      />
-      <ScrollFoldScene
-        outgoing={<TeamContent />}
-        incoming={<ContactContent />}
-        {...FADE_SCENE_PROPS}
-      />
-    </div>
+    <>
+      <ScrollStage sections={sections} />
+    </>
   );
 }
