@@ -60,6 +60,18 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Testing (local)
+
+Before deploy, run:
+
+```bash
+npm run lint
+npm test
+npm run build
+```
+
+**Future revision (MI):** Add GitHub Actions CI (`.github/workflows/ci.yml`) to run lint, test, and build on every push/PR. Requires a GitHub token with the `workflow` scope. Vitest and `npm test` are already in place; only the automated cloud runner is deferred.
+
 ## Full Liminal Sin Reproduction
 
 This repo is the **frontend only**. To reproduce the full experience locally, also clone the backend:
