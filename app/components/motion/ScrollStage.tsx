@@ -139,8 +139,10 @@ export function ScrollStage({
   );
   const layers = getSectionLayers(index, localT, sectionCount);
   const primarySection = sections[layers.primaryIndex];
-  const secondarySection =
-    layers.secondaryIndex !== null ? sections[layers.secondaryIndex] : null;
+  const preMountIndex =
+    layers.primaryIndex < sectionCount - 1 ? layers.primaryIndex + 1 : null;
+  const preMountSection =
+    preMountIndex !== null ? sections[preMountIndex] : null;
 
   return (
     <ScrollStagePublisher value={stageState}>
@@ -170,9 +172,9 @@ export function ScrollStage({
             style={{ opacity: secondaryOpacity }}
             aria-hidden={layers.secondaryIndex === null}
           >
-            {secondarySection && (
-              <div id={secondarySection.id} className="h-full w-full">
-                {secondarySection.content}
+            {preMountSection && (
+              <div id={preMountSection.id} className="h-full w-full">
+                {preMountSection.content}
               </div>
             )}
           </motion.div>
