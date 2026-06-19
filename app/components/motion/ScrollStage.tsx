@@ -36,12 +36,21 @@ type ScrollStageProps = {
   sectionHeight?: string;
 };
 
+function readViewportRatio(): number {
+  if (typeof window === "undefined") return 1;
+  const raw = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue("--header-h"),
+  );
+  const headerH = Number.isFinite(raw) ? raw * 16 : 72;
+  return getViewportRatio(window.innerHeight, headerH, 100);
+}
+
 export function ScrollStage({
   sections,
   sectionHeight = "100dvh",
 }: ScrollStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [viewportRatio, setViewportRatio] = useState(1);
+  const [viewportRatio, setViewportRatio] = useState(readViewportRatio);
   const [stageState, setStageState] = useState<ScrollStageState>(() => ({
     sectionIndex: 0,
     localT: 0,
