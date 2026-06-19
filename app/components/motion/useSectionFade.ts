@@ -14,6 +14,55 @@ function clamp01(value: number): number {
   return Math.min(1, Math.max(0, value));
 }
 
+function cubicBezier(p1x: number, p1y: number, p2x: number, p2y: number) {
+  const cx = 3 * p1x;
+  const bx = 3 * (p2x - p1x) - cx;
+  const ax = 1 - cx - bx;
+  const cy = 3 * p1y;
+  const by = 3 * (p2y - p1y) - cy;
+  const ay = 1 - cy - by;
+
+  const sampleCurveX = (t: number) => ((ax * t + bx) * t + cx) * t;
+  const sampleCurveY = (t: number) => ((ay * t + by) * t + cy) * t;
+  const sampleCurveDerivativeX = (t: number) => (3 * ax * t + 2 * bx) * t + cx;
+
+  const solveCurveX = (x: number) => {
+    let t = x;
+    for (let i = 0; i < 8; i += 1) {
+      const currentX = sampleCurveX(t) - x;
+      if (Math.abs(currentX) < 1e-6) return t;
+      const d = sampleCurveDerivativeX(t);
+      if (Math.abs(d) < 1e-6) break;
+      t -= currentX / d;
+    }
+
+    let t0 = 0;
+    let t1 = 1;
+    t = x;
+    while (t0 < t1) {
+      const currentX = sampleCurveX(t);
+      if (Math.abs(currentX - x) < 1e-6) return t;
+      if (x > currentX) t0 = t;
+      else t1 = t;
+      t = (t0 + t1) / 2;
+    }
+    return t;
+  };
+
+  return function easeT(t: number): number {
+    const clamped = clamp01(t);
+    if (clamped === 0) return 0;
+    if (clamped === 1) return 1;
+    return sampleCurveY(solveCurveX(clamped));
+  };
+}
+
+/** Matches CSS --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1) */
+export const easeSmooth = cubicBezier(0.22, 1, 0.36, 1);
+
+/** Symmetric ease-in-out for section crossfade opacity */
+export const easeCrossfade = cubicBezier(0.42, 0, 0.58, 1);
+
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }
@@ -49,9 +98,10 @@ export function getSectionFadeOpacities(
   if (progress <= FADE_HOLD_END) {
     const crossT =
       (progress - FADE_HOLD_START) / (FADE_HOLD_END - FADE_HOLD_START);
+    const easedT = easeCrossfade(crossT);
     return {
-      outgoing: lerp(1, 0, crossT),
-      incoming: lerp(0, 1, crossT),
+      outgoing: lerp(1, 0, easedT),
+      incoming: lerp(0, 1, easedT),
       isTransitioning: true,
       phase: "crossfade",
     };

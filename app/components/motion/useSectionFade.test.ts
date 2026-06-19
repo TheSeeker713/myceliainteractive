@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   FADE_HOLD_END,
   FADE_HOLD_START,
+  easeCrossfade,
   getScrollProgressFromSection,
   getScrollableSpan,
   getSectionFadeOpacities,
@@ -15,7 +16,7 @@ const VIEWPORT_HEIGHT = 797;
 const MOBILE_HEADER = 72;
 const DESKTOP_HEADER = 76;
 const MOBILE_RATIO = getViewportRatio(VIEWPORT_HEIGHT, MOBILE_HEADER, 100);
-const DESKTOP_RATIO = getViewportRatio(VIEWPORT_HEIGHT, DESKTOP_HEADER, 110);
+const DESKTOP_RATIO = getViewportRatio(VIEWPORT_HEIGHT, DESKTOP_HEADER, 100);
 
 describe("getSectionFadeOpacities", () => {
   it("first section is solid incoming at t=0", () => {
@@ -33,15 +34,43 @@ describe("getSectionFadeOpacities", () => {
     expect(result.phase).toBe("hold-out");
   });
 
-  it("crossfades in the middle band", () => {
+  it("crossfades in the middle band with eased opacities", () => {
     const mid = (FADE_HOLD_START + FADE_HOLD_END) / 2;
+    const easedMid = easeCrossfade(0.5);
     const result = getSectionFadeOpacities(mid, false);
     expect(result.isTransitioning).toBe(true);
     expect(result.phase).toBe("crossfade");
-    expect(result.outgoing).toBeGreaterThan(0);
-    expect(result.outgoing).toBeLessThan(1);
-    expect(result.incoming).toBeGreaterThan(0);
-    expect(result.incoming).toBeLessThan(1);
+    expect(result.outgoing).toBeCloseTo(1 - easedMid, 5);
+    expect(result.incoming).toBeCloseTo(easedMid, 5);
+  });
+
+  it("preserves crossfade endpoints after easing", () => {
+    const start = getSectionFadeOpacities(FADE_HOLD_START, false);
+    expect(start.outgoing).toBe(1);
+    expect(start.incoming).toBe(0);
+    expect(start.phase).toBe("crossfade");
+
+    const end = getSectionFadeOpacities(FADE_HOLD_END, false);
+    expect(end.outgoing).toBe(0);
+    expect(end.incoming).toBe(1);
+    expect(end.phase).toBe("crossfade");
+  });
+
+  it("keeps crossfade opacities monotonic across the band", () => {
+    const samples = 21;
+    let prevOutgoing = 1;
+    let prevIncoming = 0;
+
+    for (let i = 0; i < samples; i += 1) {
+      const t =
+        FADE_HOLD_START +
+        (i / (samples - 1)) * (FADE_HOLD_END - FADE_HOLD_START);
+      const result = getSectionFadeOpacities(t, false);
+      expect(result.outgoing).toBeLessThanOrEqual(prevOutgoing);
+      expect(result.incoming).toBeGreaterThanOrEqual(prevIncoming);
+      prevOutgoing = result.outgoing;
+      prevIncoming = result.incoming;
+    }
   });
 
   it("holds incoming solid after crossfade", () => {
@@ -172,11 +201,12 @@ describe("getSectionLayers", () => {
 
   it("crossfades adjacent sections in the middle band", () => {
     const mid = (FADE_HOLD_START + FADE_HOLD_END) / 2;
+    const easedMid = easeCrossfade(0.5);
     const layers = getSectionLayers(2, mid, SECTION_COUNT);
     expect(layers.primaryIndex).toBe(2);
     expect(layers.secondaryIndex).toBe(3);
-    expect(layers.primaryOpacity).toBeGreaterThan(0);
-    expect(layers.secondaryOpacity).toBeGreaterThan(0);
+    expect(layers.primaryOpacity).toBeCloseTo(1 - easedMid, 5);
+    expect(layers.secondaryOpacity).toBeCloseTo(easedMid, 5);
   });
 
   it("holds last section on the final segment", () => {
