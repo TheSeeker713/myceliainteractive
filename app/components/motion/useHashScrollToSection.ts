@@ -2,6 +2,10 @@
 
 import { useEffect } from "react";
 import type { ScrollStageSection } from "./ScrollStage";
+import {
+  getScrollProgressFromSection,
+  getViewportRatio,
+} from "./useSectionFade";
 
 const HASH_TO_SECTION_ID: Record<string, string> = {
   projects: "projects",
@@ -25,8 +29,22 @@ export function useHashScrollToSection(
       );
       if (sectionIndex < 0) return;
 
-      const sectionHeightPx = window.innerHeight;
-      const top = sectionIndex * sectionHeightPx;
+      const innerH = window.innerHeight;
+      const raw = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--header-h",
+        ),
+      );
+      const headerH = Number.isFinite(raw) ? raw * 16 : 72;
+      const ratio = getViewportRatio(innerH, headerH, 100);
+      const sectionCount = sections.length;
+      const totalHeight = sectionCount * innerH;
+      const progress = getScrollProgressFromSection(
+        sectionIndex,
+        sectionCount,
+        ratio,
+      );
+      const top = progress * (totalHeight - innerH);
 
       window.scrollTo({ top, behavior: "smooth" });
     };
