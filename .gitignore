@@ -55,3 +55,6 @@ public/assets/sound_fx/
 
 # Deprecated HTML files (migrated to TSX routes)
 public/.deprecated/
+
+# Local test/verification files
+_tests/
