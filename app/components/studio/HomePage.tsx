@@ -103,28 +103,28 @@ export function HomePage() {
       {
         id: "projects",
         content: (
-          <CardSlot>
+          <CardSlot scrollable>
             <ProjectSceneContent project={liminalSin} />
           </CardSlot>
         ),
       },
       {
         content: (
-          <CardSlot>
+          <CardSlot scrollable>
             <ProjectSceneContent project={s33k3r} />
           </CardSlot>
         ),
       },
       {
         content: (
-          <CardSlot>
+          <CardSlot scrollable>
             <ProjectSceneContent project={kaia} />
           </CardSlot>
         ),
       },
       {
         content: (
-          <CardSlot>
+          <CardSlot scrollable>
             <ProjectSceneContent project={ais} />
           </CardSlot>
         ),
