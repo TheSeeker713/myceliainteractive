@@ -85,6 +85,13 @@ export function ScrollStage({
     offset: ["start start", "end end"],
   });
 
+  // Tracks the last sectionIndex/isTransitioning pair that was actually
+  // committed to React state, so we can skip re-rendering on scroll ticks
+  // that don't cross a section or transition boundary. The opacity
+  // crossfade itself is driven entirely by the useTransform motion values
+  // below and never touches this ref or React state.
+  const lastAppliedRef = useRef({ sectionIndex: 0, isTransitioning: false });
+
   const syncFromProgress = useCallback(
     (p: number) => {
       const { index, localT } = getSectionFromProgress(
@@ -102,14 +109,21 @@ export function ScrollStage({
             }
           : getSectionFadeOpacities(localT, index === 0);
 
+      const isTransitioning = fade.isTransitioning;
+      const last = lastAppliedRef.current;
+      if (last.sectionIndex === index && last.isTransitioning === isTransitioning) {
+        return;
+      }
+      lastAppliedRef.current = { sectionIndex: index, isTransitioning };
+
       setStageState({
         sectionIndex: index,
         localT,
         scrollProgress: p,
         sectionCount,
         fade,
-        isTransitioning: fade.isTransitioning,
-        isHoldSolid: !fade.isTransitioning,
+        isTransitioning,
+        isHoldSolid: !isTransitioning,
       });
     },
     [sectionCount, viewportRatio],
