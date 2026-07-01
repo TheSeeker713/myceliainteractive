@@ -3,6 +3,9 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Liminal Sin | Privacy Policy",
+  alternates: {
+    canonical: "/ls/privacy",
+  },
 };
 
 export default function PrivacyPage() {

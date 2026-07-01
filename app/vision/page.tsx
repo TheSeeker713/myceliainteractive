@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "10-Year Vision | Mycelia Interactive LLC",
   description:
     "Mycelia Interactive's aspirational 10-year north star horizon — building on today's real-time AI interactive narrative and agentic systems work.",
+  alternates: {
+    canonical: "/vision",
+  },
   openGraph: {
     title: "10-Year Vision | Mycelia Interactive LLC",
     description:

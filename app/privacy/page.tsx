@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Privacy Policy | Mycelia Interactive LLC",
   description:
     "Privacy policy for the Mycelia Interactive LLC public website and studio communications.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 export default function CompanyPrivacyPage() {

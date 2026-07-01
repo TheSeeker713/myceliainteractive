@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Liminal Sin | Mycelia Interactive LLC",
   description:
     "A psychological interactive experience with real-time AI trust and response. Request gated access to the vertical slice prototype.",
+  alternates: {
+    canonical: "/ls",
+  },
   openGraph: {
     title: "Liminal Sin | Mycelia Interactive LLC",
     description:
