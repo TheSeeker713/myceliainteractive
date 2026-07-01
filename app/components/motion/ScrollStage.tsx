@@ -14,6 +14,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { cn } from "@/utils/cn";
 import { ScrollDebugOverlay } from "./ScrollDebugOverlay";
 import {
   ScrollStagePublisher,
@@ -167,6 +168,36 @@ export function ScrollStage({
   const preMountSection =
     preMountIndex !== null ? sections[preMountIndex] : null;
 
+  // Physical DOM slots are pinned to index parity rather than to the
+  // primary/secondary role. A section always mounts into the same slot
+  // (its index mod 2) the first time it becomes the incoming section, and
+  // stays in that slot when later promoted to primary. Only the slot's
+  // role (and therefore its opacity source, z-index, and aria-hidden
+  // state) swaps between the two divs, so no section is ever unmounted
+  // from one div and remounted into the other while it has nonzero
+  // opacity.
+  const primaryIsEvenSlot = layers.primaryIndex % 2 === 0;
+  const primaryAriaHidden =
+    layers.secondaryIndex !== null &&
+    layers.secondaryOpacity > layers.primaryOpacity;
+  const secondaryAriaHidden = layers.secondaryIndex === null;
+
+  const evenSlotIndex = primaryIsEvenSlot ? layers.primaryIndex : preMountIndex;
+  const evenSlotSection = primaryIsEvenSlot ? primarySection : preMountSection;
+  const evenSlotOpacity = primaryIsEvenSlot ? primaryOpacity : secondaryOpacity;
+  const evenSlotAriaHidden = primaryIsEvenSlot
+    ? primaryAriaHidden
+    : secondaryAriaHidden;
+  const evenSlotZ = primaryIsEvenSlot ? "z-10" : "z-20";
+
+  const oddSlotIndex = primaryIsEvenSlot ? preMountIndex : layers.primaryIndex;
+  const oddSlotSection = primaryIsEvenSlot ? preMountSection : primarySection;
+  const oddSlotOpacity = primaryIsEvenSlot ? secondaryOpacity : primaryOpacity;
+  const oddSlotAriaHidden = primaryIsEvenSlot
+    ? secondaryAriaHidden
+    : primaryAriaHidden;
+  const oddSlotZ = primaryIsEvenSlot ? "z-20" : "z-10";
+
   return (
     <ScrollStagePublisher value={stageState}>
       <div
@@ -176,28 +207,33 @@ export function ScrollStage({
       >
         <div className="sticky top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] w-full overflow-hidden">
           <motion.div
-            className="absolute inset-0 z-10"
-            style={{ opacity: primaryOpacity }}
-            aria-hidden={
-              layers.secondaryIndex !== null &&
-              layers.secondaryOpacity > layers.primaryOpacity
-            }
+            className={cn("absolute inset-0", evenSlotZ)}
+            style={{ opacity: evenSlotOpacity }}
+            aria-hidden={evenSlotAriaHidden}
           >
-            {primarySection && (
-              <div id={primarySection.id} className="h-full w-full">
-                {primarySection.content}
+            {evenSlotSection && (
+              <div
+                key={evenSlotIndex}
+                id={evenSlotSection.id}
+                className="h-full w-full"
+              >
+                {evenSlotSection.content}
               </div>
             )}
           </motion.div>
 
           <motion.div
-            className="absolute inset-0 z-20"
-            style={{ opacity: secondaryOpacity }}
-            aria-hidden={layers.secondaryIndex === null}
+            className={cn("absolute inset-0", oddSlotZ)}
+            style={{ opacity: oddSlotOpacity }}
+            aria-hidden={oddSlotAriaHidden}
           >
-            {preMountSection && (
-              <div id={preMountSection.id} className="h-full w-full">
-                {preMountSection.content}
+            {oddSlotSection && (
+              <div
+                key={oddSlotIndex}
+                id={oddSlotSection.id}
+                className="h-full w-full"
+              >
+                {oddSlotSection.content}
               </div>
             )}
           </motion.div>
