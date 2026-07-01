@@ -160,12 +160,13 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const drawFrame = (fi: number) => {
+    const drawFrame = (fi: number): boolean => {
       const d   = getDrawParams(fi);
       const img = imagesRef.current[d.sheetIndex];
-      if (!img) return;
+      if (!img) return false;
       ctx.drawImage(img, d.sx, d.sy, FRAME_W, FRAME_H,
         0, 0, canvas.width, canvas.height);
+      return true;
     };
 
     const handleScroll = () => {
@@ -177,9 +178,8 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
 
     const render = () => {
       const f = getActualFrame(scrollProgressRef.current);
-      if (f !== frameRef.current) {
+      if (f !== frameRef.current && drawFrame(f)) {
         frameRef.current = f;
-        drawFrame(f);
       }
       rafRef.current = requestAnimationFrame(render);
     };
