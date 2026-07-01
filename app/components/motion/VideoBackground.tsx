@@ -186,8 +186,9 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
 
     handleScroll();
     const f0 = getActualFrame(scrollProgressRef.current);
-    frameRef.current = f0;
-    drawFrame(f0);
+    if (f0 !== frameRef.current && drawFrame(f0)) {
+      frameRef.current = f0;
+    }
     rafRef.current = requestAnimationFrame(render);
     window.addEventListener("scroll", handleScroll,
       { passive: true });
