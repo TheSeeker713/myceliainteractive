@@ -10,7 +10,7 @@ export function MissionContent() {
       <p>
         Our work is defined by one design principle: the audience participates.
         We build real-time AI systems where voice, vision, and behavior reshape
-        narrative as it unfolds — starting with immersive interactive
+        narrative as it unfolds, starting with immersive interactive
         entertainment as our proving ground.{" "}
         <Link
           href="/vision"

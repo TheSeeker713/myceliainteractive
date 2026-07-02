@@ -62,7 +62,7 @@ export function GamePageShell({ children }: { children: React.ReactNode }) {
       {/* ── Footer bar ── */}
       <footer className="fixed bottom-0 left-0 right-0 z-[60] flex flex-wrap items-center justify-between px-4 py-1.5 bg-black/60 backdrop-blur-sm border-t border-purple-900/30 text-[10px] text-purple-300/50 tracking-wide font-mono">
         <span>&copy; {new Date().getFullYear()} Mycelia Interactive</span>
-        <span className="uppercase">Prototype &mdash; Not Final</span>
+        <span className="uppercase">Prototype: Not Final</span>
       </footer>
     </div>
   );

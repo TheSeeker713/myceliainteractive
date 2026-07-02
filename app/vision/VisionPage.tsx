@@ -37,7 +37,7 @@ function VisionHeroContent() {
         10-Year North Star Horizon
       </h1>
       <p className="mt-6 text-lg text-studio-text-muted max-w-2xl leading-relaxed">
-        An aspirational view of where Mycelia Interactive could grow — grounded
+        An aspirational view of where Mycelia Interactive could grow, grounded
         in the real-time AI systems we are building today.
       </p>
     </>
@@ -70,7 +70,7 @@ function VisionFoundationContent() {
       <FoldCard index={0} total={1} className="p-6 sm:p-8 space-y-4 text-studio-text-muted max-w-3xl">
         <p>
           Mycelia Interactive is building live AI interactive narrative and
-          agentic systems — where audience voice, vision, and behavior reshape
+          agentic systems, where audience voice, vision, and behavior reshape
           story in real time. Liminal Sin demonstrates multi-agent trust
           architecture; KAIA extends the same foundation toward productivity
           SaaS.
@@ -92,7 +92,7 @@ function VisionHorizonContent() {
       <h2 className="text-2xl font-semibold mb-4">The Horizon</h2>
       <p className="text-studio-text-muted max-w-3xl leading-relaxed mb-8">
         Over a ten-year horizon, we see participatory presence extending beyond
-        screens — ambient, portable interfaces that keep audiences connected to
+        screens: ambient, portable interfaces that keep audiences connected to
         narrative and collaborative intelligence in education, research, and
         creative work. Entertainment remains the proving ground; the north star
         is human-centered, always-on agentic companionship in physical space.

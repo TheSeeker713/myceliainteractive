@@ -17,7 +17,7 @@ export function LiminalSinHeroContent() {
         <p className="mt-5 text-lg text-studio-text-muted leading-relaxed">
           A psychological interactive experience built around a real-time AI
           trust and response system. Your voice, behavior, and decisions shape
-          how characters respond — there are no fixed narrative paths.
+          how characters respond; there are no fixed narrative paths.
         </p>
         <p className="mt-4 text-sm text-studio-text-muted">
           Vertical slice prototype · Gemini Live Agent Challenge 2026

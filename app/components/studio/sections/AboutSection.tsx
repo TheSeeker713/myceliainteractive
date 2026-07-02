@@ -10,7 +10,7 @@ export function AboutContent() {
         Mycelia Interactive LLC is an entertainment company developing
         original intellectual property across film, interactive experiences,
         games, and music. Our defining focus is real-time AI-driven response
-        systems that use voice and vision — entertainment where audience
+        systems that use voice and vision: entertainment where audience
         behavior shapes the experience as it unfolds.
       </p>
       <p>

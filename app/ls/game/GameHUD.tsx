@@ -288,7 +288,7 @@ export default function GameHUD({
       {micDenied && !demoEnded && (
         <ErrorModal
           title="No Signal"
-          message="Microphone access was denied. This experience requires your voice to proceed. We apologise — the session cannot continue without it."
+          message="Microphone access was denied. This experience requires your voice to proceed. We apologise. The session cannot continue without it."
           onEndSession={handleReload}
         />
       )}

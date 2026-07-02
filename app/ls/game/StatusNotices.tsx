@@ -21,7 +21,7 @@ export function StatusNotices({
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-1 rounded bg-black/70 border border-red-500/40 text-red-400 text-xs font-mono tracking-widest uppercase">
           {status === "connecting" && "Establishing Connection…"}
           {status === "closed" && "Signal Lost"}
-          {status === "error" && "Connection Error — No Backend"}
+          {status === "error" && "Connection Error: No Backend"}
         </div>
       )}
 
@@ -36,7 +36,7 @@ export function StatusNotices({
         >
           <span className="text-red-400">⚠</span>
           <span className="text-red-300/80">
-            Camera cannot see you — enabling camera gives a more immersive
+            Camera cannot see you: enabling camera gives a more immersive
             experience
           </span>
         </div>
@@ -52,7 +52,7 @@ export function StatusNotices({
             animation: "hint-fade-in-out 8s ease-in-out forwards",
           }}
         >
-          Camera access was not granted — the experience will continue with
+          Camera access was not granted; the experience will continue with
           audio only
         </div>
       )}

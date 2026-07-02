@@ -27,7 +27,7 @@ export function PrototypeAccessGate() {
         </div>
         <p className="mt-8 text-sm text-studio-text-muted">
           Liminal Sin is a psychological interactive experience with a real-time
-          AI trust and response system — submitted as a vertical slice to the
+          AI trust and response system, submitted as a vertical slice to the
           Gemini Live Agent Challenge 2026.
         </p>
         <p className="mt-4 text-sm text-studio-text-muted">

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.myceliainteractive.com"),
   title: "Mycelia Interactive LLC | Interactive Entertainment",
   description:
-    "Mycelia Interactive LLC develops original interactive entertainment where audiences participate in real time — characters hear you, stories respond through AI-driven voice and vision systems.",
+    "Mycelia Interactive LLC develops original interactive entertainment where audiences participate in real time. Characters hear you, stories respond through AI-driven voice and vision systems.",
   authors: [{ name: "Mycelia Interactive LLC" }],
   creator: "Mycelia Interactive LLC",
   alternates: {

@@ -7,14 +7,14 @@ import SignupForms from "@/app/ls/SignupForms";
 const featureCards = [
   {
     label: "Your Voice Is the Mechanic",
-    desc: "No controllers. No menus. You speak — and the characters react in real time.",
+    desc: "No controllers. No menus. You speak, and the characters react in real time.",
   },
   {
     label: "The House Watches You Back",
     desc: "The Game Master perceives your webcam and reads your vocal cadence.",
   },
   {
-    label: "Full Motion Video — Generatively Rebuilt",
+    label: "Full Motion Video: Generatively Rebuilt",
     desc: "Synthetic liminal spaces generated with Veo and Kling. Architecture that shifts mid-scene.",
   },
   {
@@ -22,7 +22,7 @@ const featureCards = [
     desc: "Jason, Audrey, and Josh are autonomous AI agents with individual trust and fear metrics.",
   },
   {
-    label: "Slotsky — The Probability Engine",
+    label: "Slotsky: The Probability Engine",
     desc: "The casino logic made sentient underground. It rearranges corridors. The house always wins.",
   },
   {
@@ -52,14 +52,14 @@ export function LiminalSinStoryContent() {
       <div className="space-y-5 text-studio-text-muted leading-relaxed">
         <p>
           <strong className="text-studio-text">Liminal Sin</strong> is Mycelia
-          Interactive LLC&apos;s primary technology demonstration — a
+          Interactive LLC&apos;s primary technology demonstration: a
           psychological interactive experience set in the Vegas Underground. You
           become a disembodied voice woven into a living story. Three people are
           trapped. They can hear you. Whether they trust you is entirely up to
           them.
         </p>
         <p>
-          This is real-time AI-driven narrative — where voice, emotion, and
+          This is real-time AI-driven narrative, where voice, emotion, and
           trust reshape the story as it unfolds. Not a branching menu. Not a
           chatbot. A system that watches, listens, and responds.
         </p>

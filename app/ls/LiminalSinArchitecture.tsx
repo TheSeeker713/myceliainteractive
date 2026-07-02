@@ -7,7 +7,7 @@ const ARCHITECTURE_BULLETS = [
   "Bidirectional WebSocket connects to Cloud Run backend running Gemini Live multi-agent sessions",
   "Trust, fear, and scene state persist in Firestore across the session lifecycle",
   "Imagen 4 generates scene stills; Veo 3.1 Fast delivers generative video loops on scene change",
-  "Frontend is a render terminal — all game logic and agent decisions live in the backend",
+  "Frontend is a render terminal; all game logic and agent decisions live in the backend",
   "Marketing shell uses Cloudflare Workers AI for atmospheric FPV imagery only",
 ] as const;
 

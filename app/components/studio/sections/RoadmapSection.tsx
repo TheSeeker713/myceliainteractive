@@ -47,7 +47,7 @@ export function RoadmapContent() {
               key={need}
               className="text-sm text-studio-text-muted leading-relaxed flex gap-2"
             >
-              <span className="text-studio-accent shrink-0">—</span>
+              <span className="text-studio-accent shrink-0">•</span>
               <span>{need}</span>
             </li>
           ))}

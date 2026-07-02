@@ -3,12 +3,12 @@
 import { FoldCard } from "@/app/components/motion/FoldCard";
 
 const SCOPE_ITEMS = [
-  { label: "Scope", value: "Act 1 vertical slice — Vegas Underground setting" },
-  { label: "Agents", value: "Jason, Audrey, and Josh — autonomous trust/fear agents" },
+  { label: "Scope", value: "Act 1 vertical slice: Vegas Underground setting" },
+  { label: "Agents", value: "Jason, Audrey, and Josh: autonomous trust/fear agents" },
   { label: "Mechanics", value: "Voice-driven interaction, Trust Meter, dread escalation" },
   { label: "Endings", value: "Game Over and Good Ending paths based on trust outcomes" },
-  { label: "Submission", value: "Gemini Live Agent Challenge 2026 — live interactive demo" },
-  { label: "Access", value: "Gated prototype — approved requests receive play link within 24 hours" },
+  { label: "Submission", value: "Gemini Live Agent Challenge 2026: live interactive demo" },
+  { label: "Access", value: "Gated prototype: approved requests receive play link within 24 hours" },
 ] as const;
 
 export function LiminalSinSliceScopeContent() {
@@ -18,7 +18,7 @@ export function LiminalSinSliceScopeContent() {
         Vertical Slice Scope
       </h2>
       <p className="text-studio-text-muted max-w-2xl mb-8 leading-relaxed">
-        This build is a focused technology demonstration — not the full game. It
+        This build is a focused technology demonstration, not the full game. It
         proves real-time multi-agent narrative, trust systems, and generative
         media orchestration under live player input.
       </p>
