@@ -82,7 +82,7 @@ export function SiteHeader() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 -mr-2 text-studio-text-muted hover:text-studio-text"
+          className="md:hidden p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text"
           aria-label="Toggle navigation"
         >
           <svg
