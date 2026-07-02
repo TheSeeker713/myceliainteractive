@@ -77,8 +77,8 @@ export class GameErrorBoundary extends Component<Props, State> {
             onClick={() => window.location.reload()}
             className="px-6 py-3 text-xs font-mono tracking-widest uppercase"
             style={{
-              border: "1px solid #dc2626",
-              color: "#dc2626",
+              border: "1px solid var(--color-game-danger)",
+              color: "var(--color-game-danger)",
               background: "rgba(220,38,38,0.1)",
             }}
           >

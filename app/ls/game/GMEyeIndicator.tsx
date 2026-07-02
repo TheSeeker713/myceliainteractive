@@ -18,7 +18,7 @@ export function GMEyeIndicator({ visible }: { visible: boolean }) {
       >
         <path
           d="M2 14C2 14 10 2 22 2C34 2 42 14 42 14C42 14 34 26 22 26C10 26 2 14 2 14Z"
-          stroke="#dc2626"
+          stroke="var(--color-game-danger)"
           strokeWidth="1.5"
           fill="rgba(220, 38, 38, 0.08)"
         />
@@ -27,12 +27,12 @@ export function GMEyeIndicator({ visible }: { visible: boolean }) {
           cx="22"
           cy="14"
           r="5"
-          fill="#dc2626"
+          fill="var(--color-game-danger)"
           style={{
             animation: "gm-eye-iris-pulse 3.5s ease-in-out infinite",
           }}
         />
-        <circle cx="22" cy="14" r="2.5" fill="#0a0a0a" />
+        <circle cx="22" cy="14" r="2.5" fill="var(--color-game-danger-surface)" />
         <circle cx="19" cy="11.5" r="1" fill="rgba(255,255,255,0.5)" />
       </svg>
       <div

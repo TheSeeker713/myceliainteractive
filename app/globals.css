@@ -19,6 +19,10 @@
   --color-hero-magenta-500: #8b2cf5;
   --color-hero-cyan-500: #00c7ff;
 
+  /* Game namespace — danger/error state (ErrorOverlay, GMEyeIndicator, GameErrorBoundary). */
+  --color-game-danger: #dc2626;
+  --color-game-danger-surface: #0a0a0a;
+
   --animate-fade-in: fade-in 0.8s ease-out forwards;
   --animate-fade-in-up: fade-in-up 0.8s ease-out forwards;
 }

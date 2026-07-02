@@ -19,8 +19,8 @@ function ErrorToast({
     <div
       className="pointer-events-auto flex items-start gap-3 px-4 py-3 rounded font-mono text-xs"
       style={{
-        background: "#0a0a0a",
-        border: "1px solid #dc2626",
+        background: "var(--color-game-danger-surface)",
+        border: "1px solid var(--color-game-danger)",
         boxShadow: "0 0 12px rgba(220,38,38,0.25)",
         animation: "demo-end-fade-in 0.3s ease-out forwards",
       }}
@@ -64,8 +64,8 @@ export function ErrorModal({
       <div
         className="max-w-md w-full mx-6 p-8 font-mono"
         style={{
-          background: "#0a0a0a",
-          border: "1px solid #dc2626",
+          background: "var(--color-game-danger-surface)",
+          border: "1px solid var(--color-game-danger)",
           boxShadow: "0 0 40px rgba(220,38,38,0.3)",
         }}
       >
@@ -86,8 +86,8 @@ export function ErrorModal({
             onClick={onEndSession}
             className="px-4 py-2 text-xs font-mono tracking-widest uppercase border transition-colors"
             style={{
-              borderColor: "#dc2626",
-              color: "#dc2626",
+              borderColor: "var(--color-game-danger)",
+              color: "var(--color-game-danger)",
               background: "rgba(220,38,38,0.1)",
             }}
           >
