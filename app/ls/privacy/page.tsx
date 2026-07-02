@@ -3,8 +3,14 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Liminal Sin | Privacy Policy",
+  description:
+    "Privacy policy for the Liminal Sin interactive prototype, covering camera, microphone, and real-time session data handling.",
   alternates: {
     canonical: "/ls/privacy",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
