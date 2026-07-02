@@ -21,7 +21,7 @@ export function SiteMotionShell({ children }: SiteMotionShellProps) {
   return (
     <ScrollStageRootProvider>
       <VideoBackground enabled={enabled} />
-      <div className="relative z-[1]">{children}</div>
+      <div className="relative z-[var(--z-site-content)]">{children}</div>
     </ScrollStageRootProvider>
   );
 }

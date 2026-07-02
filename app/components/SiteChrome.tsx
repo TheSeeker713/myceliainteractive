@@ -62,7 +62,7 @@ export function SiteHeader() {
   );
 
   return (
-    <header className="site-gutter site-header-py sticky top-0 z-50 w-full border-b border-black/8 bg-white/75 backdrop-blur-xl">
+    <header className="site-gutter site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-black/8 bg-white/75 backdrop-blur-xl">
       <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-between gap-4">
         <Link href="/" aria-label="Mycelia Interactive LLC home">
           <Image
@@ -128,7 +128,7 @@ export function SiteFooter() {
   if (shouldHideChrome(pathname)) return null;
 
   return (
-    <footer className="site-gutter site-footer-py sticky bottom-0 z-50 w-full border-t border-black/8 bg-white/80 backdrop-blur-md mt-auto">
+    <footer className="site-gutter site-footer-py sticky bottom-0 z-[var(--z-site-chrome)] w-full border-t border-black/8 bg-white/80 backdrop-blur-md mt-auto">
       <div className="max-w-[var(--content-max-width)] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm text-studio-text-muted">
         <span>
           &copy; {new Date().getFullYear()} Mycelia Interactive LLC. All rights

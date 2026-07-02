@@ -188,7 +188,9 @@ export function ScrollStage({
   const evenSlotAriaHidden = primaryIsEvenSlot
     ? primaryAriaHidden
     : secondaryAriaHidden;
-  const evenSlotZ = primaryIsEvenSlot ? "z-10" : "z-20";
+  const evenSlotZ = primaryIsEvenSlot
+    ? "z-[var(--z-site-scroll-back)]"
+    : "z-[var(--z-site-scroll-front)]";
 
   const oddSlotIndex = primaryIsEvenSlot ? preMountIndex : layers.primaryIndex;
   const oddSlotSection = primaryIsEvenSlot ? preMountSection : primarySection;
@@ -196,7 +198,9 @@ export function ScrollStage({
   const oddSlotAriaHidden = primaryIsEvenSlot
     ? secondaryAriaHidden
     : primaryAriaHidden;
-  const oddSlotZ = primaryIsEvenSlot ? "z-20" : "z-10";
+  const oddSlotZ = primaryIsEvenSlot
+    ? "z-[var(--z-site-scroll-front)]"
+    : "z-[var(--z-site-scroll-back)]";
 
   return (
     <ScrollStagePublisher value={stageState}>

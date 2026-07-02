@@ -84,7 +84,7 @@ export function ScrollFoldScene({
             phase="out"
             variant={variant}
             use3D={enable3D}
-            className="z-10"
+            className="z-[var(--z-site-scroll-back)]"
           >
             <div className="site-gutter w-full">
               <div className="studio-section mx-auto">{outgoing}</div>
@@ -96,7 +96,11 @@ export function ScrollFoldScene({
           phase="in"
           variant={variant}
           use3D={enable3D}
-          className={outgoing ? "z-20" : "z-10"}
+          className={
+            outgoing
+              ? "z-[var(--z-site-scroll-front)]"
+              : "z-[var(--z-site-scroll-back)]"
+          }
         >
           <FoldSceneProvider progress={scrollYProgress}>
             <div className="site-gutter w-full h-full flex items-center">

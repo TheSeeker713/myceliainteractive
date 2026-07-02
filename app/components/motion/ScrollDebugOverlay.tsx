@@ -31,7 +31,7 @@ export function ScrollDebugOverlay({ stage }: ScrollDebugOverlayProps) {
     resolvedStage;
 
   return (
-    <div className="fixed bottom-4 left-4 z-[9999] rounded-lg bg-black/80 text-white text-xs font-mono p-3 pointer-events-none max-w-xs">
+    <div className="fixed bottom-4 left-4 z-[var(--z-site-debug)] rounded-lg bg-black/80 text-white text-xs font-mono p-3 pointer-events-none max-w-xs">
       <p>scroll: {scrollProgress.toFixed(3)}</p>
       <p>
         section: {sectionIndex + 1}/{sectionCount} t={localT.toFixed(3)}
