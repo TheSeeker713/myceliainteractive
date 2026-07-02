@@ -40,10 +40,10 @@ export function LiminalSinArchitectureContent() {
               stroke="rgba(45,106,126,0.3)"
               strokeWidth="1"
             />
-            <text x="70" y="105" textAnchor="middle" fontSize="11" fill="#171717">
+            <text x="70" y="105" textAnchor="middle" fontSize="11" fill="var(--color-studio-text)">
               Browser
             </text>
-            <text x="70" y="118" textAnchor="middle" fontSize="9" fill="#5c5c5c">
+            <text x="70" y="118" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
               Next.js / CF
             </text>
             <path
@@ -52,7 +52,7 @@ export function LiminalSinArchitectureContent() {
               strokeWidth="1"
               markerEnd="url(#arrow)"
             />
-            <text x="150" y="92" textAnchor="middle" fontSize="8" fill="#5c5c5c">
+            <text x="150" y="92" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
               WebSocket
             </text>
             <rect
@@ -65,13 +65,13 @@ export function LiminalSinArchitectureContent() {
               stroke="rgba(45,106,126,0.3)"
               strokeWidth="1"
             />
-            <text x="235" y="95" textAnchor="middle" fontSize="11" fill="#171717">
+            <text x="235" y="95" textAnchor="middle" fontSize="11" fill="var(--color-studio-text)">
               Cloud Run
             </text>
-            <text x="235" y="108" textAnchor="middle" fontSize="9" fill="#5c5c5c">
+            <text x="235" y="108" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
               Gemini Live
             </text>
-            <text x="235" y="121" textAnchor="middle" fontSize="9" fill="#5c5c5c">
+            <text x="235" y="121" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
               Multi-agent
             </text>
             <path
@@ -94,7 +94,7 @@ export function LiminalSinArchitectureContent() {
               stroke="rgba(45,106,126,0.2)"
               strokeWidth="0.8"
             />
-            <text x="370" y="55" textAnchor="middle" fontSize="8" fill="#5c5c5c">
+            <text x="370" y="55" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
               Imagen 4
             </text>
             <rect
@@ -107,7 +107,7 @@ export function LiminalSinArchitectureContent() {
               stroke="rgba(45,106,126,0.2)"
               strokeWidth="0.8"
             />
-            <text x="370" y="155" textAnchor="middle" fontSize="8" fill="#5c5c5c">
+            <text x="370" y="155" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
               Veo 3.1
             </text>
             <defs>
