@@ -156,6 +156,16 @@ export function ScrollStage({
     return getSectionLayers(index, localT, sectionCount).secondaryOpacity;
   });
 
+  // Only the dominant (opacity > 0.5) layer receives pointer events. This
+  // stops a fully transparent pre-mounted layer sitting in the front z-slot
+  // from swallowing clicks on the visible section beneath it.
+  const primaryPointerEvents = useTransform(primaryOpacity, (o) =>
+    o > 0.5 ? "auto" : "none",
+  );
+  const secondaryPointerEvents = useTransform(secondaryOpacity, (o) =>
+    o > 0.5 ? "auto" : "none",
+  );
+
   const { index, localT } = getSectionFromProgress(
     stageState.scrollProgress,
     sectionCount,
@@ -185,6 +195,9 @@ export function ScrollStage({
   const evenSlotIndex = primaryIsEvenSlot ? layers.primaryIndex : preMountIndex;
   const evenSlotSection = primaryIsEvenSlot ? primarySection : preMountSection;
   const evenSlotOpacity = primaryIsEvenSlot ? primaryOpacity : secondaryOpacity;
+  const evenSlotPointerEvents = primaryIsEvenSlot
+    ? primaryPointerEvents
+    : secondaryPointerEvents;
   const evenSlotAriaHidden = primaryIsEvenSlot
     ? primaryAriaHidden
     : secondaryAriaHidden;
@@ -195,6 +208,9 @@ export function ScrollStage({
   const oddSlotIndex = primaryIsEvenSlot ? preMountIndex : layers.primaryIndex;
   const oddSlotSection = primaryIsEvenSlot ? preMountSection : primarySection;
   const oddSlotOpacity = primaryIsEvenSlot ? secondaryOpacity : primaryOpacity;
+  const oddSlotPointerEvents = primaryIsEvenSlot
+    ? secondaryPointerEvents
+    : primaryPointerEvents;
   const oddSlotAriaHidden = primaryIsEvenSlot
     ? secondaryAriaHidden
     : primaryAriaHidden;
@@ -212,7 +228,7 @@ export function ScrollStage({
         <div className="sticky top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] w-full overflow-hidden">
           <motion.div
             className={cn("absolute inset-0", evenSlotZ)}
-            style={{ opacity: evenSlotOpacity }}
+            style={{ opacity: evenSlotOpacity, pointerEvents: evenSlotPointerEvents }}
             aria-hidden={evenSlotAriaHidden}
           >
             {evenSlotSection && (
@@ -228,7 +244,7 @@ export function ScrollStage({
 
           <motion.div
             className={cn("absolute inset-0", oddSlotZ)}
-            style={{ opacity: oddSlotOpacity }}
+            style={{ opacity: oddSlotOpacity, pointerEvents: oddSlotPointerEvents }}
             aria-hidden={oddSlotAriaHidden}
           >
             {oddSlotSection && (
