@@ -34,6 +34,39 @@
   --header-h: 4.5rem;
   --footer-h: 5.375rem;
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Z-index scale — site namespace (studio chrome, scroll stage, layout). */
+  --z-site-content: 1;
+  --z-site-scroll-back: 10;
+  --z-site-scroll-front: 20;
+  --z-site-chrome: 50;
+  --z-site-skip-link: 100;
+  --z-site-debug: 9999;
+
+  /* Z-index scale — game namespace (app/ls/game + game-effects.css).
+     The site and game namespaces never stack against each other at
+     runtime, since the game replaces the site chrome entirely on
+     /ls/play, but they are kept separate to avoid any future coupling. */
+  --z-game-base: 0;
+  --z-game-decoration: 1;
+  --z-game-scene-layer: 5;
+  --z-game-vignette: 10;
+  --z-game-noise: 20;
+  --z-game-hint: 26;
+  --z-game-panel: 28;
+  --z-game-scanline: 30;
+  --z-game-glitch: 31;
+  --z-game-hud-widget: 40;
+  --z-game-collectible: 45;
+  --z-game-status: 50;
+  --z-game-status-detail: 55;
+  --z-game-chrome: 60;
+  --z-game-error-detail: 65;
+  --z-game-error: 70;
+  --z-game-intro: 80;
+  --z-game-easter-egg: 8888;
+  --z-game-easter-egg-text: 8889;
+  --z-game-topmost: 9999;
 }
 
 @media (min-width: 640px) {
