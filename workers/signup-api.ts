@@ -649,65 +649,103 @@ async function retryFailedAccessEmails(env: Env): Promise<void> {
   }
 }
 
+async function handleRequest(request: Request, env: Env): Promise<Response> {
+  const url = new URL(request.url);
+
+  if (url.hostname === "myceliainteractive.com") {
+    url.hostname = "www.myceliainteractive.com";
+    return Response.redirect(url.toString(), 301);
+  }
+
+  if (url.pathname === "/api/signup" && request.method === "POST") {
+    return handleSignup(request, env);
+  }
+  if (url.pathname === "/api/signup") {
+    return Response.json({ error: "Method not allowed" }, { status: 405 });
+  }
+
+  if (url.pathname === "/api/access/grant" && request.method === "POST") {
+    return handleAccessGrant(request, env);
+  }
+  if (url.pathname === "/api/access/grant") {
+    return Response.json({ error: "Method not allowed" }, { status: 405 });
+  }
+
+  if (url.pathname === "/api/access/revoke" && request.method === "POST") {
+    return handleAccessRevoke(request, env);
+  }
+  if (url.pathname === "/api/access/revoke") {
+    return Response.json({ error: "Method not allowed" }, { status: 405 });
+  }
+
+  if (url.pathname === "/api/set-game-live" && request.method === "POST") {
+    return handleSetGameLive();
+  }
+  if (url.pathname === "/api/set-game-live") {
+    return Response.json({ error: "Method not allowed" }, { status: 405 });
+  }
+
+  if (url.pathname === "/api/ai/image" && request.method === "GET") {
+    return handleAiImage(request, env);
+  }
+  if (url.pathname === "/api/ai/image") {
+    return Response.json({ error: "Method not allowed" }, { status: 405 });
+  }
+
+  if (url.pathname === "/api/log-error" && request.method === "POST") {
+    return handleLogError(request, env);
+  }
+  if (url.pathname === "/api/log-error") {
+    return Response.json({ error: "Method not allowed" }, { status: 405 });
+  }
+
+  if (url.pathname === "/api/access/validate" && request.method === "GET") {
+    return handleValidateAccess(request, env);
+  }
+  if (url.pathname === "/api/access/validate") {
+    return Response.json({ error: "Method not allowed" }, { status: 405 });
+  }
+
+  return env.ASSETS.fetch(request);
+}
+
+// Security headers applied uniformly to every response leaving this Worker.
+//
+// CSP and Cross-Origin-Embedder-Policy/Cross-Origin-Opener-Policy are
+// intentionally NOT set here. This site embeds a Gemini Live WebSocket
+// connection, loads game media from a GCS-hosted bucket, and runs a
+// third-party game client whose full set of required origins (script,
+// connect, media, frame) has not yet been enumerated through live testing.
+// A CSP or COEP/COOP added without that testing would likely break the
+// Gemini Live session, GCS media loading, or the game client silently in
+// production. Revisit once those origins have been confirmed against a
+// live test pass.
+function withSecurityHeaders(response: Response): Response {
+  const headers = new Headers(response.headers);
+
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("X-Frame-Options", "DENY");
+  headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  headers.set(
+    "Strict-Transport-Security",
+    "max-age=63072000; includeSubDomains",
+  );
+  headers.set(
+    "Permissions-Policy",
+    "camera=(self), microphone=(self), autoplay=(self)",
+  );
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 const handler = {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
-
-    if (url.hostname === "myceliainteractive.com") {
-      url.hostname = "www.myceliainteractive.com";
-      return Response.redirect(url.toString(), 301);
-    }
-
-    if (url.pathname === "/api/signup" && request.method === "POST") {
-      return handleSignup(request, env);
-    }
-    if (url.pathname === "/api/signup") {
-      return Response.json({ error: "Method not allowed" }, { status: 405 });
-    }
-
-    if (url.pathname === "/api/access/grant" && request.method === "POST") {
-      return handleAccessGrant(request, env);
-    }
-    if (url.pathname === "/api/access/grant") {
-      return Response.json({ error: "Method not allowed" }, { status: 405 });
-    }
-
-    if (url.pathname === "/api/access/revoke" && request.method === "POST") {
-      return handleAccessRevoke(request, env);
-    }
-    if (url.pathname === "/api/access/revoke") {
-      return Response.json({ error: "Method not allowed" }, { status: 405 });
-    }
-
-    if (url.pathname === "/api/set-game-live" && request.method === "POST") {
-      return handleSetGameLive();
-    }
-    if (url.pathname === "/api/set-game-live") {
-      return Response.json({ error: "Method not allowed" }, { status: 405 });
-    }
-
-    if (url.pathname === "/api/ai/image" && request.method === "GET") {
-      return handleAiImage(request, env);
-    }
-    if (url.pathname === "/api/ai/image") {
-      return Response.json({ error: "Method not allowed" }, { status: 405 });
-    }
-
-    if (url.pathname === "/api/log-error" && request.method === "POST") {
-      return handleLogError(request, env);
-    }
-    if (url.pathname === "/api/log-error") {
-      return Response.json({ error: "Method not allowed" }, { status: 405 });
-    }
-
-    if (url.pathname === "/api/access/validate" && request.method === "GET") {
-      return handleValidateAccess(request, env);
-    }
-    if (url.pathname === "/api/access/validate") {
-      return Response.json({ error: "Method not allowed" }, { status: 405 });
-    }
-
-    return env.ASSETS.fetch(request);
+    const response = await handleRequest(request, env);
+    return withSecurityHeaders(response);
   },
 
   async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
