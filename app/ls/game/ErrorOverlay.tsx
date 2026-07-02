@@ -58,7 +58,7 @@ export function ErrorModal({
 }) {
   return (
     <div
-      className="absolute inset-0 z-[70] flex items-center justify-center"
+      className="absolute inset-0 z-[var(--z-game-error)] flex items-center justify-center"
       style={{ background: "rgba(0,0,0,0.92)" }}
     >
       <div
@@ -130,7 +130,7 @@ export function ErrorOverlay({
     <>
       {/* Toast stack — top-center, recoverable errors */}
       {recoverableErrors.length > 0 && (
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-[65] flex flex-col gap-2 w-80 pointer-events-none">
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-[var(--z-game-error-detail)] flex flex-col gap-2 w-80 pointer-events-none">
           {recoverableErrors.map((err) => (
             <ErrorToast key={err.id} error={err} onDismiss={onDismiss} />
           ))}

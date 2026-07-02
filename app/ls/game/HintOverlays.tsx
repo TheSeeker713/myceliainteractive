@@ -10,7 +10,7 @@ export function HintOverlays({
   return (
     <>
       {showHint && (
-        <div className="absolute inset-0 z-25 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 z-[var(--z-game-hint)] flex items-center justify-center pointer-events-none">
           <p
             className="font-mono text-sm tracking-[0.3em] uppercase"
             style={{
@@ -24,7 +24,7 @@ export function HintOverlays({
       )}
 
       {serverHint && (
-        <div className="absolute inset-0 z-[26] flex items-end justify-center pb-16 pointer-events-none">
+        <div className="absolute inset-0 z-[var(--z-game-hint)] flex items-end justify-center pb-16 pointer-events-none">
           <p
             className="font-mono text-sm tracking-[0.2em] uppercase text-center max-w-md px-4"
             style={{

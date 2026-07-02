@@ -188,7 +188,7 @@ export function IntroSequence({
 
   return (
     <div
-      className="absolute inset-0 z-[80] bg-black flex items-center justify-center select-none"
+      className="absolute inset-0 z-[var(--z-game-intro)] bg-black flex items-center justify-center select-none"
       style={{
         opacity: visible ? 1 : 0,
         transition: "opacity 1.5s ease-out",

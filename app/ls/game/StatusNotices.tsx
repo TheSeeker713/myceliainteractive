@@ -18,7 +18,7 @@ export function StatusNotices({
   return (
     <>
       {status !== "open" && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-1 rounded bg-black/70 border border-red-500/40 text-red-400 text-xs font-mono tracking-widest uppercase">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[var(--z-game-status)] px-4 py-1 rounded bg-black/70 border border-red-500/40 text-red-400 text-xs font-mono tracking-widest uppercase">
           {status === "connecting" && "Establishing Connection…"}
           {status === "closed" && "Signal Lost"}
           {status === "error" && "Connection Error: No Backend"}
@@ -27,7 +27,7 @@ export function StatusNotices({
 
       {cameraObscuredVisible && !webcamDenied && sessionActive && (
         <div
-          className="absolute top-16 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-3 px-4 py-2 font-mono text-xs"
+          className="absolute top-16 left-1/2 -translate-x-1/2 z-[var(--z-game-status-detail)] flex items-center gap-3 px-4 py-2 font-mono text-xs"
           style={{
             background: "rgba(10,10,10,0.9)",
             border: "1px solid rgba(220,38,38,0.5)",
@@ -44,7 +44,7 @@ export function StatusNotices({
 
       {webcamDeniedVisible && sessionActive && (
         <div
-          className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[55] px-4 py-2 font-mono text-[10px] tracking-widest uppercase"
+          className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[var(--z-game-status-detail)] px-4 py-2 font-mono text-[10px] tracking-widest uppercase"
           style={{
             background: "rgba(10,10,10,0.8)",
             border: "1px solid rgba(220,38,38,0.3)",

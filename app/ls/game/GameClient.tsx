@@ -112,7 +112,7 @@ function GameInner() {
 
       {sessionPhase === "waiting" && (
         <div
-          className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black px-6"
+          className="absolute inset-0 z-[var(--z-game-status)] flex flex-col items-center justify-center gap-6 bg-black px-6"
           style={{
             fontFamily: "var(--font-geist-mono), 'Courier New', monospace",
           }}

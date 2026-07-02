@@ -25,7 +25,7 @@ export function DemoEndOverlay({
 
   return (
     <div
-      className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-black/80"
+      className="absolute inset-0 z-[var(--z-game-chrome)] flex flex-col items-center justify-center bg-black/80"
       style={{ animation: "demo-end-fade-in 1.5s ease-in forwards" }}
     >
       <h1

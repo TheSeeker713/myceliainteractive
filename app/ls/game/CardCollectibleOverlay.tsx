@@ -23,7 +23,7 @@ export function CardCollectibleOverlay({
 
   return (
     <div
-      className="absolute bottom-8 right-8 z-[45] flex flex-col items-center gap-3 pointer-events-auto"
+      className="absolute bottom-8 right-8 z-[var(--z-game-collectible)] flex flex-col items-center gap-3 pointer-events-auto"
       style={{
         animation: cardCollecting
           ? "card-slide-out 0.5s ease-in forwards"

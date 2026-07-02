@@ -16,7 +16,7 @@ export function PlayerSubtitles({ active }: { active: boolean }) {
 
   return (
     <div
-      className="absolute bottom-[8%] left-1/2 -translate-x-1/2 z-30 pointer-events-none max-w-[80%] transition-opacity duration-500 ease-in-out"
+      className="absolute bottom-[8%] left-1/2 -translate-x-1/2 z-[var(--z-game-scanline)] pointer-events-none max-w-[80%] transition-opacity duration-500 ease-in-out"
       style={{ opacity: visible ? 1 : 0 }}
     >
       <p

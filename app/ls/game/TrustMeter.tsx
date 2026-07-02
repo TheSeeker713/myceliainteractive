@@ -15,7 +15,7 @@ export function TrustMeter({
 
   return (
     <div
-      className="absolute bottom-6 right-6 z-40 font-mono text-xs text-purple-300/80 flex flex-col items-end gap-1"
+      className="absolute bottom-6 right-6 z-[var(--z-game-hud-widget)] font-mono text-xs text-purple-300/80 flex flex-col items-end gap-1"
       style={{ animation: "trust-meter-pulse 5s ease-in-out infinite" }}
     >
       <span className="tracking-widest uppercase text-[10px] text-purple-400/50">

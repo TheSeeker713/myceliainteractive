@@ -30,7 +30,7 @@ export function PanelOverlay({
 
   return (
     <div
-      className="absolute inset-0 z-[28] pointer-events-none"
+      className="absolute inset-0 z-[var(--z-game-panel)] pointer-events-none"
       style={{
         opacity: clicked ? 0 : 1,
         transition: "opacity 0.4s ease-out",

@@ -42,7 +42,7 @@ export function GamePageShell({ children }: { children: React.ReactNode }) {
 
       {/* ── Header bar ── */}
       <header
-        className="fixed top-0 left-0 right-0 z-[60] flex items-center justify-between px-4 py-2 bg-black/60 backdrop-blur-sm border-b border-purple-900/30 transition-opacity duration-500"
+        className="fixed top-0 left-0 right-0 z-[var(--z-game-chrome)] flex items-center justify-between px-4 py-2 bg-black/60 backdrop-blur-sm border-b border-purple-900/30 transition-opacity duration-500"
         style={{ opacity: headerVisible ? 1 : 0, pointerEvents: headerVisible ? "auto" : "none" }}
       >
         <Link href="/ls" aria-label="Return to Liminal Sin landing">
@@ -60,7 +60,7 @@ export function GamePageShell({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* ── Footer bar ── */}
-      <footer className="fixed bottom-0 left-0 right-0 z-[60] flex flex-wrap items-center justify-between px-4 py-1.5 bg-black/60 backdrop-blur-sm border-t border-purple-900/30 text-[10px] text-purple-300/50 tracking-wide font-mono">
+      <footer className="fixed bottom-0 left-0 right-0 z-[var(--z-game-chrome)] flex flex-wrap items-center justify-between px-4 py-1.5 bg-black/60 backdrop-blur-sm border-t border-purple-900/30 text-[10px] text-purple-300/50 tracking-wide font-mono">
         <span>&copy; {new Date().getFullYear()} Mycelia Interactive</span>
         <span className="uppercase">Prototype: Not Final</span>
       </footer>

@@ -6,7 +6,7 @@ export function GMEyeIndicator({ visible }: { visible: boolean }) {
   return (
     <div
       aria-hidden="true"
-      className="absolute top-5 right-5 z-40"
+      className="absolute top-5 right-5 z-[var(--z-game-hud-widget)]"
       style={{ animation: "gm-eye-breathe 3.5s ease-in-out infinite" }}
     >
       <svg
