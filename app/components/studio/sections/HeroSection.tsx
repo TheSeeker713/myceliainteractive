@@ -10,15 +10,15 @@ export function HeroContent() {
     <SceneCard className="text-center">
       <div className="space-y-5 sm:space-y-6">
         <div className="space-y-2 sm:space-y-3">
-          <h1 className="text-[clamp(2.25rem,8vw,5rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-[#0f0f14]/95 text-balance">
+          <h1 className="text-[clamp(2.25rem,8vw,5rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-[var(--color-studio-text-on-glass)]/95 text-balance">
             Mycelia Interactive
           </h1>
-          <p className="text-[clamp(1.25rem,4vw,2rem)] text-[#1e1e28]/65">
+          <p className="text-[clamp(1.25rem,4vw,2rem)] text-[var(--color-studio-subtitle-on-glass)]/65">
             LLC
           </p>
         </div>
 
-        <p className="max-w-prose mx-auto text-[clamp(1rem,2.5vw,1.25rem)] text-[#14141e]/78 leading-relaxed text-balance">
+        <p className="max-w-prose mx-auto text-[clamp(1rem,2.5vw,1.25rem)] text-[var(--color-studio-body-on-glass)]/78 leading-relaxed text-balance">
           Immersive interactive entertainment where the audience participates.
           Characters hear you. Stories respond in real time.
         </p>

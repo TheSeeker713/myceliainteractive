@@ -23,6 +23,11 @@
   --color-game-danger: #dc2626;
   --color-game-danger-surface: #0a0a0a;
 
+  /* Studio namespace — glass-legible text tier for HeroSection's frosted-glass card (plan.md spec). */
+  --color-studio-text-on-glass: #0f0f14;
+  --color-studio-subtitle-on-glass: #1e1e28;
+  --color-studio-body-on-glass: #14141e;
+
   --animate-fade-in: fade-in 0.8s ease-out forwards;
   --animate-fade-in-up: fade-in-up 0.8s ease-out forwards;
 }
