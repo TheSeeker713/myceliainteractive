@@ -47,11 +47,11 @@ export function ContactContent() {
           </Button>
         </Link>
         <a
-          href="mailto:contact@myceliainteractive.com?subject=AI%20%26%20Cloud%20Credits%20Collaboration"
+          href="mailto:contact@myceliainteractive.com?subject=Collaboration%20Inquiry"
           className="w-full sm:w-auto"
         >
           <Button variant="secondary" className="w-full sm:w-auto">
-            Inquire About AI &amp; Cloud Credits
+            Inquire About Collaboration
           </Button>
         </a>
       </div>

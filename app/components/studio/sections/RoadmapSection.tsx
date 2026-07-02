@@ -53,11 +53,11 @@ export function RoadmapContent() {
           ))}
         </ul>
         <a
-          href="mailto:contact@myceliainteractive.com?subject=AI%20%26%20Cloud%20Credits%20Collaboration"
+          href="mailto:contact@myceliainteractive.com?subject=Collaboration%20Inquiry"
           className="mt-5 inline-block w-full sm:w-auto"
         >
           <Button className="w-full sm:w-auto">
-            Inquire About AI &amp; Cloud Credits Collaboration
+            Inquire About Cloud Credits
           </Button>
         </a>
       </div>
