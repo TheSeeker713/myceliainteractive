@@ -36,6 +36,7 @@
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Z-index scale — site namespace (studio chrome, scroll stage, layout). */
+  --z-site-backdrop: -10;
   --z-site-content: 1;
   --z-site-scroll-back: 10;
   --z-site-scroll-front: 20;

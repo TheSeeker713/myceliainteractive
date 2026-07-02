@@ -208,7 +208,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   if (reducedMotion || hasError) {
     return (
       <div
-        className="fixed inset-0 z-[-10]"
+        className="fixed inset-0 z-[var(--z-site-backdrop)]"
         style={{
           backgroundImage: `url(${POSTER_SRC})`,
           backgroundSize: "cover",
@@ -221,7 +221,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
 
   if (useFallback) {
     return (
-      <div className="fixed inset-0 z-[-10]" aria-hidden="true">
+      <div className="fixed inset-0 z-[var(--z-site-backdrop)]" aria-hidden="true">
         <video
           autoPlay
           muted
@@ -237,7 +237,7 @@ export function VideoBackground({ enabled = true }: VideoBackgroundProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-[-10]" aria-hidden="true">
+    <div className="fixed inset-0 z-[var(--z-site-backdrop)]" aria-hidden="true">
       {!ready && (
         <div
           className="absolute inset-0"
