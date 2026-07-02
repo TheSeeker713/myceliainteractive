@@ -23,7 +23,7 @@ export function Button({
         "inline-flex items-center justify-center rounded-lg font-medium transition-[colors,transform] duration-200 motion-safe:hover:scale-[1.02] motion-safe:active:scale-[0.98]",
         sizeClasses[size],
         variant === "primary" &&
-          "bg-studio-accent text-white hover:bg-[#245a6b]",
+          "bg-studio-accent text-white hover:bg-[var(--color-studio-accent-hover)]",
         variant === "secondary" &&
           "border border-black/10 bg-white text-studio-text hover:bg-studio-bg-muted",
         className,

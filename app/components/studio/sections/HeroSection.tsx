@@ -27,7 +27,7 @@ export function HeroContent() {
           <Link href="/ls#access" className="w-full sm:w-auto sm:min-w-[12rem]">
             <Button
               size="lg"
-              className="w-full min-h-11 sm:min-h-12 bg-[#1e5a64]/85 backdrop-blur-md border border-white/20 hover:bg-[#1e5a64]/95 shadow-[0_4px_16px_rgba(30,90,100,0.3)]"
+              className="w-full min-h-11 sm:min-h-12 bg-[var(--color-studio-accent)]/85 backdrop-blur-md border border-white/20 hover:bg-[var(--color-studio-accent)]/95 shadow-[0_4px_16px_rgba(30,90,100,0.3)]"
             >
               Request Private Access to Liminal Sin
             </Button>
