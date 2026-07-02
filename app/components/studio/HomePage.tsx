@@ -9,7 +9,6 @@ import {
 import { useHashScrollToSection } from "@/app/components/motion/useHashScrollToSection";
 import { CardSlot } from "@/app/components/studio/CardSlot";
 import { AboutContent } from "@/app/components/studio/sections/AboutSection";
-import { ContactContent } from "@/app/components/studio/sections/ContactSection";
 import { HeroContent } from "@/app/components/studio/sections/HeroSection";
 import { MissionContent } from "@/app/components/studio/sections/MissionSection";
 import {
@@ -17,8 +16,6 @@ import {
   ProjectsContent,
 } from "@/app/components/studio/sections/ProjectsSection";
 import { ProofPointsContent } from "@/app/components/studio/sections/ProofPointsStrip";
-import { RoadmapContent } from "@/app/components/studio/sections/RoadmapSection";
-import { TeamContent } from "@/app/components/studio/sections/TeamSection";
 import { PROJECTS } from "@/app/components/studio/data";
 
 function HomePageStatic() {
@@ -27,11 +24,6 @@ function HomePageStatic() {
       <section className="studio-section pt-16 sm:pt-24 min-h-[80dvh] flex items-center">
         <CardSlot>
           <HeroContent />
-        </CardSlot>
-      </section>
-      <section className="studio-section">
-        <CardSlot>
-          <ProofPointsContent />
         </CardSlot>
       </section>
       <section className="studio-section">
@@ -47,19 +39,9 @@ function HomePageStatic() {
       <section id="projects" className="studio-section scroll-mt-24 space-y-6">
         <ProjectsContent />
       </section>
-      <section id="roadmap" className="studio-section scroll-mt-24">
-        <CardSlot scrollable>
-          <RoadmapContent />
-        </CardSlot>
-      </section>
       <section className="studio-section">
         <CardSlot>
-          <TeamContent />
-        </CardSlot>
-      </section>
-      <section className="studio-section">
-        <CardSlot>
-          <ContactContent />
+          <ProofPointsContent />
         </CardSlot>
       </section>
     </div>
@@ -76,13 +58,6 @@ export function HomePage() {
         content: (
           <CardSlot>
             <HeroContent />
-          </CardSlot>
-        ),
-      },
-      {
-        content: (
-          <CardSlot>
-            <ProofPointsContent />
           </CardSlot>
         ),
       },
@@ -130,24 +105,9 @@ export function HomePage() {
         ),
       },
       {
-        id: "roadmap",
-        content: (
-          <CardSlot scrollable>
-            <RoadmapContent />
-          </CardSlot>
-        ),
-      },
-      {
         content: (
           <CardSlot>
-            <TeamContent />
-          </CardSlot>
-        ),
-      },
-      {
-        content: (
-          <CardSlot>
-            <ContactContent />
+            <ProofPointsContent />
           </CardSlot>
         ),
       },

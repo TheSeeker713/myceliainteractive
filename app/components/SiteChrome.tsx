@@ -29,13 +29,6 @@ export function SiteHeader() {
         Projects
       </Link>
       <Link
-        href="/#roadmap"
-        className="text-studio-text-muted hover:text-studio-text transition-colors"
-        onClick={() => setMobileOpen(false)}
-      >
-        Roadmap
-      </Link>
-      <Link
         href="/ls"
         className="text-studio-text-muted hover:text-studio-text transition-colors"
         onClick={() => setMobileOpen(false)}

@@ -9,7 +9,6 @@ import {
 
 const HASH_TO_SECTION_ID: Record<string, string> = {
   projects: "projects",
-  roadmap: "roadmap",
 };
 
 function readHeaderHeightPx(): number {
