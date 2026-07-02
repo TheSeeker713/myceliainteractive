@@ -52,12 +52,17 @@ export default function SignupForms() {
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-studio-text mb-1">
+            <label
+              htmlFor="signup-name"
+              className="block text-sm font-medium text-studio-text mb-1"
+            >
               Name
             </label>
             <input
+              id="signup-name"
               type="text"
               required
+              autoComplete="name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-studio-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-studio-accent/30"
@@ -65,12 +70,17 @@ export default function SignupForms() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-studio-text mb-1">
+            <label
+              htmlFor="signup-email"
+              className="block text-sm font-medium text-studio-text mb-1"
+            >
               Email
             </label>
             <input
+              id="signup-email"
               type="email"
               required
+              autoComplete="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className="w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-studio-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-studio-accent/30"
