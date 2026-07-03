@@ -10,9 +10,9 @@ import { SceneCard } from "@/app/components/studio/SceneCard";
 export function RoadmapContent() {
   return (
     <SceneCard>
-      <h2 className="text-2xl font-semibold text-studio-text mb-3">
+      <h1 className="text-2xl font-semibold text-studio-text mb-3">
         MVP Roadmap &amp; AI/Cloud Resource Needs
-      </h2>
+      </h1>
       <p className="text-studio-text-muted mb-6 leading-relaxed">
         Near-term milestones and what targeted cloud credits would enable for
         our real-time agent and generative media stack.

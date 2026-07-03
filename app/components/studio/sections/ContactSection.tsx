@@ -7,7 +7,7 @@ import { SceneCard } from "@/app/components/studio/SceneCard";
 export function ContactContent() {
   return (
     <SceneCard className="space-y-4 text-studio-text-muted">
-      <h2 className="text-2xl font-semibold text-studio-text">Contact</h2>
+      <h1 className="text-2xl font-semibold text-studio-text">Contact</h1>
       <p>
         <span className="font-medium text-studio-text">General inquiries:</span>{" "}
         <a
