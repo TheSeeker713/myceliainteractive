@@ -23,42 +23,42 @@ export function SiteHeader() {
     <>
       <Link
         href="/#projects"
-        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
         onClick={() => setMobileOpen(false)}
       >
         Projects
       </Link>
       <Link
         href="/ls"
-        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
         onClick={() => setMobileOpen(false)}
       >
         Liminal Sin
       </Link>
       <Link
         href="/roadmap"
-        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
         onClick={() => setMobileOpen(false)}
       >
         Roadmap
       </Link>
       <Link
         href="/vision"
-        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
         onClick={() => setMobileOpen(false)}
       >
         10-Year Vision
       </Link>
       <Link
         href="/team"
-        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
         onClick={() => setMobileOpen(false)}
       >
         Team
       </Link>
       <Link
         href="/contact"
-        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
         onClick={() => setMobileOpen(false)}
       >
         Contact
@@ -67,7 +67,7 @@ export function SiteHeader() {
         href="https://www.thes33k3r.com"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
         onClick={() => setMobileOpen(false)}
       >
         The S33k3r
@@ -128,7 +128,7 @@ export function SiteHeader() {
       {/* Mobile Menu Dropdown */}
       {mobileOpen && (
         <div className="lg:hidden border-t border-black/8 bg-white/95 backdrop-blur-xl">
-          <nav className="site-gutter py-4 flex flex-col gap-3 text-sm">
+          <nav className="site-gutter py-4 flex flex-col gap-0 text-sm">
             {navLinks}
           </nav>
         </div>
