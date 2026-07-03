@@ -13,7 +13,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
-    md: "px-5 py-2.5 text-sm",
+    md: "px-5 py-2.5 text-sm min-h-11",
     lg: "px-7 py-3.5 text-base",
   };
 
