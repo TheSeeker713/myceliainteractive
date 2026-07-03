@@ -36,11 +36,32 @@ export function SiteHeader() {
         Liminal Sin
       </Link>
       <Link
+        href="/roadmap"
+        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        onClick={() => setMobileOpen(false)}
+      >
+        Roadmap
+      </Link>
+      <Link
         href="/vision"
         className="text-studio-text-muted hover:text-studio-text transition-colors"
         onClick={() => setMobileOpen(false)}
       >
         10-Year Vision
+      </Link>
+      <Link
+        href="/team"
+        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        onClick={() => setMobileOpen(false)}
+      >
+        Team
+      </Link>
+      <Link
+        href="/contact"
+        className="text-studio-text-muted hover:text-studio-text transition-colors"
+        onClick={() => setMobileOpen(false)}
+      >
+        Contact
       </Link>
       <a
         href="https://www.thes33k3r.com"
@@ -68,14 +89,14 @@ export function SiteHeader() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-5 text-sm">
+        <nav className="hidden lg:flex items-center gap-5 text-sm">
           {navLinks}
         </nav>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text"
+          className="lg:hidden p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text"
           aria-label="Toggle navigation"
         >
           <svg
@@ -106,7 +127,7 @@ export function SiteHeader() {
 
       {/* Mobile Menu Dropdown */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-black/8 bg-white/95 backdrop-blur-xl">
+        <div className="lg:hidden border-t border-black/8 bg-white/95 backdrop-blur-xl">
           <nav className="site-gutter py-4 flex flex-col gap-3 text-sm">
             {navLinks}
           </nav>

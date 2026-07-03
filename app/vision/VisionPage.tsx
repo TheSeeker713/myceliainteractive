@@ -54,7 +54,7 @@ function VisionDisclaimerContent() {
         This page describes an aspirational, proposed future direction. It is{" "}
         <strong className="text-studio-text">not</strong> part of the near-term
         MVP or 24-month roadmap. For current milestones, see the{" "}
-        <Link href="/#roadmap" className="text-studio-accent hover:underline">
+        <Link href="/roadmap" className="text-studio-accent hover:underline">
           MVP Roadmap
         </Link>
         .
@@ -121,7 +121,7 @@ function VisionConnectContent() {
     <>
       <h2 className="text-2xl font-semibold mb-4">Connect</h2>
       <div className="flex flex-col sm:flex-row gap-3">
-        <Link href="/#roadmap">
+        <Link href="/roadmap">
           <Button variant="secondary">View MVP Roadmap</Button>
         </Link>
         <a href="mailto:contact@myceliainteractive.com">
