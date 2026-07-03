@@ -2,7 +2,7 @@
 
 **Purpose:** Fast-reference record of settled conventions, intentional deferrals, and accepted tradeoffs. Decisions/state only — no narrative (see `PROJECT_HISTORY_AND_ROADMAP_*.md` for the story).
 **Maintenance:** Update at the END of every CDP that establishes a new convention, defers something, or resolves a previously-deferred item. Keep entries to 1–3 lines. Do not let it go stale.
-**Last updated:** July 3, 2026 (commit `3933439`)
+**Last updated:** July 3, 2026 (commit `2245b5c`)
 
 ---
 
@@ -27,11 +27,11 @@
 ## Recently resolved
 
 - **Sitewide unlayered CSS reset (fixed `3933439`):** `* { margin: 0; padding: 0; box-sizing: border-box; }` in `globals.css` was unlayered author CSS, which always beats `@layer utilities` regardless of source order — it was silently zeroing nearly every Tailwind margin/padding utility sitewide. Wrapped in `@layer base`; verified via clean rebuild, live probe re-test, full 6-item mobile re-audit, reduced-motion fallback, and `/vision`/form/`/ls/game`/`/ls/play` spot-checks. Surfaced two follow-on items, both logged below: the 375px hero H1 wrap and confirmation that the mobile nav dropdown's 20px tap targets are a separate, unrelated gap.
+- **`/ls` FPV carousel horizontal overflow (fixed `2245b5c`, mobile-fix M1):** `FPVBandContent`'s `-mx-[clamp(1.5rem,6vw,4rem)]` negative margin had no compensating parent padding, and `w-full` locked the box width so the auto-margin full-bleed math couldn't resolve — left edge clipped ~24–64px off-screen, right edge fell equally short, masked by `body { overflow-x: hidden }`. Wrapped in `.ls-gutter` (same clamp expression) and dropped `w-full` from the inner div. Verified symmetric, edge-to-edge rendering (zero offenders in a full-page overflow scan) at 375/390/428/768/1440px.
 
 ## Accepted current tradeoffs / known gaps (live in production right now)
 
 - **`Button` `md` size ~40px tall (< 44px touch target)** sitewide, except the homepage hero (`size="lg"` + `min-h-11`). Pending the mobile-fix phase.
-- **`/ls` FPV carousel horizontal overflow:** `w-full -mx-[clamp(...)]` shifts it off the left edge; masked by `body { overflow-x: hidden }`, so it clips instead of scrolling. Pending mobile-fix phase (M1).
 - **Sticky footer overlap on mobile:** standalone pages' bottom padding (`py-12` ≈ 48px) is less than the mobile footer (~86px), so the last line can sit under the footer at scroll end; `ScrollStage` sticky height also ignores the footer. Pending mobile-fix phase (M3).
 - **`/vision` legibility:** low-contrast text through much of the fold scroll is live until the rebuild lands.
 - **`overflow-x: hidden` on `body`** currently masks real horizontal overflow rather than fixing root causes; remove reliance once overflows are fixed.
