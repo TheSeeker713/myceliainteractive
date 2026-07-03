@@ -15,8 +15,10 @@ import {
 
 function FPVBandContent() {
   return (
-    <div className="w-full -mx-[clamp(1.5rem,6vw,4rem)]">
-      <FPVCarousel />
+    <div className="ls-gutter">
+      <div className="-mx-[clamp(1.5rem,6vw,4rem)]">
+        <FPVCarousel />
+      </div>
     </div>
   );
 }
