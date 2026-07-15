@@ -1,0 +1,97 @@
+---
+description: Mycelia Interactive project agent rules — stack, mandatory checks, version control vs deployment
+alwaysApply: true
+---
+
+# Mycelia Interactive — Agent Rules (`.cursor/agents.mdc`)
+
+This file is for the **Mycelia Interactive** company website project only.
+It is distinct from, and does not affect, the `.cursor/agents.mdc` in the **KAIA Wrapper** project, which remains permanently read-only and must never be written to or edited from this or any other session.
+
+Root [`AGENTS.md`](../AGENTS.md) remains immutable unless Jeremy directs otherwise. Where this file and root `AGENTS.md` differ on **commit/push vs deploy**, follow this file: commit/push are automated session hygiene; **production deploy stays approval-gated**.
+
+## Project overview
+
+**Mycelia Interactive LLC** company website ([myceliainteractive.com](https://www.myceliainteractive.com)).
+
+### Actual stack (from this repo — do not assume other Mycelia projects)
+
+| Layer | In use |
+|---|---|
+| Framework | Next.js **16.2.x** (App Router), `output: "export"` static export |
+| UI | React **19.2.x**, Tailwind CSS **v4**, Framer Motion, `clsx` / `tailwind-merge` |
+| Tooling | TypeScript 5.9, ESLint 9 + `eslint-config-next`, Vitest, React Compiler (`babel-plugin-react-compiler`) |
+| Hosting | Cloudflare Workers via **Wrangler** (`wrangler.jsonc`); assets from `./out`; Worker entry `workers/signup-api.ts` (D1, AI binding, cron) |
+| Package manager | **npm** (`package-lock.json`) |
+
+There is no separate `typecheck` script. TypeScript is enforced via `next build` and, when needed, `npx tsc --noEmit`.
+
+## Mandatory checks after every change
+
+Run and pass before considering a change complete:
+
+1. `npm run build`
+2. `npm run lint`
+3. `npx tsc --noEmit` (explicit typecheck; not a package.json script)
+4. `npm test` (`vitest run`)
+
+Also run any step-specific runtime/visual/mobile checks as appropriate.
+
+## Version control policy (automated)
+
+At the end of every working session:
+
+1. Commit all appropriate local work to **`main`** with a clear message
+2. Push to GitHub (`origin/main`) **only when Cloudflare Workers Builds will not live-deploy from that push** (see below)
+
+No per-session approval is required for **commit**. Push requires checking the Workers Builds gate first.
+
+Use GitHub CLI (`gh`) and git for repository operations. Branch is always **`main`** — never `master`.
+
+### CRITICAL — push currently equals production deploy
+
+This Worker is connected to **Cloudflare Workers Builds**, which builds and deploys on pushes to `main`. There is **no** GitHub Actions workflow in-repo; the live path is Cloudflare’s Git integration, not `npm run deploy` from the agent.
+
+Until Workers Builds auto-deploy is disabled (or switched to a non-production branch), **do not treat `git push` as version-control-only**. Prefer local commit + report “ready to push” and wait for Jeremy, or push only after Jeremy confirms Workers Builds will not ship to production.
+
+### Secrets gate before any automated push
+
+Before enabling or performing automated push, confirm `.gitignore` excludes secrets:
+
+- `.env*` is ignored except `.env.production` (public build-time `NEXT_PUBLIC_*` defaults only)
+- Never commit `.env.local`, credentials, PEM keys, or API secrets
+- Confirm repo visibility (public/private) before push; this repo may be public
+
+Automated push removes the manual checkpoint that would otherwise catch an accidental secret commit — treat secret hygiene as mandatory.
+
+## CDP — Deployment policy (NEVER auto-deploy)
+
+**Never auto-deploy under any circumstance.**
+
+Forbidden without Jeremy’s separate, explicit approval every time:
+
+- `npm run deploy`
+- `wrangler deploy` (any non–dry-run form)
+- Cloudflare dashboard / Workers Builds “retry deploy” / promote
+- Any MCP tool that publishes a Worker version to production
+- Assuming “commit/push” is safe while Workers Builds is wired to `main`
+
+Allowed without deploy approval:
+
+- `npm run deploy:dry-run` (validation only; must not publish)
+- Local `npm run build` / lint / test / typecheck
+- Local commit (not push) when Workers Builds would ship on push
+
+Dry-run checks (`npm run deploy:dry-run`) are allowed when validating Wrangler config as part of ordinary verification.
+
+## Branch policy
+
+- Work on **`main` only**
+- Never create or use `master`
+- Prefer `gh` for GitHub-facing operations (PRs, repo metadata, visibility checks)
+
+## Standing constraints
+
+- Never hardcode client names or sensitive business details into the codebase
+- Mobile-first UI and proper error handling on all implementations
+- Do not proceed from audit (Phase 1) to remediation (Phase 2) without Jeremy’s explicit approval of findings
