@@ -76,10 +76,9 @@ function VisionFoundationContent() {
           SaaS.
         </p>
         <p>
-          Entertainment is our proving ground: a rigorous testbed for
-          low-latency inference, generative media orchestration, and
-          human-centered agent design before those systems scale to broader
-          applications.
+          Entertainment is where we put those systems to work: low-latency
+          inference, generative media orchestration, and human-centered agent
+          design in live, participatory experiences.
         </p>
       </FoldCard>
     </>

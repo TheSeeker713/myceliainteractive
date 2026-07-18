@@ -15,7 +15,6 @@ import {
   ProjectSceneContent,
   ProjectsContent,
 } from "@/app/components/studio/sections/ProjectsSection";
-import { ProofPointsContent } from "@/app/components/studio/sections/ProofPointsStrip";
 import { PROJECTS } from "@/app/components/studio/data";
 
 function HomePageStatic() {
@@ -38,11 +37,6 @@ function HomePageStatic() {
       </section>
       <section id="projects" className="studio-section scroll-mt-24 space-y-6">
         <ProjectsContent />
-      </section>
-      <section className="studio-section">
-        <CardSlot>
-          <ProofPointsContent />
-        </CardSlot>
       </section>
     </div>
   );
@@ -101,13 +95,6 @@ export function HomePage() {
         content: (
           <CardSlot scrollable>
             <ProjectSceneContent project={ais} />
-          </CardSlot>
-        ),
-      },
-      {
-        content: (
-          <CardSlot>
-            <ProofPointsContent />
           </CardSlot>
         ),
       },

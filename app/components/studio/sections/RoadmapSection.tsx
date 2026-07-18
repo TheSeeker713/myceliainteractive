@@ -1,24 +1,19 @@
 "use client";
 
-import {
-  CLOUD_CREDIT_NEEDS,
-  ROADMAP_MILESTONES,
-} from "@/app/components/studio/data";
-import { Button } from "@/app/components/studio/Button";
+import { ROADMAP_MILESTONES } from "@/app/components/studio/data";
 import { SceneCard } from "@/app/components/studio/SceneCard";
 
 export function RoadmapContent() {
   return (
     <SceneCard>
       <h1 className="text-2xl font-semibold text-studio-text mb-3">
-        MVP Roadmap &amp; AI/Cloud Resource Needs
+        MVP Roadmap
       </h1>
       <p className="text-studio-text-muted mb-6 leading-relaxed">
-        Near-term milestones and what targeted cloud credits would enable for
-        our real-time agent and generative media stack.
+        Near-term milestones for our real-time agent and generative media stack.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {ROADMAP_MILESTONES.map((milestone) => (
           <div
             key={milestone.title}
@@ -35,31 +30,6 @@ export function RoadmapContent() {
             </p>
           </div>
         ))}
-      </div>
-
-      <div className="rounded-xl border border-black/8 bg-white/30 p-4">
-        <h3 className="text-base font-semibold text-studio-text">
-          Cloud Credits Enable
-        </h3>
-        <ul className="mt-4 space-y-2">
-          {CLOUD_CREDIT_NEEDS.map((need) => (
-            <li
-              key={need}
-              className="text-sm text-studio-text-muted leading-relaxed flex gap-2"
-            >
-              <span className="text-studio-accent shrink-0">•</span>
-              <span>{need}</span>
-            </li>
-          ))}
-        </ul>
-        <a
-          href="mailto:contact@myceliainteractive.com?subject=Collaboration%20Inquiry"
-          className="mt-5 inline-block w-full sm:w-auto"
-        >
-          <Button className="w-full sm:w-auto">
-            Inquire About Cloud Credits
-          </Button>
-        </a>
       </div>
     </SceneCard>
   );

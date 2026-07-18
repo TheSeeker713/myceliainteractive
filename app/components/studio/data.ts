@@ -47,25 +47,6 @@ export const TEAM = [
   },
 ] as const;
 
-export const PROOF_POINTS = [
-  {
-    label: "Gemini Live Agent Challenge 2026",
-    detail: "Vertical slice submitted",
-  },
-  {
-    label: "Live public experiences",
-    detail: "The S33k3r + gated Liminal Sin",
-  },
-  {
-    label: "Two-person founding team",
-    detail: "Shipped interactive IP",
-  },
-  {
-    label: "Real-time multi-agent stack",
-    detail: "Voice + vision driven",
-  },
-] as const;
-
 export const ROADMAP_MILESTONES = [
   {
     title: "Liminal Sin vertical slice",
@@ -91,11 +72,4 @@ export const ROADMAP_MILESTONES = [
     detail:
       "SaaS companion MVP for neurodivergent productivity: subscription-ready platform launch.",
   },
-] as const;
-
-export const CLOUD_CREDIT_NEEDS = [
-  "Real-time agent scaling across concurrent sessions",
-  "Low-latency inference for voice and vision pipelines",
-  "Generative media compute for scene pre-generation",
-  "Staging environments for continuous integration testing",
 ] as const;

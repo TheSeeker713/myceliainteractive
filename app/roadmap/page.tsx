@@ -5,12 +5,12 @@ import { RoadmapContent } from "@/app/components/studio/sections/RoadmapSection"
 export const metadata: Metadata = {
   title: "MVP Roadmap | Mycelia Interactive LLC",
   description:
-    "Near-term milestones for Mycelia Interactive's real-time AI agent and generative media stack, plus the targeted cloud resources that would accelerate them.",
+    "Near-term milestones for Mycelia Interactive's real-time AI agent and generative media stack.",
   alternates: { canonical: "/roadmap" },
   openGraph: {
     title: "MVP Roadmap | Mycelia Interactive LLC",
     description:
-      "Near-term milestones and cloud resource needs for Mycelia Interactive's real-time agent and generative media stack.",
+      "Near-term milestones for Mycelia Interactive's real-time agent and generative media stack.",
     url: "https://www.myceliainteractive.com/roadmap",
   },
 };
