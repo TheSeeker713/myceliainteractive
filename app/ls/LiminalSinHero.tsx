@@ -1,20 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@/app/components/studio/Button";
 
 export function LiminalSinHeroContent() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+    <div className="grid grid-cols-1 gap-6 items-center">
       <div>
-        <p className="text-sm font-medium text-studio-accent uppercase tracking-wide mb-3">
+        <p data-lg-kicker className="liquid-glass-kicker text-studio-accent mb-3">
           Flagship prototype
         </p>
-        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-studio-text">
+        <h1 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
           Liminal Sin
         </h1>
-        <p className="mt-5 text-lg text-studio-text-muted leading-relaxed">
+        <p className="mt-5 liquid-glass-body text-studio-text-muted leading-relaxed">
           A psychological interactive experience built around a real-time AI
           trust and response system. Your voice, behavior, and decisions shape
           how characters respond; there are no fixed narrative paths.
@@ -23,15 +22,13 @@ export function LiminalSinHeroContent() {
           Vertical slice prototype · Gemini Live Agent Challenge 2026
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="#access">
-            <Button>Request access</Button>
-          </Link>
-          <Link href="#experience">
-            <Button variant="secondary">What you&apos;ll experience</Button>
-          </Link>
-          <Link href="/ls/game">
-            <Button variant="secondary">About prototype access</Button>
-          </Link>
+          <Button href="#access">Request access</Button>
+          <Button href="#experience" variant="secondary">
+            What you&apos;ll experience
+          </Button>
+          <Button href="/ls/game" variant="secondary">
+            About prototype access
+          </Button>
         </div>
       </div>
       <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8 shadow-sm">
@@ -41,7 +38,7 @@ export function LiminalSinHeroContent() {
           fill
           className="object-cover"
           priority
-          sizes="(max-width: 1024px) 100vw, 50vw"
+          sizes="(max-width: 1024px) 100vw, 896px"
         />
       </div>
     </div>

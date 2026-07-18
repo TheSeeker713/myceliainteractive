@@ -1,11 +1,9 @@
 "use client";
 
+import { useMemo } from "react";
 import FPVCarousel from "@/app/components/FPVCarousel";
-import {
-  LiquidGlassPage,
-  LiquidGlassSurface,
-} from "@/app/components/motion/LiquidGlassSurface";
-import { LiminalSinAccessFooter } from "@/app/ls/LiminalSinAccessFooter";
+import { MyceliaCardStage } from "@/app/components/motion/MyceliaCardStage";
+import { useMyceliaReduceMotion } from "@/app/components/motion/useMyceliaReduceMotion";
 import { LiminalSinArchitectureContent } from "@/app/ls/LiminalSinArchitecture";
 import { LiminalSinExperienceContent } from "@/app/ls/LiminalSinExperienceTeaser";
 import { LiminalSinHeroContent } from "@/app/ls/LiminalSinHero";
@@ -17,51 +15,70 @@ import {
   LiminalSinTrustContent,
 } from "@/app/ls/LiminalSinStorySections";
 
-export function LiminalSinLanding() {
+function FPVPane() {
   return (
-    <LiquidGlassPage className="pb-8">
-      <LiquidGlassSurface variant="cover" trackPointer>
-        <LiminalSinHeroContent />
-      </LiquidGlassSurface>
-
-      <LiquidGlassSurface id="experience" variant="cover" trackPointer>
-        <LiminalSinExperienceContent />
-      </LiquidGlassSurface>
-
-      <LiquidGlassSurface
-        variant="cover"
-        contentClassName="!p-0 sm:!p-0 lg:!p-0"
-      >
-        <div className="overflow-hidden rounded-[inherit]">
-          <FPVCarousel />
-        </div>
-      </LiquidGlassSurface>
-
-      <LiquidGlassSurface variant="cover">
-        <LiminalSinStoryContent />
-      </LiquidGlassSurface>
-
-      <LiquidGlassSurface variant="cover">
-        <LiminalSinTrustContent />
-      </LiquidGlassSurface>
-
-      <LiquidGlassSurface variant="cover">
-        <LiminalSinCapabilitiesContent />
-      </LiquidGlassSurface>
-
-      <LiquidGlassSurface variant="cover">
-        <LiminalSinArchitectureContent />
-      </LiquidGlassSurface>
-
-      <LiquidGlassSurface variant="cover">
-        <LiminalSinSliceScopeContent />
-      </LiquidGlassSurface>
-
-      <LiquidGlassSurface id="access" variant="cover">
-        <LiminalSinAccessContent />
-      </LiquidGlassSurface>
-
-      <LiminalSinAccessFooter />
-    </LiquidGlassPage>
+    <div className="space-y-4">
+      <p data-lg-kicker className="liquid-glass-kicker text-studio-accent">
+        Atmosphere
+      </p>
+      <h2 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
+        Generative FPV stills
+      </h2>
+      <p className="liquid-glass-body text-studio-text-muted">
+        Marketing-shell imagery generated for the Liminal Sin atmosphere —
+        not gameplay footage.
+      </p>
+      <div className="rounded-xl overflow-hidden border border-black/8">
+        <FPVCarousel />
+      </div>
+    </div>
   );
+}
+
+function AccessFooterNote() {
+  return (
+    <div className="space-y-3">
+      <p className="liquid-glass-body text-studio-text-muted">
+        <span className="font-medium text-studio-text">Desktop experience:</span>{" "}
+        Liminal Sin is designed for desktop browsers. Mobile play is not
+        supported.
+      </p>
+      <p className="text-sm text-studio-text-muted">
+        LIMINAL SIN&trade; is a work of interactive fiction. All characters and
+        events are fictional.
+      </p>
+    </div>
+  );
+}
+
+export function LiminalSinLanding() {
+  const { reduceMotion } = useMyceliaReduceMotion();
+
+  const panes = useMemo(
+    () => [
+      { content: <LiminalSinHeroContent /> },
+      {
+        id: "experience",
+        content: <LiminalSinExperienceContent />,
+      },
+      { content: <FPVPane /> },
+      { content: <LiminalSinStoryContent /> },
+      { content: <LiminalSinTrustContent /> },
+      { content: <LiminalSinCapabilitiesContent /> },
+      { content: <LiminalSinArchitectureContent /> },
+      { content: <LiminalSinSliceScopeContent /> },
+      {
+        id: "access",
+        content: (
+          <div className="space-y-8">
+            <LiminalSinAccessContent />
+            <AccessFooterNote />
+          </div>
+        ),
+      },
+    ],
+    [],
+  );
+
+  return <MyceliaCardStage panes={panes} reduceMotion={reduceMotion} />;
 }
