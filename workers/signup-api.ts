@@ -657,6 +657,14 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     return Response.redirect(url.toString(), 301);
   }
 
+  // Legacy judges deep-link → Liminal Sin landing
+  if (
+    url.pathname === "/ls/judges" ||
+    url.pathname === "/ls/judges/"
+  ) {
+    return Response.redirect(`${SITE_ORIGIN}/ls`, 301);
+  }
+
   if (url.pathname === "/api/signup" && request.method === "POST") {
     return handleSignup(request, env);
   }
