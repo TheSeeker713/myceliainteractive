@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Chakra_Petch, Geist, Geist_Mono } from "next/font/google";
 import { SiteMotionShell } from "./components/motion/SiteMotionShell";
 import { SiteHeader, SiteFooter } from "./components/SiteChrome";
 import "./globals.css";
@@ -12,6 +12,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const myceliaAgent = Chakra_Petch({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-mycelia-agent",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -61,20 +68,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <head>
-        {/* Kick off the fetch for the first scroll-scrubber spritesheet
-            during initial HTML parsing, before VideoBackground's mount
-            effect runs, so the canvas can become scroll-reactive sooner. */}
-        <link
-          rel="preload"
-          as="image"
-          href="/assets/frames/spritesheet1.webp"
-          type="image/webp"
-          fetchPriority="high"
-        />
-      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} ${myceliaAgent.variable} antialiased flex flex-col min-h-screen`}
       >
         <a
           href="#main-content"

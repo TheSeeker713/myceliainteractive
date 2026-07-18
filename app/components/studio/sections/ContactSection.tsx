@@ -1,14 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/app/components/studio/Button";
 import { SceneCard } from "@/app/components/studio/SceneCard";
 
 export function ContactContent() {
   return (
     <SceneCard className="space-y-4 text-studio-text-muted">
-      <h1 className="text-2xl font-semibold text-studio-text">Contact</h1>
-      <p>
+      <h1 className="font-semibold text-studio-text">Contact</h1>
+      <p className="liquid-glass-body">
         <span className="font-medium text-studio-text">General inquiries:</span>{" "}
         <a
           href="mailto:contact@myceliainteractive.com"
@@ -17,7 +16,7 @@ export function ContactContent() {
           contact@myceliainteractive.com
         </a>
       </p>
-      <p>
+      <p className="liquid-glass-body">
         <span className="font-medium text-studio-text">Website:</span>{" "}
         <a
           href="https://www.myceliainteractive.com"
@@ -26,7 +25,7 @@ export function ContactContent() {
           www.myceliainteractive.com
         </a>
       </p>
-      <p>
+      <p className="liquid-glass-body">
         <span className="font-medium text-studio-text">
           Interactive experience:
         </span>{" "}
@@ -39,21 +38,18 @@ export function ContactContent() {
           www.thes33k3r.com
         </a>
       </p>
-      <p>New Mexico, United States</p>
+      <p className="liquid-glass-body">New Mexico, United States</p>
       <div className="pt-2 flex flex-col sm:flex-row gap-3">
-        <Link href="/ls#access" className="w-full sm:w-auto">
-          <Button className="w-full sm:w-auto">
-            Request Private Access to Liminal Sin
-          </Button>
-        </Link>
-        <a
+        <Button href="/ls#access" className="w-full sm:w-auto">
+          Request Private Access to Liminal Sin
+        </Button>
+        <Button
           href="mailto:contact@myceliainteractive.com?subject=Collaboration%20Inquiry"
+          variant="secondary"
           className="w-full sm:w-auto"
         >
-          <Button variant="secondary" className="w-full sm:w-auto">
-            Inquire About Collaboration
-          </Button>
-        </a>
+          Inquire About Collaboration
+        </Button>
       </div>
     </SceneCard>
   );

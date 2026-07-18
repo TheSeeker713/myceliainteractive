@@ -29,6 +29,7 @@ export function Card({
 
   return (
     <div
+      data-card-variant={variant}
       className={cn(
         "rounded-2xl transition-all duration-200",
         variantClasses[variant],

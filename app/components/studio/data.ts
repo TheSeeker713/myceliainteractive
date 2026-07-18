@@ -2,6 +2,7 @@ export const PROJECTS = [
   {
     name: "Liminal Sin",
     featured: true,
+    image: "/assets/images/Liminal_Sin_Title.jpg",
     description:
       "A psychological interactive experience built around a real-time AI trust and response system. No fixed narrative paths. Characters react to what you actually do. Vertical slice prototype submitted to the Gemini Live Agent Challenge 2026.",
     href: "/ls",
@@ -9,6 +10,7 @@ export const PROJECTS = [
   },
   {
     name: "The S33k3r Transmission",
+    image: "/assets/images/S33k3r_Card.webp",
     description:
       "A fully functional ARG and FMV interactive music video experience: a live demonstration of interactive entertainment on a public platform.",
     href: "https://www.thes33k3r.com",
@@ -16,6 +18,7 @@ export const PROJECTS = [
   },
   {
     name: "KAIA",
+    image: "/assets/images/KAIA_Card.webp",
     description:
       "Keep At It, Always: a gamified AI productivity SaaS for neurodivergent users. Persistent adaptive avatar companion, habit loops, and executive-function scaffolding. Pre-production; designed as a subscription-ready platform built on the same real-time agent architecture as Liminal Sin.",
     href: null,
@@ -23,6 +26,7 @@ export const PROJECTS = [
   },
   {
     name: "Altered Imagination Studios",
+    video: "/assets/video/ais_clip.webm",
     description:
       "A daily AI video content brand operating under the Mycelia Interactive umbrella: production output and live pipeline development for AI video generation.",
     href: null,

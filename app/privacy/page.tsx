@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  LiquidGlassPage,
+  LiquidGlassSurface,
+} from "@/app/components/motion/LiquidGlassSurface";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Mycelia Interactive LLC",
@@ -16,22 +20,22 @@ export const metadata: Metadata = {
 
 export default function CompanyPrivacyPage() {
   return (
-    <div className="site-gutter py-12 sm:py-16 min-h-[80vh]">
-      <article className="studio-section max-w-3xl">
-        <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
-          <h1 className="text-2xl font-semibold text-studio-text">
+    <LiquidGlassPage>
+      <LiquidGlassSurface variant="fill" trackPointer>
+        <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <h1 className="font-semibold text-studio-text">
             Mycelia Interactive LLC · Privacy Policy
           </h1>
           <Link
             href="/"
-            className="text-sm text-studio-text-muted hover:text-studio-accent transition-colors"
+            className="text-sm text-studio-text-muted hover:text-studio-accent transition-colors min-h-11 inline-flex items-center"
           >
             ← Home
           </Link>
         </div>
 
-        <div className="studio-card p-6 sm:p-10 space-y-6 leading-relaxed text-studio-text-muted">
-          <p className="text-sm">
+        <div className="space-y-6 leading-relaxed text-studio-text-muted">
+          <p className="liquid-glass-body">
             <strong className="text-studio-text">Effective Date:</strong> June
             18, 2026
             <br />
@@ -100,7 +104,10 @@ export default function CompanyPrivacyPage() {
             <p>
               The Liminal Sin prototype has a separate privacy policy covering
               camera, microphone, and real-time session behavior. See{" "}
-              <Link href="/ls/privacy" className="text-studio-accent hover:underline">
+              <Link
+                href="/ls/privacy"
+                className="text-studio-accent hover:underline"
+              >
                 Liminal Sin Privacy Policy
               </Link>
               .
@@ -122,7 +129,7 @@ export default function CompanyPrivacyPage() {
             </p>
           </section>
         </div>
-      </article>
-    </div>
+      </LiquidGlassSurface>
+    </LiquidGlassPage>
   );
 }

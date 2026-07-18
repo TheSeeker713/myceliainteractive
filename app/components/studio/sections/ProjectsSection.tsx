@@ -7,30 +7,53 @@ import { SceneCard } from "@/app/components/studio/SceneCard";
 
 type ProjectItem = (typeof PROJECTS)[number];
 
-export function ProjectSceneContent({ project }: { project: ProjectItem }) {
-  const isFeatured = "featured" in project && project.featured;
+function ProjectMedia({ project }: { project: ProjectItem }) {
+  if ("video" in project && project.video) {
+    return (
+      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8 bg-black/20">
+        <video
+          src={project.video}
+          className="absolute inset-0 h-full w-full object-cover"
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="metadata"
+          aria-label={project.name}
+        />
+      </div>
+    );
+  }
 
+  if ("image" in project && project.image) {
+    return (
+      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8">
+        <Image
+          src={project.image}
+          alt={project.name}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 896px"
+        />
+      </div>
+    );
+  }
+
+  return null;
+}
+
+export function ProjectSceneContent({ project }: { project: ProjectItem }) {
   return (
     <SceneCard className="flex flex-col gap-5">
-      <p className="text-sm font-medium text-studio-accent uppercase tracking-wide">
+      <p data-lg-kicker className="liquid-glass-kicker text-studio-accent">
         Projects
       </p>
-      {isFeatured && (
-        <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8">
-          <Image
-            src="/assets/images/Liminal_Sin_Title.jpg"
-            alt="Liminal Sin"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 672px"
-          />
-        </div>
-      )}
+      <ProjectMedia project={project} />
       <div>
-        <h3 className="text-xl font-semibold text-studio-text">
+        <h3 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
           {project.name}
         </h3>
-        <p className="mt-3 text-sm text-studio-text-muted leading-relaxed">
+        <p className="mt-3 liquid-glass-body text-studio-text-muted leading-relaxed">
           {project.description}
         </p>
         {project.href ? (
@@ -52,7 +75,10 @@ export function ProjectSceneContent({ project }: { project: ProjectItem }) {
             </Link>
           )
         ) : (
-          <p className="mt-4 text-xs uppercase tracking-wide text-studio-text-muted">
+          <p
+            data-lg-kicker
+            className="mt-4 liquid-glass-kicker text-studio-text-muted"
+          >
             Pre-production
           </p>
         )}

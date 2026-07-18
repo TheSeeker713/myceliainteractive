@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  LiquidGlassPage,
+  LiquidGlassSurface,
+} from "@/app/components/motion/LiquidGlassSurface";
 
 export const metadata: Metadata = {
   title: "Liminal Sin | Privacy Policy",
@@ -16,27 +20,27 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="site-gutter py-12 sm:py-16 min-h-[80vh]">
-      <article className="studio-section max-w-3xl">
-        <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
-          <h1 className="text-2xl font-semibold text-studio-text">
+    <LiquidGlassPage>
+      <LiquidGlassSurface variant="fill" trackPointer>
+        <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <h1 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
             Liminal Sin · Privacy Policy
           </h1>
           <Link
             href="/"
-            className="text-sm text-studio-text-muted hover:text-studio-accent transition-colors"
+            className="text-sm text-studio-text-muted hover:text-studio-accent transition-colors min-h-11 inline-flex items-center"
           >
             ← Home
           </Link>
         </div>
 
-        <div className="studio-card p-6 sm:p-10 space-y-6 leading-relaxed text-studio-text-muted">
-          <p className="text-sm">
+        <div className="space-y-6 leading-relaxed text-studio-text-muted">
+          <p className="liquid-glass-body">
             <strong className="text-studio-text">Effective Date:</strong> March
             3, 2026
             <br />
-            <strong className="text-studio-text">Project Owner:</strong>{" "}
-            Mycelia Interactive LLC
+            <strong className="text-studio-text">Project Owner:</strong> Mycelia
+            Interactive LLC
           </p>
 
           <section>
@@ -54,7 +58,8 @@ export default function PrivacyPage() {
                 train our own AI models.
               </li>
               <li>
-                We design the system for minimum collection and minimum retention.
+                We design the system for minimum collection and minimum
+                retention.
               </li>
             </ul>
           </section>
@@ -108,9 +113,9 @@ export default function PrivacyPage() {
               6) Data Minimization and Security
             </h2>
             <p>
-              We apply reasonable safeguards and strive to minimize data exposure,
-              retention, and sharing. No internet-connected service can guarantee
-              absolute security.
+              We apply reasonable safeguards and strive to minimize data
+              exposure, retention, and sharing. No internet-connected service can
+              guarantee absolute security.
             </p>
           </section>
 
@@ -124,7 +129,7 @@ export default function PrivacyPage() {
             </p>
           </section>
         </div>
-      </article>
-    </div>
+      </LiquidGlassSurface>
+    </LiquidGlassPage>
   );
 }

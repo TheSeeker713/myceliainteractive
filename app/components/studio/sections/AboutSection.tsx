@@ -1,19 +1,37 @@
 "use client";
 
+import Image from "next/image";
 import { SceneCard } from "@/app/components/studio/SceneCard";
 
 export function AboutContent() {
   return (
     <SceneCard className="space-y-4 text-studio-text-muted">
-      <h2 className="text-2xl font-semibold text-studio-text">About</h2>
-      <p>
+      <p
+        data-lg-kicker
+        className="liquid-glass-kicker text-studio-accent"
+      >
+        Company
+      </p>
+      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8">
+        <Image
+          src="/assets/images/About_Network.webp"
+          alt=""
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 896px"
+        />
+      </div>
+      <h2 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
+        About
+      </h2>
+      <p className="liquid-glass-body">
         Mycelia Interactive LLC is an entertainment company developing
         original intellectual property across film, interactive experiences,
         games, and music. Our defining focus is real-time AI-driven response
         systems that use voice and vision: entertainment where audience
         behavior shapes the experience as it unfolds.
       </p>
-      <p>
+      <p className="liquid-glass-body">
         All intellectual property developed under the Mycelia Interactive name
         is owned in full by the company. We do not develop licensed or adapted
         third-party properties.

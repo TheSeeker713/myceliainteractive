@@ -1,0 +1,477 @@
+.atmosphere-preview-root {
+  --lg-mx: 50%;
+  --lg-my: 35%;
+  font-family: var(--font-mycelia-agent, var(--font-atmosphere-preview)),
+    system-ui, sans-serif;
+}
+
+/* Nested SceneCard/Card glass becomes transparent inside the liquid shell. */
+.liquid-glass-card [data-card-variant="glass"] {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+
+.liquid-glass-card [data-card-variant="glass"]::before {
+  display: none !important;
+}
+
+.liquid-glass-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.75rem;
+  color: #0a1214;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.46) 0%,
+      rgba(255, 255, 255, 0.16) 42%,
+      rgba(210, 236, 240, 0.2) 100%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 22px 36px rgba(2, 10, 14, 0.48),
+    0 8px 16px rgba(2, 10, 14, 0.34),
+    0 2px 4px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -18px 40px rgba(18, 64, 74, 0.1);
+  backdrop-filter: blur(16px) saturate(1.7);
+  -webkit-backdrop-filter: blur(16px) saturate(1.7);
+  transform: translateZ(0);
+}
+
+.liquid-glass-card::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  background:
+    radial-gradient(
+      circle at var(--lg-mx) var(--lg-my),
+      rgba(255, 255, 255, 0.68) 0%,
+      rgba(255, 255, 255, 0.16) 24%,
+      transparent 52%
+    ),
+    linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      transparent 36%,
+      rgba(120, 210, 230, 0.12) 68%,
+      transparent 100%
+    );
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  transition: opacity 180ms ease;
+}
+
+.liquid-glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(10, 40, 48, 0.12);
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E"),
+    radial-gradient(
+      120% 90% at 18% 12%,
+      rgba(255, 255, 255, 0.34) 0%,
+      transparent 46%
+    ),
+    radial-gradient(
+      90% 70% at 82% 78%,
+      rgba(180, 210, 220, 0.22) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      70% 60% at 50% 40%,
+      rgba(255, 255, 255, 0.12) 0%,
+      transparent 55%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.24) 0%,
+      transparent 38%,
+      transparent 58%,
+      rgba(12, 42, 50, 0.08) 100%
+    );
+  background-size:
+    180px 180px,
+    auto,
+    auto,
+    auto,
+    auto;
+  opacity: 0.9;
+  mix-blend-mode: soft-light;
+}
+
+.liquid-glass-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.liquid-glass-card:hover {
+  box-shadow:
+    0 28px 42px rgba(2, 10, 14, 0.54),
+    0 10px 18px rgba(2, 10, 14, 0.38),
+    0 2px 4px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -18px 40px rgba(18, 64, 74, 0.12);
+}
+
+.liquid-glass-kicker {
+  color: #0f4f5f;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.liquid-glass-title {
+  color: #071014;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  text-wrap: balance;
+  text-transform: uppercase;
+}
+
+.liquid-glass-body {
+  color: #132428;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  text-wrap: pretty;
+}
+
+/* Desktop type scale (approved): title > body > kicker */
+@media (min-width: 768px) {
+  .liquid-glass-kicker {
+    font-size: 0.8125rem;
+  }
+
+  .liquid-glass-title {
+    font-size: 1.875rem;
+  }
+
+  .liquid-glass-body {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .liquid-glass-kicker {
+    font-size: 0.875rem;
+  }
+
+  .liquid-glass-title {
+    font-size: 2.25rem;
+  }
+
+  .liquid-glass-body {
+    font-size: 1.125rem;
+  }
+}
+
+/* Kickers tagged via data attribute share the kicker scale. */
+.liquid-glass-card [data-lg-kicker] {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .liquid-glass-card [data-lg-kicker] {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .liquid-glass-card [data-lg-kicker] {
+    font-size: 0.875rem;
+  }
+}
+
+/* Primary section titles (apply .liquid-glass-title on the element).
+   Nested grid headings keep local Tailwind sizes. */
+.liquid-glass-card-content > h1.liquid-glass-title,
+.liquid-glass-card-content > h2.liquid-glass-title,
+.liquid-glass-card-content > h3.liquid-glass-title {
+  text-transform: none;
+}
+
+.liquid-glass-sticky-stage {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  min-height: 100%;
+  height: 100%;
+  place-items: center;
+  padding: 1.5rem 1.25rem 3.5rem;
+  pointer-events: none;
+}
+
+.liquid-glass-stage-toolbar {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  pointer-events: none;
+}
+
+.liquid-glass-stage-hint {
+  margin: 0;
+  max-width: 28rem;
+  color: rgba(245, 250, 252, 0.88);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.45;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
+}
+
+.liquid-glass-motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-left: auto;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(8, 20, 24, 0.42);
+  color: rgba(245, 250, 252, 0.94);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.liquid-glass-motion-toggle input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #7ed0df;
+  cursor: pointer;
+}
+
+.liquid-glass-stage-progress {
+  position: absolute;
+  bottom: 1.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(245, 250, 252, 0.78);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+.liquid-glass-stage-card {
+  position: relative;
+  width: min(100%, 36rem);
+  pointer-events: auto;
+  will-change: opacity, transform;
+}
+
+@media (min-width: 768px) {
+  .liquid-glass-stage-card {
+    width: min(100%, 48rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .liquid-glass-stage-card {
+    width: min(100%, 56rem);
+  }
+}
+
+.liquid-glass-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-block: 1.25rem 1.75rem;
+  min-height: calc(100dvh - var(--header-h) - var(--footer-h));
+}
+
+.liquid-glass-card--cover {
+  width: 100%;
+  max-width: min(100%, 72rem);
+  margin-inline: auto;
+}
+
+.liquid-glass-card--fill {
+  min-height: calc(100dvh - var(--header-h) - var(--footer-h) - 2.5rem);
+  flex: 1;
+}
+
+.liquid-glass-card--panel {
+  width: 100%;
+  max-width: min(100%, 36rem);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .liquid-glass-card--panel {
+    max-width: min(100%, 48rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .liquid-glass-card--panel {
+    max-width: min(100%, 56rem);
+  }
+}
+
+.liquid-glass-stage-card--glitch {
+  overflow: visible;
+}
+
+.liquid-glass-glitch-base {
+  position: relative;
+  z-index: 1;
+  filter: contrast(1.05) saturate(1.08);
+}
+
+.liquid-glass-glitch-layer,
+.liquid-glass-glitch-slice {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.liquid-glass-glitch-layer--r {
+  z-index: 2;
+  mix-blend-mode: lighten;
+  filter: sepia(1) hue-rotate(-50deg) saturate(8) brightness(1.25);
+  opacity: calc(0.45 + var(--glitch, 0) * 0.5);
+}
+
+.liquid-glass-glitch-layer--b {
+  z-index: 3;
+  mix-blend-mode: lighten;
+  filter: sepia(1) hue-rotate(175deg) saturate(8) brightness(1.2);
+  opacity: calc(0.4 + var(--glitch, 0) * 0.5);
+}
+
+.liquid-glass-glitch-slice {
+  z-index: 4;
+  mix-blend-mode: hard-light;
+  filter: contrast(1.4) brightness(1.12);
+}
+
+.liquid-glass-scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  border-radius: 1.75rem;
+  opacity: calc(0.25 + var(--glitch, 0) * 0.65);
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(8, 24, 30, 0.35) 0,
+    rgba(8, 24, 30, 0.35) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+.liquid-glass-glitch-noise {
+  position: absolute;
+  inset: -4%;
+  z-index: 6;
+  pointer-events: none;
+  border-radius: 1.75rem;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255, 60, 110, 0.35), transparent 42%),
+    radial-gradient(circle at 80% 70%, rgba(30, 230, 255, 0.32), transparent 44%);
+  mix-blend-mode: screen;
+}
+
+.liquid-glass-card-content {
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.liquid-glass-card-content--stage {
+  max-height: min(72dvh, 42rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.liquid-glass-card-content--page {
+  max-height: none;
+  overflow-y: visible;
+}
+
+.preview-flow-poster {
+  position: fixed;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.preview-flow-poster--under {
+  z-index: 0;
+}
+
+.preview-flow-poster--drift {
+  animation: preview-flow-drift 18s ease-in-out infinite alternate;
+  transform: scale(1.06);
+}
+
+/* Keep real dimensions off-screen so Chromium does not throttle decode
+   the way it can for 1×1 / opacity:0 / visibility:hidden video elements. */
+.preview-flow-video-source {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes preview-flow-drift {
+  from {
+    transform: scale(1.05) translate3d(-1.2%, 0.8%, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(1.4%, -1%, 0);
+  }
+}
+
+@media (max-width: 640px) {
+  .liquid-glass-sticky-stage {
+    padding-inline: 1rem;
+  }
+}
