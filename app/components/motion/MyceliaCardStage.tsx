@@ -18,6 +18,7 @@ import {
   WHEEL_TRIGGER_THRESHOLD_PX,
   type ScrollMachineState,
 } from "./cardScrollMachine";
+import { shouldCaptureStageScroll } from "./cardStagePointer";
 import { LiquidGlassSurface } from "./LiquidGlassSurface";
 import { MYCELIA_FLOW_WHEEL_EVENT } from "./MyceliaFlowAtmosphere";
 import "./liquid-glass.css";
@@ -197,6 +198,11 @@ export function MyceliaCardStage({
   }, [panes.length, reduceMotion]);
 
   useEffect(() => {
+    const getCardRect = () =>
+      rootRef.current
+        ?.querySelector(".liquid-glass-stage-card")
+        ?.getBoundingClientRect() ?? null;
+
     const commitIntent = (direction: 1 | -1) => {
       const next = applyScrollIntent(
         machineRef.current,
@@ -210,6 +216,18 @@ export function MyceliaCardStage({
     };
 
     const onWheel = (event: WheelEvent) => {
+      // Over the card: native overflow scroll on .liquid-glass-card-content.
+      // Outside the card: accumulate toward a discrete card transition.
+      if (
+        !shouldCaptureStageScroll(
+          { clientX: event.clientX, clientY: event.clientY },
+          getCardRect(),
+        )
+      ) {
+        wheelAccumRef.current = 0;
+        return;
+      }
+
       event.preventDefault();
       window.dispatchEvent(
         new CustomEvent(MYCELIA_FLOW_WHEEL_EVENT, {
@@ -225,14 +243,29 @@ export function MyceliaCardStage({
     };
 
     let touchStartY: number | null = null;
+    let touchStartsOverCard = false;
     const onTouchStart = (event: TouchEvent) => {
-      touchStartY = event.touches[0]?.clientY ?? null;
+      const touch = event.touches[0];
+      touchStartY = touch?.clientY ?? null;
+      touchStartsOverCard = touch
+        ? !shouldCaptureStageScroll(
+            { clientX: touch.clientX, clientY: touch.clientY },
+            getCardRect(),
+          )
+        : false;
     };
     const onTouchMove = (event: TouchEvent) => {
       if (touchStartY === null) return;
-      const y = event.touches[0]?.clientY;
-      if (y === undefined) return;
-      const deltaY = touchStartY - y;
+      const touch = event.touches[0];
+      if (!touch) return;
+
+      // If the gesture began on the card, keep native in-card scrolling.
+      if (touchStartsOverCard) {
+        wheelAccumRef.current = 0;
+        return;
+      }
+
+      const deltaY = touchStartY - touch.clientY;
       window.dispatchEvent(
         new CustomEvent(MYCELIA_FLOW_WHEEL_EVENT, {
           detail: { deltaY },
@@ -241,7 +274,7 @@ export function MyceliaCardStage({
       if (Math.abs(deltaY) < WHEEL_TRIGGER_THRESHOLD_PX) return;
       event.preventDefault();
       commitIntent(deltaY > 0 ? 1 : -1);
-      touchStartY = y;
+      touchStartY = touch.clientY;
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -255,13 +288,19 @@ export function MyceliaCardStage({
   }, [panes.length]);
 
   useEffect(() => {
-    const hash = window.location.hash.replace(/^#/, "");
-    if (!hash) return;
-    const index = panes.findIndex((pane) => pane.id === hash);
-    if (index < 0) return;
-    const jumped = createScrollMachineState(index);
-    machineRef.current = jumped;
-    startTransition(() => setMachine(jumped));
+    const jumpToHash = () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      if (!hash) return;
+      const index = panes.findIndex((pane) => pane.id === hash);
+      if (index < 0) return;
+      const jumped = createScrollMachineState(index);
+      machineRef.current = jumped;
+      startTransition(() => setMachine(jumped));
+    };
+
+    jumpToHash();
+    window.addEventListener("hashchange", jumpToHash);
+    return () => window.removeEventListener("hashchange", jumpToHash);
   }, [panes]);
 
   const { cardIndex, cycle } = getCycleForScrollMachine(machine, reduceMotion);
