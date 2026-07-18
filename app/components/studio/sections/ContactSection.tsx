@@ -43,13 +43,6 @@ export function ContactContent() {
         <Button href="/ls#access" className="w-full sm:w-auto">
           Request Private Access to Liminal Sin
         </Button>
-        <Button
-          href="mailto:contact@myceliainteractive.com?subject=Collaboration%20Inquiry"
-          variant="secondary"
-          className="w-full sm:w-auto"
-        >
-          Inquire About Collaboration
-        </Button>
       </div>
     </SceneCard>
   );

@@ -7,14 +7,13 @@ export function RoadmapContent() {
     <div className="space-y-6">
       <div>
         <p data-lg-kicker className="liquid-glass-kicker text-studio-accent mb-3">
-          Near-term
+          Status
         </p>
         <h1 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
-          MVP Roadmap
+          Roadmap
         </h1>
         <p className="mt-3 liquid-glass-body text-studio-text-muted leading-relaxed">
-          Near-term milestones for our real-time agent and generative media
-          stack.
+          Current status across completed, active, and scheduled work.
         </p>
       </div>
 

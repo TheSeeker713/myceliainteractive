@@ -38,14 +38,6 @@ export function HeroContent() {
           >
             Request demo access
           </Button>
-          <Button
-            href="mailto:contact@myceliainteractive.com?subject=Collaboration%20Inquiry"
-            variant="secondary"
-            size="lg"
-            className="w-full sm:w-auto sm:min-w-[12rem] min-h-11 sm:min-h-12 bg-white/15 backdrop-blur-md border border-black/15 hover:bg-white/28"
-          >
-            Inquire About Collaboration
-          </Button>
         </div>
       </div>
     </SceneCard>

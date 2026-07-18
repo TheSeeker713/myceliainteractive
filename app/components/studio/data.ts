@@ -37,14 +37,14 @@ export const PROJECTS = [
 export const TEAM = [
   {
     name: "Adrianna Loya",
-    role: "Co-founder · CEO, CCO, CFO",
+    role: "Founder · CEO, CCO, CFO",
     detail:
       "Leads Altered Imagination Studios, daily AI video production pipeline, and company operations and finance.",
     email: "adrianna@myceliainteractive.com",
   },
   {
     name: "Jeremy Robards",
-    role: "Founder · CTO, CAIO, CCO",
+    role: "Co-founder · CTO, CAIO, CCO",
     detail:
       "Leads product development, interactive systems architecture, Gemini Live integration, and full-stack delivery.",
     email: "jeremy@myceliainteractive.com",
@@ -54,26 +54,31 @@ export const TEAM = [
 export const ROADMAP_MILESTONES = [
   {
     title: "Liminal Sin vertical slice",
-    timeframe: "Now",
+    timeframe: "Completed · Jan 2026",
     detail:
-      "Gemini Live Agent Challenge submission; public gated demo with trust-driven narrative.",
+      "Finished Act 1 vertical slice; Gemini Live Agent Challenge submission and gated public demo.",
   },
   {
-    title: "Agent scaling + session reliability",
-    timeframe: "0–6 months",
+    title: "Mycelia Interactive website remodeling",
+    timeframe: "Active · Jun–Jul 2026",
     detail:
-      "Multi-session Cloud Run scaling, Firestore session hardening, production observability.",
+      "Current active work: company site redesign and liquid-glass atmosphere cutover.",
   },
   {
-    title: "Generative media pipeline",
-    timeframe: "6–12 months",
-    detail:
-      "Imagen 4 + Veo 3.1 batch pre-generation, lower scene latency, richer environmental storytelling.",
+    title: "Studio 25 Films",
+    timeframe: "Active · Jul 2026",
+    detail: "Active production work with Studio 25 Films.",
   },
   {
-    title: "KAIA private alpha",
-    timeframe: "12–18 months",
+    title: "Agentic project work",
+    timeframe: "Active · In progress",
     detail:
-      "SaaS companion MVP for neurodivergent productivity: subscription-ready platform launch.",
+      "Ongoing development across agentic systems and related projects.",
+  },
+  {
+    title: "KAIA prototype",
+    timeframe: "Scheduled · Aug 2026",
+    detail:
+      "KAIA scheduled for production as a prototype in August 2026.",
   },
 ] as const;
