@@ -60,8 +60,8 @@ export function LiminalSinStoryContent() {
         </p>
         <p>
           This is real-time AI-driven narrative, where voice, emotion, and
-          trust reshape the story as it unfolds. Not a branching menu. Not a
-          chatbot. A system that watches, listens, and responds.
+          trust reshape the story as it unfolds. A system that watches, listens,
+          and responds.
         </p>
       </div>
       <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8">
