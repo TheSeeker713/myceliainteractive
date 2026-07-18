@@ -315,10 +315,6 @@ export function MyceliaCardStage({
         <GlitchPane cycle={cycle} reduceMotion={reduceMotion}>
           {pane?.content}
         </GlitchPane>
-        <p className="liquid-glass-stage-progress" aria-live="polite">
-          {cardIndex + 1} / {panes.length}
-          {` · ${machine.status}`}
-        </p>
       </div>
     </div>
   );
