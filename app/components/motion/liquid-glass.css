@@ -128,7 +128,7 @@
 
 .liquid-glass-kicker {
   color: #0f4f5f;
-  font-size: 0.78rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -136,7 +136,7 @@
 
 .liquid-glass-title {
   color: #071014;
-  font-size: 1.5rem;
+  font-size: 1.625rem;
   font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 1.1;
@@ -146,35 +146,21 @@
 
 .liquid-glass-body {
   color: #132428;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 500;
   line-height: 1.65;
   letter-spacing: 0.01em;
   text-wrap: pretty;
 }
 
-/* Desktop type scale (approved): title > body > kicker */
+/* Desktop type scale: title > body > kicker (slight readability bump) */
 @media (min-width: 768px) {
-  .liquid-glass-kicker {
-    font-size: 0.8125rem;
-  }
-
-  .liquid-glass-title {
-    font-size: 1.875rem;
-  }
-
-  .liquid-glass-body {
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
   .liquid-glass-kicker {
     font-size: 0.875rem;
   }
 
   .liquid-glass-title {
-    font-size: 2.25rem;
+    font-size: 2.125rem;
   }
 
   .liquid-glass-body {
@@ -182,9 +168,23 @@
   }
 }
 
+@media (min-width: 1024px) {
+  .liquid-glass-kicker {
+    font-size: 0.9375rem;
+  }
+
+  .liquid-glass-title {
+    font-size: 2.5rem;
+  }
+
+  .liquid-glass-body {
+    font-size: 1.25rem;
+  }
+}
+
 /* Kickers tagged via data attribute share the kicker scale. */
 .liquid-glass-card [data-lg-kicker] {
-  font-size: 0.78rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -192,13 +192,46 @@
 
 @media (min-width: 768px) {
   .liquid-glass-card [data-lg-kicker] {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
   }
 }
 
 @media (min-width: 1024px) {
   .liquid-glass-card [data-lg-kicker] {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
+  }
+}
+
+/*
+ * Light aura on smaller text (kicker + body). Soft at rest; grows a little
+ * when the pointer is over the card or the text itself.
+ */
+.liquid-glass-kicker,
+.liquid-glass-card [data-lg-kicker],
+.liquid-glass-body {
+  --lg-aura-soft: 0 0 0.35rem rgba(180, 230, 240, 0.45),
+    0 0 0.75rem rgba(255, 255, 255, 0.28);
+  --lg-aura-strong: 0 0 0.55rem rgba(180, 230, 240, 0.7),
+    0 0 1.25rem rgba(255, 255, 255, 0.42),
+    0 0 1.85rem rgba(126, 208, 223, 0.28);
+  text-shadow: var(--lg-aura-soft);
+  transition: text-shadow 220ms ease;
+}
+
+.liquid-glass-card:hover .liquid-glass-kicker,
+.liquid-glass-card:hover [data-lg-kicker],
+.liquid-glass-card:hover .liquid-glass-body,
+.liquid-glass-kicker:hover,
+.liquid-glass-card [data-lg-kicker]:hover,
+.liquid-glass-body:hover {
+  text-shadow: var(--lg-aura-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-glass-kicker,
+  .liquid-glass-card [data-lg-kicker],
+  .liquid-glass-body {
+    transition: none;
   }
 }
 
@@ -290,20 +323,20 @@
 
 .liquid-glass-stage-card {
   position: relative;
-  width: min(100%, 36rem);
+  width: min(100%, 38rem);
   pointer-events: auto;
   will-change: opacity, transform;
 }
 
 @media (min-width: 768px) {
   .liquid-glass-stage-card {
-    width: min(100%, 48rem);
+    width: min(100%, 52rem);
   }
 }
 
 @media (min-width: 1024px) {
   .liquid-glass-stage-card {
-    width: min(100%, 56rem);
+    width: min(100%, 62rem);
   }
 }
 
@@ -317,7 +350,7 @@
 
 .liquid-glass-card--cover {
   width: 100%;
-  max-width: min(100%, 72rem);
+  max-width: min(100%, 76rem);
   margin-inline: auto;
 }
 
@@ -328,19 +361,19 @@
 
 .liquid-glass-card--panel {
   width: 100%;
-  max-width: min(100%, 36rem);
+  max-width: min(100%, 38rem);
   margin-inline: auto;
 }
 
 @media (min-width: 768px) {
   .liquid-glass-card--panel {
-    max-width: min(100%, 48rem);
+    max-width: min(100%, 52rem);
   }
 }
 
 @media (min-width: 1024px) {
   .liquid-glass-card--panel {
-    max-width: min(100%, 56rem);
+    max-width: min(100%, 62rem);
   }
 }
 
@@ -419,9 +452,43 @@
 }
 
 .liquid-glass-card-content--stage {
-  max-height: min(72dvh, 42rem);
+  max-height: min(78dvh, 48rem);
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+/* Nested utility text inside cards (milestones, bullets) — desktop bump + aura */
+@media (min-width: 1024px) {
+  .liquid-glass-card .text-sm {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .liquid-glass-card .text-xs {
+    font-size: 0.9rem;
+  }
+
+  .liquid-glass-card .text-base {
+    font-size: 1.15rem;
+  }
+}
+
+.liquid-glass-card .text-sm,
+.liquid-glass-card .text-xs {
+  --lg-aura-soft: 0 0 0.3rem rgba(180, 230, 240, 0.4),
+    0 0 0.65rem rgba(255, 255, 255, 0.22);
+  --lg-aura-strong: 0 0 0.5rem rgba(180, 230, 240, 0.65),
+    0 0 1.1rem rgba(255, 255, 255, 0.38),
+    0 0 1.6rem rgba(126, 208, 223, 0.24);
+  text-shadow: var(--lg-aura-soft);
+  transition: text-shadow 220ms ease;
+}
+
+.liquid-glass-card:hover .text-sm,
+.liquid-glass-card:hover .text-xs,
+.liquid-glass-card .text-sm:hover,
+.liquid-glass-card .text-xs:hover {
+  text-shadow: var(--lg-aura-strong);
 }
 
 .liquid-glass-card-content--page {
