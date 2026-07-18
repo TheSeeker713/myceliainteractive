@@ -26,13 +26,14 @@ function ProjectMedia({ project }: { project: ProjectItem }) {
   }
 
   if ("image" in project && project.image) {
+    // object-contain so full artwork (e.g. S33k3r) is visible, not cropped.
     return (
-      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8">
+      <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden border border-black/8 bg-black/15">
         <Image
           src={project.image}
           alt={project.name}
           fill
-          className="object-cover"
+          className="object-contain"
           sizes="(max-width: 768px) 100vw, 896px"
         />
       </div>
