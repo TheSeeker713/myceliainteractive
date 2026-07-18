@@ -250,8 +250,9 @@ function FullVideoAtmosphere({ onError }: { onError?: (error: Error) => void }) 
   }
 
   return (
-    <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
-      <PosterFallback animated={false} className="preview-flow-poster--under" />
+    <>
+      {/* Video stays outside the visual wrapper so decode is never tied to
+          the pointer-events:none / stacking context of the canvas layer. */}
       <video
         ref={videoRef}
         className="preview-flow-video-source"
@@ -262,16 +263,26 @@ function FullVideoAtmosphere({ onError }: { onError?: (error: Error) => void }) 
         autoPlay
         preload="auto"
         poster={FLOW_POSTER_SRC}
+        aria-hidden="true"
       />
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 h-full w-full pointer-events-none"
-        style={{
-          opacity: ready ? 1 : 0,
-          transition: "opacity 500ms ease",
-        }}
-      />
-    </div>
+      <div
+        className="fixed inset-0 pointer-events-none z-[var(--z-site-backdrop)]"
+        aria-hidden="true"
+      >
+        <PosterFallback
+          animated={false}
+          className="preview-flow-poster--under"
+        />
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 h-full w-full pointer-events-none"
+          style={{
+            opacity: ready ? 1 : 0,
+            transition: "opacity 500ms ease",
+          }}
+        />
+      </div>
+    </>
   );
 }
 

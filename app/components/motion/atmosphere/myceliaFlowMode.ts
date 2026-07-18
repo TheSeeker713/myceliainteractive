@@ -52,7 +52,12 @@ export function detectMyceliaFlowDeviceCapability(): Omit<
   }
 
   const canvas = document.createElement("canvas");
-  const webgl2Available = Boolean(canvas.getContext("webgl2"));
+  const probe = canvas.getContext("webgl2");
+  const webgl2Available = Boolean(probe);
+  // Release the probe context so it cannot starve the real atmosphere renderer.
+  probe
+    ?.getExtension("WEBGL_lose_context")
+    ?.loseContext();
   const connection = (
     navigator as Navigator & {
       connection?: { saveData?: boolean; effectiveType?: string };

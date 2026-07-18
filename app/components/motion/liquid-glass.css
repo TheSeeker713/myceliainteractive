@@ -458,7 +458,8 @@
   opacity: 1;
   visibility: visible;
   pointer-events: none;
-  z-index: -1;
+  /* Keep in the normal stack (not z-index:-1) so Chromium continues decoding
+     frames for WebGL upload while the element stays off-screen. */
 }
 
 @keyframes preview-flow-drift {
