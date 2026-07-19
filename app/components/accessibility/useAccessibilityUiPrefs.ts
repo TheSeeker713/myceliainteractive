@@ -54,12 +54,14 @@ export function useAccessibilityUiPrefs(): {
     };
   }, []);
 
+  // Match useMyceliaReduceMotion: set local state, then publish (storage +
+  // same-tab event) outside the updater. Publishing inside setPrefs(() => ...)
+  // runs during React's update phase and makes peer listeners call setState on
+  // SiteMotionShell while AccessibilityPanel is still rendering.
   const updatePrefs = (patch: Partial<AccessibilityUiPrefs>) => {
-    setPrefs((current) => {
-      const next = { ...current, ...patch };
-      publish(next);
-      return next;
-    });
+    const next = { ...prefs, ...patch };
+    setPrefs(next);
+    publish(next);
   };
 
   const resetUiPrefs = () => {
