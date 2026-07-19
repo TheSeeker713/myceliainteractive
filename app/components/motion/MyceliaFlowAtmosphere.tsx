@@ -27,6 +27,8 @@ const SCROLL_VELOCITY_GAIN = 1.55;
 
 type MyceliaFlowAtmosphereProps = {
   reduceMotionOptIn: boolean;
+  /** Soft-pause WebGL RAF + video; keeps FullVideoAtmosphere mounted. */
+  pauseAtmosphere?: boolean;
   onError?: (error: Error) => void;
 };
 
@@ -59,10 +61,18 @@ async function ensureVideoPlaying(video: HTMLVideoElement): Promise<boolean> {
   }
 }
 
-function FullVideoAtmosphere({ onError }: { onError?: (error: Error) => void }) {
+function FullVideoAtmosphere({
+  onError,
+  pauseAtmosphere = false,
+}: {
+  onError?: (error: Error) => void;
+  pauseAtmosphere?: boolean;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const textureReadyRef = useRef(false);
+  const rendererRef = useRef<WebGLAtmosphereRenderer | null>(null);
+  const pauseAtmosphereRef = useRef(pauseAtmosphere);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -215,7 +225,13 @@ function FullVideoAtmosphere({ onError }: { onError?: (error: Error) => void }) 
       window.addEventListener(MYCELIA_FLOW_WHEEL_EVENT, onFlowWheel);
       window.addEventListener("atmosphere-preview-wheel", onFlowWheel);
       video.addEventListener("error", onVideoError);
+      rendererRef.current = renderer;
       renderer.start();
+      // Honor current pause preference without remounting the renderer.
+      renderer.setSuspended(pauseAtmosphereRef.current);
+      if (pauseAtmosphereRef.current) {
+        video.pause();
+      }
 
       failTimer = window.setTimeout(() => {
         if (!disposed && !textureReadyRef.current) {
@@ -233,6 +249,7 @@ function FullVideoAtmosphere({ onError }: { onError?: (error: Error) => void }) 
         window.removeEventListener("pointermove", retryPlayIfNeeded);
         window.removeEventListener("scroll", retryPlayIfNeeded);
         video.removeEventListener("error", onVideoError);
+        rendererRef.current = null;
         renderer?.dispose();
         video.pause();
       };
@@ -244,6 +261,21 @@ function FullVideoAtmosphere({ onError }: { onError?: (error: Error) => void }) 
       );
     }
   }, [onError]);
+
+  useEffect(() => {
+    pauseAtmosphereRef.current = pauseAtmosphere;
+    const renderer = rendererRef.current;
+    const video = videoRef.current;
+    if (!renderer || !video) return;
+
+    // Soft-pause: stop RAF via setSuspended + pause decode; resume cleanly.
+    renderer.setSuspended(pauseAtmosphere);
+    if (pauseAtmosphere) {
+      video.pause();
+    } else {
+      void ensureVideoPlaying(video);
+    }
+  }, [pauseAtmosphere]);
 
   if (failed) {
     return <PosterFallback animated={false} />;
@@ -288,6 +320,7 @@ function FullVideoAtmosphere({ onError }: { onError?: (error: Error) => void }) 
 
 export function MyceliaFlowAtmosphere({
   reduceMotionOptIn,
+  pauseAtmosphere = false,
   onError,
 }: MyceliaFlowAtmosphereProps) {
   const [mounted, setMounted] = useState(false);
@@ -308,8 +341,18 @@ export function MyceliaFlowAtmosphere({
   });
 
   if (!mounted || mode === "static" || mode === "lite") {
-    return <PosterFallback animated={mounted && mode === "lite"} />;
+    return (
+      <PosterFallback
+        animated={mounted && mode === "lite" && !pauseAtmosphere}
+      />
+    );
   }
 
-  return <FullVideoAtmosphere key="mycelia-flow-full" onError={onError} />;
+  return (
+    <FullVideoAtmosphere
+      key="mycelia-flow-full"
+      onError={onError}
+      pauseAtmosphere={pauseAtmosphere}
+    />
+  );
 }

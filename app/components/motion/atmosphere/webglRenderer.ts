@@ -41,6 +41,8 @@ export type WebGLAtmosphereRendererOptions = {
 export type WebGLAtmosphereRenderer = {
   start: () => void;
   stop: () => void;
+  /** Soft-pause: blocks RAF start (incl. visibility resume) until cleared. */
+  setSuspended: (suspended: boolean) => void;
   resize: () => void;
   setInput: (input: Partial<AtmosphereInputState>) => void;
   dispose: () => void;
@@ -451,8 +453,10 @@ export function createWebGLAtmosphereRenderer(
     animationFrame = requestAnimationFrame(render);
   };
 
+  let suspended = false;
+
   const start = () => {
-    if (disposed || running || document.hidden) return;
+    if (disposed || running || document.hidden || suspended) return;
     running = true;
     lastRenderedAt = 0;
     resize();
@@ -464,6 +468,15 @@ export function createWebGLAtmosphereRenderer(
     if (animationFrame !== null) {
       cancelAnimationFrame(animationFrame);
       animationFrame = null;
+    }
+  };
+
+  const setSuspended = (next: boolean) => {
+    suspended = next;
+    if (next) {
+      stop();
+    } else {
+      start();
     }
   };
 
@@ -493,6 +506,7 @@ export function createWebGLAtmosphereRenderer(
   return {
     start,
     stop,
+    setSuspended,
     resize,
     setInput,
     dispose: () => {

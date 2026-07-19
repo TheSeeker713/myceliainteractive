@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, type RefObject } from "react";
+import { useAccessibilityUiPrefs } from "@/app/components/accessibility/useAccessibilityUiPrefs";
+import type { TextSizePref } from "@/app/components/accessibility/accessibilityPreference";
 import { useMyceliaReduceMotion } from "@/app/components/motion/useMyceliaReduceMotion";
 
 type AccessibilityPanelProps = {
@@ -11,9 +13,16 @@ type AccessibilityPanelProps = {
   triggerRef: RefObject<HTMLButtonElement | null>;
 };
 
+const TEXT_SIZES: { id: TextSizePref; label: string }[] = [
+  { id: "sm", label: "S" },
+  { id: "md", label: "M" },
+  { id: "lg", label: "L" },
+  { id: "xl", label: "XL" },
+];
+
 /**
- * Step 1.2 shell: Reduce Motion + Reset.
- * Additional toggles land in Step 1.3.
+ * Accessibility dialog: Reduce Motion, Pause atmosphere, text/contrast/font
+ * prefs, and Reset. Theme stays in the header control (Part 2).
  */
 export function AccessibilityPanel({
   id,
@@ -22,7 +31,12 @@ export function AccessibilityPanel({
   triggerRef,
 }: AccessibilityPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
-  const { reduceMotion, prefsReady, setReduceMotion } = useMyceliaReduceMotion();
+  const { reduceMotion, prefsReady: reduceReady, setReduceMotion } =
+    useMyceliaReduceMotion();
+  const { prefs, prefsReady: uiReady, updatePrefs, resetUiPrefs } =
+    useAccessibilityUiPrefs();
+
+  const prefsReady = reduceReady && uiReady;
 
   useEffect(() => {
     if (!open) return;
@@ -64,6 +78,7 @@ export function AccessibilityPanel({
 
   const resetAccessibility = () => {
     setReduceMotion(false);
+    resetUiPrefs();
   };
 
   return (
@@ -73,7 +88,7 @@ export function AccessibilityPanel({
       role="dialog"
       aria-modal="false"
       aria-label="Accessibility"
-      className="absolute right-0 top-full z-[calc(var(--z-site-chrome)+1)] mt-2 w-[min(calc(100vw-2rem),20rem)] rounded-xl border border-black/10 bg-white/95 p-4 shadow-lg backdrop-blur-xl pointer-events-auto"
+      className="absolute right-0 top-full z-[calc(var(--z-site-chrome)+1)] mt-2 w-[min(calc(100vw-2rem),22rem)] max-h-[min(70dvh,32rem)] overflow-y-auto rounded-xl border border-black/10 bg-white/95 p-4 shadow-lg backdrop-blur-xl pointer-events-auto"
       onWheel={(event) => event.stopPropagation()}
       onTouchMove={(event) => event.stopPropagation()}
     >
@@ -105,28 +120,89 @@ export function AccessibilityPanel({
         </button>
       </div>
 
-      <p className="text-xs text-studio-text-muted mb-4 leading-relaxed">
+      <p className="text-xs text-studio-text-muted mb-3 leading-relaxed">
         Preferences apply on this device and are saved in your browser.
       </p>
 
-      <label className="flex items-start gap-3 min-h-11 py-2 cursor-pointer">
-        <input
-          type="checkbox"
-          className="mt-1 h-4 w-4 accent-[var(--studio-accent)] cursor-pointer"
+      <div className="flex flex-col gap-1">
+        <PrefToggle
           checked={reduceMotion}
           disabled={!prefsReady}
-          onChange={(event) => setReduceMotion(event.target.checked)}
+          onChange={setReduceMotion}
+          title="Reduce motion"
+          description="Limit animation and use a static background instead of the motion atmosphere."
         />
-        <span className="min-w-0">
-          <span className="block text-sm font-medium text-studio-text">
-            Reduce motion
-          </span>
-          <span className="block text-xs text-studio-text-muted mt-0.5 leading-relaxed">
-            Limit animation and use a static background instead of the motion
-            atmosphere.
-          </span>
-        </span>
-      </label>
+
+        <PrefToggle
+          checked={prefs.pauseAtmosphere}
+          disabled={!prefsReady}
+          onChange={(next) => updatePrefs({ pauseAtmosphere: next })}
+          title="Pause background"
+          description="Stop the WebGL atmosphere and video decode; resume from the same renderer without remounting."
+        />
+
+        <div className="py-2">
+          <p className="text-sm font-medium text-studio-text mb-2">Text size</p>
+          <div
+            className="inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/70 p-0.5"
+            role="radiogroup"
+            aria-label="Text size"
+          >
+            {TEXT_SIZES.map((option) => {
+              const selected = prefs.textSize === option.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  disabled={!prefsReady}
+                  onClick={() => updatePrefs({ textSize: option.id })}
+                  className={
+                    selected
+                      ? "inline-flex items-center justify-center min-h-10 min-w-10 px-2.5 rounded-md text-xs font-semibold text-studio-text bg-white shadow-sm"
+                      : "inline-flex items-center justify-center min-h-10 min-w-10 px-2.5 rounded-md text-xs font-semibold text-studio-text-muted hover:text-studio-text"
+                  }
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <PrefToggle
+          checked={prefs.highContrast}
+          disabled={!prefsReady}
+          onChange={(next) => updatePrefs({ highContrast: next })}
+          title="High contrast"
+          description="Strengthen text and glass borders for clearer reading over the atmosphere."
+        />
+
+        <PrefToggle
+          checked={prefs.dyslexiaFont}
+          disabled={!prefsReady}
+          onChange={(next) => updatePrefs({ dyslexiaFont: next })}
+          title="Dyslexia-friendly font"
+          description="Use Atkinson Hyperlegible for body text sitewide."
+        />
+
+        <PrefToggle
+          checked={prefs.emphasizeLinks}
+          disabled={!prefsReady}
+          onChange={(next) => updatePrefs({ emphasizeLinks: next })}
+          title="Underline links"
+          description="Make links and interactive controls more visually distinct."
+        />
+
+        <PrefToggle
+          checked={prefs.relaxedSpacing}
+          disabled={!prefsReady}
+          onChange={(next) => updatePrefs({ relaxedSpacing: next })}
+          title="Relaxed spacing"
+          description="Increase line height and letter spacing for easier reading."
+        />
+      </div>
 
       <div className="mt-4 pt-3 border-t border-black/8">
         <button
@@ -139,5 +215,39 @@ export function AccessibilityPanel({
         </button>
       </div>
     </div>
+  );
+}
+
+function PrefToggle({
+  checked,
+  disabled,
+  onChange,
+  title,
+  description,
+}: {
+  checked: boolean;
+  disabled: boolean;
+  onChange: (next: boolean) => void;
+  title: string;
+  description: string;
+}) {
+  return (
+    <label className="flex items-start gap-3 min-h-11 py-2 cursor-pointer">
+      <input
+        type="checkbox"
+        className="mt-1 h-4 w-4 accent-[var(--studio-accent)] cursor-pointer"
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.checked)}
+      />
+      <span className="min-w-0">
+        <span className="block text-sm font-medium text-studio-text">
+          {title}
+        </span>
+        <span className="block text-xs text-studio-text-muted mt-0.5 leading-relaxed">
+          {description}
+        </span>
+      </span>
+    </label>
   );
 }

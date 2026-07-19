@@ -1,8 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Chakra_Petch, Geist, Geist_Mono } from "next/font/google";
+import {
+  Atkinson_Hyperlegible,
+  Chakra_Petch,
+  Geist,
+  Geist_Mono,
+} from "next/font/google";
 import { SiteMotionShell } from "./components/motion/SiteMotionShell";
 import { SiteHeader, SiteFooter } from "./components/SiteChrome";
 import "./globals.css";
+import "./styles/accessibility-prefs.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,6 +24,13 @@ const myceliaAgent = Chakra_Petch({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-mycelia-agent",
+  display: "swap",
+});
+
+const dyslexiaFont = Atkinson_Hyperlegible({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-dyslexia",
   display: "swap",
 });
 
@@ -69,7 +82,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${myceliaAgent.variable} antialiased flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} ${myceliaAgent.variable} ${dyslexiaFont.variable} antialiased flex flex-col min-h-screen`}
       >
         <a
           href="#main-content"
