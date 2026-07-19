@@ -3,10 +3,9 @@ description: Mycelia Interactive project agent rules — stack, mandatory checks
 alwaysApply: true
 ---
 
-# Mycelia Interactive — Agent Rules (`.cursor/agents.mdc`)
+# Mycelia Interactive — Agent Rules (`.cursor/rules/agents.mdc`)
 
 This file is for the **Mycelia Interactive** company website project only.
-It is distinct from, and does not affect, the `.cursor/agents.mdc` in the **KAIA Wrapper** project, which remains permanently read-only and must never be written to or edited from this or any other session.
 
 Root [`AGENTS.md`](../AGENTS.md) remains the primary source of truth and is immutable to agents unless Jeremy directs otherwise. This file supplements it with project-specific stack and check details. On version control, this file and `AGENTS.md` now say the same thing: **commit and push are mandatory and automatic; Cloudflare Workers Builds auto-deploying on push is accepted, intended behavior, not something to gate.**
 
