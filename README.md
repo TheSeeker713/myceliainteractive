@@ -8,15 +8,14 @@ This repository is the **frontend/site repo**. It contains the public marketing 
 
 **Mycelia Interactive LLC** — incorporated in New Mexico, May 2026 · Albuquerque, New Mexico
 
-- **Adrianna Loya** — Co-founder; CEO, CCO, CFO
-- **Jeremy Robards** — Founder; CTO, CAIO, CCO
+- **Adrianna Loya** — Founder; CEO, CCO, CFO
+- **Jeremy Robards** — Co-founder; CTO, CAIO, CCO
 
 ## What This Repo Contains
 
 - Mycelia Interactive LLC studio homepage (`/`)
 - Liminal Sin landing page (`/ls`) — story, access request form, FPV carousel
 - Liminal Sin request gate (`/ls/game`) — closed prototype; directs visitors to request access
-- Liminal Sin private play entry (`/ls/play?access=token`) — token-gated browser client (team-issued links only)
 - Cloudflare Worker (`workers/signup-api.ts`) — signup API, access token validation, D1
 
 ## Live Links
@@ -36,10 +35,8 @@ Private play links are issued by the development team only (`/ls/play?access=...
 
 ## Related Repositories
 
-- Frontend/site repo: [TheSeeker713/myceliainteractive](https://github.com/TheSeeker713/myceliainteractive)
-- Backend/runtime repo: [TheSeeker713/liminal-sin-gemini](https://github.com/TheSeeker713/liminal-sin-gemini)
-
-The backend repo contains the Gemini Live multi-agent runtime, WebSocket server, Google Cloud deployment, Firestore session state, and canonical media orchestration for Liminal Sin.
+Frontend/site repo: TheSeeker713/myceliainteractive (this repo)
+The Liminal Sin backend runtime is maintained in a separate, private repository.
 
 ## Tech Stack
 
