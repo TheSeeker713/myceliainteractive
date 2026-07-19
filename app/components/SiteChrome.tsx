@@ -97,13 +97,76 @@ export function SiteHeader() {
     </>
   );
 
+  const utilityCluster = (
+    <div
+      className="flex items-center gap-2"
+      aria-label="Site preferences"
+    >
+      {/* Step 1.1 placeholder — panel wiring in Step 1.2 */}
+      <button
+        type="button"
+        className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg border border-black/10 bg-white/50 text-studio-text-muted hover:text-studio-text hover:bg-white/80 transition-colors pointer-events-auto"
+        aria-label="Accessibility options"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="4.5" r="2" strokeWidth={2} />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v3m0 0c-2.5 0-4.5 1.2-5.5 3M12 11c2.5 0 4.5 1.2 5.5 3M9 21l1.5-7M15 21l-1.5-7"
+          />
+        </svg>
+      </button>
+
+      {/* Step 1.1 placeholder — persistence/bootstrap in Step 2c */}
+      <div
+        className="inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/50 p-0.5 pointer-events-auto"
+        role="group"
+        aria-label="Theme (placeholder)"
+      >
+        {(
+          [
+            { id: "system", label: "System" },
+            { id: "lightside", label: "Lightside" },
+            { id: "darkside", label: "Darkside" },
+          ] as const
+        ).map((option) => {
+          const isDefaultVisual = option.id === "lightside";
+          return (
+            <button
+              key={option.id}
+              type="button"
+              className={
+                isDefaultVisual
+                  ? "inline-flex items-center justify-center min-h-10 px-2 sm:px-2.5 rounded-md text-[0.65rem] sm:text-xs font-semibold tracking-wide text-studio-text bg-white/90 shadow-sm"
+                  : "inline-flex items-center justify-center min-h-10 px-2 sm:px-2.5 rounded-md text-[0.65rem] sm:text-xs font-semibold tracking-wide text-studio-text-muted hover:text-studio-text"
+              }
+              aria-label={`Theme: ${option.label}`}
+              aria-pressed={isDefaultVisual}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     <header className="site-gutter site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-black/8 bg-white/75 backdrop-blur-xl">
-      <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-between gap-4">
+      <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-between gap-3 sm:gap-4">
         <Link
           href="/"
           aria-label="Mycelia Interactive LLC home"
-          className="inline-flex items-center min-h-11 py-1"
+          className="inline-flex items-center min-h-11 py-1 shrink-0"
         >
           <Image
             src="/assets/images/Mycelia Interactive Banner.png"
@@ -114,49 +177,54 @@ export function SiteHeader() {
           />
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-5 text-sm" aria-label="Primary">
-          {navLinks}
-        </nav>
-
-        {/* Mobile Menu Button */}
-        <button
-          ref={menuButtonRef}
-          type="button"
-          onClick={() => setMobileOpen((open) => !open)}
-          className="lg:hidden inline-flex items-center justify-center min-h-11 min-w-11 p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileOpen}
-          aria-controls={navId}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-5 min-w-0">
+          <nav
+            className="hidden lg:flex items-center gap-5 text-sm"
+            aria-label="Primary"
           >
-            {mobileOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
+            {navLinks}
+          </nav>
+
+          {utilityCluster}
+
+          <button
+            ref={menuButtonRef}
+            type="button"
+            onClick={() => setMobileOpen((open) => !open)}
+            className="lg:hidden inline-flex items-center justify-center min-h-11 min-w-11 p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text pointer-events-auto"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            aria-controls={navId}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              {mobileOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Dropdown — nav links only; utilities stay in the bar */}
       {mobileOpen && (
         <div className="lg:hidden border-t border-black/8 bg-white/95 backdrop-blur-xl">
           <nav
