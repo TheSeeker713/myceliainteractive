@@ -144,11 +144,11 @@ export function SiteHeader() {
         triggerRef={a11yButtonRef}
       />
 
-      {/* Theme placeholder — persistence/bootstrap in Step 2c */}
+      {/* Theme placeholder — disabled until Step 2c wires real theme state */}
       <div
-        className="inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/50 p-0.5 pointer-events-auto"
+        className="inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/50 p-0.5 pointer-events-auto opacity-70"
         role="group"
-        aria-label="Theme (placeholder)"
+        aria-label="Theme (coming soon)"
       >
         {(
           [
@@ -162,12 +162,14 @@ export function SiteHeader() {
             <button
               key={option.id}
               type="button"
+              disabled
+              aria-disabled="true"
               className={
                 isDefaultVisual
-                  ? "inline-flex items-center justify-center min-h-10 px-2 sm:px-2.5 rounded-md text-[0.65rem] sm:text-xs font-semibold tracking-wide text-studio-text bg-white/90 shadow-sm"
-                  : "inline-flex items-center justify-center min-h-10 px-2 sm:px-2.5 rounded-md text-[0.65rem] sm:text-xs font-semibold tracking-wide text-studio-text-muted hover:text-studio-text"
+                  ? "inline-flex items-center justify-center min-h-10 px-2 sm:px-2.5 rounded-md text-[0.65rem] sm:text-xs font-semibold tracking-wide text-studio-text bg-white/90 shadow-sm disabled:cursor-not-allowed"
+                  : "inline-flex items-center justify-center min-h-10 px-2 sm:px-2.5 rounded-md text-[0.65rem] sm:text-xs font-semibold tracking-wide text-studio-text-muted disabled:cursor-not-allowed"
               }
-              aria-label={`Theme: ${option.label}`}
+              aria-label={`Theme: ${option.label} (coming soon)`}
               aria-pressed={isDefaultVisual}
             >
               {option.label}
