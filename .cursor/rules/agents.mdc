@@ -1,0 +1,116 @@
+---
+description: Mycelia Interactive project agent rules — stack, mandatory checks, version control
+alwaysApply: true
+---
+
+# Mycelia Interactive — Agent Rules (`.cursor/agents.mdc`)
+
+This file is for the **Mycelia Interactive** company website project only.
+It is distinct from, and does not affect, the `.cursor/agents.mdc` in the **KAIA Wrapper** project, which remains permanently read-only and must never be written to or edited from this or any other session.
+
+Root [`AGENTS.md`](../AGENTS.md) remains the primary source of truth and is immutable to agents unless Jeremy directs otherwise. This file supplements it with project-specific stack and check details. On version control, this file and `AGENTS.md` now say the same thing: **commit and push are mandatory and automatic; Cloudflare Workers Builds auto-deploying on push is accepted, intended behavior, not something to gate.**
+
+## Project overview
+
+**Mycelia Interactive LLC** company website ([myceliainteractive.com](https://www.myceliainteractive.com)).
+
+### Actual stack (from this repo — do not assume other Mycelia projects)
+
+| Layer | In use |
+|---|---|
+| Framework | Next.js **16.2.x** (App Router), `output: "export"` static export |
+| UI | React **19.2.x**, Tailwind CSS **v4**, Framer Motion, `clsx` / `tailwind-merge` |
+| Tooling | TypeScript 5.9, ESLint 9 + `eslint-config-next`, Vitest, React Compiler (`babel-plugin-react-compiler`) |
+| Hosting | Cloudflare Workers via **Wrangler** (`wrangler.jsonc`); assets from `./out`; Worker entry `workers/signup-api.ts` (D1, AI binding, cron) |
+| Package manager | **npm** (`package-lock.json`) |
+
+There is no separate `typecheck` script. TypeScript is enforced via `next build` and, when needed, `npx tsc --noEmit`.
+
+Do not claim tooling that isn't actually installed (e.g. MSW, Prettier, Playwright, axe-core, Lighthouse) as part of the standard check suite unless it has actually been added as a dependency. Verify against `package.json` before stating a testing methodology as fact.
+
+## Mandatory checks after every change
+
+Run and pass before considering a step complete:
+
+1. `npm run build`
+2. `npm run lint`
+3. `npx tsc --noEmit` (explicit typecheck; not a package.json script)
+4. `npm test` (`vitest run`)
+
+Also run any step-specific runtime/visual/mobile checks as appropriate.
+
+## Version control policy (mandatory, automatic)
+
+After every step's checks pass:
+
+1. Commit to **`main`** with a clear, specific message.
+2. Push to `origin/main` **immediately and automatically**, without asking and without waiting for a separate "commit and push" prompt.
+3. Report a commit/push record every time: hash, message, branch, and confirmed `origin/main` ahead/behind status, verified against actual `git log origin/main` — never asserted from memory or a prior claim.
+4. If a previously claimed push cannot be verified against actual `git log origin/main`, say so explicitly rather than asserting it happened.
+
+There is no Workers Builds gate to check and no holding pattern. Cloudflare Workers Builds will auto-deploy on push — that is expected and accepted, not a reason to delay or ask first.
+
+Use GitHub CLI (`gh`) and git for repository operations. Branch is always **`main`** — never `master`.
+
+### Secrets gate (still applies)
+
+Before push, confirm `.gitignore` excludes secrets:
+
+- `.env*` is ignored except `.env.production` (public build-time `NEXT_PUBLIC_*` defaults only)
+- Never commit `.env.local`, credentials, PEM keys, or API secrets
+- Confirm repo visibility (public/private) before push; this repo may be public
+
+Automated push removes the manual checkpoint that would otherwise catch an accidental secret commit — treat secret hygiene as mandatory precisely because push is no longer gated.
+
+### Manual/out-of-band deploy commands — still require approval
+
+The automatic push flow above is the only deploy path that runs without asking. Separately, these remain forbidden without Jeremy's explicit approval, since they're redundant with or could conflict with the push-triggered pipeline:
+
+- Manually running `npm run deploy` or `wrangler deploy` outside the normal commit/push flow
+- Cloudflare dashboard "retry deploy" / promote / rollback actions
+- Any MCP tool that publishes a Worker version directly
+
+`npm run deploy:dry-run` (validation only, does not publish) is always fine as part of ordinary verification.
+
+## Branch policy
+
+- Work on **`main` only**
+- Never create or use `master`
+- Prefer `gh` for GitHub-facing operations (PRs, repo metadata, visibility checks)
+
+## Standing constraints
+
+- Never hardcode client names or sensitive business details into the codebase
+- Mobile-first UI and proper error handling on all implementations
+
+---
+
+## Session behavior requirements
+
+These apply to every session.
+
+1. **Plan Mode first.** For any non-trivial feature or refactor, start in Plan Mode. Produce a numbered, reviewable plan before writing or editing a single line of code. Do not begin implementation until Jeremy explicitly approves the plan, and do not begin an individual step until that step is separately approved.
+2. **No hallucination.** Never state that a file, function, dependency, or behavior exists unless you have actually opened and read it in this repo during this session. If unsure, say "I need to check" and go check. Do not invent API names, package names, or config values. If something in a prior audit or doc appears stale or contradicted by the live code, flag the discrepancy explicitly instead of trusting either source blindly.
+3. **No code write/edit without approval.** This includes small "obvious" fixes, formatting changes, and config tweaks. Nothing gets written to disk until Jeremy says go. (Version control itself — commit and push per the policy above — is the one exception, and only after a step is already approved and its checks pass.)
+4. **No file deletion or edit without approval**, beyond the mechanical commit/push covered above. This includes moving assets into a `legacy/` folder and touching `.gitignore`. Propose the exact move/edit list first.
+5. **AGENTS.md and this file are read-only to agents.** You may read this file for context. You must never edit, rewrite, or delete it, even during a cleanup pass, even if it looks out of date. Flag apparent drift to Jeremy as an observation only — Jeremy edits these files by hand.
+6. **Verification before assertion.** Never report a change as "already present," "already done," or "already live" without first checking actual current state — local build and/or production, whichever Jeremy is looking at. If challenged on whether a change exists, re-verify from source and live output before responding. Do not defend a prior claim without checking it first.
+7. **End of session:**
+   - Run the full mandatory check suite (build, lint, typecheck, test) plus any step-specific runtime/visual/mobile checks.
+   - Do not consider a session "done" on green automated checks alone. Package up what changed and note it needs Jeremy's manual testing on a real external browser/device before it's considered fully verified. Automated Playwright-style self-reports are not sufficient on their own for this project.
+   - Commit and push per the version control policy above — automatic, no separate prompt.
+
+## Current initiative status
+
+### Background: shipped, not upcoming
+
+The WebGL/video-texture atmosphere (`MyceliaFlowAtmosphere.tsx`) is already live in production via `SiteMotionShell.tsx` (the "A6 cutover"). `VideoBackground.tsx` (the old spritesheet path) still exists in the tree for rollback only — it is not the active background. Do not treat retiring it or building a WebGL replacement as upcoming work; that already happened. Any further background work is refinement, not initial build.
+
+### Theme toggle: System / Lightside / Darkside — planned, not shipped
+
+No theme toggle exists in the live UI or `SiteChrome` header yet. This remains a planned feature, not built:
+
+- Default state must remain **light** for new visitors; dark must never be the default.
+- Three-state toggle in the sticky header: **System**, **Lightside**, **Darkside**.
+- "System" follows `prefers-color-scheme`. "Lightside"/"Darkside" are explicit user overrides that persist (e.g. localStorage).
+- Whether "Darkside" gets its own full token palette or is deferred is an open scope question — confirm with Jeremy before implementing dark-mode-specific colors.
