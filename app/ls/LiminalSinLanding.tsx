@@ -56,19 +56,21 @@ export function LiminalSinLanding() {
 
   const panes = useMemo(
     () => [
-      { content: <LiminalSinHeroContent /> },
+      { label: "Liminal Sin hero", content: <LiminalSinHeroContent /> },
       {
         id: "experience",
+        label: "Experience",
         content: <LiminalSinExperienceContent />,
       },
-      { content: <FPVPane /> },
-      { content: <LiminalSinStoryContent /> },
-      { content: <LiminalSinTrustContent /> },
-      { content: <LiminalSinCapabilitiesContent /> },
-      { content: <LiminalSinArchitectureContent /> },
-      { content: <LiminalSinSliceScopeContent /> },
+      { label: "First-person view", content: <FPVPane /> },
+      { label: "Story", content: <LiminalSinStoryContent /> },
+      { label: "Trust", content: <LiminalSinTrustContent /> },
+      { label: "Capabilities", content: <LiminalSinCapabilitiesContent /> },
+      { label: "Architecture", content: <LiminalSinArchitectureContent /> },
+      { label: "Slice scope", content: <LiminalSinSliceScopeContent /> },
       {
         id: "access",
+        label: "Request access",
         content: (
           <div className="space-y-8">
             <LiminalSinAccessContent />

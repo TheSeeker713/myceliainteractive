@@ -15,16 +15,26 @@ export function HomePage() {
 
   const panes = useMemo(
     () => [
-      { content: <HeroContent /> },
-      { content: <AboutContent /> },
-      { content: <MissionContent /> },
+      { label: "Hero", content: <HeroContent /> },
+      { label: "About", content: <AboutContent /> },
+      { label: "Mission", content: <MissionContent /> },
       {
         id: "projects",
+        label: liminalSin.name,
         content: <ProjectSceneContent project={liminalSin} />,
       },
-      { content: <ProjectSceneContent project={s33k3r} /> },
-      { content: <ProjectSceneContent project={kaia} /> },
-      { content: <ProjectSceneContent project={ais} /> },
+      {
+        label: s33k3r.name,
+        content: <ProjectSceneContent project={s33k3r} />,
+      },
+      {
+        label: kaia.name,
+        content: <ProjectSceneContent project={kaia} />,
+      },
+      {
+        label: ais.name,
+        content: <ProjectSceneContent project={ais} />,
+      },
     ],
     [liminalSin, s33k3r, kaia, ais],
   );

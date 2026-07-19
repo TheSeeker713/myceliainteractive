@@ -35,8 +35,38 @@ const GLITCH_SLICES = [
 
 export type MyceliaCardPane = {
   id?: string;
+  /** Screen-reader label for live-region pane announcements. */
+  label?: string;
   content: ReactNode;
 };
+
+function isTypingTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  const tag = target.tagName;
+  return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+}
+
+/** True when the stage scrollport can still move in `direction` (1 = down). */
+function canScrollStageContent(
+  scrollPort: HTMLElement | null,
+  direction: 1 | -1,
+): boolean {
+  if (!scrollPort) return false;
+  const max = scrollPort.scrollHeight - scrollPort.clientHeight;
+  if (max <= 1) return false;
+  if (direction === 1) return scrollPort.scrollTop < max - 1;
+  return scrollPort.scrollTop > 1;
+}
+
+function paneAnnouncement(
+  pane: MyceliaCardPane | undefined,
+  index: number,
+  total: number,
+): string {
+  const name = pane?.label ?? pane?.id ?? `Card ${index + 1}`;
+  return `${name}, ${index + 1} of ${total}`;
+}
 
 function GlitchPane({
   children,
@@ -155,9 +185,11 @@ export function MyceliaCardStage({
   const rootRef = useRef<HTMLDivElement>(null);
   const machineRef = useRef<ScrollMachineState>(createScrollMachineState(0));
   const wheelAccumRef = useRef(0);
+  const announcedIndexRef = useRef<number | null>(null);
   const [machine, setMachine] = useState<ScrollMachineState>(() =>
     createScrollMachineState(0),
   );
+  const [liveMessage, setLiveMessage] = useState("");
 
   useEffect(() => {
     const root = rootRef.current;
@@ -277,13 +309,52 @@ export function MyceliaCardStage({
       touchStartY = touch.clientY;
     };
 
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      if (isTypingTarget(event.target)) return;
+      if (
+        event.target instanceof Element &&
+        event.target.closest("header, footer, [role='dialog']")
+      ) {
+        return;
+      }
+
+      let direction: 1 | -1 | null = null;
+      if (event.key === "ArrowDown" || event.key === "PageDown") {
+        direction = 1;
+      } else if (event.key === "ArrowUp" || event.key === "PageUp") {
+        direction = -1;
+      }
+      if (!direction) return;
+
+      // Inside the card scrollport: let native overflow scroll until the edge,
+      // then advance panes (same split as wheel over vs outside the card).
+      const scrollPort = rootRef.current?.querySelector(
+        ".liquid-glass-card-content--stage",
+      ) as HTMLElement | null;
+      if (
+        event.target instanceof Node &&
+        scrollPort?.contains(event.target) &&
+        canScrollStageContent(scrollPort, direction)
+      ) {
+        return;
+      }
+
+      const before = machineRef.current;
+      commitIntent(direction);
+      if (machineRef.current === before) return;
+      event.preventDefault();
+    };
+
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [panes.length]);
 
@@ -306,11 +377,31 @@ export function MyceliaCardStage({
   const { cardIndex, cycle } = getCycleForScrollMachine(machine, reduceMotion);
   const pane = panes[cardIndex];
 
+  useEffect(() => {
+    if (machine.status !== "holding") return;
+    if (announcedIndexRef.current === null) {
+      announcedIndexRef.current = cardIndex;
+      return;
+    }
+    if (announcedIndexRef.current === cardIndex) return;
+    announcedIndexRef.current = cardIndex;
+    const message = paneAnnouncement(pane, cardIndex, panes.length);
+    startTransition(() => setLiveMessage(message));
+  }, [machine.status, cardIndex, pane, panes.length]);
+
   return (
     <div
       ref={rootRef}
       className="atmosphere-preview-root relative h-[calc(100dvh-var(--header-h)-var(--footer-h))] overflow-hidden"
     >
+      <div
+        className="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        role="status"
+      >
+        {liveMessage}
+      </div>
       <div className="liquid-glass-sticky-stage">
         <GlitchPane cycle={cycle} reduceMotion={reduceMotion}>
           {pane?.content}
