@@ -25,8 +25,6 @@ This repository is the **frontend/site repo**. It contains the public marketing 
 - Liminal Sin access requests: [https://www.myceliainteractive.com/ls/game](https://www.myceliainteractive.com/ls/game)
 - The S33k3r Transmission (external): [https://www.thes33k3r.com](https://www.thes33k3r.com)
 
-Private play links are issued by the development team only (`/ls/play?access=...`).
-
 ## Contact
 
 - contact@myceliainteractive.com
@@ -94,37 +92,3 @@ Builds the static export and deploys via Wrangler.
 | `/ls/game` | Closed prototype gate — request access (not playable) |
 | `/ls/play` | Private play entry — requires `?access=token` issued by team |
 | `/ls/privacy` | Liminal Sin privacy policy |
-
-## Issuing prototype access (team)
-
-1. Review pending requests in the D1 `signups` table (`status = 'pending'`).
-2. Approve a requester with the admin grant API (generates a secure token and sends Email 2 with the private play link):
-
-```bash
-curl -X POST "https://www.myceliainteractive.com/api/access/grant" \
-  -H "Authorization: Bearer $ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"email":"requester@example.com","expiresInDays":14}'
-```
-
-3. The requester receives Email 2 with `https://www.myceliainteractive.com/ls/play?access=<token>` (default expiry: 14 days, max 30).
-
-To revoke a token:
-
-```bash
-curl -X POST "https://www.myceliainteractive.com/api/access/revoke" \
-  -H "Authorization: Bearer $ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"token":"<token>"}'
-```
-
-**Emergency fallback** — manual D1 insert (then email the play link yourself):
-
-```sql
-INSERT INTO access_tokens (token, email, name, expires_at, created_at, revoked)
-VALUES ('your-random-token-here', 'requester@example.com', 'Name', 1735689600000, 1704067200000, 0);
-```
-
-Set `expires_at` to a Unix timestamp in milliseconds (e.g. 7–14 days from now).
-
-`POST /api/set-game-live` is deprecated; use per-user `/api/access/grant` instead.
