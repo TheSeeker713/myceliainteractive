@@ -72,10 +72,14 @@ function GlitchPane({
   children,
   cycle,
   reduceMotion,
+  paneId,
+  paneLabel,
 }: {
   children: ReactNode;
   cycle: CardCycleState;
   reduceMotion: boolean;
+  paneId?: string;
+  paneLabel?: string;
 }) {
   if (cycle.opacity <= 0.01 && cycle.phase === "buffer") {
     return null;
@@ -91,6 +95,15 @@ function GlitchPane({
     glitch > 0.55 ? (Math.sin(glitch * 48) > 0.35 ? 0.18 : 0) * glitch : 0;
   const rgb = Math.min(36, Math.max(glitch, inGlitchPhase ? 0.08 : 0) * 42);
   const tear = Math.max(glitch, inGlitchPhase ? 0.08 : 0) * 28;
+  // Fragment target + focus restore land on the base card only — never on
+  // aria-hidden glitch clones (duplicate ids / focusable hidden content).
+  const landmarkProps = paneId
+    ? ({
+        id: paneId,
+        tabIndex: -1,
+        "aria-label": paneLabel,
+      } as const)
+    : {};
 
   if (reduceMotion || !inGlitchPhase) {
     return (
@@ -103,7 +116,12 @@ function GlitchPane({
             : `translateY(${(1 - cycle.opacity) * 12}px) scale(${0.96 + cycle.opacity * 0.04})`,
         }}
       >
-        <LiquidGlassSurface variant="stage" trackPointer contentClassName="!p-6 sm:!p-8 lg:!p-10">
+        <LiquidGlassSurface
+          variant="stage"
+          trackPointer
+          contentClassName="!p-6 sm:!p-8 lg:!p-10"
+          {...landmarkProps}
+        >
           {children}
         </LiquidGlassSurface>
       </div>
@@ -125,7 +143,12 @@ function GlitchPane({
       }
     >
       <div className="liquid-glass-glitch-base">
-        <LiquidGlassSurface variant="stage" trackPointer contentClassName="!p-6 sm:!p-8 lg:!p-10">
+        <LiquidGlassSurface
+          variant="stage"
+          trackPointer
+          contentClassName="!p-6 sm:!p-8 lg:!p-10"
+          {...landmarkProps}
+        >
           {pane}
         </LiquidGlassSurface>
       </div>
@@ -186,6 +209,7 @@ export function MyceliaCardStage({
   const machineRef = useRef<ScrollMachineState>(createScrollMachineState(0));
   const wheelAccumRef = useRef(0);
   const announcedIndexRef = useRef<number | null>(null);
+  const pendingFocusIdRef = useRef<string | null>(null);
   const [machine, setMachine] = useState<ScrollMachineState>(() =>
     createScrollMachineState(0),
   );
@@ -364,6 +388,7 @@ export function MyceliaCardStage({
       if (!hash) return;
       const index = panes.findIndex((pane) => pane.id === hash);
       if (index < 0) return;
+      pendingFocusIdRef.current = hash;
       const jumped = createScrollMachineState(index);
       machineRef.current = jumped;
       startTransition(() => setMachine(jumped));
@@ -389,6 +414,23 @@ export function MyceliaCardStage({
     startTransition(() => setLiveMessage(message));
   }, [machine.status, cardIndex, pane, panes.length]);
 
+  // F3: after hash/CTA pane jumps, move focus onto the new landmark.
+  useEffect(() => {
+    if (machine.status !== "holding") return;
+    const focusId = pendingFocusIdRef.current;
+    if (!focusId) return;
+    if (panes[cardIndex]?.id !== focusId) return;
+    pendingFocusIdRef.current = null;
+    const focusTarget = () => {
+      const el = document.getElementById(focusId);
+      if (el instanceof HTMLElement) {
+        el.focus({ preventScroll: true });
+      }
+    };
+    // Double-rAF: wait for the active pane's id to commit to the DOM.
+    requestAnimationFrame(() => requestAnimationFrame(focusTarget));
+  }, [machine.status, cardIndex, panes]);
+
   return (
     <div
       ref={rootRef}
@@ -403,7 +445,12 @@ export function MyceliaCardStage({
         {liveMessage}
       </div>
       <div className="liquid-glass-sticky-stage">
-        <GlitchPane cycle={cycle} reduceMotion={reduceMotion}>
+        <GlitchPane
+          cycle={cycle}
+          reduceMotion={reduceMotion}
+          paneId={pane?.id}
+          paneLabel={pane?.label}
+        >
           {pane?.content}
         </GlitchPane>
       </div>

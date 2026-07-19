@@ -15,6 +15,8 @@ export type LiquidGlassSurfaceProps = {
   contentClassName?: string;
   style?: CSSProperties;
   id?: string;
+  tabIndex?: number;
+  "aria-label"?: string;
   /**
    * stage — homepage discrete cycle card
    * cover — full-width page section card
@@ -35,6 +37,8 @@ export function LiquidGlassSurface({
   contentClassName = "",
   style,
   id,
+  tabIndex,
+  "aria-label": ariaLabel,
   variant = "panel",
   trackPointer = false,
 }: LiquidGlassSurfaceProps) {
@@ -60,6 +64,8 @@ export function LiquidGlassSurface({
     <article
       id={id}
       ref={cardRef}
+      tabIndex={tabIndex}
+      aria-label={ariaLabel}
       className={cn(
         "liquid-glass-card scroll-mt-24",
         (variant === "cover" || variant === "fill") &&
