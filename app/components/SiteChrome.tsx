@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { AccessibilityPanel } from "@/app/components/AccessibilityPanel";
 
 const NO_CHROME_ROUTES = ["/ls/play"];
 
@@ -16,13 +17,17 @@ function shouldHideChrome(pathname: string) {
 export function SiteHeader() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [a11yOpen, setA11yOpen] = useState(false);
   const [menuPathname, setMenuPathname] = useState(pathname);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const a11yButtonRef = useRef<HTMLButtonElement>(null);
   const navId = useId();
+  const a11yPanelId = useId();
 
   if (pathname !== menuPathname) {
     setMenuPathname(pathname);
     setMobileOpen(false);
+    setA11yOpen(false);
   }
 
   useEffect(() => {
@@ -99,14 +104,20 @@ export function SiteHeader() {
 
   const utilityCluster = (
     <div
-      className="flex items-center gap-2"
+      className="relative flex items-center gap-2"
       aria-label="Site preferences"
     >
-      {/* Step 1.1 placeholder — panel wiring in Step 1.2 */}
       <button
+        ref={a11yButtonRef}
         type="button"
+        onClick={() => {
+          setMobileOpen(false);
+          setA11yOpen((open) => !open);
+        }}
         className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg border border-black/10 bg-white/50 text-studio-text-muted hover:text-studio-text hover:bg-white/80 transition-colors pointer-events-auto"
         aria-label="Accessibility options"
+        aria-expanded={a11yOpen}
+        aria-controls={a11yPanelId}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +137,14 @@ export function SiteHeader() {
         </svg>
       </button>
 
-      {/* Step 1.1 placeholder — persistence/bootstrap in Step 2c */}
+      <AccessibilityPanel
+        id={a11yPanelId}
+        open={a11yOpen}
+        onClose={() => setA11yOpen(false)}
+        triggerRef={a11yButtonRef}
+      />
+
+      {/* Theme placeholder — persistence/bootstrap in Step 2c */}
       <div
         className="inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/50 p-0.5 pointer-events-auto"
         role="group"
@@ -190,7 +208,10 @@ export function SiteHeader() {
           <button
             ref={menuButtonRef}
             type="button"
-            onClick={() => setMobileOpen((open) => !open)}
+            onClick={() => {
+              setA11yOpen(false);
+              setMobileOpen((open) => !open);
+            }}
             className="lg:hidden inline-flex items-center justify-center min-h-11 min-w-11 p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text pointer-events-auto"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}

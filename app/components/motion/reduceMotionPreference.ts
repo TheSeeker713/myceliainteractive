@@ -3,6 +3,14 @@ export const MYCELIA_REDUCE_MOTION_KEY = "mycelia:reduce-motion";
 export const LEGACY_PREVIEW_REDUCE_MOTION_KEY =
   "atmosphere-preview:reduce-motion";
 
+/** Same-tab sync for multiple useMyceliaReduceMotion() consumers. */
+export const MYCELIA_REDUCE_MOTION_CHANGE_EVENT =
+  "mycelia:reduce-motion-change";
+
+export type MyceliaReduceMotionChangeDetail = {
+  reduceMotion: boolean;
+};
+
 type StorageLike = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
 /**

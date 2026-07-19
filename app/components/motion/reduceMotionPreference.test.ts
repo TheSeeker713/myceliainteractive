@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   LEGACY_PREVIEW_REDUCE_MOTION_KEY,
+  MYCELIA_REDUCE_MOTION_CHANGE_EVENT,
   MYCELIA_REDUCE_MOTION_KEY,
   readMyceliaReduceMotion,
   writeMyceliaReduceMotion,
@@ -48,5 +49,11 @@ describe("reduceMotionPreference", () => {
     writeMyceliaReduceMotion(storage, false);
     expect(storage.getItem(MYCELIA_REDUCE_MOTION_KEY)).toBeNull();
     expect(storage.getItem(LEGACY_PREVIEW_REDUCE_MOTION_KEY)).toBeNull();
+  });
+
+  it("exports a stable same-tab change event name", () => {
+    expect(MYCELIA_REDUCE_MOTION_CHANGE_EVENT).toBe(
+      "mycelia:reduce-motion-change",
+    );
   });
 });
