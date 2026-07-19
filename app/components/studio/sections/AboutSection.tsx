@@ -32,9 +32,8 @@ export function AboutContent() {
         behavior shapes the experience as it unfolds.
       </p>
       <p className="liquid-glass-body">
-        All intellectual property developed under the Mycelia Interactive name
-        is owned in full by the company. We do not develop licensed or adapted
-        third-party properties.
+        Every project we build is original — our own characters, our own worlds,
+        no licensed IP or fan adaptations.
       </p>
     </SceneCard>
   );
