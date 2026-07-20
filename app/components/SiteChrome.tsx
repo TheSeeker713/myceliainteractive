@@ -5,6 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { AccessibilityPanel } from "@/app/components/AccessibilityPanel";
+import {
+  AccessibilityBottomSheet,
+  useIsMobileViewport,
+} from "@/app/mobile";
+
 
 const NO_CHROME_ROUTES = ["/ls/play"];
 
@@ -16,6 +21,7 @@ function shouldHideChrome(pathname: string) {
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const { isMobileViewport } = useIsMobileViewport();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [a11yOpen, setA11yOpen] = useState(false);
   const [menuPathname, setMenuPathname] = useState(pathname);
@@ -23,6 +29,7 @@ export function SiteHeader() {
   const a11yButtonRef = useRef<HTMLButtonElement>(null);
   const navId = useId();
   const a11yPanelId = useId();
+  const closeA11y = () => setA11yOpen(false);
 
   if (pathname !== menuPathname) {
     setMenuPathname(pathname);
@@ -137,12 +144,21 @@ export function SiteHeader() {
         </svg>
       </button>
 
-      <AccessibilityPanel
-        id={a11yPanelId}
-        open={a11yOpen}
-        onClose={() => setA11yOpen(false)}
-        triggerRef={a11yButtonRef}
-      />
+      {isMobileViewport ? (
+        <AccessibilityBottomSheet
+          id={a11yPanelId}
+          open={a11yOpen}
+          onClose={closeA11y}
+          triggerRef={a11yButtonRef}
+        />
+      ) : (
+        <AccessibilityPanel
+          id={a11yPanelId}
+          open={a11yOpen}
+          onClose={closeA11y}
+          triggerRef={a11yButtonRef}
+        />
+      )}
 
       {/* Theme placeholder — disabled until Step 2c wires real theme state */}
       <div
