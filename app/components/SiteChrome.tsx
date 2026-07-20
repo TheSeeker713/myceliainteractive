@@ -7,6 +7,7 @@ import { useId, useRef, useState } from "react";
 import { AccessibilityPanel } from "@/app/components/AccessibilityPanel";
 import {
   AccessibilityBottomSheet,
+  MobileFeatureErrorBoundary,
   PrimaryNavLinks,
   SiteMobileNavPanel,
   SiteMobileNavToggle,
@@ -77,12 +78,14 @@ export function SiteHeader() {
       </button>
 
       {isMobileViewport ? (
-        <AccessibilityBottomSheet
-          id={a11yPanelId}
-          open={a11yOpen}
-          onClose={closeA11y}
-          triggerRef={a11yButtonRef}
-        />
+        <MobileFeatureErrorBoundary feature="a11y-sheet">
+          <AccessibilityBottomSheet
+            id={a11yPanelId}
+            open={a11yOpen}
+            onClose={closeA11y}
+            triggerRef={a11yButtonRef}
+          />
+        </MobileFeatureErrorBoundary>
       ) : (
         <AccessibilityPanel
           id={a11yPanelId}
@@ -94,7 +97,7 @@ export function SiteHeader() {
 
       {/* Theme placeholder — disabled until Step 2c wires real theme state */}
       <div
-        className="inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/50 p-0.5 pointer-events-auto opacity-70"
+        className="site-header-theme-cluster inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/50 p-0.5 pointer-events-auto opacity-70"
         role="group"
         aria-label="Theme (coming soon)"
       >
@@ -155,22 +158,26 @@ export function SiteHeader() {
 
           {utilityCluster}
 
-          <SiteMobileNavToggle
-            open={mobileOpen}
-            onOpenChange={setMobileOpen}
-            onBeforeOpen={closeA11y}
-            navId={navId}
-            menuButtonRef={menuButtonRef}
-          />
+          <MobileFeatureErrorBoundary feature="mobile-nav-toggle">
+            <SiteMobileNavToggle
+              open={mobileOpen}
+              onOpenChange={setMobileOpen}
+              onBeforeOpen={closeA11y}
+              navId={navId}
+              menuButtonRef={menuButtonRef}
+            />
+          </MobileFeatureErrorBoundary>
         </div>
       </div>
 
-      <SiteMobileNavPanel
-        open={mobileOpen}
-        onOpenChange={setMobileOpen}
-        navId={navId}
-        menuButtonRef={menuButtonRef}
-      />
+      <MobileFeatureErrorBoundary feature="mobile-nav-panel">
+        <SiteMobileNavPanel
+          open={mobileOpen}
+          onOpenChange={setMobileOpen}
+          navId={navId}
+          menuButtonRef={menuButtonRef}
+        />
+      </MobileFeatureErrorBoundary>
     </header>
   );
 }

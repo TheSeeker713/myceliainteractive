@@ -26,3 +26,17 @@
 .site-mobile-nav-list a:hover {
   color: var(--color-studio-text, #171717);
 }
+
+/* ≤360px: compress disabled theme placeholders so A11y + hamburger stay on-screen */
+@media (max-width: 360px) {
+  .site-header-theme-cluster {
+    max-width: 6.75rem;
+    overflow: hidden;
+  }
+
+  .site-header-theme-cluster button {
+    min-width: 0;
+    padding-inline: 0.2rem;
+    font-size: 0.55rem;
+  }
+}

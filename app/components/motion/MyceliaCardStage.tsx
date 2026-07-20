@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { useIsMobileViewport } from "@/app/mobile";
+import { callMobileSafe } from "@/app/mobile/guardMobile";
 import type { CardCycleState } from "./cardCycle";
 import {
   accumulateWheelDelta,
@@ -305,10 +306,15 @@ export function MyceliaCardStage({
 
     // Mobile: scroll-end advancement + no desktop outside-card touch trap.
     if (isMobileViewport) {
-      const detachMobile = attachCardStageMobileListeners({
-        getRoot: () => rootRef.current,
-        commitIntent,
-      });
+      const detachMobile = callMobileSafe(
+        "card-stage-attach-entry",
+        () =>
+          attachCardStageMobileListeners({
+            getRoot: () => rootRef.current,
+            commitIntent,
+          }),
+        () => {},
+      );
       window.addEventListener("keydown", onKeyDown);
       return () => {
         detachMobile();

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, type RefObject } from "react";
+import { runMobileSafe } from "@/app/mobile/guardMobile";
 import "@/app/styles/mobile/site-chrome.mobile.css";
 
 export type PrimaryNavItem =
@@ -89,8 +90,10 @@ export function SiteMobileNavToggle({
       ref={menuButtonRef}
       type="button"
       onClick={() => {
-        if (!open) onBeforeOpen?.();
-        onOpenChange(!open);
+        runMobileSafe("mobile-nav-toggle", () => {
+          if (!open) onBeforeOpen?.();
+          onOpenChange(!open);
+        });
       }}
       className="lg:hidden inline-flex items-center justify-center min-h-11 min-w-11 p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text pointer-events-auto"
       aria-label={open ? "Close menu" : "Open menu"}
@@ -147,13 +150,19 @@ export function SiteMobileNavPanel({
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onOpenChange(false);
-        menuButtonRef.current?.focus();
+        runMobileSafe("mobile-nav-escape", () => {
+          onOpenChange(false);
+          menuButtonRef.current?.focus();
+        });
       }
     };
 
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    return () => {
+      runMobileSafe("mobile-nav-escape-detach", () => {
+        document.removeEventListener("keydown", onKeyDown);
+      });
+    };
   }, [open, onOpenChange, menuButtonRef]);
 
   if (!open) return null;

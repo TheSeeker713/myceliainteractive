@@ -8,6 +8,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { AccessibilityPanelBody } from "@/app/components/accessibility/AccessibilityPanelBody";
+import { callMobileSafe, runMobileSafe } from "@/app/mobile/guardMobile";
 import "@/app/styles/mobile/a11y-sheet.css";
 
 type AccessibilityBottomSheetProps = {
@@ -45,86 +46,95 @@ export function AccessibilityBottomSheet({
     if (!open || !isClient) return;
 
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const panel = panelRef.current;
     const trigger = triggerRef.current;
-    // Prefer body controls after the header close button for first focus.
-    const focusTarget =
-      panel?.querySelector<HTMLElement>(
-        ".a11y-sheet-body input, .a11y-sheet-body button",
-      ) ??
-      panel?.querySelector<HTMLElement>("button, input") ??
-      panel;
-    focusTarget?.focus();
+
+    runMobileSafe("a11y-sheet-open", () => {
+      document.body.style.overflow = "hidden";
+
+      const panel = panelRef.current;
+      const focusTarget =
+        panel?.querySelector<HTMLElement>(
+          ".a11y-sheet-body input, .a11y-sheet-body button",
+        ) ??
+        panel?.querySelector<HTMLElement>("button, input") ??
+        panel;
+      focusTarget?.focus();
+    });
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        onClose();
+        runMobileSafe("a11y-sheet-escape", onClose);
       }
     };
 
     document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKeyDown);
-      trigger?.focus();
+      runMobileSafe("a11y-sheet-close", () => {
+        document.body.style.overflow = previousOverflow;
+        document.removeEventListener("keydown", onKeyDown);
+        trigger?.focus();
+      });
     };
   }, [open, isClient, onClose, triggerRef]);
 
   if (!open || !isClient) return null;
 
-  return createPortal(
-    <div className="a11y-sheet-root">
-      <button
-        type="button"
-        className="a11y-sheet-backdrop"
-        aria-label="Dismiss accessibility panel"
-        onClick={onClose}
-      />
-      <div
-        ref={panelRef}
-        id={id}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Accessibility"
-        className="a11y-sheet-panel"
-        onWheel={(event) => event.stopPropagation()}
-        onTouchMove={(event) => event.stopPropagation()}
-      >
-        <div className="a11y-sheet-header">
-          <h2 className="text-sm font-semibold tracking-wide text-studio-text uppercase pt-2">
-            Accessibility
-          </h2>
+  return callMobileSafe(
+    "a11y-sheet-portal",
+    () =>
+      createPortal(
+        <div className="a11y-sheet-root">
           <button
             type="button"
-            onClick={onClose}
-            className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg text-studio-text-muted hover:text-studio-text transition-colors"
-            aria-label="Close accessibility panel"
+            className="a11y-sheet-backdrop"
+            aria-label="Dismiss accessibility panel"
+            onClick={() => runMobileSafe("a11y-sheet-backdrop", onClose)}
+          />
+          <div
+            ref={panelRef}
+            id={id}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Accessibility"
+            className="a11y-sheet-panel"
+            onWheel={(event) => event.stopPropagation()}
+            onTouchMove={(event) => event.stopPropagation()}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <div className="a11y-sheet-body">
-          <AccessibilityPanelBody />
-        </div>
-      </div>
-    </div>,
-    document.body,
+            <div className="a11y-sheet-header">
+              <h2 className="text-sm font-semibold tracking-wide text-studio-text uppercase pt-2">
+                Accessibility
+              </h2>
+              <button
+                type="button"
+                onClick={() => runMobileSafe("a11y-sheet-close-btn", onClose)}
+                className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg text-studio-text-muted hover:text-studio-text transition-colors"
+                aria-label="Close accessibility panel"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="a11y-sheet-body">
+              <AccessibilityPanelBody />
+            </div>
+          </div>
+        </div>,
+        document.body,
+      ),
+    null,
   );
 }

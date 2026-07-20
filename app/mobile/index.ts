@@ -1,10 +1,12 @@
 export { AccessibilityBottomSheet } from "./AccessibilityBottomSheet";
+export { MobileFeatureErrorBoundary } from "./MobileFeatureErrorBoundary";
 export {
   PRIMARY_NAV_ITEMS,
   PrimaryNavLinks,
   SiteMobileNavPanel,
   SiteMobileNavToggle,
 } from "./SiteMobileNav";
+export { callMobileSafe, runMobileSafe } from "./guardMobile";
 export {
   MOBILE_VIEWPORT_MEDIA_QUERY,
   matchesMobileViewport,
