@@ -1,0 +1,28 @@
+/* Mobile nav panel (hamburger dropdown). A11y + Theme stay in the header bar. */
+
+.site-mobile-nav-panel {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.site-mobile-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-block: 1rem;
+  font-size: 0.875rem;
+}
+
+.site-mobile-nav-list a {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-studio-text-muted, #5c5c5c);
+  transition: color 0.15s ease;
+}
+
+.site-mobile-nav-list a:hover {
+  color: var(--color-studio-text, #171717);
+}

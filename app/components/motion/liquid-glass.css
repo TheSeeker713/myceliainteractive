@@ -539,8 +539,4 @@
   }
 }
 
-@media (max-width: 640px) {
-  .liquid-glass-sticky-stage {
-    padding-inline: 1rem;
-  }
-}
+/* max-width mobile stage rules live in app/styles/mobile/liquid-glass.mobile.css */

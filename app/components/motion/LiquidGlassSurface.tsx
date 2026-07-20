@@ -8,6 +8,7 @@ import {
 } from "react";
 import { cn } from "@/utils/cn";
 import "./liquid-glass.css";
+import "@/app/styles/mobile/liquid-glass.mobile.css";
 
 export type LiquidGlassSurfaceProps = {
   children: ReactNode;

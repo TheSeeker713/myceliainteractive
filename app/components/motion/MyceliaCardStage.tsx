@@ -25,7 +25,6 @@ import { MYCELIA_FLOW_WHEEL_EVENT } from "./MyceliaFlowAtmosphere";
 import { attachCardStageMobileListeners } from "./mobile/attachCardStageMobileListeners";
 import { canScrollStageContent } from "./mobile/cardStageMobileScroll";
 import "./liquid-glass.css";
-import "./mobile/card-stage.mobile.css";
 
 const GLITCH_SLICES = [
   { top: 0, height: 18, offset: -1.15 },

@@ -3,13 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { AccessibilityPanel } from "@/app/components/AccessibilityPanel";
 import {
   AccessibilityBottomSheet,
+  PrimaryNavLinks,
+  SiteMobileNavPanel,
+  SiteMobileNavToggle,
   useIsMobileViewport,
 } from "@/app/mobile";
-
 
 const NO_CHROME_ROUTES = ["/ls/play"];
 
@@ -37,77 +39,7 @@ export function SiteHeader() {
     setA11yOpen(false);
   }
 
-  useEffect(() => {
-    if (!mobileOpen) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMobileOpen(false);
-        menuButtonRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [mobileOpen]);
-
   if (shouldHideChrome(pathname)) return null;
-
-  const navLinks = (
-    <>
-      <Link
-        href="/#projects"
-        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
-        onClick={() => setMobileOpen(false)}
-      >
-        Projects
-      </Link>
-      <Link
-        href="/ls"
-        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
-        onClick={() => setMobileOpen(false)}
-      >
-        Liminal Sin
-      </Link>
-      <Link
-        href="/roadmap"
-        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
-        onClick={() => setMobileOpen(false)}
-      >
-        Roadmap
-      </Link>
-      <Link
-        href="/vision"
-        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
-        onClick={() => setMobileOpen(false)}
-      >
-        10-Year Vision
-      </Link>
-      <Link
-        href="/team"
-        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
-        onClick={() => setMobileOpen(false)}
-      >
-        Team
-      </Link>
-      <Link
-        href="/contact"
-        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
-        onClick={() => setMobileOpen(false)}
-      >
-        Contact
-      </Link>
-      <a
-        href="https://www.thes33k3r.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-studio-text-muted hover:text-studio-text transition-colors py-3"
-        onClick={() => setMobileOpen(false)}
-      >
-        The S33k3r
-      </a>
-    </>
-  );
 
   const utilityCluster = (
     <div
@@ -218,63 +150,27 @@ export function SiteHeader() {
             className="hidden lg:flex items-center gap-5 text-sm"
             aria-label="Primary"
           >
-            {navLinks}
+            <PrimaryNavLinks variant="desktop" />
           </nav>
 
           {utilityCluster}
 
-          <button
-            ref={menuButtonRef}
-            type="button"
-            onClick={() => {
-              setA11yOpen(false);
-              setMobileOpen((open) => !open);
-            }}
-            className="lg:hidden inline-flex items-center justify-center min-h-11 min-w-11 p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text pointer-events-auto"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-            aria-controls={navId}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              {mobileOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
+          <SiteMobileNavToggle
+            open={mobileOpen}
+            onOpenChange={setMobileOpen}
+            onBeforeOpen={closeA11y}
+            navId={navId}
+            menuButtonRef={menuButtonRef}
+          />
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown — nav links only; utilities stay in the bar */}
-      {mobileOpen && (
-        <div className="lg:hidden border-t border-black/8 bg-white/95 backdrop-blur-xl">
-          <nav
-            id={navId}
-            className="site-gutter py-4 flex flex-col gap-0 text-sm"
-            aria-label="Mobile"
-          >
-            {navLinks}
-          </nav>
-        </div>
-      )}
+      <SiteMobileNavPanel
+        open={mobileOpen}
+        onOpenChange={setMobileOpen}
+        navId={navId}
+        menuButtonRef={menuButtonRef}
+      />
     </header>
   );
 }
