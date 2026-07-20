@@ -12,7 +12,8 @@ export function AboutContent() {
       >
         Company
       </p>
-      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8">
+      {/* ≤767: omit aspect-video — copy-first About pane */}
+      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8 max-md:hidden">
         <Image
           src="/assets/images/About_Network.webp"
           alt=""
@@ -24,7 +25,7 @@ export function AboutContent() {
       <h2 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
         About
       </h2>
-      <p className="liquid-glass-body">
+      <p className="liquid-glass-body max-md:hidden">
         Mycelia Interactive LLC is an entertainment company developing
         original intellectual property across film, interactive experiences,
         games, and music. Our defining focus is real-time AI-driven response

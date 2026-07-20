@@ -11,118 +11,153 @@ const ARCHITECTURE_BULLETS = [
   "Marketing shell uses Cloudflare Workers AI for atmospheric FPV imagery only",
 ] as const;
 
+const MOBILE_ARCHITECTURE_BULLETS = ARCHITECTURE_BULLETS.slice(0, 3);
+
+function ArchitectureDiagram({
+  className,
+  markerId,
+}: {
+  className?: string;
+  markerId: string;
+}) {
+  return (
+    <svg
+      viewBox="0 0 400 220"
+      className={className ?? "w-full h-auto"}
+      aria-label="Liminal Sin architecture diagram"
+      role="img"
+    >
+      <rect
+        x="20"
+        y="70"
+        width="100"
+        height="60"
+        rx="8"
+        fill="rgba(255,255,255,0.9)"
+        stroke="rgba(45,106,126,0.3)"
+        strokeWidth="1"
+      />
+      <text x="70" y="105" textAnchor="middle" fontSize="11" fill="var(--color-studio-text)">
+        Browser
+      </text>
+      <text x="70" y="118" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
+        Next.js / CF
+      </text>
+      <path
+        d="M 125 100 L 175 100"
+        stroke="rgba(45,106,126,0.4)"
+        strokeWidth="1"
+        markerEnd={`url(#${markerId})`}
+      />
+      <text x="150" y="92" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
+        WebSocket
+      </text>
+      <rect
+        x="180"
+        y="55"
+        width="110"
+        height="90"
+        rx="8"
+        fill="rgba(255,255,255,0.9)"
+        stroke="rgba(45,106,126,0.3)"
+        strokeWidth="1"
+      />
+      <text x="235" y="95" textAnchor="middle" fontSize="11" fill="var(--color-studio-text)">
+        Cloud Run
+      </text>
+      <text x="235" y="108" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
+        Gemini Live
+      </text>
+      <text x="235" y="121" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
+        Multi-agent
+      </text>
+      <path
+        d="M 295 85 L 345 55"
+        stroke="rgba(45,106,126,0.25)"
+        strokeWidth="0.8"
+      />
+      <path
+        d="M 295 115 L 345 145"
+        stroke="rgba(45,106,126,0.25)"
+        strokeWidth="0.8"
+      />
+      <rect
+        x="350"
+        y="30"
+        width="40"
+        height="40"
+        rx="6"
+        fill="rgba(232,244,248,0.8)"
+        stroke="rgba(45,106,126,0.2)"
+        strokeWidth="0.8"
+      />
+      <text x="370" y="55" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
+        Imagen 4
+      </text>
+      <rect
+        x="350"
+        y="130"
+        width="40"
+        height="40"
+        rx="6"
+        fill="rgba(232,244,248,0.8)"
+        stroke="rgba(45,106,126,0.2)"
+        strokeWidth="0.8"
+      />
+      <text x="370" y="155" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
+        Veo 3.1
+      </text>
+      <defs>
+        <marker
+          id={markerId}
+          markerWidth="6"
+          markerHeight="6"
+          refX="5"
+          refY="3"
+          orient="auto"
+        >
+          <path d="M0,0 L6,3 L0,6" fill="rgba(45,106,126,0.4)" />
+        </marker>
+      </defs>
+    </svg>
+  );
+}
+
 export function LiminalSinArchitectureContent() {
   return (
     <>
       <h2 className="text-2xl font-semibold text-studio-text mb-3">
         Architecture Overview
       </h2>
-      <p className="text-studio-text-muted max-w-2xl mb-10 leading-relaxed">
+      <p className="text-studio-text-muted max-w-2xl mb-10 max-md:mb-5 leading-relaxed">
         A minimal view of how the vertical slice connects browser input to live
         agent responses and generative media.
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      {/* ≤767: diagram-first + 3 bullets; defer full FoldCard bullet grid */}
+      <div className="md:hidden space-y-4">
+        <div className="rounded-xl border border-black/8 bg-white/20 p-3">
+          <ArchitectureDiagram markerId="ls-arch-arrow-mobile" />
+        </div>
+        <ul className="space-y-3 list-none p-0 m-0">
+          {MOBILE_ARCHITECTURE_BULLETS.map((bullet) => (
+            <li
+              key={bullet}
+              className="flex gap-3 text-sm text-studio-text-muted leading-relaxed border-b border-black/8 pb-3 last:border-0"
+            >
+              <span
+                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-studio-accent"
+                aria-hidden
+              />
+              <span>{bullet}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <FoldCard index={0} total={ARCHITECTURE_BULLETS.length + 1} className="p-6 sm:p-8">
-          <svg
-            viewBox="0 0 400 220"
-            className="w-full h-auto"
-            aria-label="Liminal Sin architecture diagram"
-            role="img"
-          >
-            <rect
-              x="20"
-              y="70"
-              width="100"
-              height="60"
-              rx="8"
-              fill="rgba(255,255,255,0.9)"
-              stroke="rgba(45,106,126,0.3)"
-              strokeWidth="1"
-            />
-            <text x="70" y="105" textAnchor="middle" fontSize="11" fill="var(--color-studio-text)">
-              Browser
-            </text>
-            <text x="70" y="118" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
-              Next.js / CF
-            </text>
-            <path
-              d="M 125 100 L 175 100"
-              stroke="rgba(45,106,126,0.4)"
-              strokeWidth="1"
-              markerEnd="url(#arrow)"
-            />
-            <text x="150" y="92" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
-              WebSocket
-            </text>
-            <rect
-              x="180"
-              y="55"
-              width="110"
-              height="90"
-              rx="8"
-              fill="rgba(255,255,255,0.9)"
-              stroke="rgba(45,106,126,0.3)"
-              strokeWidth="1"
-            />
-            <text x="235" y="95" textAnchor="middle" fontSize="11" fill="var(--color-studio-text)">
-              Cloud Run
-            </text>
-            <text x="235" y="108" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
-              Gemini Live
-            </text>
-            <text x="235" y="121" textAnchor="middle" fontSize="9" fill="var(--color-studio-text-muted)">
-              Multi-agent
-            </text>
-            <path
-              d="M 295 85 L 345 55"
-              stroke="rgba(45,106,126,0.25)"
-              strokeWidth="0.8"
-            />
-            <path
-              d="M 295 115 L 345 145"
-              stroke="rgba(45,106,126,0.25)"
-              strokeWidth="0.8"
-            />
-            <rect
-              x="350"
-              y="30"
-              width="40"
-              height="40"
-              rx="6"
-              fill="rgba(232,244,248,0.8)"
-              stroke="rgba(45,106,126,0.2)"
-              strokeWidth="0.8"
-            />
-            <text x="370" y="55" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
-              Imagen 4
-            </text>
-            <rect
-              x="350"
-              y="130"
-              width="40"
-              height="40"
-              rx="6"
-              fill="rgba(232,244,248,0.8)"
-              stroke="rgba(45,106,126,0.2)"
-              strokeWidth="0.8"
-            />
-            <text x="370" y="155" textAnchor="middle" fontSize="8" fill="var(--color-studio-text-muted)">
-              Veo 3.1
-            </text>
-            <defs>
-              <marker
-                id="arrow"
-                markerWidth="6"
-                markerHeight="6"
-                refX="5"
-                refY="3"
-                orient="auto"
-              >
-                <path d="M0,0 L6,3 L0,6" fill="rgba(45,106,126,0.4)" />
-              </marker>
-            </defs>
-          </svg>
+          <ArchitectureDiagram markerId="ls-arch-arrow-desktop" />
         </FoldCard>
 
         <ul className="space-y-4">

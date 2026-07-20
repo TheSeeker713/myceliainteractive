@@ -13,7 +13,8 @@ export function MissionContent() {
       >
         Direction
       </p>
-      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8">
+      {/* ≤767: omit aspect-video — title + short para + Vision link */}
+      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8 max-md:hidden">
         <Image
           src="/assets/images/Roadmap_Network.webp"
           alt=""

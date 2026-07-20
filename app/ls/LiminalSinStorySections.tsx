@@ -48,8 +48,8 @@ const trustCards = [
 
 export function LiminalSinStoryContent() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <div className="space-y-5 text-studio-text-muted leading-relaxed">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-md:gap-0 items-center">
+      <div className="space-y-5 max-md:space-y-4 text-studio-text-muted leading-relaxed">
         <p>
           <strong className="text-studio-text">Liminal Sin</strong> is Mycelia
           Interactive LLC&apos;s primary technology demonstration: a
@@ -64,7 +64,8 @@ export function LiminalSinStoryContent() {
           and responds.
         </p>
       </div>
-      <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8">
+      {/* ≤767: omit story image — two short paras only */}
+      <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8 max-md:hidden">
         <Image
           src="/assets/images/Liminal_Sin_Title.jpg"
           alt="Liminal Sin"
@@ -83,12 +84,23 @@ export function LiminalSinTrustContent() {
       <h2 className="text-2xl font-semibold text-studio-text mb-3">
         The Trust System
       </h2>
-      <p className="text-studio-text-muted max-w-2xl mb-10 leading-relaxed">
+      <p className="text-studio-text-muted max-w-2xl mb-10 max-md:mb-5 leading-relaxed">
         The characters are agents, not actors. Their behavior shifts with every
         word you speak. Build trust through honesty. Destroy it through
         manipulation.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {/* ≤767: compact list — no FoldCard chrome */}
+      <ul className="md:hidden space-y-3 list-none p-0 m-0">
+        {trustCards.map((item) => (
+          <li key={item.title} className="border-b border-black/8 pb-3 last:border-0">
+            <h3 className="font-semibold text-studio-text text-sm">{item.title}</h3>
+            <p className="mt-1 text-sm text-studio-text-muted leading-relaxed">
+              {item.text}
+            </p>
+          </li>
+        ))}
+      </ul>
+      <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-5">
         {trustCards.map((item, index) => (
           <FoldCard key={item.title} index={index} total={trustCards.length} className="p-6">
             <h3 className="font-semibold text-studio-text">{item.title}</h3>
@@ -105,10 +117,21 @@ export function LiminalSinTrustContent() {
 export function LiminalSinCapabilitiesContent() {
   return (
     <>
-      <h2 className="text-2xl font-semibold text-studio-text mb-8">
+      <h2 className="text-2xl font-semibold text-studio-text mb-8 max-md:mb-4">
         System capabilities
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* ≤767: single-column compact list; defer rich FoldCards */}
+      <ul className="md:hidden space-y-3 list-none p-0 m-0">
+        {featureCards.map((card) => (
+          <li key={card.label} className="border-b border-black/8 pb-3 last:border-0">
+            <h3 className="text-sm font-semibold text-studio-text">{card.label}</h3>
+            <p className="mt-1 text-sm text-studio-text-muted leading-relaxed">
+              {card.desc}
+            </p>
+          </li>
+        ))}
+      </ul>
+      <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 gap-4">
         {featureCards.map((card, index) => (
           <FoldCard key={card.label} index={index} total={featureCards.length} className="p-5">
             <h3 className="text-sm font-semibold text-studio-text">{card.label}</h3>
@@ -125,9 +148,9 @@ export function LiminalSinCapabilitiesContent() {
 export function LiminalSinAccessContent() {
   return (
     <>
-      <div className="text-center mb-10 max-w-xl mx-auto">
+      <div className="text-center mb-10 max-md:mb-6 max-w-xl mx-auto">
         <h2 className="text-2xl font-semibold text-studio-text">Request access</h2>
-        <p className="mt-3 text-studio-text-muted">
+        <p className="mt-3 text-studio-text-muted max-md:text-sm">
           The prototype is closed to the public. Approved requesters receive a
           private play link within 24 hours.
         </p>

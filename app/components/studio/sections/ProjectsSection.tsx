@@ -49,7 +49,10 @@ export function ProjectSceneContent({ project }: { project: ProjectItem }) {
       <p data-lg-kicker className="liquid-glass-kicker text-studio-accent">
         Projects
       </p>
-      <ProjectMedia project={project} />
+      {/* ≤767: copy-first; omit large title media. Desktop keeps media above. */}
+      <div className="max-md:hidden">
+        <ProjectMedia project={project} />
+      </div>
       <div>
         <h3 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
           {project.name}

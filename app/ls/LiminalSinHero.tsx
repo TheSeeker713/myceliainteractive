@@ -21,17 +21,36 @@ export function LiminalSinHeroContent() {
         <p className="mt-4 text-sm text-studio-text-muted">
           Vertical slice prototype · Gemini Live Agent Challenge 2026
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="#access">Request access</Button>
-          <Button href="#experience" variant="secondary">
-            What you&apos;ll experience
+        {/* ≤767: one primary CTA; secondary links as compact text row; demote /ls/game */}
+        <div className="mt-8 space-y-4">
+          <Button href="#access" className="w-full min-h-11 md:w-auto">
+            Request access
           </Button>
-          <Button href="/ls/game" variant="secondary">
-            About prototype access
-          </Button>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm md:hidden">
+            <a
+              href="#experience"
+              className="font-medium text-studio-accent hover:underline min-h-11 inline-flex items-center"
+            >
+              What you&apos;ll experience
+            </a>
+            <a
+              href="/ls/game"
+              className="text-studio-text-muted hover:underline min-h-11 inline-flex items-center"
+            >
+              About prototype access
+            </a>
+          </div>
+          <div className="hidden md:flex flex-wrap gap-3">
+            <Button href="#experience" variant="secondary">
+              What you&apos;ll experience
+            </Button>
+            <Button href="/ls/game" variant="secondary">
+              About prototype access
+            </Button>
+          </div>
         </div>
       </div>
-      <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8 shadow-sm">
+      <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8 shadow-sm max-md:hidden">
         <Image
           src="/assets/images/Liminal_Sin_Title.jpg"
           alt="Liminal Sin"

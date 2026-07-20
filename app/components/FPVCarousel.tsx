@@ -50,7 +50,7 @@ export default function FPVCarousel() {
     : `/api/ai/image?seed=${nextSeed}&v=2`;
 
   return (
-    <div className="relative w-full h-[36vh] min-h-[260px] max-h-[480px] overflow-hidden border-y border-black/8 bg-studio-bg-muted pointer-events-none">
+    <div className="relative w-full h-[36vh] min-h-[260px] max-h-[480px] max-md:h-[22vh] max-md:min-h-[140px] max-md:max-h-[220px] overflow-hidden border-y border-black/8 bg-studio-bg-muted pointer-events-none">
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
           isTransitioning ? "opacity-0" : "opacity-90"

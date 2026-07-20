@@ -17,7 +17,7 @@ import {
 
 function FPVPane() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-md:space-y-3">
       <p data-lg-kicker className="liquid-glass-kicker text-studio-accent">
         Atmosphere
       </p>
@@ -27,6 +27,9 @@ function FPVPane() {
       <p className="liquid-glass-body text-studio-text-muted">
         Marketing-shell imagery generated for the Liminal Sin atmosphere —
         not gameplay footage.
+      </p>
+      <p className="text-sm text-studio-text-muted md:hidden">
+        Gallery — atmospheric stills cycle below.
       </p>
       <div className="rounded-xl overflow-hidden border border-black/8">
         <FPVCarousel />
@@ -74,7 +77,10 @@ export function LiminalSinLanding() {
         content: (
           <div className="space-y-8">
             <LiminalSinAccessContent />
-            <AccessFooterNote />
+            {/* ≤767: form already carries one desktop note; trim trademark block */}
+            <div className="max-md:hidden">
+              <AccessFooterNote />
+            </div>
           </div>
         ),
       },
