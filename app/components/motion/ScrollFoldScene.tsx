@@ -2,6 +2,7 @@
 
 import { useScroll } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { MOBILE_VIEWPORT_MEDIA_QUERY } from "@/app/mobile";
 import { cn } from "@/utils/cn";
 import { FoldLayer } from "./FoldLayer";
 import { FoldSceneProvider } from "./FoldSceneContext";
@@ -36,7 +37,7 @@ export function ScrollFoldScene({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
+    const mq = window.matchMedia(MOBILE_VIEWPORT_MEDIA_QUERY);
     const update = () => setIsMobile(mq.matches);
     update();
     mq.addEventListener("change", update);
