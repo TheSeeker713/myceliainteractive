@@ -8,6 +8,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import { useIsMobileViewport } from "@/app/mobile";
 import type { CardCycleState } from "./cardCycle";
 import {
   accumulateWheelDelta,
@@ -21,7 +22,10 @@ import {
 import { shouldCaptureStageScroll } from "./cardStagePointer";
 import { LiquidGlassSurface } from "./LiquidGlassSurface";
 import { MYCELIA_FLOW_WHEEL_EVENT } from "./MyceliaFlowAtmosphere";
+import { attachCardStageMobileListeners } from "./mobile/attachCardStageMobileListeners";
+import { canScrollStageContent } from "./mobile/cardStageMobileScroll";
 import "./liquid-glass.css";
+import "./mobile/card-stage.mobile.css";
 
 const GLITCH_SLICES = [
   { top: 0, height: 18, offset: -1.15 },
@@ -45,18 +49,6 @@ function isTypingTarget(target: EventTarget | null): boolean {
   if (target.isContentEditable) return true;
   const tag = target.tagName;
   return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
-}
-
-/** True when the stage scrollport can still move in `direction` (1 = down). */
-function canScrollStageContent(
-  scrollPort: HTMLElement | null,
-  direction: 1 | -1,
-): boolean {
-  if (!scrollPort) return false;
-  const max = scrollPort.scrollHeight - scrollPort.clientHeight;
-  if (max <= 1) return false;
-  if (direction === 1) return scrollPort.scrollTop < max - 1;
-  return scrollPort.scrollTop > 1;
 }
 
 function paneAnnouncement(
@@ -205,6 +197,10 @@ export function MyceliaCardStage({
   panes,
   reduceMotion,
 }: MyceliaCardStageProps) {
+  const { isMobileViewport } = useIsMobileViewport();
+  // Mobile uses the reduced-motion timing/curves for a simple fade only;
+  // desktop glitch path is unchanged when isMobileViewport is false.
+  const useFadeTransition = reduceMotion || isMobileViewport;
   const rootRef = useRef<HTMLDivElement>(null);
   const machineRef = useRef<ScrollMachineState>(createScrollMachineState(0));
   const wheelAccumRef = useRef(0);
@@ -240,7 +236,7 @@ export function MyceliaCardStage({
           current,
           elapsed,
           panes.length,
-          reduceMotion,
+          useFadeTransition,
         );
         if (next !== current) {
           machineRef.current = next;
@@ -251,7 +247,7 @@ export function MyceliaCardStage({
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [panes.length, reduceMotion]);
+  }, [panes.length, useFadeTransition]);
 
   useEffect(() => {
     const getCardRect = () =>
@@ -270,6 +266,56 @@ export function MyceliaCardStage({
       setMachine(next);
       wheelAccumRef.current = 0;
     };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      if (isTypingTarget(event.target)) return;
+      if (
+        event.target instanceof Element &&
+        event.target.closest("header, footer, [role='dialog']")
+      ) {
+        return;
+      }
+
+      let direction: 1 | -1 | null = null;
+      if (event.key === "ArrowDown" || event.key === "PageDown") {
+        direction = 1;
+      } else if (event.key === "ArrowUp" || event.key === "PageUp") {
+        direction = -1;
+      }
+      if (!direction) return;
+
+      // Inside the card scrollport: let native overflow scroll until the edge,
+      // then advance panes (same split as wheel over vs outside the card).
+      const scrollPort = rootRef.current?.querySelector(
+        ".liquid-glass-card-content--stage",
+      ) as HTMLElement | null;
+      if (
+        event.target instanceof Node &&
+        scrollPort?.contains(event.target) &&
+        canScrollStageContent(scrollPort, direction)
+      ) {
+        return;
+      }
+
+      const before = machineRef.current;
+      commitIntent(direction);
+      if (machineRef.current === before) return;
+      event.preventDefault();
+    };
+
+    // Mobile: scroll-end advancement + no desktop outside-card touch trap.
+    if (isMobileViewport) {
+      const detachMobile = attachCardStageMobileListeners({
+        getRoot: () => rootRef.current,
+        commitIntent,
+      });
+      window.addEventListener("keydown", onKeyDown);
+      return () => {
+        detachMobile();
+        window.removeEventListener("keydown", onKeyDown);
+      };
+    }
 
     const onWheel = (event: WheelEvent) => {
       // Over the card: native overflow scroll on .liquid-glass-card-content.
@@ -333,43 +379,6 @@ export function MyceliaCardStage({
       touchStartY = touch.clientY;
     };
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.altKey || event.ctrlKey || event.metaKey) return;
-      if (isTypingTarget(event.target)) return;
-      if (
-        event.target instanceof Element &&
-        event.target.closest("header, footer, [role='dialog']")
-      ) {
-        return;
-      }
-
-      let direction: 1 | -1 | null = null;
-      if (event.key === "ArrowDown" || event.key === "PageDown") {
-        direction = 1;
-      } else if (event.key === "ArrowUp" || event.key === "PageUp") {
-        direction = -1;
-      }
-      if (!direction) return;
-
-      // Inside the card scrollport: let native overflow scroll until the edge,
-      // then advance panes (same split as wheel over vs outside the card).
-      const scrollPort = rootRef.current?.querySelector(
-        ".liquid-glass-card-content--stage",
-      ) as HTMLElement | null;
-      if (
-        event.target instanceof Node &&
-        scrollPort?.contains(event.target) &&
-        canScrollStageContent(scrollPort, direction)
-      ) {
-        return;
-      }
-
-      const before = machineRef.current;
-      commitIntent(direction);
-      if (machineRef.current === before) return;
-      event.preventDefault();
-    };
-
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false });
@@ -380,7 +389,7 @@ export function MyceliaCardStage({
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [panes.length]);
+  }, [panes.length, isMobileViewport]);
 
   useEffect(() => {
     const jumpToHash = () => {
@@ -399,7 +408,10 @@ export function MyceliaCardStage({
     return () => window.removeEventListener("hashchange", jumpToHash);
   }, [panes]);
 
-  const { cardIndex, cycle } = getCycleForScrollMachine(machine, reduceMotion);
+  const { cardIndex, cycle } = getCycleForScrollMachine(
+    machine,
+    useFadeTransition,
+  );
   const pane = panes[cardIndex];
 
   useEffect(() => {
@@ -447,7 +459,7 @@ export function MyceliaCardStage({
       <div className="liquid-glass-sticky-stage">
         <GlitchPane
           cycle={cycle}
-          reduceMotion={reduceMotion}
+          reduceMotion={useFadeTransition}
           paneId={pane?.id}
           paneLabel={pane?.label}
         >

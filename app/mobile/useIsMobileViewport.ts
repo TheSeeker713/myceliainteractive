@@ -6,7 +6,7 @@ import { MOBILE_VIEWPORT_MEDIA_QUERY } from "./mobileViewport";
 /**
  * SSR-safe mobile viewport gate for Part 3.
  * Always `false` on first paint; hydrates from matchMedia after mount.
- * Not wired into any consumer yet (Step 3B.1 scaffolding only).
+ * Consumers: MyceliaCardStage (3B.2) — more shells in later 3B sub-steps.
  */
 export function useIsMobileViewport(): {
   isMobileViewport: boolean;

@@ -1,0 +1,7 @@
+/* Mobile stage scrollport: use available stage height so tall panes can
+   reach a real scroll edge (desktop keeps min(78dvh, 48rem) in liquid-glass.css). */
+@media (max-width: 767px) {
+  .liquid-glass-card-content--stage {
+    max-height: calc(100dvh - var(--header-h) - var(--footer-h) - 1.5rem);
+  }
+}
