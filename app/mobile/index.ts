@@ -12,3 +12,8 @@ export {
   matchesMobileViewport,
 } from "./mobileViewport";
 export { useIsMobileViewport } from "./useIsMobileViewport";
+export {
+  applyVisualViewportBox,
+  attachVisualViewportFixedRoot,
+  readVisualViewportBox,
+} from "./visualViewportFixedRoot";

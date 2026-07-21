@@ -41,8 +41,9 @@
   --font-sans: var(--font-geist-sans, system-ui, sans-serif);
   --font-mono: var(--font-geist-mono, monospace);
   --content-max-width: 1120px;
-  --header-h: 4.5rem;
-  --footer-h: 5.375rem;
+  /* Include safe-area so stage height math stays correct under viewport-fit=cover. */
+  --header-h: calc(4.5rem + env(safe-area-inset-top, 0px));
+  --footer-h: calc(5.375rem + env(safe-area-inset-bottom, 0px));
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Z-index scale — site namespace (studio chrome, scroll stage, layout). */
@@ -82,13 +83,13 @@
 
 @media (min-width: 640px) {
   :root {
-    --footer-h: 4rem;
+    --footer-h: calc(4rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
 @media (min-width: 768px) {
   :root {
-    --header-h: 4.75rem;
+    --header-h: calc(4.75rem + env(safe-area-inset-top, 0px));
   }
 }
 
@@ -117,9 +118,18 @@
   padding-bottom: clamp(1rem, 2.5vw, 1.5rem);
 }
 
+/* viewport-fit=cover: keep chrome content clear of notch / home indicator. */
+.site-header-py {
+  padding-top: calc(
+    clamp(1rem, 2.5vw, 1.5rem) + env(safe-area-inset-top, 0px)
+  );
+}
+
 .site-footer-py {
   padding-top: clamp(1rem, 2vw, 1.25rem);
-  padding-bottom: clamp(1rem, 2vw, 1.25rem);
+  padding-bottom: calc(
+    clamp(1rem, 2vw, 1.25rem) + env(safe-area-inset-bottom, 0px)
+  );
 }
 
 @layer base {

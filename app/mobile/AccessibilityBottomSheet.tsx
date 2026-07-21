@@ -9,6 +9,7 @@ import {
 import { createPortal } from "react-dom";
 import { AccessibilityPanelBody } from "@/app/components/accessibility/AccessibilityPanelBody";
 import { callMobileSafe, runMobileSafe } from "@/app/mobile/guardMobile";
+import { attachVisualViewportFixedRoot } from "@/app/mobile/visualViewportFixedRoot";
 import "@/app/styles/mobile/a11y-sheet.css";
 
 type AccessibilityBottomSheetProps = {
@@ -32,6 +33,10 @@ function useIsClient() {
  * Mobile (≤767) accessibility chrome: bottom sheet + dimmed backdrop.
  * Required dismiss: close button, backdrop tap, Escape.
  * Reuses AccessibilityPanelBody prefs — no separate toggle state.
+ *
+ * Root geometry is synced to window.visualViewport when available so the
+ * overlay tracks the on-screen viewport on iOS Safari (layout vs visual
+ * viewport divergence). Falls back to CSS position:fixed; inset:0 otherwise.
  */
 export function AccessibilityBottomSheet({
   id,
@@ -39,6 +44,7 @@ export function AccessibilityBottomSheet({
   onClose,
   triggerRef,
 }: AccessibilityBottomSheetProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const isClient = useIsClient();
 
@@ -78,13 +84,27 @@ export function AccessibilityBottomSheet({
     };
   }, [open, isClient, onClose, triggerRef]);
 
+  useEffect(() => {
+    if (!open || !isClient) return;
+    const root = rootRef.current;
+    if (!root) return;
+
+    return callMobileSafe(
+      "a11y-sheet-visual-viewport",
+      () => attachVisualViewportFixedRoot(root),
+      () => {
+        /* no-op cleanup when attach throws */
+      },
+    );
+  }, [open, isClient]);
+
   if (!open || !isClient) return null;
 
   return callMobileSafe(
     "a11y-sheet-portal",
     () =>
       createPortal(
-        <div className="a11y-sheet-root">
+        <div ref={rootRef} className="a11y-sheet-root">
           <button
             type="button"
             className="a11y-sheet-backdrop"
