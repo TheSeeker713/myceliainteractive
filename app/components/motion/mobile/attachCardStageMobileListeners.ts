@@ -2,16 +2,20 @@ import { runMobileSafe } from "@/app/mobile/guardMobile";
 import {
   classifySwipeAxis,
   isMobileStageBlockedTarget,
-  shouldAcceptHorizontalSwipe,
   type MobileSwipeAxis,
 } from "./cardStageMobileScroll";
 
 export type AttachCardStageMobileListenersOptions = {
   getRoot: () => HTMLElement | null;
-  commitIntent: (direction: 1 | -1) => void;
+  /** Continuous horizontal follow (dx = currentX − startX). */
+  onDragMove: (dx: number) => void;
+  /** Release after a horizontal (or undecided) gesture — parent decides dismiss vs spring. */
+  onDragEnd: (dx: number) => void;
+  /** Vertical-locked or cancelled gesture — parent should idle/spring without commit. */
+  onDragCancel: () => void;
 };
 
-function touchStartedInRoot(
+function pointerStartedInRoot(
   target: EventTarget | null,
   root: HTMLElement | null,
 ): boolean {
@@ -24,16 +28,12 @@ function touchStartedInRoot(
 }
 
 /**
- * Mobile (≤767) card-stage listeners — Step 3E.2.
+ * Mobile (≤767) card-stage listeners — Step 3F.2 drag-follow.
  *
- * - Vertical swipe/scroll: never calls commitIntent (native pan-y only).
- * - Horizontal swipe left → next pane; right → previous pane via the same
- *   commitIntent → applyScrollIntent path keyboard uses.
- * - Gesture-level single-fire lock: armed on touchstart, consumed on first
- *   accepted swipe, cleared on touchend/touchcancel. Does not re-anchor mid-
- *   gesture (that caused the multi-advance bug in 3B.2).
- *
- * Desktop outside-card listeners are not used while this is attached.
+ * Tracks the finger 1:1 while axis-locked horizontal. Does **not** call
+ * commitIntent — MyceliaCardStage decides on release (fling then commit, or
+ * spring back). Vertical axis never preventDefaults (in-card / page scroll).
+ * Single-fire: onDragEnd/onDragCancel at most once per gesture.
  */
 export function attachCardStageMobileListeners(
   options: AttachCardStageMobileListenersOptions,
@@ -43,7 +43,8 @@ export function attachCardStageMobileListeners(
   let axisLock: MobileSwipeAxis | null = null;
   let startX = 0;
   let startY = 0;
-  let startTime = 0;
+  let lastDx = 0;
+  let pointerId: number | null = null;
 
   const clearGesture = () => {
     armed = false;
@@ -51,44 +52,52 @@ export function attachCardStageMobileListeners(
     axisLock = null;
     startX = 0;
     startY = 0;
-    startTime = 0;
+    lastDx = 0;
+    pointerId = null;
   };
 
-  const safeCommit = (direction: 1 | -1) => {
-    runMobileSafe("card-stage-commit", () => {
-      options.commitIntent(direction);
-    });
+  const finish = (kind: "end" | "cancel") => {
+    if (!armed || gestureConsumed) {
+      clearGesture();
+      return;
+    }
+    gestureConsumed = true;
+    const dx = lastDx;
+    const wasVertical = axisLock === "vertical";
+    clearGesture();
+    if (wasVertical || kind === "cancel") {
+      runMobileSafe("card-stage-drag-cancel", () => options.onDragCancel());
+      return;
+    }
+    runMobileSafe("card-stage-drag-end", () => options.onDragEnd(dx));
   };
 
-  const onTouchStart = (event: TouchEvent) => {
-    runMobileSafe("card-stage-touchstart", () => {
+  const onPointerDown = (event: PointerEvent) => {
+    runMobileSafe("card-stage-pointerdown", () => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
       clearGesture();
       if (isMobileStageBlockedTarget(event.target)) return;
       const root = options.getRoot();
-      if (!touchStartedInRoot(event.target, root)) return;
-
-      const touch = event.touches[0];
-      if (!touch) return;
+      if (!pointerStartedInRoot(event.target, root)) return;
 
       armed = true;
       gestureConsumed = false;
       axisLock = null;
-      startX = touch.clientX;
-      startY = touch.clientY;
-      startTime = performance.now();
+      startX = event.clientX;
+      startY = event.clientY;
+      lastDx = 0;
+      pointerId = event.pointerId;
     });
   };
 
-  const onTouchMove = (event: TouchEvent) => {
-    runMobileSafe("card-stage-touchmove", () => {
+  const onPointerMove = (event: PointerEvent) => {
+    runMobileSafe("card-stage-pointermove", () => {
       if (!armed || gestureConsumed) return;
-      if (isMobileStageBlockedTarget(event.target)) return;
+      if (pointerId != null && event.pointerId !== pointerId) return;
 
-      const touch = event.touches[0];
-      if (!touch) return;
-
-      const dx = touch.clientX - startX;
-      const dy = touch.clientY - startY;
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      lastDx = dx;
 
       if (axisLock == null || axisLock === "undecided") {
         const classified = classifySwipeAxis(dx, dy);
@@ -104,32 +113,33 @@ export function attachCardStageMobileListeners(
       }
 
       if (axisLock === "vertical") {
-        // Native vertical scroll only — never pane-change.
         return;
       }
 
-      const direction = shouldAcceptHorizontalSwipe(dx, dy, {
-        elapsedMs: performance.now() - startTime,
-      });
-      if (!direction) return;
-
       event.preventDefault();
-      gestureConsumed = true;
-      safeCommit(direction);
+      options.onDragMove(dx);
     });
   };
 
-  const onTouchEnd = () => {
-    runMobileSafe("card-stage-touchend", () => {
-      clearGesture();
+  const onPointerUp = (event: PointerEvent) => {
+    runMobileSafe("card-stage-pointerup", () => {
+      if (pointerId != null && event.pointerId !== pointerId) return;
+      finish("end");
+    });
+  };
+
+  const onPointerCancel = (event: PointerEvent) => {
+    runMobileSafe("card-stage-pointercancel", () => {
+      if (pointerId != null && event.pointerId !== pointerId) return;
+      finish("cancel");
     });
   };
 
   try {
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
-    window.addEventListener("touchend", onTouchEnd, { passive: true });
-    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
+    window.addEventListener("pointermove", onPointerMove, { passive: false });
+    window.addEventListener("pointerup", onPointerUp, { passive: true });
+    window.addEventListener("pointercancel", onPointerCancel, { passive: true });
   } catch (error) {
     console.error(
       "[mycelia:mobile] card-stage-attach failed; no mobile listeners installed.",
@@ -140,10 +150,10 @@ export function attachCardStageMobileListeners(
 
   return () => {
     runMobileSafe("card-stage-detach", () => {
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("touchend", onTouchEnd);
-      window.removeEventListener("touchcancel", onTouchEnd);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerCancel);
       clearGesture();
     });
   };

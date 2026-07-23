@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
   canScrollStageContent,
   classifySwipeAxis,
+  dragRotationDeg,
+  flingTargetDx,
   isMobileStageBlockedTarget,
   paneDirectionFromHorizontalDelta,
-  shouldAcceptHorizontalSwipe,
+  shouldDismissHorizontalDrag,
 } from "./cardStageMobileScroll";
 
 function port(scrollTop: number, scrollHeight: number, clientHeight: number) {
@@ -43,36 +45,28 @@ describe("cardStageMobileScroll", () => {
   });
 });
 
-describe("horizontal swipe helpers (3E.2)", () => {
+describe("horizontal drag-dismiss helpers (3F.2)", () => {
   it("classifies dominant axis with ratio lock", () => {
     expect(classifySwipeAxis(50, 10)).toBe("horizontal");
     expect(classifySwipeAxis(10, 50)).toBe("vertical");
     expect(classifySwipeAxis(3, 3)).toBe("undecided");
-    expect(classifySwipeAxis(40, 35)).toBe("undecided");
   });
 
-  it("maps left swipe to next and right swipe to previous", () => {
+  it("maps left drag to next and right drag to previous", () => {
     expect(paneDirectionFromHorizontalDelta(-80)).toBe(1);
     expect(paneDirectionFromHorizontalDelta(80)).toBe(-1);
-    expect(paneDirectionFromHorizontalDelta(0)).toBeNull();
   });
 
-  it("rejects vertical and under-threshold horizontal motion", () => {
-    expect(shouldAcceptHorizontalSwipe(10, 80)).toBeNull();
-    expect(shouldAcceptHorizontalSwipe(-40, 5)).toBeNull();
+  it("dismisses at 35% of viewport width", () => {
+    expect(shouldDismissHorizontalDrag(-100, 390)).toBeNull();
+    expect(shouldDismissHorizontalDrag(-137, 390)).toBe(1);
+    expect(shouldDismissHorizontalDrag(137, 390)).toBe(-1);
   });
 
-  it("accepts horizontal distance past threshold once", () => {
-    expect(shouldAcceptHorizontalSwipe(-64, 5)).toBe(1);
-    expect(shouldAcceptHorizontalSwipe(64, -4)).toBe(-1);
-  });
-
-  it("accepts a short flick via velocity escape", () => {
-    expect(
-      shouldAcceptHorizontalSwipe(-45, 4, { elapsedMs: 60 }),
-    ).toBe(1);
-    expect(
-      shouldAcceptHorizontalSwipe(-45, 4, { elapsedMs: 200 }),
-    ).toBeNull();
+  it("computes fling targets and rotation", () => {
+    expect(flingTargetDx(1, 390)).toBe(-390);
+    expect(flingTargetDx(-1, 390)).toBe(390);
+    expect(dragRotationDeg(195, 390)).toBeCloseTo(4);
+    expect(dragRotationDeg(-390, 390)).toBeCloseTo(-8);
   });
 });

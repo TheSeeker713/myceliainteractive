@@ -1,27 +1,24 @@
 /** Pixel slack for sub-pixel / rubber-band scroll edges. */
 export const MOBILE_SCROLL_EDGE_EPS_PX = 2;
 
-/** Horizontal swipe distance before a pane change (not hair-trigger). */
-export const MOBILE_SWIPE_DISTANCE_THRESHOLD_PX = 64;
-
 /**
  * Require |dx| > |dy| * ratio before treating the gesture as horizontal.
- * Prevents diagonal/vertical scroll from stealing pane changes.
+ * Prevents diagonal/vertical scroll from stealing card drag-dismiss.
  */
 export const MOBILE_SWIPE_AXIS_RATIO = 1.25;
 
-/** Lower distance floor when velocity escape accepts a short flick. */
-export const MOBILE_SWIPE_VELOCITY_FLOOR_PX = 40;
+/** Fraction of visual-viewport width required to dismiss on release (3F.2). */
+export const MOBILE_DRAG_DISMISS_RATIO = 0.35;
 
-/** px/ms — short flick must exceed this with the velocity floor. */
-export const MOBILE_SWIPE_VELOCITY_ESCAPE_PX_PER_MS = 0.55;
+/** Max card tilt (degrees) while dragging horizontally. */
+export const MOBILE_DRAG_MAX_ROTATION_DEG = 8;
 
 /**
  * True when the scrollport can still move in `direction` (1 = down / next content).
  * When content does not overflow, returns false (already "at edge" both ways).
  *
  * Used by MyceliaCardStage keyboard handling (desktop + mobile until 3E.3).
- * Mobile vertical scroll never advances panes (3E.1 / 3E.2).
+ * Mobile vertical scroll never advances panes (3E.1+).
  */
 export function canScrollStageContent(
   scrollPort: Pick<HTMLElement, "scrollTop" | "scrollHeight" | "clientHeight"> | null,
@@ -77,50 +74,43 @@ export function paneDirectionFromHorizontalDelta(dx: number): 1 | -1 | null {
   return dx < 0 ? 1 : -1;
 }
 
-export type AcceptHorizontalSwipeOptions = {
-  distancePx?: number;
-  axisRatio?: number;
-  /** Elapsed ms since touchstart; enables velocity escape. */
-  elapsedMs?: number;
-  velocityFloorPx?: number;
-  velocityEscapePxPerMs?: number;
-};
-
 /**
- * Returns pane direction if this horizontal swipe should fire once.
- * Vertical-dominant and under-threshold gestures return null.
+ * On release: dismiss if |dx| ≥ ratio × viewport width.
+ * Returns pane direction or null to spring back.
  */
-export function shouldAcceptHorizontalSwipe(
+export function shouldDismissHorizontalDrag(
   dx: number,
-  dy: number,
-  options: AcceptHorizontalSwipeOptions = {},
+  viewportWidth: number,
+  ratio = MOBILE_DRAG_DISMISS_RATIO,
 ): 1 | -1 | null {
-  if (classifySwipeAxis(dx, dy, options.axisRatio) !== "horizontal") {
+  if (!Number.isFinite(dx) || !Number.isFinite(viewportWidth) || viewportWidth <= 0) {
     return null;
   }
+  if (!Number.isFinite(ratio) || ratio <= 0) return null;
+  if (Math.abs(dx) < viewportWidth * ratio) return null;
+  return paneDirectionFromHorizontalDelta(dx);
+}
 
-  const distancePx = options.distancePx ?? MOBILE_SWIPE_DISTANCE_THRESHOLD_PX;
-  const absX = Math.abs(dx);
-
-  if (absX >= distancePx) {
-    return paneDirectionFromHorizontalDelta(dx);
+/** Subtle rotation tied to horizontal drag progress (−max…+max). */
+export function dragRotationDeg(
+  dx: number,
+  viewportWidth: number,
+  maxDeg = MOBILE_DRAG_MAX_ROTATION_DEG,
+): number {
+  if (!Number.isFinite(dx) || !Number.isFinite(viewportWidth) || viewportWidth <= 0) {
+    return 0;
   }
+  const t = Math.max(-1, Math.min(1, dx / viewportWidth));
+  return t * maxDeg;
+}
 
-  const elapsedMs = options.elapsedMs;
-  if (
-    elapsedMs != null &&
-    elapsedMs > 0 &&
-    Number.isFinite(elapsedMs) &&
-    absX >= (options.velocityFloorPx ?? MOBILE_SWIPE_VELOCITY_FLOOR_PX)
-  ) {
-    const speed = absX / elapsedMs;
-    if (
-      speed >=
-      (options.velocityEscapePxPerMs ?? MOBILE_SWIPE_VELOCITY_ESCAPE_PX_PER_MS)
-    ) {
-      return paneDirectionFromHorizontalDelta(dx);
-    }
-  }
+/** Off-screen fling target: next → negative X, previous → positive X. */
+export function flingTargetDx(direction: 1 | -1, viewportWidth: number): number {
+  const w = Math.max(viewportWidth, 1);
+  return direction === 1 ? -w : w;
+}
 
-  return null;
+export function readDragViewportWidth(): number {
+  if (typeof window === "undefined") return 390;
+  return window.visualViewport?.width || window.innerWidth || 390;
 }

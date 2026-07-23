@@ -37,13 +37,10 @@ The scroll-to-edge → advance model is **not tuned**; it is **retired** for mob
 - `canScrollStageContent` remains for desktop/shared keyboard edge checks until 3E.3.
 - `isMobileStageBlockedTarget` remains for 3E.2 swipe wiring.
 
-## Planned replacement (3E.2 — shipped)
+## Planned replacement (3E.2 / 3F.2)
 
-- Horizontal swipe left → next pane; right → previous pane.
-- Route through the same `commitIntent` → `applyScrollIntent` path as keyboard.
-- Gesture-level single-fire lock (one commit per touch identity until `touchend`) plus distance/velocity threshold — does not re-anchor mid-gesture.
-- `touch-action: pan-y` on `.liquid-glass-card-content--stage` (≤767).
-- 3E.4 affordance still pending: low-opacity directional arrows on card edges.
+- **3E.2:** Discrete horizontal swipe → `commitIntent` (superseded by 3F.2).
+- **3F.2:** Drag-follow with 35% visual-viewport dismiss threshold; fling off-screen then `commitIntent` once; spring back if short; axis lock preserves vertical scroll.
 
 ## Verification note
 
