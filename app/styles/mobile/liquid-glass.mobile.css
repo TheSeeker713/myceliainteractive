@@ -9,9 +9,11 @@
 /* Mobile stage scrollport: use available stage height so tall panes can
    reach a real scroll edge (desktop keeps min(78dvh, 48rem) in liquid-glass.css).
    Subtract full sticky-stage vertical padding (1.5rem + 3.5rem = 5rem).
-   --header-h / --footer-h already include safe-area insets when viewport-fit=cover. */
+   --header-h / --footer-h already include safe-area insets when viewport-fit=cover.
+   touch-action: pan-y — browser owns vertical scroll; JS handles horizontal swipe. */
 @media (max-width: 767px) {
   .liquid-glass-card-content--stage {
     max-height: calc(100dvh - var(--header-h) - var(--footer-h) - 5rem);
+    touch-action: pan-y;
   }
 }

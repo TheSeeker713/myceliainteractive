@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   canScrollStageContent,
+  classifySwipeAxis,
   isMobileStageBlockedTarget,
+  paneDirectionFromHorizontalDelta,
+  shouldAcceptHorizontalSwipe,
 } from "./cardStageMobileScroll";
 
 function port(scrollTop: number, scrollHeight: number, clientHeight: number) {
@@ -37,5 +40,39 @@ describe("cardStageMobileScroll", () => {
     expect(
       isMobileStageBlockedTarget({ tagName: "INPUT" } as unknown as EventTarget),
     ).toBe(false);
+  });
+});
+
+describe("horizontal swipe helpers (3E.2)", () => {
+  it("classifies dominant axis with ratio lock", () => {
+    expect(classifySwipeAxis(50, 10)).toBe("horizontal");
+    expect(classifySwipeAxis(10, 50)).toBe("vertical");
+    expect(classifySwipeAxis(3, 3)).toBe("undecided");
+    expect(classifySwipeAxis(40, 35)).toBe("undecided");
+  });
+
+  it("maps left swipe to next and right swipe to previous", () => {
+    expect(paneDirectionFromHorizontalDelta(-80)).toBe(1);
+    expect(paneDirectionFromHorizontalDelta(80)).toBe(-1);
+    expect(paneDirectionFromHorizontalDelta(0)).toBeNull();
+  });
+
+  it("rejects vertical and under-threshold horizontal motion", () => {
+    expect(shouldAcceptHorizontalSwipe(10, 80)).toBeNull();
+    expect(shouldAcceptHorizontalSwipe(-40, 5)).toBeNull();
+  });
+
+  it("accepts horizontal distance past threshold once", () => {
+    expect(shouldAcceptHorizontalSwipe(-64, 5)).toBe(1);
+    expect(shouldAcceptHorizontalSwipe(64, -4)).toBe(-1);
+  });
+
+  it("accepts a short flick via velocity escape", () => {
+    expect(
+      shouldAcceptHorizontalSwipe(-45, 4, { elapsedMs: 60 }),
+    ).toBe(1);
+    expect(
+      shouldAcceptHorizontalSwipe(-45, 4, { elapsedMs: 200 }),
+    ).toBeNull();
   });
 });

@@ -4,7 +4,11 @@
 
 - **3E.0b:** Confirmed improved on Jeremy’s real device — closed.
 - **3E.1:** Diagnosis recorded; mobile scroll-to-edge pane advance **retired** in code.
-- **3E.2+:** Not started — awaiting separate approval. Until horizontal swipe lands, mobile pane change is keyboard Arrow/Page only (shared `commitIntent` → `applyScrollIntent`). Desktop wheel/touch/glitch unchanged.
+- **3E.2:** Horizontal swipe left/right → `commitIntent` with gesture-level single-fire lock; `touch-action: pan-y` on the stage scrollport. Vertical scroll never advances panes.
+
+## Process note (future)
+
+When a step retires the only usable mechanism for a live feature and a later step is the replacement, do **not** split them into separately approved/pushed steps if that leaves production degraded. Flag the risk in planning and ship as one atomic change, or fast-track replacement immediately (as 3E.2 was after 3E.1).
 
 ## Real-device bug (multi-advance)
 
@@ -33,12 +37,13 @@ The scroll-to-edge → advance model is **not tuned**; it is **retired** for mob
 - `canScrollStageContent` remains for desktop/shared keyboard edge checks until 3E.3.
 - `isMobileStageBlockedTarget` remains for 3E.2 swipe wiring.
 
-## Planned replacement (3E.2+, not in this commit)
+## Planned replacement (3E.2 — shipped)
 
 - Horizontal swipe left → next pane; right → previous pane.
 - Route through the same `commitIntent` → `applyScrollIntent` path as keyboard.
-- Gesture-level single-fire lock (one commit per touch identity until `touchend`) plus distance/velocity threshold — do not port the old vertical re-anchor logic.
-- 3E.4 affordance: low-opacity directional **arrows** on the left and right edges of the card (`aria-hidden`), shown until the first successful swipe in the session (`sessionStorage`), then fade out.
+- Gesture-level single-fire lock (one commit per touch identity until `touchend`) plus distance/velocity threshold — does not re-anchor mid-gesture.
+- `touch-action: pan-y` on `.liquid-glass-card-content--stage` (≤767).
+- 3E.4 affordance still pending: low-opacity directional arrows on card edges.
 
 ## Verification note
 

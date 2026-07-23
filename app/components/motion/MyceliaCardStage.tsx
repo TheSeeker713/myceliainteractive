@@ -304,7 +304,7 @@ export function MyceliaCardStage({
       event.preventDefault();
     };
 
-    // Mobile: scroll-edge pane advance retired (3E.1). Horizontal swipe in 3E.2.
+    // Mobile: horizontal swipe → commitIntent (3E.2); vertical never advances.
     // Desktop outside-card wheel/touch are not attached on this branch.
     if (isMobileViewport) {
       const detachMobile = callMobileSafe(
