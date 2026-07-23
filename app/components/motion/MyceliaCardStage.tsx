@@ -5,11 +5,20 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type CSSProperties,
   type ReactNode,
 } from "react";
 import { useIsMobileViewport } from "@/app/mobile";
 import { callMobileSafe } from "@/app/mobile/guardMobile";
+import {
+  hasSeenMobileCardGuide,
+  markMobileCardGuideSeen,
+} from "@/app/mobile/cardGuideStorage";
+import {
+  MobileCardGuideArrows,
+  MobileCardGuideTip,
+} from "@/app/mobile/MobileCardGuide";
 import type { CardCycleState } from "./cardCycle";
 import {
   accumulateWheelDelta,
@@ -205,6 +214,19 @@ type MyceliaCardStageProps = {
   reduceMotion: boolean;
 };
 
+function subscribeGuideStorage() {
+  return () => {};
+}
+
+function getGuideSeenSnapshot() {
+  return hasSeenMobileCardGuide();
+}
+
+function getGuideSeenServerSnapshot() {
+  // Hide on SSR to avoid a flash of the tip before sessionStorage is readable.
+  return true;
+}
+
 export function MyceliaCardStage({
   panes,
   reduceMotion,
@@ -222,15 +244,53 @@ export function MyceliaCardStage({
     createScrollMachineState(0),
   );
   const [liveMessage, setLiveMessage] = useState("");
+  const guideSeenSession = useSyncExternalStore(
+    subscribeGuideStorage,
+    getGuideSeenSnapshot,
+    getGuideSeenServerSnapshot,
+  );
+  const [guideDismissed, setGuideDismissed] = useState(false);
+  const [guideFading, setGuideFading] = useState(false);
+  const guideFadingRef = useRef(false);
+  const guideDismissedRef = useRef(false);
   const dragCommitLockRef = useRef(false);
   const dragSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   /** Clear off-screen drag transform only after fade swaps to the incoming pane. */
   const pendingDragClearRef = useRef(false);
+  const guideFadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const getStageCard = () =>
     (rootRef.current?.querySelector(
       ".mycelia-card-drag-layer",
     ) as HTMLElement | null) ?? null;
+
+  const dismissMobileCardGuide = () => {
+    if (
+      guideSeenSession ||
+      guideDismissedRef.current ||
+      guideFadingRef.current
+    ) {
+      return;
+    }
+    guideFadingRef.current = true;
+    setGuideFading(true);
+    markMobileCardGuideSeen();
+    if (guideFadeTimerRef.current != null) {
+      clearTimeout(guideFadeTimerRef.current);
+    }
+    guideFadeTimerRef.current = setTimeout(() => {
+      guideDismissedRef.current = true;
+      setGuideDismissed(true);
+      setGuideFading(false);
+      guideFadingRef.current = false;
+      guideFadeTimerRef.current = null;
+    }, 280);
+  };
+  const dismissMobileCardGuideRef = useRef(dismissMobileCardGuide);
+
+  useEffect(() => {
+    dismissMobileCardGuideRef.current = dismissMobileCardGuide;
+  });
 
   useEffect(() => {
     const root = rootRef.current;
@@ -393,6 +453,10 @@ export function MyceliaCardStage({
                 vh,
                 true,
               );
+              // First successful dismiss on the hero card hides arrows + tip together.
+              if (machineRef.current.cardIndex === 0) {
+                dismissMobileCardGuideRef.current();
+              }
               clearSettleTimer();
               dragSettleTimerRef.current = setTimeout(() => {
                 // Commit while still off-screen; rAF clears transform at p≥0.5.
@@ -436,6 +500,10 @@ export function MyceliaCardStage({
       window.addEventListener("keydown", onKeyDown);
       return () => {
         clearSettleTimer();
+        if (guideFadeTimerRef.current != null) {
+          clearTimeout(guideFadeTimerRef.current);
+          guideFadeTimerRef.current = null;
+        }
         dragCommitLockRef.current = false;
         pendingDragClearRef.current = false;
         clearCardDragTransform(getStageCard());
@@ -540,6 +608,11 @@ export function MyceliaCardStage({
     useFadeTransition,
   );
   const pane = panes[cardIndex];
+  const showMobileCardGuide =
+    isMobileViewport &&
+    cardIndex === 0 &&
+    !guideSeenSession &&
+    (!guideDismissed || guideFading);
 
   useEffect(() => {
     if (machine.status !== "holding") return;
@@ -584,7 +657,7 @@ export function MyceliaCardStage({
         {liveMessage}
       </div>
       <div className="liquid-glass-sticky-stage">
-        <div className="mycelia-card-drag-layer">
+        <div className="mycelia-card-drag-layer relative">
           <GlitchPane
             cycle={cycle}
             reduceMotion={useFadeTransition}
@@ -593,7 +666,13 @@ export function MyceliaCardStage({
           >
             {pane?.content}
           </GlitchPane>
+          {showMobileCardGuide ? (
+            <MobileCardGuideArrows fading={guideFading} />
+          ) : null}
         </div>
+        {showMobileCardGuide ? (
+          <MobileCardGuideTip fading={guideFading} />
+        ) : null}
       </div>
     </div>
   );

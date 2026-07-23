@@ -1,0 +1,83 @@
+/* First-use mobile card guide (3F.4): edge arrows + tip strip. */
+
+.mycelia-card-guide-arrows {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.mycelia-card-guide-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  opacity: 0.32;
+  color: rgba(30, 50, 58, 0.85);
+}
+
+.mycelia-card-guide-arrow--left {
+  left: 0.35rem;
+}
+
+.mycelia-card-guide-arrow--right {
+  right: 0.35rem;
+}
+
+.mycelia-card-guide-tip {
+  pointer-events: none;
+  width: min(100%, 22rem);
+  margin-inline: auto;
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  color: rgba(40, 50, 55, 0.78);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.mycelia-card-guide-tip-full {
+  display: block;
+}
+
+.mycelia-card-guide-tip-short {
+  display: none;
+}
+
+.mycelia-card-guide {
+  transition: opacity 280ms ease;
+  opacity: 1;
+}
+
+.mycelia-card-guide--fading {
+  opacity: 0;
+}
+
+@media (max-height: 640px) {
+  .mycelia-card-guide-tip {
+    margin-top: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .mycelia-card-guide-tip-full {
+    display: none;
+  }
+
+  .mycelia-card-guide-tip-short {
+    display: block;
+  }
+
+  .mycelia-card-guide-arrow {
+    width: 1.4rem;
+    height: 1.4rem;
+    opacity: 0.28;
+  }
+}
