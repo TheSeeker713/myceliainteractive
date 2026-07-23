@@ -304,7 +304,8 @@ export function MyceliaCardStage({
       event.preventDefault();
     };
 
-    // Mobile: scroll-end advancement + no desktop outside-card touch trap.
+    // Mobile: scroll-edge pane advance retired (3E.1). Horizontal swipe in 3E.2.
+    // Desktop outside-card wheel/touch are not attached on this branch.
     if (isMobileViewport) {
       const detachMobile = callMobileSafe(
         "card-stage-attach-entry",
