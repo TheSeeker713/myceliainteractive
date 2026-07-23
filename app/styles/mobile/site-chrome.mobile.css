@@ -27,6 +27,17 @@
   color: var(--color-studio-text, #171717);
 }
 
+/*
+  Step 3F.1: unstick footer on mobile so it is reachable via page scroll below
+  the card stage. Desktop keeps sticky bottom-0 (Tailwind on .site-footer).
+  max-md:static on the element is the primary override; this reinforces it.
+*/
+@media (max-width: 767px) {
+  .site-footer {
+    position: static;
+  }
+}
+
 /* ≤360px: compress disabled theme placeholders so A11y + hamburger stay on-screen */
 @media (max-width: 360px) {
   .site-header-theme-cluster {

@@ -6,14 +6,21 @@
   }
 }
 
-/* Mobile stage scrollport: use available stage height so tall panes can
-   reach a real scroll edge (desktop keeps min(78dvh, 48rem) in liquid-glass.css).
-   Subtract full sticky-stage vertical padding (1.5rem + 3.5rem = 5rem).
-   --header-h / --footer-h already include safe-area insets when viewport-fit=cover.
-   touch-action: pan-y — browser owns vertical scroll; JS handles horizontal swipe. */
+/*
+  Step 3F.1 — nested scroll coexistence (≤767):
+  - Stage height = 100dvh − header only (footer no longer reserved / not sticky).
+  - Footer is in normal document flow below the stage → page scroll reaches it.
+  - In-card .liquid-glass-card-content--stage keeps overflow-y + touch-action: pan-y.
+  - Stage root keeps overflow-x clipping for future drag-fling; body/main stay scrollable.
+  - Horizontal drag-dismiss (3F.2) must axis-lock so vertical never preventDefaults page scroll.
+*/
 @media (max-width: 767px) {
+  .mycelia-card-stage-root {
+    height: calc(100dvh - var(--header-h));
+  }
+
   .liquid-glass-card-content--stage {
-    max-height: calc(100dvh - var(--header-h) - var(--footer-h) - 5rem);
+    max-height: calc(100dvh - var(--header-h) - 5rem);
     touch-action: pan-y;
   }
 }

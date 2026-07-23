@@ -540,3 +540,9 @@
 }
 
 /* max-width mobile stage rules live in app/styles/mobile/liquid-glass.mobile.css */
+
+/* Card stage viewport height: desktop reserves sticky footer; mobile (3F.1)
+   drops --footer-h so the footer sits in document flow below the stage. */
+.mycelia-card-stage-root {
+  height: calc(100dvh - var(--header-h) - var(--footer-h));
+}

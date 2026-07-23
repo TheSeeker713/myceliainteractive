@@ -13,6 +13,7 @@ import {
   SiteMobileNavToggle,
   useIsMobileViewport,
 } from "@/app/mobile";
+import "@/app/styles/mobile/site-chrome.mobile.css";
 
 const NO_CHROME_ROUTES = ["/ls/play"];
 
@@ -187,7 +188,7 @@ export function SiteFooter() {
   if (shouldHideChrome(pathname)) return null;
 
   return (
-    <footer className="site-gutter site-footer-py sticky bottom-0 z-[var(--z-site-chrome)] w-full border-t border-black/8 bg-white/80 backdrop-blur-md mt-auto">
+    <footer className="site-footer site-gutter site-footer-py sticky bottom-0 max-md:static z-[var(--z-site-chrome)] w-full border-t border-black/8 bg-white/80 backdrop-blur-md mt-auto">
       <div className="max-w-[var(--content-max-width)] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm text-studio-text-muted">
         <span>
           &copy; {new Date().getFullYear()} Mycelia Interactive LLC. All rights

@@ -452,7 +452,7 @@ export function MyceliaCardStage({
   return (
     <div
       ref={rootRef}
-      className="atmosphere-preview-root relative h-[calc(100dvh-var(--header-h)-var(--footer-h))] overflow-hidden"
+      className="atmosphere-preview-root mycelia-card-stage-root relative overflow-hidden"
     >
       <div
         className="sr-only"
