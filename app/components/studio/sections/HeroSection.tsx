@@ -32,11 +32,21 @@ export function HeroContent() {
 
         <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full relative z-10">
           <Button
-            href="/ls#access"
+            href="/ls"
             size="lg"
             className="w-full sm:w-auto sm:min-w-[12rem] min-h-11 sm:min-h-12 bg-[var(--color-studio-accent)]/85 backdrop-blur-md border border-white/20 hover:bg-[var(--color-studio-accent)]/95 shadow-[0_4px_16px_rgba(30,90,100,0.3)]"
           >
-            Request demo access
+            Learn about Liminal Sin
+          </Button>
+          <Button
+            href="https://thes33k3r.com/bank"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="secondary"
+            size="lg"
+            className="w-full sm:w-auto sm:min-w-[12rem] min-h-11 sm:min-h-12 border-white/25 bg-white/55 text-[var(--color-studio-text-on-glass)] backdrop-blur-md hover:bg-white/70"
+          >
+            Play test The S33k3r prototype
           </Button>
         </div>
       </div>
