@@ -7,7 +7,9 @@ import {
 
 export type AttachCardStageMobileListenersOptions = {
   getRoot: () => HTMLElement | null;
-  /** Continuous horizontal follow (dx = currentX − startX). */
+  /** Stage card element that receives live transform + pointer capture. */
+  getCard: () => HTMLElement | null;
+  /** Continuous horizontal follow (dx = currentX − startX). Hot path — keep cheap. */
   onDragMove: (dx: number) => void;
   /** Release after a horizontal (or undecided) gesture — parent decides dismiss vs spring. */
   onDragEnd: (dx: number) => void;
@@ -30,10 +32,12 @@ function pointerStartedInRoot(
 /**
  * Mobile (≤767) card-stage listeners — Step 3F.2 drag-follow.
  *
- * Tracks the finger 1:1 while axis-locked horizontal. Does **not** call
- * commitIntent — MyceliaCardStage decides on release (fling then commit, or
- * spring back). Vertical axis never preventDefaults (in-card / page scroll).
- * Single-fire: onDragEnd/onDragCancel at most once per gesture.
+ * Tracks the finger while axis-locked horizontal. Does **not** call
+ * commitIntent — MyceliaCardStage decides on release. Vertical axis never
+ * preventDefaults. Single-fire onDragEnd/onDragCancel per gesture.
+ *
+ * Uses setPointerCapture on the card so move events keep flowing on iOS even
+ * when the finger leaves the original target.
  */
 export function attachCardStageMobileListeners(
   options: AttachCardStageMobileListenersOptions,
@@ -45,8 +49,18 @@ export function attachCardStageMobileListeners(
   let startY = 0;
   let lastDx = 0;
   let pointerId: number | null = null;
+  let captureEl: HTMLElement | null = null;
 
   const clearGesture = () => {
+    if (captureEl && pointerId != null) {
+      try {
+        if (captureEl.hasPointerCapture?.(pointerId)) {
+          captureEl.releasePointerCapture(pointerId);
+        }
+      } catch {
+        /* ignore */
+      }
+    }
     armed = false;
     gestureConsumed = false;
     axisLock = null;
@@ -54,6 +68,7 @@ export function attachCardStageMobileListeners(
     startY = 0;
     lastDx = 0;
     pointerId = null;
+    captureEl = null;
   };
 
   const finish = (kind: "end" | "cancel") => {
@@ -87,6 +102,16 @@ export function attachCardStageMobileListeners(
       startY = event.clientY;
       lastDx = 0;
       pointerId = event.pointerId;
+
+      const card = options.getCard();
+      if (card) {
+        captureEl = card;
+        try {
+          card.setPointerCapture(event.pointerId);
+        } catch {
+          captureEl = null;
+        }
+      }
     });
   };
 

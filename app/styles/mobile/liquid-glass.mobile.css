@@ -11,16 +11,36 @@
   - Stage height = 100dvh − header only (footer no longer reserved / not sticky).
   - Footer is in normal document flow below the stage → page scroll reaches it.
   - In-card .liquid-glass-card-content--stage keeps overflow-y + touch-action: pan-y.
-  - Stage root keeps overflow-x clipping for future drag-fling; body/main stay scrollable.
-  - Horizontal drag-dismiss (3F.2) must axis-lock so vertical never preventDefaults page scroll.
+  - Stage root keeps overflow-x clipping for drag-fling; body/main stay scrollable.
+
+  Step 3F.2 fix — tall panes (/ls hero): place-items:center vertically centered a
+  card taller than the stage inside overflow:hidden, clipping the top with no way
+  to scroll that chrome into view. Pin to the top; in-card scroll handles the rest.
 */
 @media (max-width: 767px) {
   .mycelia-card-stage-root {
     height: calc(100dvh - var(--header-h));
   }
 
+  .liquid-glass-sticky-stage {
+    place-items: start center;
+    align-content: start;
+  }
+
   .liquid-glass-card-content--stage {
     max-height: calc(100dvh - var(--header-h) - 5rem);
     touch-action: pan-y;
+  }
+
+  /* Prefer JS horizontal drag over browser back-swipe while on the card shell. */
+  .liquid-glass-stage-card,
+  .mycelia-card-drag-layer {
+    touch-action: pan-y;
+  }
+
+  .mycelia-card-drag-layer {
+    width: min(100%, 38rem);
+    max-width: 100%;
+    will-change: transform;
   }
 }

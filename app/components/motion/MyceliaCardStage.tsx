@@ -25,8 +25,12 @@ import { LiquidGlassSurface } from "./LiquidGlassSurface";
 import { MYCELIA_FLOW_WHEEL_EVENT } from "./MyceliaFlowAtmosphere";
 import { attachCardStageMobileListeners } from "./mobile/attachCardStageMobileListeners";
 import {
+  CARD_DRAG_SETTLE_MS,
+  applyCardDragTransform,
+  clearCardDragTransform,
+} from "./mobile/cardDragTransform";
+import {
   canScrollStageContent,
-  dragRotationDeg,
   flingTargetDx,
   readDragViewportWidth,
   shouldDismissHorizontalDrag,
@@ -72,18 +76,12 @@ function GlitchPane({
   reduceMotion,
   paneId,
   paneLabel,
-  dragOffsetPx = 0,
-  dragAnimated = false,
 }: {
   children: ReactNode;
   cycle: CardCycleState;
   reduceMotion: boolean;
   paneId?: string;
   paneLabel?: string;
-  /** Mobile drag-follow translateX (3F.2). */
-  dragOffsetPx?: number;
-  /** Use CSS transition while springing / flinging. */
-  dragAnimated?: boolean;
 }) {
   if (cycle.opacity <= 0.01 && cycle.phase === "buffer") {
     return null;
@@ -109,28 +107,15 @@ function GlitchPane({
       } as const)
     : {};
 
-  const vvWidth =
-    typeof window !== "undefined"
-      ? window.visualViewport?.width || window.innerWidth || 390
-      : 390;
-  const hasDrag = dragOffsetPx !== 0 || dragAnimated;
-  const dragTransform = hasDrag
-    ? `translateX(${dragOffsetPx}px) rotate(${dragRotationDeg(dragOffsetPx, vvWidth)}deg)`
-    : null;
-  const dragTransition = dragAnimated ? "transform 220ms ease-out" : "none";
-
   if (reduceMotion || !inGlitchPhase) {
     return (
       <div
         className="liquid-glass-stage-card"
         style={{
           opacity: cycle.opacity,
-          transform:
-            dragTransform ??
-            (reduceMotion
-              ? undefined
-              : `translateY(${(1 - cycle.opacity) * 12}px) scale(${0.96 + cycle.opacity * 0.04})`),
-          transition: dragTransform ? dragTransition : undefined,
+          transform: reduceMotion
+            ? undefined
+            : `translateY(${(1 - cycle.opacity) * 12}px) scale(${0.96 + cycle.opacity * 0.04})`,
         }}
       >
         <LiquidGlassSurface
@@ -235,10 +220,13 @@ export function MyceliaCardStage({
     createScrollMachineState(0),
   );
   const [liveMessage, setLiveMessage] = useState("");
-  const [dragDx, setDragDx] = useState(0);
-  const [dragSettling, setDragSettling] = useState(false);
   const dragCommitLockRef = useRef(false);
   const dragSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const getStageCard = () =>
+    (rootRef.current?.querySelector(
+      ".mycelia-card-drag-layer",
+    ) as HTMLElement | null) ?? null;
 
   useEffect(() => {
     const root = rootRef.current;
@@ -333,8 +321,8 @@ export function MyceliaCardStage({
       event.preventDefault();
     };
 
-    // Mobile: drag-follow → fling/spring → commitIntent once (3F.2).
-    // Desktop outside-card wheel/touch are not attached on this branch.
+    // Mobile: drag-follow via imperative DOM transform (3F.2) — not setState per
+    // move (that re-rendered the whole pane and dropped live follow on device).
     if (isMobileViewport) {
       const clearSettleTimer = () => {
         if (dragSettleTimerRef.current != null) {
@@ -348,48 +336,61 @@ export function MyceliaCardStage({
         () =>
           attachCardStageMobileListeners({
             getRoot: () => rootRef.current,
+            getCard: getStageCard,
             onDragMove: (dx) => {
               if (dragCommitLockRef.current) return;
               clearSettleTimer();
-              setDragSettling(false);
-              setDragDx(dx);
+              applyCardDragTransform(
+                getStageCard(),
+                dx,
+                readDragViewportWidth(),
+                false,
+              );
             },
             onDragEnd: (dx) => {
               if (dragCommitLockRef.current) return;
+              const card = getStageCard();
               const vv = readDragViewportWidth();
               const direction = shouldDismissHorizontalDrag(dx, vv);
               if (!direction) {
-                setDragSettling(true);
-                setDragDx(0);
+                applyCardDragTransform(card, 0, vv, true);
                 clearSettleTimer();
                 dragSettleTimerRef.current = setTimeout(() => {
-                  setDragSettling(false);
+                  clearCardDragTransform(card);
                   dragSettleTimerRef.current = null;
-                }, 240);
+                }, CARD_DRAG_SETTLE_MS);
                 return;
               }
 
               dragCommitLockRef.current = true;
-              setDragSettling(true);
-              setDragDx(flingTargetDx(direction, vv));
+              applyCardDragTransform(
+                card,
+                flingTargetDx(direction, vv),
+                vv,
+                true,
+              );
               clearSettleTimer();
               dragSettleTimerRef.current = setTimeout(() => {
                 commitIntent(direction);
-                setDragDx(0);
-                setDragSettling(false);
+                clearCardDragTransform(getStageCard());
+                // Reset in-card scroll so the next pane starts at the top.
+                const port = rootRef.current?.querySelector(
+                  ".liquid-glass-card-content--stage",
+                ) as HTMLElement | null;
+                if (port) port.scrollTop = 0;
                 dragCommitLockRef.current = false;
                 dragSettleTimerRef.current = null;
-              }, 240);
+              }, CARD_DRAG_SETTLE_MS);
             },
             onDragCancel: () => {
               if (dragCommitLockRef.current) return;
-              setDragSettling(true);
-              setDragDx(0);
+              const card = getStageCard();
+              applyCardDragTransform(card, 0, readDragViewportWidth(), true);
               clearSettleTimer();
               dragSettleTimerRef.current = setTimeout(() => {
-                setDragSettling(false);
+                clearCardDragTransform(card);
                 dragSettleTimerRef.current = null;
-              }, 240);
+              }, CARD_DRAG_SETTLE_MS);
             },
           }),
         () => {},
@@ -398,6 +399,7 @@ export function MyceliaCardStage({
       return () => {
         clearSettleTimer();
         dragCommitLockRef.current = false;
+        clearCardDragTransform(getStageCard());
         detachMobile();
         window.removeEventListener("keydown", onKeyDown);
       };
@@ -543,16 +545,16 @@ export function MyceliaCardStage({
         {liveMessage}
       </div>
       <div className="liquid-glass-sticky-stage">
-        <GlitchPane
-          cycle={cycle}
-          reduceMotion={useFadeTransition}
-          paneId={pane?.id}
-          paneLabel={pane?.label}
-          dragOffsetPx={isMobileViewport ? dragDx : 0}
-          dragAnimated={isMobileViewport && dragSettling}
-        >
-          {pane?.content}
-        </GlitchPane>
+        <div className="mycelia-card-drag-layer">
+          <GlitchPane
+            cycle={cycle}
+            reduceMotion={useFadeTransition}
+            paneId={pane?.id}
+            paneLabel={pane?.label}
+          >
+            {pane?.content}
+          </GlitchPane>
+        </div>
       </div>
     </div>
   );
