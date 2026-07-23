@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { SceneCard } from "@/app/components/studio/SceneCard";
+import { MobileCardImage } from "@/app/mobile/MobileCardImage";
 
 export function AboutContent() {
   return (
@@ -12,7 +13,6 @@ export function AboutContent() {
       >
         Company
       </p>
-      {/* ≤767: omit aspect-video — copy-first About pane */}
       <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8 max-md:hidden">
         <Image
           src="/assets/images/About_Network.webp"
@@ -22,6 +22,7 @@ export function AboutContent() {
           sizes="(max-width: 768px) 100vw, 896px"
         />
       </div>
+      <MobileCardImage src="/assets/images/About_Network.webp" alt="About Mycelia Interactive" />
       <h2 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
         About
       </h2>

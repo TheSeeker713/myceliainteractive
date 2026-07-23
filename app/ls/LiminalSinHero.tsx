@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Button } from "@/app/components/studio/Button";
+import { MobileCardImage } from "@/app/mobile/MobileCardImage";
 
 export function LiminalSinHeroContent() {
   return (
@@ -21,6 +22,11 @@ export function LiminalSinHeroContent() {
         <p className="mt-4 text-sm text-studio-text-muted">
           Vertical slice prototype · Gemini Live Agent Challenge 2026
         </p>
+        <MobileCardImage
+          src="/assets/images/Liminal_Sin_Title.jpg"
+          alt="Liminal Sin"
+          className="mt-5"
+        />
         {/* ≤767: one primary CTA; secondary links as compact text row; demote /ls/game */}
         <div className="mt-8 space-y-4">
           <Button href="#access" className="w-full min-h-11 md:w-auto">

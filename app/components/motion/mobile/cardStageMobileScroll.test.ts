@@ -43,6 +43,18 @@ describe("cardStageMobileScroll", () => {
       isMobileStageBlockedTarget({ tagName: "INPUT" } as unknown as EventTarget),
     ).toBe(false);
   });
+
+  it("blocks data-card-media targets so drag does not steal native save", () => {
+    if (typeof document === "undefined") return;
+    const wrap = document.createElement("div");
+    wrap.setAttribute("data-card-media", "");
+    const img = document.createElement("img");
+    wrap.appendChild(img);
+    document.body.appendChild(wrap);
+    expect(isMobileStageBlockedTarget(img)).toBe(true);
+    expect(isMobileStageBlockedTarget(wrap)).toBe(true);
+    wrap.remove();
+  });
 });
 
 describe("horizontal drag-dismiss helpers (3F.2)", () => {

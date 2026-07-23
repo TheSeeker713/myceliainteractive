@@ -4,6 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { PROJECTS } from "@/app/components/studio/data";
 import { SceneCard } from "@/app/components/studio/SceneCard";
+import {
+  MobileCardImage,
+  MobileCardVideoThumb,
+} from "@/app/mobile/MobileCardImage";
 
 type ProjectItem = (typeof PROJECTS)[number];
 
@@ -43,16 +47,34 @@ function ProjectMedia({ project }: { project: ProjectItem }) {
   return null;
 }
 
+function ProjectMobileMedia({ project }: { project: ProjectItem }) {
+  if ("video" in project && project.video) {
+    return (
+      <MobileCardVideoThumb src={project.video} label={project.name} />
+    );
+  }
+  if ("image" in project && project.image) {
+    return (
+      <MobileCardImage
+        src={project.image}
+        alt={project.name}
+        objectFit="contain"
+      />
+    );
+  }
+  return null;
+}
+
 export function ProjectSceneContent({ project }: { project: ProjectItem }) {
   return (
     <SceneCard className="flex flex-col gap-5">
       <p data-lg-kicker className="liquid-glass-kicker text-studio-accent">
         Projects
       </p>
-      {/* ≤767: copy-first; omit large title media. Desktop keeps media above. */}
       <div className="max-md:hidden">
         <ProjectMedia project={project} />
       </div>
+      <ProjectMobileMedia project={project} />
       <div>
         <h3 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
           {project.name}

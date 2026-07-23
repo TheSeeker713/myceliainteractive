@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SceneCard } from "@/app/components/studio/SceneCard";
+import { MobileCardImage } from "@/app/mobile/MobileCardImage";
 
 export function MissionContent() {
   return (
@@ -13,7 +14,6 @@ export function MissionContent() {
       >
         Direction
       </p>
-      {/* ≤767: omit aspect-video — title + short para + Vision link */}
       <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8 max-md:hidden">
         <Image
           src="/assets/images/Roadmap_Network.webp"
@@ -23,6 +23,10 @@ export function MissionContent() {
           sizes="(max-width: 768px) 100vw, 896px"
         />
       </div>
+      <MobileCardImage
+        src="/assets/images/Roadmap_Network.webp"
+        alt="Mission direction"
+      />
       <h2 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal mb-0">
         Mission
       </h2>

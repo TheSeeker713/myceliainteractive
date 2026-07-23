@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { FoldCard } from "@/app/components/motion/FoldCard";
+import { MobileCardImage } from "@/app/mobile/MobileCardImage";
 import SignupForms from "@/app/ls/SignupForms";
 
 const featureCards = [
@@ -64,7 +65,6 @@ export function LiminalSinStoryContent() {
           and responds.
         </p>
       </div>
-      {/* ≤767: omit story image — two short paras only */}
       <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8 max-md:hidden">
         <Image
           src="/assets/images/Liminal_Sin_Title.jpg"
@@ -74,6 +74,11 @@ export function LiminalSinStoryContent() {
           sizes="(max-width: 1024px) 100vw, 50vw"
         />
       </div>
+      <MobileCardImage
+        src="/assets/images/Liminal_Sin_Title.jpg"
+        alt="Liminal Sin"
+        className="mt-4"
+      />
     </div>
   );
 }

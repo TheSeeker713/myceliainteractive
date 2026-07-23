@@ -37,7 +37,10 @@ export function isMobileStageBlockedTarget(target: EventTarget | null): boolean 
   // Node/test envs have no Element; treat as unblocked (listeners are browser-only).
   if (typeof Element === "undefined") return false;
   if (!(target instanceof Element)) return false;
-  if (target.closest("header, footer, [role='dialog']")) return true;
+  // data-card-media: thumbnails / lightbox — native long-press Save Image/Video (3F.3)
+  if (target.closest("header, footer, [role='dialog'], [data-card-media]")) {
+    return true;
+  }
   if (typeof HTMLElement !== "undefined" && target instanceof HTMLElement) {
     if (target.isContentEditable) return true;
     const tag = target.tagName;

@@ -16,4 +16,4 @@
 - Both fade on first successful drag
 - No regression to 3F.2 drag mechanics
 
-3F.3 (thumbnails/lightbox) stays on hold until this is confirmed.
+3F.3 (thumbnails/lightbox) shipped separately — see `part3-step-3f3-card-images.md`.
