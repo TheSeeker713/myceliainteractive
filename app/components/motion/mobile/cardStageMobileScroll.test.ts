@@ -52,21 +52,22 @@ describe("horizontal drag-dismiss helpers (3F.2)", () => {
     expect(classifySwipeAxis(3, 3)).toBe("undecided");
   });
 
-  it("maps left drag to next and right drag to previous", () => {
-    expect(paneDirectionFromHorizontalDelta(-80)).toBe(1);
-    expect(paneDirectionFromHorizontalDelta(80)).toBe(-1);
+  it("maps right drag to next and left drag to previous", () => {
+    expect(paneDirectionFromHorizontalDelta(80)).toBe(1);
+    expect(paneDirectionFromHorizontalDelta(-80)).toBe(-1);
   });
 
   it("dismisses at 35% of viewport width", () => {
-    expect(shouldDismissHorizontalDrag(-100, 390)).toBeNull();
-    expect(shouldDismissHorizontalDrag(-137, 390)).toBe(1);
-    expect(shouldDismissHorizontalDrag(137, 390)).toBe(-1);
+    expect(shouldDismissHorizontalDrag(100, 390)).toBeNull();
+    expect(shouldDismissHorizontalDrag(137, 390)).toBe(1);
+    expect(shouldDismissHorizontalDrag(-137, 390)).toBe(-1);
   });
 
-  it("computes fling targets and rotation", () => {
-    expect(flingTargetDx(1, 390)).toBe(-390);
-    expect(flingTargetDx(-1, 390)).toBe(390);
-    expect(dragRotationDeg(195, 390)).toBeCloseTo(4);
-    expect(dragRotationDeg(-390, 390)).toBeCloseTo(-8);
+  it("computes fling targets and 2D rotation", () => {
+    expect(flingTargetDx(1, 390)).toBe(390);
+    expect(flingTargetDx(-1, 390)).toBe(-390);
+    expect(dragRotationDeg(195, 0, 390, 844)).toBeCloseTo(4);
+    expect(dragRotationDeg(390, 0, 390, 844)).toBeCloseTo(8);
+    expect(dragRotationDeg(0, 422, 390, 844)).toBeCloseTo(1.6);
   });
 });

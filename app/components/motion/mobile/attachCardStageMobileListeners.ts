@@ -9,10 +9,10 @@ export type AttachCardStageMobileListenersOptions = {
   getRoot: () => HTMLElement | null;
   /** Stage card element that receives live transform + pointer capture. */
   getCard: () => HTMLElement | null;
-  /** Continuous horizontal follow (dx = currentX − startX). Hot path — keep cheap. */
-  onDragMove: (dx: number) => void;
+  /** Continuous follow while horizontally locked (dx/dy = current − start). */
+  onDragMove: (dx: number, dy: number) => void;
   /** Release after a horizontal (or undecided) gesture — parent decides dismiss vs spring. */
-  onDragEnd: (dx: number) => void;
+  onDragEnd: (dx: number, dy: number) => void;
   /** Vertical-locked or cancelled gesture — parent should idle/spring without commit. */
   onDragCancel: () => void;
 };
@@ -32,12 +32,9 @@ function pointerStartedInRoot(
 /**
  * Mobile (≤767) card-stage listeners — Step 3F.2 drag-follow.
  *
- * Tracks the finger while axis-locked horizontal. Does **not** call
- * commitIntent — MyceliaCardStage decides on release. Vertical axis never
- * preventDefaults. Single-fire onDragEnd/onDragCancel per gesture.
- *
- * Uses setPointerCapture on the card so move events keep flowing on iOS even
- * when the finger leaves the original target.
+ * Tracks the finger while axis-locked horizontal (dx + dy for visuals).
+ * Does **not** call commitIntent — MyceliaCardStage decides on release.
+ * Vertical axis never preventDefaults. Single-fire onDragEnd/onDragCancel.
  */
 export function attachCardStageMobileListeners(
   options: AttachCardStageMobileListenersOptions,
@@ -48,6 +45,7 @@ export function attachCardStageMobileListeners(
   let startX = 0;
   let startY = 0;
   let lastDx = 0;
+  let lastDy = 0;
   let pointerId: number | null = null;
   let captureEl: HTMLElement | null = null;
 
@@ -67,6 +65,7 @@ export function attachCardStageMobileListeners(
     startX = 0;
     startY = 0;
     lastDx = 0;
+    lastDy = 0;
     pointerId = null;
     captureEl = null;
   };
@@ -78,13 +77,14 @@ export function attachCardStageMobileListeners(
     }
     gestureConsumed = true;
     const dx = lastDx;
+    const dy = lastDy;
     const wasVertical = axisLock === "vertical";
     clearGesture();
     if (wasVertical || kind === "cancel") {
       runMobileSafe("card-stage-drag-cancel", () => options.onDragCancel());
       return;
     }
-    runMobileSafe("card-stage-drag-end", () => options.onDragEnd(dx));
+    runMobileSafe("card-stage-drag-end", () => options.onDragEnd(dx, dy));
   };
 
   const onPointerDown = (event: PointerEvent) => {
@@ -101,6 +101,7 @@ export function attachCardStageMobileListeners(
       startX = event.clientX;
       startY = event.clientY;
       lastDx = 0;
+      lastDy = 0;
       pointerId = event.pointerId;
 
       const card = options.getCard();
@@ -123,6 +124,7 @@ export function attachCardStageMobileListeners(
       const dx = event.clientX - startX;
       const dy = event.clientY - startY;
       lastDx = dx;
+      lastDy = dy;
 
       if (axisLock == null || axisLock === "undecided") {
         const classified = classifySwipeAxis(dx, dy);
@@ -142,7 +144,7 @@ export function attachCardStageMobileListeners(
       }
 
       event.preventDefault();
-      options.onDragMove(dx);
+      options.onDragMove(dx, dy);
     });
   };
 

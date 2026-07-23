@@ -17,6 +17,7 @@ import {
   applyScrollIntent,
   createScrollMachineState,
   getCycleForScrollMachine,
+  REDUCED_FORWARD_TRANSITION_MS,
   WHEEL_TRIGGER_THRESHOLD_PX,
   type ScrollMachineState,
 } from "./cardScrollMachine";
@@ -32,6 +33,7 @@ import {
 import {
   canScrollStageContent,
   flingTargetDx,
+  readDragViewportHeight,
   readDragViewportWidth,
   shouldDismissHorizontalDrag,
 } from "./mobile/cardStageMobileScroll";
@@ -222,6 +224,8 @@ export function MyceliaCardStage({
   const [liveMessage, setLiveMessage] = useState("");
   const dragCommitLockRef = useRef(false);
   const dragSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Clear off-screen drag transform only after fade swaps to the incoming pane. */
+  const pendingDragClearRef = useRef(false);
 
   const getStageCard = () =>
     (rootRef.current?.querySelector(
@@ -258,6 +262,21 @@ export function MyceliaCardStage({
         if (next !== current) {
           machineRef.current = next;
           setMachine(next);
+        }
+        // Bug #3: keep the drag layer off-screen until the fade crosses mid-point
+        // (incoming pane mounted). Clearing transform in the same turn as
+        // commitIntent snapped the outgoing card back to center → ghost flash.
+        if (
+          pendingDragClearRef.current &&
+          machineRef.current.transitionProgress >= 0.5
+        ) {
+          pendingDragClearRef.current = false;
+          clearCardDragTransform(getStageCard());
+          const port = rootRef.current?.querySelector(
+            ".liquid-glass-card-content--stage",
+          ) as HTMLElement | null;
+          if (port) port.scrollTop = 0;
+          dragCommitLockRef.current = false;
         }
       }
       frame = requestAnimationFrame(tick);
@@ -337,23 +356,26 @@ export function MyceliaCardStage({
           attachCardStageMobileListeners({
             getRoot: () => rootRef.current,
             getCard: getStageCard,
-            onDragMove: (dx) => {
+            onDragMove: (dx, dy) => {
               if (dragCommitLockRef.current) return;
               clearSettleTimer();
               applyCardDragTransform(
                 getStageCard(),
                 dx,
+                dy,
                 readDragViewportWidth(),
+                readDragViewportHeight(),
                 false,
               );
             },
-            onDragEnd: (dx) => {
+            onDragEnd: (dx, dy) => {
               if (dragCommitLockRef.current) return;
               const card = getStageCard();
               const vv = readDragViewportWidth();
+              const vh = readDragViewportHeight();
               const direction = shouldDismissHorizontalDrag(dx, vv);
               if (!direction) {
-                applyCardDragTransform(card, 0, vv, true);
+                applyCardDragTransform(card, 0, 0, vv, vh, true);
                 clearSettleTimer();
                 dragSettleTimerRef.current = setTimeout(() => {
                   clearCardDragTransform(card);
@@ -366,26 +388,42 @@ export function MyceliaCardStage({
               applyCardDragTransform(
                 card,
                 flingTargetDx(direction, vv),
+                dy,
                 vv,
+                vh,
                 true,
               );
               clearSettleTimer();
               dragSettleTimerRef.current = setTimeout(() => {
+                // Commit while still off-screen; rAF clears transform at p≥0.5.
+                pendingDragClearRef.current = true;
                 commitIntent(direction);
-                clearCardDragTransform(getStageCard());
-                // Reset in-card scroll so the next pane starts at the top.
-                const port = rootRef.current?.querySelector(
-                  ".liquid-glass-card-content--stage",
-                ) as HTMLElement | null;
-                if (port) port.scrollTop = 0;
-                dragCommitLockRef.current = false;
-                dragSettleTimerRef.current = null;
+                // Safety: if fade never reaches mid (edge case), clear anyway.
+                dragSettleTimerRef.current = setTimeout(() => {
+                  if (pendingDragClearRef.current) {
+                    pendingDragClearRef.current = false;
+                    clearCardDragTransform(getStageCard());
+                    const port = rootRef.current?.querySelector(
+                      ".liquid-glass-card-content--stage",
+                    ) as HTMLElement | null;
+                    if (port) port.scrollTop = 0;
+                    dragCommitLockRef.current = false;
+                  }
+                  dragSettleTimerRef.current = null;
+                }, REDUCED_FORWARD_TRANSITION_MS);
               }, CARD_DRAG_SETTLE_MS);
             },
             onDragCancel: () => {
               if (dragCommitLockRef.current) return;
               const card = getStageCard();
-              applyCardDragTransform(card, 0, readDragViewportWidth(), true);
+              applyCardDragTransform(
+                card,
+                0,
+                0,
+                readDragViewportWidth(),
+                readDragViewportHeight(),
+                true,
+              );
               clearSettleTimer();
               dragSettleTimerRef.current = setTimeout(() => {
                 clearCardDragTransform(card);
@@ -399,6 +437,7 @@ export function MyceliaCardStage({
       return () => {
         clearSettleTimer();
         dragCommitLockRef.current = false;
+        pendingDragClearRef.current = false;
         clearCardDragTransform(getStageCard());
         detachMobile();
         window.removeEventListener("keydown", onKeyDown);

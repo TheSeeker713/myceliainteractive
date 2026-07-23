@@ -10,7 +10,7 @@ export const MOBILE_SWIPE_AXIS_RATIO = 1.25;
 /** Fraction of visual-viewport width required to dismiss on release (3F.2). */
 export const MOBILE_DRAG_DISMISS_RATIO = 0.35;
 
-/** Max card tilt (degrees) while dragging horizontally. */
+/** Max card tilt (degrees) while dragging. */
 export const MOBILE_DRAG_MAX_ROTATION_DEG = 8;
 
 /**
@@ -66,12 +66,12 @@ export function classifySwipeAxis(
 }
 
 /**
- * Finger moved left (dx < 0) → next pane (1).
- * Finger moved right (dx > 0) → previous pane (-1).
+ * Finger moved right (dx > 0) → next pane (1).
+ * Finger moved left (dx < 0) → previous pane (-1).
  */
 export function paneDirectionFromHorizontalDelta(dx: number): 1 | -1 | null {
   if (dx === 0 || !Number.isFinite(dx)) return null;
-  return dx < 0 ? 1 : -1;
+  return dx > 0 ? 1 : -1;
 }
 
 /**
@@ -91,26 +91,43 @@ export function shouldDismissHorizontalDrag(
   return paneDirectionFromHorizontalDelta(dx);
 }
 
-/** Subtle rotation tied to horizontal drag progress (−max…+max). */
+/**
+ * Tilt from both axes: primary from horizontal progress, secondary from vertical
+ * so the card feels free under the finger (not locked to a horizontal rail).
+ */
 export function dragRotationDeg(
   dx: number,
+  dy: number,
   viewportWidth: number,
+  viewportHeight: number,
   maxDeg = MOBILE_DRAG_MAX_ROTATION_DEG,
 ): number {
-  if (!Number.isFinite(dx) || !Number.isFinite(viewportWidth) || viewportWidth <= 0) {
+  if (
+    !Number.isFinite(dx) ||
+    !Number.isFinite(dy) ||
+    !Number.isFinite(viewportWidth) ||
+    viewportWidth <= 0
+  ) {
     return 0;
   }
-  const t = Math.max(-1, Math.min(1, dx / viewportWidth));
-  return t * maxDeg;
+  const height = Math.max(viewportHeight, 1);
+  const tx = Math.max(-1, Math.min(1, dx / viewportWidth));
+  const ty = Math.max(-1, Math.min(1, dy / height));
+  return tx * maxDeg + ty * maxDeg * 0.4;
 }
 
-/** Off-screen fling target: next → negative X, previous → positive X. */
+/** Off-screen fling X: next → +width (right), previous → −width (left). */
 export function flingTargetDx(direction: 1 | -1, viewportWidth: number): number {
   const w = Math.max(viewportWidth, 1);
-  return direction === 1 ? -w : w;
+  return direction === 1 ? w : -w;
 }
 
 export function readDragViewportWidth(): number {
   if (typeof window === "undefined") return 390;
   return window.visualViewport?.width || window.innerWidth || 390;
+}
+
+export function readDragViewportHeight(): number {
+  if (typeof window === "undefined") return 844;
+  return window.visualViewport?.height || window.innerHeight || 844;
 }
