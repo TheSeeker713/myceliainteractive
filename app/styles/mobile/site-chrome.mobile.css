@@ -38,7 +38,7 @@
   }
 }
 
-/* ≤360px: compress disabled theme placeholders so A11y + hamburger stay on-screen */
+/* ≤360px: compress theme cluster so A11y + hamburger stay on-screen */
 @media (max-width: 360px) {
   .site-header-theme-cluster {
     max-width: 6.75rem;

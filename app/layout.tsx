@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import { SiteMotionShell } from "./components/motion/SiteMotionShell";
 import { SiteHeader, SiteFooter } from "./components/SiteChrome";
+import { THEME_BOOTSTRAP_SCRIPT } from "./theme/themePreference";
 import "./globals.css";
 import "./styles/accessibility-prefs.css";
 
@@ -81,7 +82,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${myceliaAgent.variable} ${dyslexiaFont.variable} antialiased flex flex-col min-h-screen`}
       >

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useId, useRef, useState } from "react";
 import { AccessibilityPanel } from "@/app/components/AccessibilityPanel";
+import { ThemeToggle } from "@/app/components/ThemeToggle";
 import {
   AccessibilityBottomSheet,
   MobileFeatureErrorBoundary,
@@ -55,7 +56,7 @@ export function SiteHeader() {
           setMobileOpen(false);
           setA11yOpen((open) => !open);
         }}
-        className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg border border-black/10 bg-white/50 text-studio-text-muted hover:text-studio-text hover:bg-white/80 transition-colors pointer-events-auto"
+        className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg border border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-utility-bg)] text-studio-text-muted hover:text-studio-text hover:bg-[color:var(--theme-utility-bg-active)] transition-colors pointer-events-auto"
         aria-label="Accessibility options"
         aria-expanded={a11yOpen}
         aria-controls={a11yPanelId}
@@ -96,44 +97,12 @@ export function SiteHeader() {
         />
       )}
 
-      {/* Theme placeholder — disabled until Step 2c wires real theme state */}
-      <div
-        className="site-header-theme-cluster inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/50 p-0.5 pointer-events-auto opacity-70"
-        role="group"
-        aria-label="Theme (coming soon)"
-      >
-        {(
-          [
-            { id: "system", label: "System" },
-            { id: "lightside", label: "Lightside" },
-            { id: "darkside", label: "Darkside" },
-          ] as const
-        ).map((option) => {
-          const isDefaultVisual = option.id === "lightside";
-          return (
-            <button
-              key={option.id}
-              type="button"
-              disabled
-              aria-disabled="true"
-              className={
-                isDefaultVisual
-                  ? "inline-flex items-center justify-center min-h-10 px-2 sm:px-2.5 rounded-md text-[0.65rem] sm:text-xs font-semibold tracking-wide text-studio-text bg-white/90 shadow-sm disabled:cursor-not-allowed"
-                  : "inline-flex items-center justify-center min-h-10 px-2 sm:px-2.5 rounded-md text-[0.65rem] sm:text-xs font-semibold tracking-wide text-studio-text-muted disabled:cursor-not-allowed"
-              }
-              aria-label={`Theme: ${option.label} (coming soon)`}
-              aria-pressed={isDefaultVisual}
-            >
-              {option.label}
-            </button>
-          );
-        })}
-      </div>
+      <ThemeToggle />
     </div>
   );
 
   return (
-    <header className="site-gutter site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-black/8 bg-white/75 backdrop-blur-xl">
+    <header className="site-gutter site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-bg)] backdrop-blur-xl">
       <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-between gap-3 sm:gap-4">
         <Link
           href="/"
@@ -188,7 +157,7 @@ export function SiteFooter() {
   if (shouldHideChrome(pathname)) return null;
 
   return (
-    <footer className="site-footer site-gutter site-footer-py sticky bottom-0 max-md:static z-[var(--z-site-chrome)] w-full border-t border-black/8 bg-white/80 backdrop-blur-md mt-auto">
+    <footer className="site-footer site-gutter site-footer-py sticky bottom-0 max-md:static z-[var(--z-site-chrome)] w-full border-t border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-footer-bg)] backdrop-blur-md mt-auto">
       <div className="max-w-[var(--content-max-width)] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm text-studio-text-muted">
         <span>
           &copy; {new Date().getFullYear()} Mycelia Interactive LLC. All rights
