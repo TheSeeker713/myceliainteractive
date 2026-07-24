@@ -52,6 +52,13 @@
   --theme-control-bg-active: #ffffff;
   --theme-sheet-backdrop: rgba(15, 15, 20, 0.45);
 
+  /* Inset cards / tips / list chips (shared + mobile guide) */
+  --theme-inset-bg: rgba(255, 255, 255, 0.3);
+  --theme-inset-bg-strong: rgba(255, 255, 255, 0.42);
+  --theme-inset-border: rgba(0, 0, 0, 0.08);
+  --theme-inset-text: rgba(40, 50, 55, 0.78);
+  --theme-guide-arrow: rgba(30, 50, 58, 0.85);
+
   /* Aliases used by Tailwind @theme mapping + high-contrast overrides */
   --studio-text-on-glass: #0f0f14;
   --studio-subtitle-on-glass: #1e1e28;
@@ -170,6 +177,12 @@ html[data-theme="dark"] {
   --theme-control-bg: rgba(255, 255, 255, 0.06);
   --theme-control-bg-active: rgba(255, 255, 255, 0.14);
   --theme-sheet-backdrop: rgba(0, 0, 0, 0.55);
+
+  --theme-inset-bg: rgba(255, 255, 255, 0.06);
+  --theme-inset-bg-strong: rgba(255, 255, 255, 0.1);
+  --theme-inset-border: rgba(255, 255, 255, 0.12);
+  --theme-inset-text: rgba(200, 212, 208, 0.88);
+  --theme-guide-arrow: rgba(180, 200, 198, 0.75);
 
   --lg-card-color: #e8efed;
   --lg-card-fill-0: rgba(22, 32, 36, 0.72);

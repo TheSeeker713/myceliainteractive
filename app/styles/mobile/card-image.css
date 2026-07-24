@@ -6,10 +6,10 @@
   height: 9rem;
   margin: 0;
   padding: 0;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--theme-inset-border);
   border-radius: 0.5rem;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.08);
+  background: var(--theme-inset-bg);
   cursor: zoom-in;
   -webkit-touch-callout: default;
   touch-action: manipulation;

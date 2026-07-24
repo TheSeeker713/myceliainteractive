@@ -136,7 +136,7 @@ export function LiminalSinArchitectureContent() {
 
       {/* ≤767: diagram-first + 3 bullets; defer full FoldCard bullet grid */}
       <div className="md:hidden space-y-4">
-        <div className="rounded-xl border border-black/8 bg-white/20 p-3">
+        <div className="rounded-xl border border-[color:var(--theme-inset-border)] bg-[color:var(--theme-inset-bg)] p-3">
           <ArchitectureDiagram markerId="ls-arch-arrow-mobile" />
         </div>
         <ul className="space-y-3 list-none p-0 m-0">

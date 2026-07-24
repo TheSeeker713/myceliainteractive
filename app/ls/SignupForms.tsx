@@ -65,7 +65,7 @@ export default function SignupForms() {
               autoComplete="name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-studio-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-studio-accent/30"
+              className="w-full rounded-lg border border-[color:var(--theme-inset-border)] bg-[color:var(--color-studio-surface)] px-3 py-2.5 text-studio-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-studio-accent/30"
               placeholder="Your name"
             />
           </div>
@@ -83,7 +83,7 @@ export default function SignupForms() {
               autoComplete="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-studio-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-studio-accent/30"
+              className="w-full rounded-lg border border-[color:var(--theme-inset-border)] bg-[color:var(--color-studio-surface)] px-3 py-2.5 text-studio-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-studio-accent/30"
               placeholder="you@example.com"
             />
           </div>
@@ -100,7 +100,7 @@ export default function SignupForms() {
               ? 'border-red-200 bg-red-50 text-red-800'
               : status.type === 'success'
                 ? 'border-green-200 bg-green-50 text-green-800'
-                : 'border-black/8 bg-white text-studio-text-muted'
+                : 'border-[color:var(--theme-inset-border)] bg-[color:var(--theme-inset-bg)] text-studio-text-muted'
           }`}
         >
           {status.message}
