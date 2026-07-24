@@ -9,10 +9,10 @@ import {
   writeStoredThemeChoice,
 } from "@/app/theme/themePreference";
 
-const OPTIONS: { id: ThemeChoice; label: string }[] = [
-  { id: "system", label: "System" },
-  { id: "light", label: "Lightside" },
-  { id: "dark", label: "Darkside" },
+const OPTIONS: { id: ThemeChoice; label: string; shortLabel: string }[] = [
+  { id: "system", label: "System", shortLabel: "Auto" },
+  { id: "light", label: "Lightside", shortLabel: "Light" },
+  { id: "dark", label: "Darkside", shortLabel: "Dark" },
 ];
 
 const listeners = new Set<() => void>();
@@ -111,7 +111,8 @@ export function ThemeToggle() {
             }
             aria-label={`Theme: ${option.label}`}
           >
-            {option.label}
+            <span className="md:hidden">{option.shortLabel}</span>
+            <span className="hidden md:inline">{option.label}</span>
           </button>
         );
       })}

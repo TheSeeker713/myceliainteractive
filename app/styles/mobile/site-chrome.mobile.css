@@ -38,16 +38,28 @@
   }
 }
 
-/* ≤360px: compress theme cluster so A11y + hamburger stay on-screen */
-@media (max-width: 360px) {
+/* ≤767px: compress theme cluster so A11y + hamburger stay discoverable */
+@media (max-width: 767px) {
   .site-header-theme-cluster {
-    max-width: 6.75rem;
+    max-width: 7.25rem;
     overflow: hidden;
   }
 
   .site-header-theme-cluster button {
     min-width: 0;
-    padding-inline: 0.2rem;
+    padding-inline: 0.25rem;
     font-size: 0.55rem;
+  }
+}
+
+/* ≤360px: further compress on the narrowest phones */
+@media (max-width: 360px) {
+  .site-header-theme-cluster {
+    max-width: 6.5rem;
+  }
+
+  .site-header-theme-cluster button {
+    padding-inline: 0.15rem;
+    font-size: 0.5rem;
   }
 }
