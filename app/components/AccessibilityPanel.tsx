@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useId, useRef, type RefObject } from "react";
 import { AccessibilityPanelBody } from "@/app/components/accessibility/AccessibilityPanelBody";
 
 type AccessibilityPanelProps = {
@@ -12,9 +12,8 @@ type AccessibilityPanelProps = {
 };
 
 /**
- * Desktop accessibility popover shell. Behavior unchanged from pre-3B.4:
- * absolute under the header button, aria-modal=false, Escape + outside dismiss.
- * Toggle/reset UI lives in AccessibilityPanelBody (shared with mobile sheet).
+ * Desktop accessibility popover shell.
+ * F7: focus trap + aria-labelledby on the heading (not aria-label alone).
  */
 export function AccessibilityPanel({
   id,
@@ -23,6 +22,7 @@ export function AccessibilityPanel({
   triggerRef,
 }: AccessibilityPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
 
   useEffect(() => {
     if (!open) return;
@@ -37,6 +37,21 @@ export function AccessibilityPanel({
       if (event.key === "Escape") {
         event.preventDefault();
         onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !panel) return;
+      const focusable = panel.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), input:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
@@ -68,13 +83,16 @@ export function AccessibilityPanel({
       id={id}
       role="dialog"
       aria-modal="false"
-      aria-label="Accessibility"
+      aria-labelledby={titleId}
       className="absolute right-0 top-full z-[calc(var(--z-site-chrome)+1)] mt-2 w-[min(calc(100vw-2rem),22rem)] max-h-[min(70dvh,32rem)] overflow-y-auto rounded-xl border border-black/10 bg-white/95 p-4 shadow-lg backdrop-blur-xl pointer-events-auto"
       onWheel={(event) => event.stopPropagation()}
       onTouchMove={(event) => event.stopPropagation()}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
-        <h2 className="text-sm font-semibold tracking-wide text-studio-text uppercase">
+        <h2
+          id={titleId}
+          className="text-sm font-semibold tracking-wide text-studio-text uppercase"
+        >
           Accessibility
         </h2>
         <button

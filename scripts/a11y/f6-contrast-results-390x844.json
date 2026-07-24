@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-07-19T19:34:02.562Z",
-  "baseUrl": "http://localhost:3000",
+  "measuredAt": "2026-07-24T01:40:03.106Z",
+  "baseUrl": "http://localhost:3456",
   "viewport": {
     "width": 390,
     "height": 844,
@@ -25,10 +25,10 @@
         "key": "heroTitle",
         "delayMs": 0,
         "text": "Mycelia Interactive",
-        "ratio": 14.948,
+        "ratio": 4.929,
         "required": 3,
         "passesAa": true,
-        "margin": 11.948,
+        "margin": 1.929,
         "largeText": true,
         "fg": {
           "r": 16,
@@ -37,14 +37,14 @@
           "a": 0.9490196078431372
         },
         "bg": {
-          "r": 237,
-          "g": 240,
-          "b": 238
+          "r": 132,
+          "g": 134,
+          "b": 135
         },
         "flattenedFg": {
-          "r": 27,
-          "g": 27,
-          "b": 32
+          "r": 22,
+          "g": 22,
+          "b": 27
         },
         "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
         "fontSizePx": 36
@@ -54,28 +54,28 @@
         "key": "heroLlc",
         "delayMs": 0,
         "text": "LLC",
-        "ratio": 4.068,
+        "ratio": 3.928,
         "required": 4.5,
         "passesAa": false,
-        "margin": -0.432,
+        "margin": -0.572,
         "largeText": false,
         "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
+          "r": 33,
+          "g": 33,
+          "b": 44,
+          "a": 0.9019607843137255
         },
         "bg": {
-          "r": 235,
-          "g": 237,
-          "b": 236
+          "r": 134,
+          "g": 136,
+          "b": 136
         },
         "flattenedFg": {
-          "r": 113,
-          "g": 114,
-          "b": 122
+          "r": 43,
+          "g": 43,
+          "b": 53
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
         "fontSizePx": 20
       },
       {
@@ -83,10 +83,10 @@
         "key": "heroBody",
         "delayMs": 0,
         "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.284,
+        "ratio": 3.467,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 2.784,
+        "passesAa": false,
+        "margin": -1.033,
         "largeText": false,
         "fg": {
           "r": 27,
@@ -95,14 +95,14 @@
           "a": 0.7803921568627451
         },
         "bg": {
-          "r": 223,
-          "g": 232,
-          "b": 220
+          "r": 133,
+          "g": 135,
+          "b": 131
         },
         "flattenedFg": {
-          "r": 70,
-          "g": 72,
-          "b": 77
+          "r": 50,
+          "g": 51,
+          "b": 58
         },
         "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
         "fontSizePx": 16
@@ -112,10 +112,10 @@
         "key": "aboutKicker",
         "delayMs": 0,
         "text": "Company",
-        "ratio": 7.816,
+        "ratio": 2.311,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 3.316,
+        "passesAa": false,
+        "margin": -2.189,
         "largeText": false,
         "fg": {
           "r": 15,
@@ -124,9 +124,9 @@
           "a": 1
         },
         "bg": {
-          "r": 237,
-          "g": 238,
-          "b": 233
+          "r": 126,
+          "g": 129,
+          "b": 125
         },
         "flattenedFg": {
           "r": 15,
@@ -141,10 +141,10 @@
         "key": "aboutTitle",
         "delayMs": 0,
         "text": "About",
-        "ratio": 15.846,
+        "ratio": 4.619,
         "required": 3,
         "passesAa": true,
-        "margin": 12.846,
+        "margin": 1.619,
         "largeText": true,
         "fg": {
           "r": 7,
@@ -153,9 +153,9 @@
           "a": 1
         },
         "bg": {
-          "r": 229,
-          "g": 235,
-          "b": 227
+          "r": 120,
+          "g": 126,
+          "b": 119
         },
         "flattenedFg": {
           "r": 7,
@@ -169,40 +169,17 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 0,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 10.343,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 5.843,
-        "largeText": false,
-        "fg": {
-          "r": 19,
-          "g": 36,
-          "b": 40,
-          "a": 1
-        },
-        "bg": {
-          "r": 186,
-          "g": 213,
-          "b": 212
-        },
-        "flattenedFg": {
-          "r": 19,
-          "g": 36,
-          "b": 40
-        },
-        "cssColor": "rgb(19, 36, 40)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       },
       {
         "pane": "hero",
         "key": "heroTitle",
         "delayMs": 700,
         "text": "Mycelia Interactive",
-        "ratio": 14.814,
+        "ratio": 4.977,
         "required": 3,
         "passesAa": true,
-        "margin": 11.814,
+        "margin": 1.977,
         "largeText": true,
         "fg": {
           "r": 16,
@@ -211,14 +188,14 @@
           "a": 0.9490196078431372
         },
         "bg": {
-          "r": 236,
-          "g": 239,
-          "b": 237
+          "r": 132,
+          "g": 135,
+          "b": 135
         },
         "flattenedFg": {
-          "r": 27,
-          "g": 27,
-          "b": 32
+          "r": 22,
+          "g": 22,
+          "b": 27
         },
         "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
         "fontSizePx": 36
@@ -228,28 +205,28 @@
         "key": "heroLlc",
         "delayMs": 700,
         "text": "LLC",
-        "ratio": 4.089,
+        "ratio": 3.928,
         "required": 4.5,
         "passesAa": false,
-        "margin": -0.411,
+        "margin": -0.572,
         "largeText": false,
         "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
+          "r": 33,
+          "g": 33,
+          "b": 44,
+          "a": 0.9019607843137255
         },
         "bg": {
-          "r": 234,
-          "g": 238,
-          "b": 237
+          "r": 134,
+          "g": 136,
+          "b": 136
         },
         "flattenedFg": {
-          "r": 113,
-          "g": 114,
-          "b": 122
+          "r": 43,
+          "g": 43,
+          "b": 53
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
         "fontSizePx": 20
       },
       {
@@ -257,10 +234,10 @@
         "key": "heroBody",
         "delayMs": 700,
         "text": "Immersive interactive entertainment where the au",
-        "ratio": 6.894,
+        "ratio": 3.409,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 2.394,
+        "passesAa": false,
+        "margin": -1.091,
         "largeText": false,
         "fg": {
           "r": 27,
@@ -269,14 +246,14 @@
           "a": 0.7803921568627451
         },
         "bg": {
-          "r": 207,
-          "g": 224,
-          "b": 217
+          "r": 129,
+          "g": 133,
+          "b": 130
         },
         "flattenedFg": {
-          "r": 67,
-          "g": 70,
-          "b": 77
+          "r": 49,
+          "g": 50,
+          "b": 57
         },
         "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
         "fontSizePx": 16
@@ -286,10 +263,10 @@
         "key": "aboutKicker",
         "delayMs": 700,
         "text": "Company",
-        "ratio": 7.661,
+        "ratio": 2.319,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 3.161,
+        "passesAa": false,
+        "margin": -2.181,
         "largeText": false,
         "fg": {
           "r": 15,
@@ -298,9 +275,9 @@
           "a": 1
         },
         "bg": {
-          "r": 233,
-          "g": 236,
-          "b": 234
+          "r": 127,
+          "g": 129,
+          "b": 126
         },
         "flattenedFg": {
           "r": 15,
@@ -315,10 +292,10 @@
         "key": "aboutTitle",
         "delayMs": 700,
         "text": "About",
-        "ratio": 15.623,
+        "ratio": 4.323,
         "required": 3,
         "passesAa": true,
-        "margin": 12.623,
+        "margin": 1.323,
         "largeText": true,
         "fg": {
           "r": 7,
@@ -327,9 +304,9 @@
           "a": 1
         },
         "bg": {
-          "r": 225,
-          "g": 234,
-          "b": 227
+          "r": 111,
+          "g": 122,
+          "b": 119
         },
         "flattenedFg": {
           "r": 7,
@@ -343,40 +320,17 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 700,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 10.595,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 6.095,
-        "largeText": false,
-        "fg": {
-          "r": 19,
-          "g": 36,
-          "b": 40,
-          "a": 1
-        },
-        "bg": {
-          "r": 191,
-          "g": 215,
-          "b": 212
-        },
-        "flattenedFg": {
-          "r": 19,
-          "g": 36,
-          "b": 40
-        },
-        "cssColor": "rgb(19, 36, 40)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       },
       {
         "pane": "hero",
         "key": "heroTitle",
         "delayMs": 1400,
         "text": "Mycelia Interactive",
-        "ratio": 14.626,
+        "ratio": 5.058,
         "required": 3,
         "passesAa": true,
-        "margin": 11.626,
+        "margin": 2.058,
         "largeText": true,
         "fg": {
           "r": 16,
@@ -385,14 +339,14 @@
           "a": 0.9490196078431372
         },
         "bg": {
-          "r": 233,
-          "g": 238,
-          "b": 236
+          "r": 134,
+          "g": 136,
+          "b": 136
         },
         "flattenedFg": {
-          "r": 27,
-          "g": 27,
-          "b": 32
+          "r": 22,
+          "g": 22,
+          "b": 27
         },
         "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
         "fontSizePx": 36
@@ -402,28 +356,28 @@
         "key": "heroLlc",
         "delayMs": 1400,
         "text": "LLC",
-        "ratio": 4.146,
+        "ratio": 4.003,
         "required": 4.5,
         "passesAa": false,
-        "margin": -0.354,
+        "margin": -0.497,
         "largeText": false,
         "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
+          "r": 33,
+          "g": 33,
+          "b": 44,
+          "a": 0.9019607843137255
         },
         "bg": {
-          "r": 240,
-          "g": 241,
-          "b": 238
+          "r": 137,
+          "g": 137,
+          "b": 137
         },
         "flattenedFg": {
-          "r": 115,
-          "g": 115,
-          "b": 123
+          "r": 43,
+          "g": 43,
+          "b": 53
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
         "fontSizePx": 20
       },
       {
@@ -431,10 +385,10 @@
         "key": "heroBody",
         "delayMs": 1400,
         "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.035,
+        "ratio": 3.312,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 2.535,
+        "passesAa": false,
+        "margin": -1.188,
         "largeText": false,
         "fg": {
           "r": 27,
@@ -443,14 +397,14 @@
           "a": 0.7803921568627451
         },
         "bg": {
-          "r": 214,
-          "g": 227,
-          "b": 218
+          "r": 126,
+          "g": 131,
+          "b": 129
         },
         "flattenedFg": {
-          "r": 68,
-          "g": 71,
-          "b": 77
+          "r": 49,
+          "g": 50,
+          "b": 57
         },
         "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
         "fontSizePx": 16
@@ -460,10 +414,10 @@
         "key": "aboutKicker",
         "delayMs": 1400,
         "text": "Company",
-        "ratio": 7.637,
+        "ratio": 2.239,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 3.137,
+        "passesAa": false,
+        "margin": -2.261,
         "largeText": false,
         "fg": {
           "r": 15,
@@ -472,9 +426,9 @@
           "a": 1
         },
         "bg": {
-          "r": 231,
-          "g": 236,
-          "b": 235
+          "r": 122,
+          "g": 127,
+          "b": 125
         },
         "flattenedFg": {
           "r": 15,
@@ -489,10 +443,10 @@
         "key": "aboutTitle",
         "delayMs": 1400,
         "text": "About",
-        "ratio": 15.846,
+        "ratio": 4.67,
         "required": 3,
         "passesAa": true,
-        "margin": 12.846,
+        "margin": 1.67,
         "largeText": true,
         "fg": {
           "r": 7,
@@ -501,9 +455,9 @@
           "a": 1
         },
         "bg": {
-          "r": 229,
-          "g": 235,
-          "b": 227
+          "r": 120,
+          "g": 127,
+          "b": 120
         },
         "flattenedFg": {
           "r": 7,
@@ -517,40 +471,17 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 1400,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 10.972,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 6.472,
-        "largeText": false,
-        "fg": {
-          "r": 19,
-          "g": 36,
-          "b": 40,
-          "a": 1
-        },
-        "bg": {
-          "r": 198,
-          "g": 218,
-          "b": 212
-        },
-        "flattenedFg": {
-          "r": 19,
-          "g": 36,
-          "b": 40
-        },
-        "cssColor": "rgb(19, 36, 40)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       },
       {
         "pane": "hero",
         "key": "heroTitle",
         "delayMs": 2100,
         "text": "Mycelia Interactive",
-        "ratio": 14.486,
+        "ratio": 4.915,
         "required": 3,
         "passesAa": true,
-        "margin": 11.486,
+        "margin": 1.915,
         "largeText": true,
         "fg": {
           "r": 16,
@@ -559,14 +490,14 @@
           "a": 0.9490196078431372
         },
         "bg": {
-          "r": 231,
-          "g": 237,
-          "b": 237
+          "r": 131,
+          "g": 134,
+          "b": 135
         },
         "flattenedFg": {
-          "r": 27,
-          "g": 27,
-          "b": 32
+          "r": 22,
+          "g": 22,
+          "b": 27
         },
         "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
         "fontSizePx": 36
@@ -576,28 +507,28 @@
         "key": "heroLlc",
         "delayMs": 2100,
         "text": "LLC",
-        "ratio": 4.14,
+        "ratio": 3.928,
         "required": 4.5,
         "passesAa": false,
-        "margin": -0.36,
+        "margin": -0.572,
         "largeText": false,
         "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
+          "r": 33,
+          "g": 33,
+          "b": 44,
+          "a": 0.9019607843137255
         },
         "bg": {
-          "r": 239,
-          "g": 241,
-          "b": 237
+          "r": 134,
+          "g": 136,
+          "b": 136
         },
         "flattenedFg": {
-          "r": 115,
-          "g": 115,
-          "b": 122
+          "r": 43,
+          "g": 43,
+          "b": 53
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
         "fontSizePx": 20
       },
       {
@@ -605,10 +536,10 @@
         "key": "heroBody",
         "delayMs": 2100,
         "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.155,
+        "ratio": 3.406,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 2.655,
+        "passesAa": false,
+        "margin": -1.094,
         "largeText": false,
         "fg": {
           "r": 27,
@@ -617,14 +548,14 @@
           "a": 0.7803921568627451
         },
         "bg": {
-          "r": 219,
-          "g": 230,
-          "b": 220
+          "r": 129,
+          "g": 133,
+          "b": 129
         },
         "flattenedFg": {
-          "r": 69,
-          "g": 72,
-          "b": 77
+          "r": 49,
+          "g": 50,
+          "b": 57
         },
         "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
         "fontSizePx": 16
@@ -634,10 +565,10 @@
         "key": "aboutKicker",
         "delayMs": 2100,
         "text": "Company",
-        "ratio": 7.816,
+        "ratio": 2.435,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 3.316,
+        "passesAa": false,
+        "margin": -2.065,
         "largeText": false,
         "fg": {
           "r": 15,
@@ -646,9 +577,9 @@
           "a": 1
         },
         "bg": {
-          "r": 236,
-          "g": 238,
-          "b": 236
+          "r": 133,
+          "g": 132,
+          "b": 128
         },
         "flattenedFg": {
           "r": 15,
@@ -663,10 +594,10 @@
         "key": "aboutTitle",
         "delayMs": 2100,
         "text": "About",
-        "ratio": 15.633,
+        "ratio": 4.551,
         "required": 3,
         "passesAa": true,
-        "margin": 12.633,
+        "margin": 1.551,
         "largeText": true,
         "fg": {
           "r": 7,
@@ -675,9 +606,9 @@
           "a": 1
         },
         "bg": {
-          "r": 225,
-          "g": 234,
-          "b": 228
+          "r": 118,
+          "g": 125,
+          "b": 120
         },
         "flattenedFg": {
           "r": 7,
@@ -691,40 +622,17 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 2100,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 10.852,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 6.352,
-        "largeText": false,
-        "fg": {
-          "r": 19,
-          "g": 36,
-          "b": 40,
-          "a": 1
-        },
-        "bg": {
-          "r": 196,
-          "g": 217,
-          "b": 212
-        },
-        "flattenedFg": {
-          "r": 19,
-          "g": 36,
-          "b": 40
-        },
-        "cssColor": "rgb(19, 36, 40)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       },
       {
         "pane": "hero",
         "key": "heroTitle",
         "delayMs": 2800,
         "text": "Mycelia Interactive",
-        "ratio": 14.976,
+        "ratio": 4.977,
         "required": 3,
         "passesAa": true,
-        "margin": 11.976,
+        "margin": 1.977,
         "largeText": true,
         "fg": {
           "r": 16,
@@ -733,14 +641,14 @@
           "a": 0.9490196078431372
         },
         "bg": {
-          "r": 238,
-          "g": 240,
-          "b": 238
+          "r": 132,
+          "g": 135,
+          "b": 135
         },
         "flattenedFg": {
-          "r": 27,
-          "g": 27,
-          "b": 32
+          "r": 22,
+          "g": 22,
+          "b": 27
         },
         "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
         "fontSizePx": 36
@@ -750,28 +658,28 @@
         "key": "heroLlc",
         "delayMs": 2800,
         "text": "LLC",
-        "ratio": 4.094,
+        "ratio": 3.932,
         "required": 4.5,
         "passesAa": false,
-        "margin": -0.406,
+        "margin": -0.568,
         "largeText": false,
         "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
+          "r": 33,
+          "g": 33,
+          "b": 44,
+          "a": 0.9019607843137255
         },
         "bg": {
-          "r": 235,
-          "g": 238,
-          "b": 236
+          "r": 134,
+          "g": 136,
+          "b": 137
         },
         "flattenedFg": {
-          "r": 113,
-          "g": 114,
-          "b": 122
+          "r": 43,
+          "g": 43,
+          "b": 53
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
         "fontSizePx": 20
       },
       {
@@ -779,10 +687,10 @@
         "key": "heroBody",
         "delayMs": 2800,
         "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.169,
+        "ratio": 3.405,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 2.669,
+        "passesAa": false,
+        "margin": -1.095,
         "largeText": false,
         "fg": {
           "r": 27,
@@ -791,14 +699,14 @@
           "a": 0.7803921568627451
         },
         "bg": {
-          "r": 218,
-          "g": 229,
-          "b": 219
+          "r": 130,
+          "g": 133,
+          "b": 129
         },
         "flattenedFg": {
-          "r": 69,
-          "g": 71,
-          "b": 77
+          "r": 50,
+          "g": 50,
+          "b": 57
         },
         "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
         "fontSizePx": 16
@@ -808,10 +716,10 @@
         "key": "aboutKicker",
         "delayMs": 2800,
         "text": "Company",
-        "ratio": 7.592,
+        "ratio": 2.211,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 3.092,
+        "passesAa": false,
+        "margin": -2.289,
         "largeText": false,
         "fg": {
           "r": 15,
@@ -820,9 +728,9 @@
           "a": 1
         },
         "bg": {
-          "r": 232,
-          "g": 235,
-          "b": 233
+          "r": 121,
+          "g": 126,
+          "b": 125
         },
         "flattenedFg": {
           "r": 15,
@@ -837,10 +745,10 @@
         "key": "aboutTitle",
         "delayMs": 2800,
         "text": "About",
-        "ratio": 15.623,
+        "ratio": 4.475,
         "required": 3,
         "passesAa": true,
-        "margin": 12.623,
+        "margin": 1.475,
         "largeText": true,
         "fg": {
           "r": 7,
@@ -849,9 +757,9 @@
           "a": 1
         },
         "bg": {
-          "r": 225,
-          "g": 234,
-          "b": 227
+          "r": 116,
+          "g": 124,
+          "b": 119
         },
         "flattenedFg": {
           "r": 7,
@@ -865,120 +773,97 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 2800,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 10.692,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 6.192,
-        "largeText": false,
-        "fg": {
-          "r": 19,
-          "g": 36,
-          "b": 40,
-          "a": 1
-        },
-        "bg": {
-          "r": 192,
-          "g": 216,
-          "b": 212
-        },
-        "flattenedFg": {
-          "r": 19,
-          "g": 36,
-          "b": 40
-        },
-        "cssColor": "rgb(19, 36, 40)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       }
     ],
     "aggregates": {
       "hero.heroTitle": {
         "samples": 5,
-        "minRatio": 14.486,
-        "maxRatio": 14.976,
-        "avgRatio": 14.77,
+        "minRatio": 4.915,
+        "maxRatio": 5.058,
+        "avgRatio": 4.971,
         "allPassAa": true,
         "worstPass": true,
-        "worstMargin": 11.486,
+        "worstMargin": 1.915,
         "required": 3,
         "largeText": true,
         "worstDelayMs": 2100,
         "worstBg": {
-          "r": 231,
-          "g": 237,
-          "b": 237
+          "r": 131,
+          "g": 134,
+          "b": 135
         },
         "worstFg": {
-          "r": 27,
-          "g": 27,
-          "b": 32
+          "r": 22,
+          "g": 22,
+          "b": 27
         },
         "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
         "fontSizePx": 36
       },
       "hero.heroLlc": {
         "samples": 5,
-        "minRatio": 4.068,
-        "maxRatio": 4.146,
-        "avgRatio": 4.107,
+        "minRatio": 3.928,
+        "maxRatio": 4.003,
+        "avgRatio": 3.944,
         "allPassAa": false,
         "worstPass": false,
-        "worstMargin": -0.432,
+        "worstMargin": -0.572,
         "required": 4.5,
         "largeText": false,
         "worstDelayMs": 0,
         "worstBg": {
-          "r": 235,
-          "g": 237,
-          "b": 236
+          "r": 134,
+          "g": 136,
+          "b": 136
         },
         "worstFg": {
-          "r": 113,
-          "g": 114,
-          "b": 122
+          "r": 43,
+          "g": 43,
+          "b": 53
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
         "fontSizePx": 20
       },
       "hero.heroBody": {
         "samples": 5,
-        "minRatio": 6.894,
-        "maxRatio": 7.284,
-        "avgRatio": 7.107,
-        "allPassAa": true,
-        "worstPass": true,
-        "worstMargin": 2.394,
+        "minRatio": 3.312,
+        "maxRatio": 3.467,
+        "avgRatio": 3.4,
+        "allPassAa": false,
+        "worstPass": false,
+        "worstMargin": -1.188,
         "required": 4.5,
         "largeText": false,
-        "worstDelayMs": 700,
+        "worstDelayMs": 1400,
         "worstBg": {
-          "r": 207,
-          "g": 224,
-          "b": 217
+          "r": 126,
+          "g": 131,
+          "b": 129
         },
         "worstFg": {
-          "r": 67,
-          "g": 70,
-          "b": 77
+          "r": 49,
+          "g": 50,
+          "b": 57
         },
         "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
         "fontSizePx": 16
       },
       "about.aboutKicker": {
         "samples": 5,
-        "minRatio": 7.592,
-        "maxRatio": 7.816,
-        "avgRatio": 7.704,
-        "allPassAa": true,
-        "worstPass": true,
-        "worstMargin": 3.092,
+        "minRatio": 2.211,
+        "maxRatio": 2.435,
+        "avgRatio": 2.303,
+        "allPassAa": false,
+        "worstPass": false,
+        "worstMargin": -2.289,
         "required": 4.5,
         "largeText": false,
         "worstDelayMs": 2800,
         "worstBg": {
-          "r": 232,
-          "g": 235,
-          "b": 233
+          "r": 121,
+          "g": 126,
+          "b": 125
         },
         "worstFg": {
           "r": 15,
@@ -990,19 +875,19 @@
       },
       "about.aboutTitle": {
         "samples": 5,
-        "minRatio": 15.623,
-        "maxRatio": 15.846,
-        "avgRatio": 15.714,
+        "minRatio": 4.323,
+        "maxRatio": 4.67,
+        "avgRatio": 4.528,
         "allPassAa": true,
         "worstPass": true,
-        "worstMargin": 12.623,
+        "worstMargin": 1.323,
         "required": 3,
         "largeText": true,
         "worstDelayMs": 700,
         "worstBg": {
-          "r": 225,
-          "g": 234,
-          "b": 227
+          "r": 111,
+          "g": 122,
+          "b": 119
         },
         "worstFg": {
           "r": 7,
@@ -1011,30 +896,6 @@
         },
         "cssColor": "rgb(7, 16, 20)",
         "fontSizePx": 26
-      },
-      "about.aboutBody": {
-        "samples": 5,
-        "minRatio": 10.343,
-        "maxRatio": 10.972,
-        "avgRatio": 10.691,
-        "allPassAa": true,
-        "worstPass": true,
-        "worstMargin": 5.843,
-        "required": 4.5,
-        "largeText": false,
-        "worstDelayMs": 0,
-        "worstBg": {
-          "r": 186,
-          "g": 213,
-          "b": 212
-        },
-        "worstFg": {
-          "r": 19,
-          "g": 36,
-          "b": 40
-        },
-        "cssColor": "rgb(19, 36, 40)",
-        "fontSizePx": 16
       }
     }
   },
@@ -1045,28 +906,28 @@
         "key": "heroTitle",
         "delayMs": 0,
         "text": "Mycelia Interactive",
-        "ratio": 16.079,
+        "ratio": 6.316,
         "required": 3,
         "passesAa": true,
-        "margin": 13.079,
+        "margin": 3.316,
         "largeText": true,
         "fg": {
-          "r": 16,
-          "g": 16,
-          "b": 21,
-          "a": 0.9490196078431372
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 248,
-          "g": 249,
-          "b": 248
+          "r": 140,
+          "g": 141,
+          "b": 142
         },
         "flattenedFg": {
-          "r": 28,
-          "g": 28,
-          "b": 33
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 36
       },
       {
@@ -1074,28 +935,28 @@
         "key": "heroLlc",
         "delayMs": 0,
         "text": "LLC",
-        "ratio": 4.243,
+        "ratio": 6.316,
         "required": 4.5,
-        "passesAa": false,
-        "margin": -0.257,
+        "passesAa": true,
+        "margin": 1.816,
         "largeText": false,
         "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 247,
-          "g": 248,
-          "b": 247
+          "r": 140,
+          "g": 141,
+          "b": 142
         },
         "flattenedFg": {
-          "r": 117,
-          "g": 118,
-          "b": 126
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 20
       },
       {
@@ -1103,28 +964,28 @@
         "key": "heroBody",
         "delayMs": 0,
         "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.849,
+        "ratio": 6.281,
         "required": 4.5,
         "passesAa": true,
-        "margin": 3.349,
+        "margin": 1.781,
         "largeText": false,
         "fg": {
-          "r": 27,
-          "g": 27,
-          "b": 37,
-          "a": 0.7803921568627451
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 239,
-          "g": 245,
-          "b": 240
+          "r": 139,
+          "g": 141,
+          "b": 139
         },
         "flattenedFg": {
-          "r": 74,
-          "g": 75,
-          "b": 82
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 16
       },
       {
@@ -1132,10 +993,10 @@
         "key": "aboutKicker",
         "delayMs": 0,
         "text": "Company",
-        "ratio": 12.936,
+        "ratio": 3.596,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 8.436,
+        "passesAa": false,
+        "margin": -0.904,
         "largeText": false,
         "fg": {
           "r": 0,
@@ -1144,9 +1005,9 @@
           "a": 1
         },
         "bg": {
-          "r": 249,
-          "g": 249,
-          "b": 248
+          "r": 128,
+          "g": 132,
+          "b": 130
         },
         "flattenedFg": {
           "r": 0,
@@ -1161,10 +1022,10 @@
         "key": "aboutTitle",
         "delayMs": 0,
         "text": "About",
-        "ratio": 19.409,
+        "ratio": 5.605,
         "required": 3,
         "passesAa": true,
-        "margin": 16.409,
+        "margin": 2.605,
         "largeText": true,
         "fg": {
           "r": 0,
@@ -1173,9 +1034,9 @@
           "a": 1
         },
         "bg": {
-          "r": 243,
-          "g": 247,
-          "b": 243
+          "r": 129,
+          "g": 133,
+          "b": 129
         },
         "flattenedFg": {
           "r": 0,
@@ -1189,58 +1050,35 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 0,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 16.186,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 11.686,
-        "largeText": false,
-        "fg": {
-          "r": 10,
-          "g": 10,
-          "b": 10,
-          "a": 1
-        },
-        "bg": {
-          "r": 221,
-          "g": 235,
-          "b": 236
-        },
-        "flattenedFg": {
-          "r": 10,
-          "g": 10,
-          "b": 10
-        },
-        "cssColor": "rgb(10, 10, 10)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       },
       {
         "pane": "hero",
         "key": "heroTitle",
         "delayMs": 700,
         "text": "Mycelia Interactive",
-        "ratio": 16.079,
+        "ratio": 6.316,
         "required": 3,
         "passesAa": true,
-        "margin": 13.079,
+        "margin": 3.316,
         "largeText": true,
         "fg": {
-          "r": 16,
-          "g": 16,
-          "b": 21,
-          "a": 0.9490196078431372
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 248,
-          "g": 249,
-          "b": 248
+          "r": 140,
+          "g": 141,
+          "b": 142
         },
         "flattenedFg": {
-          "r": 28,
-          "g": 28,
-          "b": 33
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 36
       },
       {
@@ -1248,28 +1086,28 @@
         "key": "heroLlc",
         "delayMs": 700,
         "text": "LLC",
-        "ratio": 4.243,
+        "ratio": 6.333,
         "required": 4.5,
-        "passesAa": false,
-        "margin": -0.257,
+        "passesAa": true,
+        "margin": 1.833,
         "largeText": false,
         "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 247,
-          "g": 248,
-          "b": 247
+          "r": 141,
+          "g": 141,
+          "b": 142
         },
         "flattenedFg": {
-          "r": 117,
-          "g": 118,
-          "b": 126
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 20
       },
       {
@@ -1277,28 +1115,28 @@
         "key": "heroBody",
         "delayMs": 700,
         "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.756,
+        "ratio": 6.205,
         "required": 4.5,
         "passesAa": true,
-        "margin": 3.256,
+        "margin": 1.705,
         "largeText": false,
         "fg": {
-          "r": 27,
-          "g": 27,
-          "b": 37,
-          "a": 0.7803921568627451
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 233,
-          "g": 242,
-          "b": 239
+          "r": 138,
+          "g": 140,
+          "b": 139
         },
         "flattenedFg": {
-          "r": 72,
-          "g": 74,
-          "b": 81
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 16
       },
       {
@@ -1306,10 +1144,10 @@
         "key": "aboutKicker",
         "delayMs": 700,
         "text": "Company",
-        "ratio": 12.809,
+        "ratio": 3.658,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 8.309,
+        "passesAa": false,
+        "margin": -0.842,
         "largeText": false,
         "fg": {
           "r": 0,
@@ -1318,9 +1156,9 @@
           "a": 1
         },
         "bg": {
-          "r": 247,
-          "g": 248,
-          "b": 248
+          "r": 130,
+          "g": 133,
+          "b": 132
         },
         "flattenedFg": {
           "r": 0,
@@ -1335,10 +1173,10 @@
         "key": "aboutTitle",
         "delayMs": 700,
         "text": "About",
-        "ratio": 19.252,
+        "ratio": 5.43,
         "required": 3,
         "passesAa": true,
-        "margin": 16.252,
+        "margin": 2.43,
         "largeText": true,
         "fg": {
           "r": 0,
@@ -1347,9 +1185,9 @@
           "a": 1
         },
         "bg": {
-          "r": 242,
-          "g": 246,
-          "b": 243
+          "r": 125,
+          "g": 131,
+          "b": 128
         },
         "flattenedFg": {
           "r": 0,
@@ -1363,58 +1201,35 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 700,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 16.313,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 11.813,
-        "largeText": false,
-        "fg": {
-          "r": 10,
-          "g": 10,
-          "b": 10,
-          "a": 1
-        },
-        "bg": {
-          "r": 222,
-          "g": 236,
-          "b": 235
-        },
-        "flattenedFg": {
-          "r": 10,
-          "g": 10,
-          "b": 10
-        },
-        "cssColor": "rgb(10, 10, 10)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       },
       {
         "pane": "hero",
         "key": "heroTitle",
         "delayMs": 1400,
         "text": "Mycelia Interactive",
-        "ratio": 16.01,
+        "ratio": 6.333,
         "required": 3,
         "passesAa": true,
-        "margin": 13.01,
+        "margin": 3.333,
         "largeText": true,
         "fg": {
-          "r": 16,
-          "g": 16,
-          "b": 21,
-          "a": 0.9490196078431372
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 246,
-          "g": 249,
-          "b": 247
+          "r": 141,
+          "g": 141,
+          "b": 142
         },
         "flattenedFg": {
-          "r": 28,
-          "g": 28,
-          "b": 33
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 36
       },
       {
@@ -1422,28 +1237,28 @@
         "key": "heroLlc",
         "delayMs": 1400,
         "text": "LLC",
-        "ratio": 4.275,
+        "ratio": 6.416,
         "required": 4.5,
-        "passesAa": false,
-        "margin": -0.225,
+        "passesAa": true,
+        "margin": 1.916,
         "largeText": false,
         "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 249,
-          "g": 249,
-          "b": 248
+          "r": 142,
+          "g": 142,
+          "b": 143
         },
         "flattenedFg": {
-          "r": 118,
-          "g": 118,
-          "b": 126
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 20
       },
       {
@@ -1451,28 +1266,28 @@
         "key": "heroBody",
         "delayMs": 1400,
         "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.824,
+        "ratio": 6.124,
         "required": 4.5,
         "passesAa": true,
-        "margin": 3.324,
+        "margin": 1.624,
         "largeText": false,
         "fg": {
-          "r": 27,
-          "g": 27,
-          "b": 37,
-          "a": 0.7803921568627451
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 236,
-          "g": 243,
-          "b": 239
+          "r": 137,
+          "g": 139,
+          "b": 138
         },
         "flattenedFg": {
-          "r": 73,
-          "g": 74,
-          "b": 81
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 16
       },
       {
@@ -1480,10 +1295,10 @@
         "key": "aboutKicker",
         "delayMs": 1400,
         "text": "Company",
-        "ratio": 12.809,
+        "ratio": 3.665,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 8.309,
+        "passesAa": false,
+        "margin": -0.835,
         "largeText": false,
         "fg": {
           "r": 0,
@@ -1492,9 +1307,9 @@
           "a": 1
         },
         "bg": {
-          "r": 247,
-          "g": 248,
-          "b": 248
+          "r": 131,
+          "g": 133,
+          "b": 131
         },
         "flattenedFg": {
           "r": 0,
@@ -1509,10 +1324,10 @@
         "key": "aboutTitle",
         "delayMs": 1400,
         "text": "About",
-        "ratio": 19.445,
+        "ratio": 5.595,
         "required": 3,
         "passesAa": true,
-        "margin": 16.445,
+        "margin": 2.595,
         "largeText": true,
         "fg": {
           "r": 0,
@@ -1521,9 +1336,9 @@
           "a": 1
         },
         "bg": {
-          "r": 244,
-          "g": 247,
-          "b": 243
+          "r": 128,
+          "g": 133,
+          "b": 130
         },
         "flattenedFg": {
           "r": 0,
@@ -1537,301 +1352,104 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 1400,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 16.663,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 12.163,
-        "largeText": false,
-        "fg": {
-          "r": 10,
-          "g": 10,
-          "b": 10,
-          "a": 1
-        },
-        "bg": {
-          "r": 226,
-          "g": 238,
-          "b": 236
-        },
-        "flattenedFg": {
-          "r": 10,
-          "g": 10,
-          "b": 10
-        },
-        "cssColor": "rgb(10, 10, 10)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       },
       {
         "pane": "hero",
         "key": "heroTitle",
         "delayMs": 2100,
         "text": "Mycelia Interactive",
-        "ratio": 15.892,
+        "ratio": 6.31,
         "required": 3,
-        "passesAa": true,
-        "margin": 12.892,
-        "largeText": true,
-        "fg": {
-          "r": 16,
-          "g": 16,
-          "b": 21,
-          "a": 0.9490196078431372
-        },
-        "bg": {
-          "r": 245,
-          "g": 248,
-          "b": 248
-        },
-        "flattenedFg": {
-          "r": 28,
-          "g": 28,
-          "b": 33
-        },
-        "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
-        "fontSizePx": 36
-      },
-      {
-        "pane": "hero",
-        "key": "heroLlc",
-        "delayMs": 2100,
-        "text": "LLC",
-        "ratio": 4.258,
-        "required": 4.5,
-        "passesAa": false,
-        "margin": -0.242,
-        "largeText": false,
-        "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
-        },
-        "bg": {
-          "r": 249,
-          "g": 250,
-          "b": 248
-        },
-        "flattenedFg": {
-          "r": 118,
-          "g": 119,
-          "b": 126
-        },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
-        "fontSizePx": 20
-      },
-      {
-        "pane": "hero",
-        "key": "heroBody",
-        "delayMs": 2100,
-        "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.849,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 3.349,
-        "largeText": false,
-        "fg": {
-          "r": 27,
-          "g": 27,
-          "b": 37,
-          "a": 0.7803921568627451
-        },
-        "bg": {
-          "r": 239,
-          "g": 245,
-          "b": 240
-        },
-        "flattenedFg": {
-          "r": 74,
-          "g": 75,
-          "b": 82
-        },
-        "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
-        "fontSizePx": 16
-      },
-      {
-        "pane": "about",
-        "key": "aboutKicker",
-        "delayMs": 2100,
-        "text": "Company",
-        "ratio": 12.785,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 8.285,
-        "largeText": false,
-        "fg": {
-          "r": 0,
-          "g": 51,
-          "b": 61,
-          "a": 1
-        },
-        "bg": {
-          "r": 246,
-          "g": 248,
-          "b": 248
-        },
-        "flattenedFg": {
-          "r": 0,
-          "g": 51,
-          "b": 61
-        },
-        "cssColor": "rgb(0, 51, 61)",
-        "fontSizePx": 13
-      },
-      {
-        "pane": "about",
-        "key": "aboutTitle",
-        "delayMs": 2100,
-        "text": "About",
-        "ratio": 19.217,
-        "required": 3,
-        "passesAa": true,
-        "margin": 16.217,
-        "largeText": true,
-        "fg": {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 1
-        },
-        "bg": {
-          "r": 241,
-          "g": 246,
-          "b": 243
-        },
-        "flattenedFg": {
-          "r": 0,
-          "g": 0,
-          "b": 0
-        },
-        "cssColor": "rgb(0, 0, 0)",
-        "fontSizePx": 26
-      },
-      {
-        "pane": "about",
-        "key": "aboutBody",
-        "delayMs": 2100,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 16.523,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 12.023,
-        "largeText": false,
-        "fg": {
-          "r": 10,
-          "g": 10,
-          "b": 10,
-          "a": 1
-        },
-        "bg": {
-          "r": 225,
-          "g": 237,
-          "b": 236
-        },
-        "flattenedFg": {
-          "r": 10,
-          "g": 10,
-          "b": 10
-        },
-        "cssColor": "rgb(10, 10, 10)",
-        "fontSizePx": 16
-      },
-      {
-        "pane": "hero",
-        "key": "heroTitle",
-        "delayMs": 2800,
-        "text": "Mycelia Interactive",
-        "ratio": 16.079,
-        "required": 3,
-        "passesAa": true,
-        "margin": 13.079,
-        "largeText": true,
-        "fg": {
-          "r": 16,
-          "g": 16,
-          "b": 21,
-          "a": 0.9490196078431372
-        },
-        "bg": {
-          "r": 248,
-          "g": 249,
-          "b": 248
-        },
-        "flattenedFg": {
-          "r": 28,
-          "g": 28,
-          "b": 33
-        },
-        "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
-        "fontSizePx": 36
-      },
-      {
-        "pane": "hero",
-        "key": "heroLlc",
-        "delayMs": 2800,
-        "text": "LLC",
-        "ratio": 4.245,
-        "required": 4.5,
-        "passesAa": false,
-        "margin": -0.255,
-        "largeText": false,
-        "fg": {
-          "r": 48,
-          "g": 48,
-          "b": 61,
-          "a": 0.6509803921568628
-        },
-        "bg": {
-          "r": 247,
-          "g": 248,
-          "b": 248
-        },
-        "flattenedFg": {
-          "r": 117,
-          "g": 118,
-          "b": 126
-        },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
-        "fontSizePx": 20
-      },
-      {
-        "pane": "hero",
-        "key": "heroBody",
-        "delayMs": 2800,
-        "text": "Immersive interactive entertainment where the au",
-        "ratio": 7.81,
-        "required": 4.5,
         "passesAa": true,
         "margin": 3.31,
-        "largeText": false,
+        "largeText": true,
         "fg": {
-          "r": 27,
-          "g": 27,
-          "b": 37,
-          "a": 0.7803921568627451
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
         },
         "bg": {
-          "r": 238,
-          "g": 244,
-          "b": 240
+          "r": 140,
+          "g": 141,
+          "b": 141
         },
         "flattenedFg": {
-          "r": 73,
-          "g": 75,
-          "b": 82
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+        "cssColor": "rgb(0, 0, 0)",
+        "fontSizePx": 36
+      },
+      {
+        "pane": "hero",
+        "key": "heroLlc",
+        "delayMs": 2100,
+        "text": "LLC",
+        "ratio": 6.333,
+        "required": 4.5,
+        "passesAa": true,
+        "margin": 1.833,
+        "largeText": false,
+        "fg": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "bg": {
+          "r": 141,
+          "g": 141,
+          "b": 142
+        },
+        "flattenedFg": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "cssColor": "rgb(0, 0, 0)",
+        "fontSizePx": 20
+      },
+      {
+        "pane": "hero",
+        "key": "heroBody",
+        "delayMs": 2100,
+        "text": "Immersive interactive entertainment where the au",
+        "ratio": 6.188,
+        "required": 4.5,
+        "passesAa": true,
+        "margin": 1.688,
+        "largeText": false,
+        "fg": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "bg": {
+          "r": 137,
+          "g": 140,
+          "b": 139
+        },
+        "flattenedFg": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 16
       },
       {
         "pane": "about",
         "key": "aboutKicker",
-        "delayMs": 2800,
+        "delayMs": 2100,
         "text": "Company",
-        "ratio": 12.912,
+        "ratio": 3.83,
         "required": 4.5,
-        "passesAa": true,
-        "margin": 8.412,
+        "passesAa": false,
+        "margin": -0.67,
         "largeText": false,
         "fg": {
           "r": 0,
@@ -1840,9 +1458,160 @@
           "a": 1
         },
         "bg": {
-          "r": 248,
-          "g": 249,
-          "b": 248
+          "r": 136,
+          "g": 136,
+          "b": 132
+        },
+        "flattenedFg": {
+          "r": 0,
+          "g": 51,
+          "b": 61
+        },
+        "cssColor": "rgb(0, 51, 61)",
+        "fontSizePx": 13
+      },
+      {
+        "pane": "about",
+        "key": "aboutTitle",
+        "delayMs": 2100,
+        "text": "About",
+        "ratio": 5.676,
+        "required": 3,
+        "passesAa": true,
+        "margin": 2.676,
+        "largeText": true,
+        "fg": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "bg": {
+          "r": 130,
+          "g": 134,
+          "b": 129
+        },
+        "flattenedFg": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "cssColor": "rgb(0, 0, 0)",
+        "fontSizePx": 26
+      },
+      {
+        "pane": "about",
+        "key": "aboutBody",
+        "delayMs": 2100,
+        "error": "missing-target-or-color"
+      },
+      {
+        "pane": "hero",
+        "key": "heroTitle",
+        "delayMs": 2800,
+        "text": "Mycelia Interactive",
+        "ratio": 6.316,
+        "required": 3,
+        "passesAa": true,
+        "margin": 3.316,
+        "largeText": true,
+        "fg": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "bg": {
+          "r": 140,
+          "g": 141,
+          "b": 142
+        },
+        "flattenedFg": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "cssColor": "rgb(0, 0, 0)",
+        "fontSizePx": 36
+      },
+      {
+        "pane": "hero",
+        "key": "heroLlc",
+        "delayMs": 2800,
+        "text": "LLC",
+        "ratio": 6.333,
+        "required": 4.5,
+        "passesAa": true,
+        "margin": 1.833,
+        "largeText": false,
+        "fg": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "bg": {
+          "r": 141,
+          "g": 141,
+          "b": 142
+        },
+        "flattenedFg": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "cssColor": "rgb(0, 0, 0)",
+        "fontSizePx": 20
+      },
+      {
+        "pane": "hero",
+        "key": "heroBody",
+        "delayMs": 2800,
+        "text": "Immersive interactive entertainment where the au",
+        "ratio": 6.188,
+        "required": 4.5,
+        "passesAa": true,
+        "margin": 1.688,
+        "largeText": false,
+        "fg": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "bg": {
+          "r": 137,
+          "g": 140,
+          "b": 139
+        },
+        "flattenedFg": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "cssColor": "rgb(0, 0, 0)",
+        "fontSizePx": 16
+      },
+      {
+        "pane": "about",
+        "key": "aboutKicker",
+        "delayMs": 2800,
+        "text": "Company",
+        "ratio": 3.645,
+        "required": 4.5,
+        "passesAa": false,
+        "margin": -0.855,
+        "largeText": false,
+        "fg": {
+          "r": 0,
+          "g": 51,
+          "b": 61,
+          "a": 1
+        },
+        "bg": {
+          "r": 129,
+          "g": 133,
+          "b": 131
         },
         "flattenedFg": {
           "r": 0,
@@ -1857,10 +1626,10 @@
         "key": "aboutTitle",
         "delayMs": 2800,
         "text": "About",
-        "ratio": 19.217,
+        "ratio": 5.43,
         "required": 3,
         "passesAa": true,
-        "margin": 16.217,
+        "margin": 2.43,
         "largeText": true,
         "fg": {
           "r": 0,
@@ -1869,9 +1638,9 @@
           "a": 1
         },
         "bg": {
-          "r": 241,
-          "g": 246,
-          "b": 243
+          "r": 125,
+          "g": 131,
+          "b": 128
         },
         "flattenedFg": {
           "r": 0,
@@ -1885,120 +1654,97 @@
         "pane": "about",
         "key": "aboutBody",
         "delayMs": 2800,
-        "text": "Mycelia Interactive LLC is an entertainment comp",
-        "ratio": 16.205,
-        "required": 4.5,
-        "passesAa": true,
-        "margin": 11.705,
-        "largeText": false,
-        "fg": {
-          "r": 10,
-          "g": 10,
-          "b": 10,
-          "a": 1
-        },
-        "bg": {
-          "r": 222,
-          "g": 235,
-          "b": 235
-        },
-        "flattenedFg": {
-          "r": 10,
-          "g": 10,
-          "b": 10
-        },
-        "cssColor": "rgb(10, 10, 10)",
-        "fontSizePx": 16
+        "error": "missing-target-or-color"
       }
     ],
     "aggregates": {
       "hero.heroTitle": {
         "samples": 5,
-        "minRatio": 15.892,
-        "maxRatio": 16.079,
-        "avgRatio": 16.028,
+        "minRatio": 6.31,
+        "maxRatio": 6.333,
+        "avgRatio": 6.318,
         "allPassAa": true,
         "worstPass": true,
-        "worstMargin": 12.892,
+        "worstMargin": 3.31,
         "required": 3,
         "largeText": true,
         "worstDelayMs": 2100,
         "worstBg": {
-          "r": 245,
-          "g": 248,
-          "b": 248
+          "r": 140,
+          "g": 141,
+          "b": 141
         },
         "worstFg": {
-          "r": 28,
-          "g": 28,
-          "b": 33
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 36
       },
       "hero.heroLlc": {
         "samples": 5,
-        "minRatio": 4.243,
-        "maxRatio": 4.275,
-        "avgRatio": 4.253,
-        "allPassAa": false,
-        "worstPass": false,
-        "worstMargin": -0.257,
+        "minRatio": 6.316,
+        "maxRatio": 6.416,
+        "avgRatio": 6.346,
+        "allPassAa": true,
+        "worstPass": true,
+        "worstMargin": 1.816,
         "required": 4.5,
         "largeText": false,
         "worstDelayMs": 0,
         "worstBg": {
-          "r": 247,
-          "g": 248,
-          "b": 247
+          "r": 140,
+          "g": 141,
+          "b": 142
         },
         "worstFg": {
-          "r": 117,
-          "g": 118,
-          "b": 126
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 20
       },
       "hero.heroBody": {
         "samples": 5,
-        "minRatio": 7.756,
-        "maxRatio": 7.849,
-        "avgRatio": 7.818,
+        "minRatio": 6.124,
+        "maxRatio": 6.281,
+        "avgRatio": 6.197,
         "allPassAa": true,
         "worstPass": true,
-        "worstMargin": 3.256,
+        "worstMargin": 1.624,
         "required": 4.5,
         "largeText": false,
-        "worstDelayMs": 700,
+        "worstDelayMs": 1400,
         "worstBg": {
-          "r": 233,
-          "g": 242,
-          "b": 239
+          "r": 137,
+          "g": 139,
+          "b": 138
         },
         "worstFg": {
-          "r": 72,
-          "g": 74,
-          "b": 81
+          "r": 0,
+          "g": 0,
+          "b": 0
         },
-        "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+        "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 16
       },
       "about.aboutKicker": {
         "samples": 5,
-        "minRatio": 12.785,
-        "maxRatio": 12.936,
-        "avgRatio": 12.85,
-        "allPassAa": true,
-        "worstPass": true,
-        "worstMargin": 8.285,
+        "minRatio": 3.596,
+        "maxRatio": 3.83,
+        "avgRatio": 3.679,
+        "allPassAa": false,
+        "worstPass": false,
+        "worstMargin": -0.904,
         "required": 4.5,
         "largeText": false,
-        "worstDelayMs": 2100,
+        "worstDelayMs": 0,
         "worstBg": {
-          "r": 246,
-          "g": 248,
-          "b": 248
+          "r": 128,
+          "g": 132,
+          "b": 130
         },
         "worstFg": {
           "r": 0,
@@ -2010,19 +1756,19 @@
       },
       "about.aboutTitle": {
         "samples": 5,
-        "minRatio": 19.217,
-        "maxRatio": 19.445,
-        "avgRatio": 19.308,
+        "minRatio": 5.43,
+        "maxRatio": 5.676,
+        "avgRatio": 5.547,
         "allPassAa": true,
         "worstPass": true,
-        "worstMargin": 16.217,
+        "worstMargin": 2.43,
         "required": 3,
         "largeText": true,
-        "worstDelayMs": 2100,
+        "worstDelayMs": 700,
         "worstBg": {
-          "r": 241,
-          "g": 246,
-          "b": 243
+          "r": 125,
+          "g": 131,
+          "b": 128
         },
         "worstFg": {
           "r": 0,
@@ -2031,30 +1777,6 @@
         },
         "cssColor": "rgb(0, 0, 0)",
         "fontSizePx": 26
-      },
-      "about.aboutBody": {
-        "samples": 5,
-        "minRatio": 16.186,
-        "maxRatio": 16.663,
-        "avgRatio": 16.378,
-        "allPassAa": true,
-        "worstPass": true,
-        "worstMargin": 11.686,
-        "required": 4.5,
-        "largeText": false,
-        "worstDelayMs": 0,
-        "worstBg": {
-          "r": 221,
-          "g": 235,
-          "b": 236
-        },
-        "worstFg": {
-          "r": 10,
-          "g": 10,
-          "b": 10
-        },
-        "cssColor": "rgb(10, 10, 10)",
-        "fontSizePx": 16
       }
     }
   },
@@ -2062,7 +1784,7 @@
     "normalFrames": [
       {
         "delayMs": 0,
-        "elapsedMs": 4581,
+        "elapsedMs": 4388,
         "contrastAttr": "normal",
         "hero": [
           {
@@ -2076,50 +1798,50 @@
               "a": 0.9490196078431372
             },
             "bg": {
-              "r": 237,
-              "g": 240,
-              "b": 238
+              "r": 132,
+              "g": 134,
+              "b": 135
             },
             "flattenedFg": {
-              "r": 27,
-              "g": 27,
-              "b": 32
+              "r": 22,
+              "g": 22,
+              "b": 27
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 14.948,
+            "ratio": 4.929,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 11.948
+            "margin": 1.929
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 33,
+              "g": 33,
+              "b": 44,
+              "a": 0.9019607843137255
             },
             "bg": {
-              "r": 235,
-              "g": 237,
-              "b": 236
+              "r": 134,
+              "g": 136,
+              "b": 136
             },
             "flattenedFg": {
-              "r": 113,
-              "g": 114,
-              "b": 122
+              "r": 43,
+              "g": 43,
+              "b": 53
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.068,
+            "ratio": 3.928,
             "largeText": false,
             "passesAa": false,
             "required": 4.5,
-            "margin": -0.432
+            "margin": -0.572
           },
           {
             "key": "heroBody",
@@ -2132,22 +1854,22 @@
               "a": 0.7803921568627451
             },
             "bg": {
-              "r": 223,
-              "g": 232,
-              "b": 220
+              "r": 133,
+              "g": 135,
+              "b": 131
             },
             "flattenedFg": {
-              "r": 70,
-              "g": 72,
-              "b": 77
+              "r": 50,
+              "g": 51,
+              "b": 58
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.284,
+            "ratio": 3.467,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 2.784
+            "margin": -1.033
           }
         ],
         "about": [
@@ -2162,9 +1884,9 @@
               "a": 1
             },
             "bg": {
-              "r": 237,
-              "g": 238,
-              "b": 233
+              "r": 126,
+              "g": 129,
+              "b": 125
             },
             "flattenedFg": {
               "r": 15,
@@ -2173,11 +1895,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 7.816,
+            "ratio": 2.311,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 3.316
+            "margin": -2.189
           },
           {
             "key": "aboutTitle",
@@ -2190,9 +1912,9 @@
               "a": 1
             },
             "bg": {
-              "r": 229,
-              "g": 235,
-              "b": 227
+              "r": 120,
+              "g": 126,
+              "b": 119
             },
             "flattenedFg": {
               "r": 7,
@@ -2201,45 +1923,44 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 15.846,
+            "ratio": 4.619,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 12.846
+            "margin": 1.619
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(19, 36, 40)",
-            "fg": {
-              "r": 19,
-              "g": 36,
-              "b": 40,
-              "a": 1
-            },
-            "bg": {
-              "r": 186,
-              "g": 213,
-              "b": 212
-            },
-            "flattenedFg": {
-              "r": 19,
-              "g": 36,
-              "b": 40
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 10.343,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 5.843
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(19, 36, 40)",
+              "fg": {
+                "r": 19,
+                "g": 36,
+                "b": 40,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       },
       {
         "delayMs": 700,
-        "elapsedMs": 9059,
+        "elapsedMs": 8645,
         "contrastAttr": "normal",
         "hero": [
           {
@@ -2253,50 +1974,50 @@
               "a": 0.9490196078431372
             },
             "bg": {
-              "r": 236,
-              "g": 239,
-              "b": 237
+              "r": 132,
+              "g": 135,
+              "b": 135
             },
             "flattenedFg": {
-              "r": 27,
-              "g": 27,
-              "b": 32
+              "r": 22,
+              "g": 22,
+              "b": 27
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 14.814,
+            "ratio": 4.977,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 11.814
+            "margin": 1.977
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 33,
+              "g": 33,
+              "b": 44,
+              "a": 0.9019607843137255
             },
             "bg": {
-              "r": 234,
-              "g": 238,
-              "b": 237
+              "r": 134,
+              "g": 136,
+              "b": 136
             },
             "flattenedFg": {
-              "r": 113,
-              "g": 114,
-              "b": 122
+              "r": 43,
+              "g": 43,
+              "b": 53
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.089,
+            "ratio": 3.928,
             "largeText": false,
             "passesAa": false,
             "required": 4.5,
-            "margin": -0.411
+            "margin": -0.572
           },
           {
             "key": "heroBody",
@@ -2309,22 +2030,22 @@
               "a": 0.7803921568627451
             },
             "bg": {
-              "r": 207,
-              "g": 224,
-              "b": 217
+              "r": 129,
+              "g": 133,
+              "b": 130
             },
             "flattenedFg": {
-              "r": 67,
-              "g": 70,
-              "b": 77
+              "r": 49,
+              "g": 50,
+              "b": 57
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 6.894,
+            "ratio": 3.409,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 2.394
+            "margin": -1.091
           }
         ],
         "about": [
@@ -2339,9 +2060,9 @@
               "a": 1
             },
             "bg": {
-              "r": 233,
-              "g": 236,
-              "b": 234
+              "r": 127,
+              "g": 129,
+              "b": 126
             },
             "flattenedFg": {
               "r": 15,
@@ -2350,11 +2071,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 7.661,
+            "ratio": 2.319,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 3.161
+            "margin": -2.181
           },
           {
             "key": "aboutTitle",
@@ -2367,9 +2088,9 @@
               "a": 1
             },
             "bg": {
-              "r": 225,
-              "g": 234,
-              "b": 227
+              "r": 111,
+              "g": 122,
+              "b": 119
             },
             "flattenedFg": {
               "r": 7,
@@ -2378,45 +2099,44 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 15.623,
+            "ratio": 4.323,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 12.623
+            "margin": 1.323
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(19, 36, 40)",
-            "fg": {
-              "r": 19,
-              "g": 36,
-              "b": 40,
-              "a": 1
-            },
-            "bg": {
-              "r": 191,
-              "g": 215,
-              "b": 212
-            },
-            "flattenedFg": {
-              "r": 19,
-              "g": 36,
-              "b": 40
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 10.595,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 6.095
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(19, 36, 40)",
+              "fg": {
+                "r": 19,
+                "g": 36,
+                "b": 40,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       },
       {
         "delayMs": 1400,
-        "elapsedMs": 13581,
+        "elapsedMs": 12910,
         "contrastAttr": "normal",
         "hero": [
           {
@@ -2430,50 +2150,50 @@
               "a": 0.9490196078431372
             },
             "bg": {
-              "r": 233,
-              "g": 238,
-              "b": 236
+              "r": 134,
+              "g": 136,
+              "b": 136
             },
             "flattenedFg": {
-              "r": 27,
-              "g": 27,
-              "b": 32
+              "r": 22,
+              "g": 22,
+              "b": 27
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 14.626,
+            "ratio": 5.058,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 11.626
+            "margin": 2.058
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 33,
+              "g": 33,
+              "b": 44,
+              "a": 0.9019607843137255
             },
             "bg": {
-              "r": 240,
-              "g": 241,
-              "b": 238
+              "r": 137,
+              "g": 137,
+              "b": 137
             },
             "flattenedFg": {
-              "r": 115,
-              "g": 115,
-              "b": 123
+              "r": 43,
+              "g": 43,
+              "b": 53
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.146,
+            "ratio": 4.003,
             "largeText": false,
             "passesAa": false,
             "required": 4.5,
-            "margin": -0.354
+            "margin": -0.497
           },
           {
             "key": "heroBody",
@@ -2486,22 +2206,22 @@
               "a": 0.7803921568627451
             },
             "bg": {
-              "r": 214,
-              "g": 227,
-              "b": 218
+              "r": 126,
+              "g": 131,
+              "b": 129
             },
             "flattenedFg": {
-              "r": 68,
-              "g": 71,
-              "b": 77
+              "r": 49,
+              "g": 50,
+              "b": 57
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.035,
+            "ratio": 3.312,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 2.535
+            "margin": -1.188
           }
         ],
         "about": [
@@ -2516,9 +2236,9 @@
               "a": 1
             },
             "bg": {
-              "r": 231,
-              "g": 236,
-              "b": 235
+              "r": 122,
+              "g": 127,
+              "b": 125
             },
             "flattenedFg": {
               "r": 15,
@@ -2527,11 +2247,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 7.637,
+            "ratio": 2.239,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 3.137
+            "margin": -2.261
           },
           {
             "key": "aboutTitle",
@@ -2544,9 +2264,9 @@
               "a": 1
             },
             "bg": {
-              "r": 229,
-              "g": 235,
-              "b": 227
+              "r": 120,
+              "g": 127,
+              "b": 120
             },
             "flattenedFg": {
               "r": 7,
@@ -2555,45 +2275,44 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 15.846,
+            "ratio": 4.67,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 12.846
+            "margin": 1.67
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(19, 36, 40)",
-            "fg": {
-              "r": 19,
-              "g": 36,
-              "b": 40,
-              "a": 1
-            },
-            "bg": {
-              "r": 198,
-              "g": 218,
-              "b": 212
-            },
-            "flattenedFg": {
-              "r": 19,
-              "g": 36,
-              "b": 40
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 10.972,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 6.472
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(19, 36, 40)",
+              "fg": {
+                "r": 19,
+                "g": 36,
+                "b": 40,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       },
       {
         "delayMs": 2100,
-        "elapsedMs": 18073,
+        "elapsedMs": 17161,
         "contrastAttr": "normal",
         "hero": [
           {
@@ -2607,50 +2326,50 @@
               "a": 0.9490196078431372
             },
             "bg": {
-              "r": 231,
-              "g": 237,
-              "b": 237
+              "r": 131,
+              "g": 134,
+              "b": 135
             },
             "flattenedFg": {
-              "r": 27,
-              "g": 27,
-              "b": 32
+              "r": 22,
+              "g": 22,
+              "b": 27
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 14.486,
+            "ratio": 4.915,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 11.486
+            "margin": 1.915
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 33,
+              "g": 33,
+              "b": 44,
+              "a": 0.9019607843137255
             },
             "bg": {
-              "r": 239,
-              "g": 241,
-              "b": 237
+              "r": 134,
+              "g": 136,
+              "b": 136
             },
             "flattenedFg": {
-              "r": 115,
-              "g": 115,
-              "b": 122
+              "r": 43,
+              "g": 43,
+              "b": 53
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.14,
+            "ratio": 3.928,
             "largeText": false,
             "passesAa": false,
             "required": 4.5,
-            "margin": -0.36
+            "margin": -0.572
           },
           {
             "key": "heroBody",
@@ -2663,22 +2382,22 @@
               "a": 0.7803921568627451
             },
             "bg": {
-              "r": 219,
-              "g": 230,
-              "b": 220
+              "r": 129,
+              "g": 133,
+              "b": 129
             },
             "flattenedFg": {
-              "r": 69,
-              "g": 72,
-              "b": 77
+              "r": 49,
+              "g": 50,
+              "b": 57
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.155,
+            "ratio": 3.406,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 2.655
+            "margin": -1.094
           }
         ],
         "about": [
@@ -2693,9 +2412,9 @@
               "a": 1
             },
             "bg": {
-              "r": 236,
-              "g": 238,
-              "b": 236
+              "r": 133,
+              "g": 132,
+              "b": 128
             },
             "flattenedFg": {
               "r": 15,
@@ -2704,11 +2423,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 7.816,
+            "ratio": 2.435,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 3.316
+            "margin": -2.065
           },
           {
             "key": "aboutTitle",
@@ -2721,9 +2440,9 @@
               "a": 1
             },
             "bg": {
-              "r": 225,
-              "g": 234,
-              "b": 228
+              "r": 118,
+              "g": 125,
+              "b": 120
             },
             "flattenedFg": {
               "r": 7,
@@ -2732,45 +2451,44 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 15.633,
+            "ratio": 4.551,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 12.633
+            "margin": 1.551
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(19, 36, 40)",
-            "fg": {
-              "r": 19,
-              "g": 36,
-              "b": 40,
-              "a": 1
-            },
-            "bg": {
-              "r": 196,
-              "g": 217,
-              "b": 212
-            },
-            "flattenedFg": {
-              "r": 19,
-              "g": 36,
-              "b": 40
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 10.852,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 6.352
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(19, 36, 40)",
+              "fg": {
+                "r": 19,
+                "g": 36,
+                "b": 40,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       },
       {
         "delayMs": 2800,
-        "elapsedMs": 22548,
+        "elapsedMs": 21486,
         "contrastAttr": "normal",
         "hero": [
           {
@@ -2784,50 +2502,50 @@
               "a": 0.9490196078431372
             },
             "bg": {
-              "r": 238,
-              "g": 240,
-              "b": 238
+              "r": 132,
+              "g": 135,
+              "b": 135
             },
             "flattenedFg": {
-              "r": 27,
-              "g": 27,
-              "b": 32
+              "r": 22,
+              "g": 22,
+              "b": 27
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 14.976,
+            "ratio": 4.977,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 11.976
+            "margin": 1.977
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.9)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 33,
+              "g": 33,
+              "b": 44,
+              "a": 0.9019607843137255
             },
             "bg": {
-              "r": 235,
-              "g": 238,
-              "b": 236
+              "r": 134,
+              "g": 136,
+              "b": 137
             },
             "flattenedFg": {
-              "r": 113,
-              "g": 114,
-              "b": 122
+              "r": 43,
+              "g": 43,
+              "b": 53
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.094,
+            "ratio": 3.932,
             "largeText": false,
             "passesAa": false,
             "required": 4.5,
-            "margin": -0.406
+            "margin": -0.568
           },
           {
             "key": "heroBody",
@@ -2840,22 +2558,22 @@
               "a": 0.7803921568627451
             },
             "bg": {
-              "r": 218,
-              "g": 229,
-              "b": 219
+              "r": 130,
+              "g": 133,
+              "b": 129
             },
             "flattenedFg": {
-              "r": 69,
-              "g": 71,
-              "b": 77
+              "r": 50,
+              "g": 50,
+              "b": 57
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.169,
+            "ratio": 3.405,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 2.669
+            "margin": -1.095
           }
         ],
         "about": [
@@ -2870,9 +2588,9 @@
               "a": 1
             },
             "bg": {
-              "r": 232,
-              "g": 235,
-              "b": 233
+              "r": 121,
+              "g": 126,
+              "b": 125
             },
             "flattenedFg": {
               "r": 15,
@@ -2881,11 +2599,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 7.592,
+            "ratio": 2.211,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 3.092
+            "margin": -2.289
           },
           {
             "key": "aboutTitle",
@@ -2898,9 +2616,9 @@
               "a": 1
             },
             "bg": {
-              "r": 225,
-              "g": 234,
-              "b": 227
+              "r": 116,
+              "g": 124,
+              "b": 119
             },
             "flattenedFg": {
               "r": 7,
@@ -2909,39 +2627,38 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 15.623,
+            "ratio": 4.475,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 12.623
+            "margin": 1.475
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(19, 36, 40)",
-            "fg": {
-              "r": 19,
-              "g": 36,
-              "b": 40,
-              "a": 1
-            },
-            "bg": {
-              "r": 192,
-              "g": 216,
-              "b": 212
-            },
-            "flattenedFg": {
-              "r": 19,
-              "g": 36,
-              "b": 40
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 10.692,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 6.192
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(19, 36, 40)",
+              "fg": {
+                "r": 19,
+                "g": 36,
+                "b": 40,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       }
@@ -2949,92 +2666,92 @@
     "highFrames": [
       {
         "delayMs": 0,
-        "elapsedMs": 4580,
+        "elapsedMs": 4262,
         "contrastAttr": "high",
         "hero": [
           {
             "key": "heroTitle",
             "text": "Mycelia Interactive",
-            "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 16,
-              "g": 16,
-              "b": 21,
-              "a": 0.9490196078431372
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 248,
-              "g": 249,
-              "b": 248
+              "r": 140,
+              "g": 141,
+              "b": 142
             },
             "flattenedFg": {
-              "r": 28,
-              "g": 28,
-              "b": 33
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 16.079,
+            "ratio": 6.316,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 13.079
+            "margin": 3.316
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 247,
-              "g": 248,
-              "b": 247
+              "r": 140,
+              "g": 141,
+              "b": 142
             },
             "flattenedFg": {
-              "r": 117,
-              "g": 118,
-              "b": 126
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.243,
+            "ratio": 6.316,
             "largeText": false,
-            "passesAa": false,
+            "passesAa": true,
             "required": 4.5,
-            "margin": -0.257
+            "margin": 1.816
           },
           {
             "key": "heroBody",
             "text": "Immersive interactive entertainment where the au",
-            "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 27,
-              "g": 27,
-              "b": 37,
-              "a": 0.7803921568627451
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 239,
-              "g": 245,
-              "b": 240
+              "r": 139,
+              "g": 141,
+              "b": 139
             },
             "flattenedFg": {
-              "r": 74,
-              "g": 75,
-              "b": 82
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.849,
+            "ratio": 6.281,
             "largeText": false,
             "passesAa": true,
             "required": 4.5,
-            "margin": 3.349
+            "margin": 1.781
           }
         ],
         "about": [
@@ -3049,9 +2766,9 @@
               "a": 1
             },
             "bg": {
-              "r": 249,
-              "g": 249,
-              "b": 248
+              "r": 128,
+              "g": 132,
+              "b": 130
             },
             "flattenedFg": {
               "r": 0,
@@ -3060,11 +2777,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 12.936,
+            "ratio": 3.596,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 8.436
+            "margin": -0.904
           },
           {
             "key": "aboutTitle",
@@ -3077,9 +2794,9 @@
               "a": 1
             },
             "bg": {
-              "r": 243,
-              "g": 247,
-              "b": 243
+              "r": 129,
+              "g": 133,
+              "b": 129
             },
             "flattenedFg": {
               "r": 0,
@@ -3088,130 +2805,129 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 19.409,
+            "ratio": 5.605,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 16.409
+            "margin": 2.605
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(10, 10, 10)",
-            "fg": {
-              "r": 10,
-              "g": 10,
-              "b": 10,
-              "a": 1
-            },
-            "bg": {
-              "r": 221,
-              "g": 235,
-              "b": 236
-            },
-            "flattenedFg": {
-              "r": 10,
-              "g": 10,
-              "b": 10
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 16.186,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 11.686
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(10, 10, 10)",
+              "fg": {
+                "r": 10,
+                "g": 10,
+                "b": 10,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       },
       {
         "delayMs": 700,
-        "elapsedMs": 9219,
+        "elapsedMs": 8471,
         "contrastAttr": "high",
         "hero": [
           {
             "key": "heroTitle",
             "text": "Mycelia Interactive",
-            "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 16,
-              "g": 16,
-              "b": 21,
-              "a": 0.9490196078431372
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 248,
-              "g": 249,
-              "b": 248
+              "r": 140,
+              "g": 141,
+              "b": 142
             },
             "flattenedFg": {
-              "r": 28,
-              "g": 28,
-              "b": 33
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 16.079,
+            "ratio": 6.316,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 13.079
+            "margin": 3.316
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 247,
-              "g": 248,
-              "b": 247
+              "r": 141,
+              "g": 141,
+              "b": 142
             },
             "flattenedFg": {
-              "r": 117,
-              "g": 118,
-              "b": 126
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.243,
+            "ratio": 6.333,
             "largeText": false,
-            "passesAa": false,
+            "passesAa": true,
             "required": 4.5,
-            "margin": -0.257
+            "margin": 1.833
           },
           {
             "key": "heroBody",
             "text": "Immersive interactive entertainment where the au",
-            "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 27,
-              "g": 27,
-              "b": 37,
-              "a": 0.7803921568627451
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 233,
-              "g": 242,
-              "b": 239
+              "r": 138,
+              "g": 140,
+              "b": 139
             },
             "flattenedFg": {
-              "r": 72,
-              "g": 74,
-              "b": 81
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.756,
+            "ratio": 6.205,
             "largeText": false,
             "passesAa": true,
             "required": 4.5,
-            "margin": 3.256
+            "margin": 1.705
           }
         ],
         "about": [
@@ -3226,9 +2942,9 @@
               "a": 1
             },
             "bg": {
-              "r": 247,
-              "g": 248,
-              "b": 248
+              "r": 130,
+              "g": 133,
+              "b": 132
             },
             "flattenedFg": {
               "r": 0,
@@ -3237,11 +2953,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 12.809,
+            "ratio": 3.658,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 8.309
+            "margin": -0.842
           },
           {
             "key": "aboutTitle",
@@ -3254,9 +2970,9 @@
               "a": 1
             },
             "bg": {
-              "r": 242,
-              "g": 246,
-              "b": 243
+              "r": 125,
+              "g": 131,
+              "b": 128
             },
             "flattenedFg": {
               "r": 0,
@@ -3265,130 +2981,129 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 19.252,
+            "ratio": 5.43,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 16.252
+            "margin": 2.43
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(10, 10, 10)",
-            "fg": {
-              "r": 10,
-              "g": 10,
-              "b": 10,
-              "a": 1
-            },
-            "bg": {
-              "r": 222,
-              "g": 236,
-              "b": 235
-            },
-            "flattenedFg": {
-              "r": 10,
-              "g": 10,
-              "b": 10
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 16.313,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 11.813
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(10, 10, 10)",
+              "fg": {
+                "r": 10,
+                "g": 10,
+                "b": 10,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       },
       {
         "delayMs": 1400,
-        "elapsedMs": 13862,
+        "elapsedMs": 12703,
         "contrastAttr": "high",
         "hero": [
           {
             "key": "heroTitle",
             "text": "Mycelia Interactive",
-            "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 16,
-              "g": 16,
-              "b": 21,
-              "a": 0.9490196078431372
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 246,
-              "g": 249,
-              "b": 247
+              "r": 141,
+              "g": 141,
+              "b": 142
             },
             "flattenedFg": {
-              "r": 28,
-              "g": 28,
-              "b": 33
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 16.01,
+            "ratio": 6.333,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 13.01
+            "margin": 3.333
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 249,
-              "g": 249,
-              "b": 248
+              "r": 142,
+              "g": 142,
+              "b": 143
             },
             "flattenedFg": {
-              "r": 118,
-              "g": 118,
-              "b": 126
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.275,
+            "ratio": 6.416,
             "largeText": false,
-            "passesAa": false,
+            "passesAa": true,
             "required": 4.5,
-            "margin": -0.225
+            "margin": 1.916
           },
           {
             "key": "heroBody",
             "text": "Immersive interactive entertainment where the au",
-            "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 27,
-              "g": 27,
-              "b": 37,
-              "a": 0.7803921568627451
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 236,
-              "g": 243,
-              "b": 239
+              "r": 137,
+              "g": 139,
+              "b": 138
             },
             "flattenedFg": {
-              "r": 73,
-              "g": 74,
-              "b": 81
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.824,
+            "ratio": 6.124,
             "largeText": false,
             "passesAa": true,
             "required": 4.5,
-            "margin": 3.324
+            "margin": 1.624
           }
         ],
         "about": [
@@ -3403,9 +3118,9 @@
               "a": 1
             },
             "bg": {
-              "r": 247,
-              "g": 248,
-              "b": 248
+              "r": 131,
+              "g": 133,
+              "b": 131
             },
             "flattenedFg": {
               "r": 0,
@@ -3414,11 +3129,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 12.809,
+            "ratio": 3.665,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 8.309
+            "margin": -0.835
           },
           {
             "key": "aboutTitle",
@@ -3431,9 +3146,9 @@
               "a": 1
             },
             "bg": {
-              "r": 244,
-              "g": 247,
-              "b": 243
+              "r": 128,
+              "g": 133,
+              "b": 130
             },
             "flattenedFg": {
               "r": 0,
@@ -3442,130 +3157,129 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 19.445,
+            "ratio": 5.595,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 16.445
+            "margin": 2.595
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(10, 10, 10)",
-            "fg": {
-              "r": 10,
-              "g": 10,
-              "b": 10,
-              "a": 1
-            },
-            "bg": {
-              "r": 226,
-              "g": 238,
-              "b": 236
-            },
-            "flattenedFg": {
-              "r": 10,
-              "g": 10,
-              "b": 10
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 16.663,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 12.163
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(10, 10, 10)",
+              "fg": {
+                "r": 10,
+                "g": 10,
+                "b": 10,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       },
       {
         "delayMs": 2100,
-        "elapsedMs": 18439,
+        "elapsedMs": 16937,
         "contrastAttr": "high",
         "hero": [
           {
             "key": "heroTitle",
             "text": "Mycelia Interactive",
-            "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 16,
-              "g": 16,
-              "b": 21,
-              "a": 0.9490196078431372
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 245,
-              "g": 248,
-              "b": 248
+              "r": 140,
+              "g": 141,
+              "b": 141
             },
             "flattenedFg": {
-              "r": 28,
-              "g": 28,
-              "b": 33
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 15.892,
+            "ratio": 6.31,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 12.892
+            "margin": 3.31
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 249,
-              "g": 250,
-              "b": 248
+              "r": 141,
+              "g": 141,
+              "b": 142
             },
             "flattenedFg": {
-              "r": 118,
-              "g": 119,
-              "b": 126
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.258,
+            "ratio": 6.333,
             "largeText": false,
-            "passesAa": false,
+            "passesAa": true,
             "required": 4.5,
-            "margin": -0.242
+            "margin": 1.833
           },
           {
             "key": "heroBody",
             "text": "Immersive interactive entertainment where the au",
-            "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 27,
-              "g": 27,
-              "b": 37,
-              "a": 0.7803921568627451
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 239,
-              "g": 245,
-              "b": 240
+              "r": 137,
+              "g": 140,
+              "b": 139
             },
             "flattenedFg": {
-              "r": 74,
-              "g": 75,
-              "b": 82
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.849,
+            "ratio": 6.188,
             "largeText": false,
             "passesAa": true,
             "required": 4.5,
-            "margin": 3.349
+            "margin": 1.688
           }
         ],
         "about": [
@@ -3580,9 +3294,9 @@
               "a": 1
             },
             "bg": {
-              "r": 246,
-              "g": 248,
-              "b": 248
+              "r": 136,
+              "g": 136,
+              "b": 132
             },
             "flattenedFg": {
               "r": 0,
@@ -3591,11 +3305,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 12.785,
+            "ratio": 3.83,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 8.285
+            "margin": -0.67
           },
           {
             "key": "aboutTitle",
@@ -3608,9 +3322,9 @@
               "a": 1
             },
             "bg": {
-              "r": 241,
-              "g": 246,
-              "b": 243
+              "r": 130,
+              "g": 134,
+              "b": 129
             },
             "flattenedFg": {
               "r": 0,
@@ -3619,130 +3333,129 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 19.217,
+            "ratio": 5.676,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 16.217
+            "margin": 2.676
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(10, 10, 10)",
-            "fg": {
-              "r": 10,
-              "g": 10,
-              "b": 10,
-              "a": 1
-            },
-            "bg": {
-              "r": 225,
-              "g": 237,
-              "b": 236
-            },
-            "flattenedFg": {
-              "r": 10,
-              "g": 10,
-              "b": 10
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 16.523,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 12.023
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(10, 10, 10)",
+              "fg": {
+                "r": 10,
+                "g": 10,
+                "b": 10,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       },
       {
         "delayMs": 2800,
-        "elapsedMs": 23019,
+        "elapsedMs": 21170,
         "contrastAttr": "high",
         "hero": [
           {
             "key": "heroTitle",
             "text": "Mycelia Interactive",
-            "cssColor": "oklab(0.17082 0.00272726 -0.00996886 / 0.95)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 16,
-              "g": 16,
-              "b": 21,
-              "a": 0.9490196078431372
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 248,
-              "g": 249,
-              "b": 248
+              "r": 140,
+              "g": 141,
+              "b": 142
             },
             "flattenedFg": {
-              "r": 28,
-              "g": 28,
-              "b": 33
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 36,
             "fontWeight": "600",
-            "ratio": 16.079,
+            "ratio": 6.316,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 13.079
+            "margin": 3.316
           },
           {
             "key": "heroLlc",
             "text": "LLC",
-            "cssColor": "oklab(0.239591 0.00489447 -0.0183826 / 0.65)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 48,
-              "g": 48,
-              "b": 61,
-              "a": 0.6509803921568628
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 247,
-              "g": 248,
-              "b": 248
+              "r": 141,
+              "g": 141,
+              "b": 142
             },
             "flattenedFg": {
-              "r": 117,
-              "g": 118,
-              "b": 126
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 20,
             "fontWeight": "400",
-            "ratio": 4.245,
+            "ratio": 6.333,
             "largeText": false,
-            "passesAa": false,
+            "passesAa": true,
             "required": 4.5,
-            "margin": -0.255
+            "margin": 1.833
           },
           {
             "key": "heroBody",
             "text": "Immersive interactive entertainment where the au",
-            "cssColor": "oklab(0.196226 0.00498816 -0.0193818 / 0.78)",
+            "cssColor": "rgb(0, 0, 0)",
             "fg": {
-              "r": 27,
-              "g": 27,
-              "b": 37,
-              "a": 0.7803921568627451
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
             },
             "bg": {
-              "r": 238,
-              "g": 244,
-              "b": 240
+              "r": 137,
+              "g": 140,
+              "b": 139
             },
             "flattenedFg": {
-              "r": 73,
-              "g": 75,
-              "b": 82
+              "r": 0,
+              "g": 0,
+              "b": 0
             },
             "fontSizePx": 16,
             "fontWeight": "400",
-            "ratio": 7.81,
+            "ratio": 6.188,
             "largeText": false,
             "passesAa": true,
             "required": 4.5,
-            "margin": 3.31
+            "margin": 1.688
           }
         ],
         "about": [
@@ -3757,9 +3470,9 @@
               "a": 1
             },
             "bg": {
-              "r": 248,
-              "g": 249,
-              "b": 248
+              "r": 129,
+              "g": 133,
+              "b": 131
             },
             "flattenedFg": {
               "r": 0,
@@ -3768,11 +3481,11 @@
             },
             "fontSizePx": 13,
             "fontWeight": "600",
-            "ratio": 12.912,
+            "ratio": 3.645,
             "largeText": false,
-            "passesAa": true,
+            "passesAa": false,
             "required": 4.5,
-            "margin": 8.412
+            "margin": -0.855
           },
           {
             "key": "aboutTitle",
@@ -3785,9 +3498,9 @@
               "a": 1
             },
             "bg": {
-              "r": 241,
-              "g": 246,
-              "b": 243
+              "r": 125,
+              "g": 131,
+              "b": 128
             },
             "flattenedFg": {
               "r": 0,
@@ -3796,39 +3509,38 @@
             },
             "fontSizePx": 26,
             "fontWeight": "700",
-            "ratio": 19.217,
+            "ratio": 5.43,
             "largeText": true,
             "passesAa": true,
             "required": 3,
-            "margin": 16.217
+            "margin": 2.43
           },
           {
             "key": "aboutBody",
-            "text": "Mycelia Interactive LLC is an entertainment comp",
-            "cssColor": "rgb(10, 10, 10)",
-            "fg": {
-              "r": 10,
-              "g": 10,
-              "b": 10,
-              "a": 1
-            },
-            "bg": {
-              "r": 222,
-              "g": 235,
-              "b": 235
-            },
-            "flattenedFg": {
-              "r": 10,
-              "g": 10,
-              "b": 10
-            },
-            "fontSizePx": 16,
-            "fontWeight": "500",
-            "ratio": 16.205,
-            "largeText": false,
-            "passesAa": true,
-            "required": 4.5,
-            "margin": 11.705
+            "error": "missing-target-or-color",
+            "meta": {
+              "tag": "P",
+              "text": "Mycelia Interactive LLC is an entertainment comp",
+              "color": "rgb(10, 10, 10)",
+              "fg": {
+                "r": 10,
+                "g": 10,
+                "b": 10,
+                "a": 1
+              },
+              "fontSizePx": 16,
+              "fontWeight": "500",
+              "largeText": false,
+              "rect": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "width": 0,
+                "height": 0
+              },
+              "dpr": 1
+            }
           }
         ]
       }

@@ -169,6 +169,7 @@ function GlitchPane({
       <div
         className="liquid-glass-glitch-layer liquid-glass-glitch-layer--r"
         aria-hidden="true"
+        inert
         style={{ transform: `translate3d(${-rgb}px, ${tear * 0.2}px, 0)` }}
       >
         <LiquidGlassSurface variant="stage" contentClassName="!p-6 sm:!p-8 lg:!p-10">
@@ -178,6 +179,7 @@ function GlitchPane({
       <div
         className="liquid-glass-glitch-layer liquid-glass-glitch-layer--b"
         aria-hidden="true"
+        inert
         style={{ transform: `translate3d(${rgb}px, ${-tear * 0.18}px, 0)` }}
       >
         <LiquidGlassSurface variant="stage" contentClassName="!p-6 sm:!p-8 lg:!p-10">
@@ -189,6 +191,7 @@ function GlitchPane({
           key={index}
           className="liquid-glass-glitch-slice"
           aria-hidden="true"
+          inert
           style={{
             clipPath: `inset(${slice.top}% 0 ${100 - slice.top - slice.height}% 0)`,
             transform: `translate3d(${slice.offset * tear}px, 0, 0)`,

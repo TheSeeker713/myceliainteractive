@@ -116,13 +116,16 @@ export function AccessibilityBottomSheet({
             id={id}
             role="dialog"
             aria-modal="true"
-            aria-label="Accessibility"
+            aria-labelledby={`${id}-title`}
             className="a11y-sheet-panel"
             onWheel={(event) => event.stopPropagation()}
             onTouchMove={(event) => event.stopPropagation()}
           >
             <div className="a11y-sheet-header">
-              <h2 className="text-sm font-semibold tracking-wide text-studio-text uppercase pt-2">
+              <h2
+                id={`${id}-title`}
+                className="text-sm font-semibold tracking-wide text-studio-text uppercase pt-2"
+              >
                 Accessibility
               </h2>
               <button

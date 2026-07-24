@@ -98,7 +98,7 @@ export function SiteMobileNavToggle({
       className="lg:hidden inline-flex items-center justify-center min-h-11 min-w-11 p-2.5 -mr-2.5 text-studio-text-muted hover:text-studio-text pointer-events-auto"
       aria-label={open ? "Close menu" : "Open menu"}
       aria-expanded={open}
-      aria-controls={navId}
+      aria-controls={open ? navId : undefined}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -157,13 +157,20 @@ export function SiteMobileNavPanel({
       }
     };
 
+    runMobileSafe("mobile-nav-focus", () => {
+      const first = document
+        .getElementById(navId)
+        ?.querySelector<HTMLElement>("a, button");
+      first?.focus();
+    });
+
     document.addEventListener("keydown", onKeyDown);
     return () => {
       runMobileSafe("mobile-nav-escape-detach", () => {
         document.removeEventListener("keydown", onKeyDown);
       });
     };
-  }, [open, onOpenChange, menuButtonRef]);
+  }, [open, onOpenChange, menuButtonRef, navId]);
 
   if (!open) return null;
 

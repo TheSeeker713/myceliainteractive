@@ -16,7 +16,7 @@ export function HeroContent() {
           </h1>
           <p
             data-lg-hero
-            className="text-[clamp(1.25rem,4vw,2rem)] text-[var(--color-studio-subtitle-on-glass)]/65"
+            className="text-[clamp(1.25rem,4vw,2rem)] text-[var(--color-studio-subtitle-on-glass)]/90"
           >
             LLC
           </p>

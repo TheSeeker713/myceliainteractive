@@ -87,6 +87,13 @@ export function LiquidGlassSurface({
           "p-6 sm:p-8 lg:p-10",
           contentClassName,
         )}
+        {...(variant === "stage"
+          ? {
+              tabIndex: 0,
+              role: "region" as const,
+              "aria-label": "Card content",
+            }
+          : {})}
       >
         {children}
       </div>

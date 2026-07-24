@@ -22,6 +22,12 @@ html[data-contrast="high"] {
   --studio-accent: #0f3d4a;
   --color-studio-text: #000000;
   --color-studio-text-muted: #1a1a1a;
+  --studio-text-on-glass: #000000;
+  --studio-subtitle-on-glass: #000000;
+  --studio-body-on-glass: #0a0a0a;
+  --color-studio-text-on-glass: #000000;
+  --color-studio-subtitle-on-glass: #000000;
+  --color-studio-body-on-glass: #0a0a0a;
 }
 
 html[data-contrast="high"] .liquid-glass-kicker,
@@ -35,6 +41,12 @@ html[data-contrast="high"] .liquid-glass-title {
 
 html[data-contrast="high"] .liquid-glass-body {
   color: #0a0a0a;
+}
+
+/* Hero glass text — Tailwind /opacity modifiers can leave LLC too faint; force solid. */
+html[data-contrast="high"] [data-lg-hero] {
+  color: #000000 !important;
+  opacity: 1 !important;
 }
 
 html[data-contrast="high"] .liquid-glass-card {

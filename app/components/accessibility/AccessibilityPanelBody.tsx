@@ -57,6 +57,17 @@ export function AccessibilityPanelBody() {
             className="inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/70 p-0.5"
             role="radiogroup"
             aria-label="Text size"
+            onKeyDown={(event) => {
+              if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+                return;
+              }
+              event.preventDefault();
+              const idx = TEXT_SIZES.findIndex((o) => o.id === prefs.textSize);
+              const delta = event.key === "ArrowRight" ? 1 : -1;
+              const next =
+                TEXT_SIZES[(idx + delta + TEXT_SIZES.length) % TEXT_SIZES.length];
+              updatePrefs({ textSize: next.id });
+            }}
           >
             {TEXT_SIZES.map((option) => {
               const selected = prefs.textSize === option.id;
@@ -66,6 +77,7 @@ export function AccessibilityPanelBody() {
                   type="button"
                   role="radio"
                   aria-checked={selected}
+                  tabIndex={selected ? 0 : -1}
                   disabled={!prefsReady}
                   onClick={() => updatePrefs({ textSize: option.id })}
                   className={
