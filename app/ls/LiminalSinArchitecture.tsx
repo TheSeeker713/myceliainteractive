@@ -8,7 +8,6 @@ const ARCHITECTURE_BULLETS = [
   "Trust, fear, and scene state persist in Firestore across the session lifecycle",
   "Imagen 4 generates scene stills; Veo 3.1 Fast delivers generative video loops on scene change",
   "Frontend is a render terminal; all game logic and agent decisions live in the backend",
-  "Marketing shell uses Cloudflare Workers AI for atmospheric FPV imagery only",
 ] as const;
 
 const MOBILE_ARCHITECTURE_BULLETS = ARCHITECTURE_BULLETS.slice(0, 3);

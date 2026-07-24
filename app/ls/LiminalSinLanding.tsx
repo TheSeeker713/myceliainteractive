@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import FPVCarousel from "@/app/components/FPVCarousel";
 import { MyceliaCardStage } from "@/app/components/motion/MyceliaCardStage";
 import { useMyceliaReduceMotion } from "@/app/components/motion/useMyceliaReduceMotion";
 import { LiminalSinArchitectureContent } from "@/app/ls/LiminalSinArchitecture";
@@ -14,29 +13,6 @@ import {
   LiminalSinStoryContent,
   LiminalSinTrustContent,
 } from "@/app/ls/LiminalSinStorySections";
-
-function FPVPane() {
-  return (
-    <div className="space-y-4 max-md:space-y-3">
-      <p data-lg-kicker className="liquid-glass-kicker text-studio-accent">
-        Atmosphere
-      </p>
-      <h2 className="liquid-glass-title font-semibold text-studio-text normal-case tracking-normal">
-        Generative FPV stills
-      </h2>
-      <p className="liquid-glass-body text-studio-text-muted">
-        Marketing-shell imagery generated for the Liminal Sin atmosphere —
-        not gameplay footage.
-      </p>
-      <p className="text-sm text-studio-text-muted md:hidden">
-        Gallery — atmospheric stills cycle below.
-      </p>
-      <div className="rounded-xl overflow-hidden border border-black/8">
-        <FPVCarousel />
-      </div>
-    </div>
-  );
-}
 
 function AccessFooterNote() {
   return (
@@ -65,7 +41,6 @@ export function LiminalSinLanding() {
         label: "Experience",
         content: <LiminalSinExperienceContent />,
       },
-      { label: "First-person view", content: <FPVPane /> },
       { label: "Story", content: <LiminalSinStoryContent /> },
       { label: "Trust", content: <LiminalSinTrustContent /> },
       { label: "Capabilities", content: <LiminalSinCapabilitiesContent /> },

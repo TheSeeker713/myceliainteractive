@@ -9,8 +9,6 @@ export interface Env {
   BREVO_API_KEY: string;
   ADMIN_TOKEN: string;
   ASSETS: Fetcher;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  AI: any;
 }
 
 interface SignupBody {
@@ -466,52 +464,6 @@ async function handleSetGameLive(): Promise<Response> {
   );
 }
 
-const MAX_SEEDS = 12;
-
-const FPV_PROMPTS = [
-  "Photorealistic FPV view through smart glasses, walking down the Vegas Underground Boring Tunnel, creepy, dimly lit, liminal space, glowing neon signs in the distance, highly detailed 8k",
-  "Photorealistic FPV view through smart glasses, exploring an abandoned underground waterpark, dry cracked slides, rusted metal, eerie shadows, liminal space, hyper-realistic",
-  "Photorealistic FPV view through smart glasses, a surreal blending of a Las Vegas tunnel and an abandoned dirty waterpark, illogical architecture, dreamcore horror, highly detailed",
-];
-
-async function handleAiImage(request: Request, env: Env): Promise<Response> {
-  const url = new URL(request.url);
-  const seedParam = url.searchParams.get("seed") || "0";
-  const rawSeed = parseInt(seedParam, 10);
-  const safeSeed = isNaN(rawSeed) ? 0 : rawSeed % MAX_SEEDS;
-
-  const prompt = FPV_PROMPTS[safeSeed % FPV_PROMPTS.length];
-
-  try {
-    const aiResponse = await env.AI.run(
-      "@cf/black-forest-labs/flux-1-schnell",
-      {
-        prompt,
-        seed: safeSeed * 1000,
-      },
-    );
-
-    const binaryString = atob(aiResponse.image);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-
-    return new Response(bytes, {
-      headers: {
-        "Content-Type": "image/jpeg",
-        "Cache-Control": "public, max-age=86400, s-maxage=86400",
-      },
-    });
-  } catch (err) {
-    console.error("AI Generation Error:", err);
-    return Response.json(
-      { error: "Failed to generate image" },
-      { status: 500 },
-    );
-  }
-}
-
 async function handleLogError(request: Request, env: Env): Promise<Response> {
   try {
     const body = (await request.json()) as Record<string, unknown>;
@@ -690,13 +642,6 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     return handleSetGameLive();
   }
   if (url.pathname === "/api/set-game-live") {
-    return Response.json({ error: "Method not allowed" }, { status: 405 });
-  }
-
-  if (url.pathname === "/api/ai/image" && request.method === "GET") {
-    return handleAiImage(request, env);
-  }
-  if (url.pathname === "/api/ai/image") {
     return Response.json({ error: "Method not allowed" }, { status: 405 });
   }
 
