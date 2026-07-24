@@ -110,3 +110,125 @@
   --lg-studio-card-shadow: rgba(0, 0, 0, 0.03);
   --lg-studio-card-hover-shadow: rgba(45, 106, 126, 0.06);
 }
+
+/*
+ * Darkside — desaturated teal-tinted neutrals (not a crude invert).
+ * Applied when html[data-theme="dark"]. WebGL atmosphere shaders untouched.
+ */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --studio-bg: #101618;
+  --studio-bg-muted: #161e20;
+  --studio-surface: #1a2326;
+  --studio-text: #e6ecea;
+  --studio-text-muted: #9aaba8;
+  --studio-border: rgba(255, 255, 255, 0.1);
+  --studio-accent: #5a9aab;
+  --studio-accent-hover: #6eb0c0;
+  --studio-accent-light: #1a3036;
+
+  --color-studio-bg: #101618;
+  --color-studio-bg-muted: #161e20;
+  --color-studio-surface: #1a2326;
+  --color-studio-text: #e6ecea;
+  --color-studio-text-muted: #9aaba8;
+  --color-studio-border: rgba(255, 255, 255, 0.1);
+  --color-studio-accent: #5a9aab;
+  --color-studio-accent-hover: #6eb0c0;
+  --color-studio-accent-light: #1a3036;
+
+  --studio-text-on-glass: #f2f6f5;
+  --studio-subtitle-on-glass: #d5dedc;
+  --studio-body-on-glass: #c8d4d1;
+  --color-studio-text-on-glass: #f2f6f5;
+  --color-studio-subtitle-on-glass: #d5dedc;
+  --color-studio-body-on-glass: #c8d4d1;
+
+  --theme-body-wash-0: #0c1214;
+  --theme-body-wash-1: #101618;
+  --theme-body-wash-2: #141c1e;
+  --theme-body-wash-3: #101618;
+
+  --theme-chrome-bg: rgba(16, 22, 24, 0.86);
+  --theme-chrome-footer-bg: rgba(16, 22, 24, 0.9);
+  --theme-chrome-border: rgba(255, 255, 255, 0.1);
+  --theme-utility-bg: rgba(255, 255, 255, 0.06);
+  --theme-utility-bg-active: rgba(255, 255, 255, 0.12);
+
+  --lg-card-color: #e8efed;
+  --lg-card-fill-0: rgba(22, 32, 36, 0.72);
+  --lg-card-fill-1: rgba(18, 28, 32, 0.58);
+  --lg-card-fill-2: rgba(28, 52, 58, 0.45);
+  --lg-card-border: rgba(255, 255, 255, 0.14);
+  --lg-card-shadow-0: rgba(0, 0, 0, 0.55);
+  --lg-card-shadow-1: rgba(0, 0, 0, 0.4);
+  --lg-card-shadow-2: rgba(0, 0, 0, 0.28);
+  --lg-card-inset-hi: rgba(255, 255, 255, 0.12);
+  --lg-card-inset-lo: rgba(0, 0, 0, 0.35);
+  --lg-card-hover-shadow-0: rgba(0, 0, 0, 0.62);
+  --lg-card-hover-shadow-1: rgba(0, 0, 0, 0.45);
+  --lg-card-hover-shadow-2: rgba(0, 0, 0, 0.32);
+
+  --lg-sheen-0: rgba(255, 255, 255, 0.18);
+  --lg-sheen-1: rgba(255, 255, 255, 0.06);
+  --lg-sheen-2: rgba(255, 255, 255, 0.1);
+  --lg-sheen-3: rgba(90, 154, 171, 0.22);
+
+  --lg-frost-inset-0: rgba(255, 255, 255, 0.1);
+  --lg-frost-inset-1: rgba(0, 0, 0, 0.35);
+  --lg-frost-0: rgba(255, 255, 255, 0.08);
+  --lg-frost-1: rgba(70, 120, 130, 0.22);
+  --lg-frost-2: rgba(255, 255, 255, 0.05);
+  --lg-frost-3: rgba(255, 255, 255, 0.06);
+  --lg-frost-4: rgba(0, 0, 0, 0.35);
+
+  --lg-kicker: #7eb8c6;
+  --lg-title: #f0f5f4;
+  --lg-body: #c5d2cf;
+
+  --lg-aura-soft-a: rgba(90, 154, 171, 0.35);
+  --lg-aura-soft-b: rgba(0, 0, 0, 0.35);
+  --lg-aura-strong-a: rgba(90, 154, 171, 0.55);
+  --lg-aura-strong-b: rgba(255, 255, 255, 0.12);
+  --lg-aura-strong-c: rgba(126, 208, 223, 0.2);
+
+  --lg-aura-sm-soft-a: rgba(90, 154, 171, 0.3);
+  --lg-aura-sm-soft-b: rgba(0, 0, 0, 0.3);
+  --lg-aura-sm-strong-a: rgba(90, 154, 171, 0.5);
+  --lg-aura-sm-strong-b: rgba(255, 255, 255, 0.1);
+  --lg-aura-sm-strong-c: rgba(126, 208, 223, 0.18);
+
+  --lg-hint: rgba(230, 236, 234, 0.88);
+  --lg-hint-shadow: rgba(0, 0, 0, 0.55);
+  --lg-toggle-border: rgba(255, 255, 255, 0.2);
+  --lg-toggle-bg: rgba(8, 14, 16, 0.65);
+  --lg-toggle-color: rgba(230, 236, 234, 0.94);
+  --lg-toggle-accent: #7ed0df;
+  --lg-progress: rgba(230, 236, 234, 0.78);
+  --lg-progress-shadow: rgba(0, 0, 0, 0.5);
+
+  --lg-scanline: rgba(200, 220, 220, 0.12);
+  --lg-noise-a: rgba(255, 80, 120, 0.28);
+  --lg-noise-b: rgba(40, 210, 230, 0.26);
+
+  --lg-studio-card-bg: rgba(22, 32, 36, 0.78);
+  --lg-studio-card-shadow: rgba(0, 0, 0, 0.35);
+  --lg-studio-card-hover-shadow: rgba(90, 154, 171, 0.12);
+}
+
+/* High-contrast + dark: keep strong borders/text without fighting Darkside neutrals. */
+html[data-theme="dark"][data-contrast="high"] {
+  --studio-text: #ffffff;
+  --studio-text-muted: #d0d8d6;
+  --studio-accent: #8fd0de;
+  --color-studio-text: #ffffff;
+  --color-studio-text-muted: #d0d8d6;
+  --lg-kicker: #a8e0ea;
+  --lg-title: #ffffff;
+  --lg-body: #eef4f2;
+  --lg-card-border: rgba(255, 255, 255, 0.45);
+  --lg-card-fill-0: rgba(8, 14, 16, 0.92);
+  --lg-card-fill-1: rgba(10, 16, 18, 0.88);
+  --lg-card-fill-2: rgba(20, 40, 46, 0.82);
+}
