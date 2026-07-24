@@ -15,6 +15,16 @@
   touch-action: manipulation;
 }
 
+/*
+  Tailwind md:hidden is overridden by the display:block rule above when this
+  stylesheet wins cascade order — force hide at the same breakpoint as 3F.3.
+*/
+@media (min-width: 768px) {
+  .mycelia-mobile-card-image {
+    display: none !important;
+  }
+}
+
 .mycelia-mobile-card-image img,
 .mycelia-mobile-card-image video {
   display: block;
