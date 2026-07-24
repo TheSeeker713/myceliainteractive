@@ -39,7 +39,12 @@ export function isMobileStageBlockedTarget(target: EventTarget | null): boolean 
   if (typeof Element === "undefined") return false;
   if (!(target instanceof Element)) return false;
   // data-card-media: thumbnails / lightbox — native long-press Save Image/Video (3F.3)
-  if (target.closest("header, footer, [role='dialog'], [data-card-media]")) {
+  // a[href] / button: pointer capture must not steal mailto/external/nav activation
+  if (
+    target.closest(
+      "header, footer, [role='dialog'], [data-card-media], a[href], button",
+    )
+  ) {
     return true;
   }
   if (typeof HTMLElement !== "undefined" && target instanceof HTMLElement) {

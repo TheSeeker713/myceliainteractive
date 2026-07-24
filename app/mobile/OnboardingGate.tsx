@@ -150,8 +150,12 @@ function MotionOnboardingGateInner({
           aria-modal="true"
           aria-labelledby={titleId}
           aria-describedby={descId}
+          onClick={continueWithoutTilt}
         >
-          <div className="mycelia-onboarding-panel">
+          <div
+            className="mycelia-onboarding-panel"
+            onClick={(event) => event.stopPropagation()}
+          >
             <h2 id={titleId} className="mycelia-onboarding-title">
               Motion background
             </h2>

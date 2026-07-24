@@ -55,6 +55,20 @@ describe("cardStageMobileScroll", () => {
     expect(isMobileStageBlockedTarget(wrap)).toBe(true);
     wrap.remove();
   });
+
+  it("blocks anchors and buttons so drag capture cannot steal mailto/nav clicks", () => {
+    if (typeof document === "undefined") return;
+    const link = document.createElement("a");
+    link.setAttribute("href", "mailto:contact@myceliainteractive.com");
+    link.textContent = "email";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    document.body.append(link, btn);
+    expect(isMobileStageBlockedTarget(link)).toBe(true);
+    expect(isMobileStageBlockedTarget(btn)).toBe(true);
+    link.remove();
+    btn.remove();
+  });
 });
 
 describe("horizontal drag-dismiss helpers (3F.2)", () => {
