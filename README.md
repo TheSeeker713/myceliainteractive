@@ -14,7 +14,7 @@ This repository is the **frontend/site repo**. It contains the public marketing 
 ## What This Repo Contains
 
 - Mycelia Interactive LLC studio homepage (`/`)
-- Liminal Sin landing page (`/ls`) — story, access request form, FPV carousel
+- Liminal Sin landing page (`/ls`) — experience overview, access request form
 - Liminal Sin request gate (`/ls/game`) — closed prototype; directs visitors to request access
 - Cloudflare Worker (`workers/signup-api.ts`) — signup API, access token validation, D1
 

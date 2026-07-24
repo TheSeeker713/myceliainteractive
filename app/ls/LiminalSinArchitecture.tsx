@@ -5,7 +5,7 @@ import { FoldCard } from "@/app/components/motion/FoldCard";
 const ARCHITECTURE_BULLETS = [
   "Browser client (Next.js on Cloudflare) captures microphone audio and webcam frames at 1 FPS",
   "Bidirectional WebSocket connects to Cloud Run backend running Gemini Live multi-agent sessions",
-  "Trust, fear, and scene state persist in Firestore across the session lifecycle",
+  "Scene and session state persist in Firestore across the session lifecycle",
   "Imagen 4 generates scene stills; Veo 3.1 Fast delivers generative video loops on scene change",
   "Frontend is a render terminal; all game logic and agent decisions live in the backend",
 ] as const;

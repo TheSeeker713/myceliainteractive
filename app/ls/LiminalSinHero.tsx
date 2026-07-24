@@ -15,9 +15,15 @@ export function LiminalSinHeroContent() {
           Liminal Sin
         </h1>
         <p className="mt-5 liquid-glass-body text-studio-text-muted leading-relaxed">
-          A psychological interactive experience built around a real-time AI
-          trust and response system. Your voice, behavior, and decisions shape
-          how characters respond; there are no fixed narrative paths.
+          Mycelia Interactive LLC&apos;s primary technology demonstration: a
+          psychological interactive experience set in the Vegas Underground. You
+          become a disembodied voice woven into a living story with Jason —
+          voice-driven, real-time AI narrative with no fixed paths.
+        </p>
+        <p className="mt-4 liquid-glass-body text-studio-text-muted leading-relaxed">
+          Your voice, behavior, and decisions shape how characters respond. An
+          enhanced trust system is planned for the MVP; it is not part of this
+          vertical-slice prototype.
         </p>
         <p className="mt-4 text-sm text-studio-text-muted">
           Vertical slice prototype · Gemini Live Agent Challenge 2026
@@ -56,7 +62,7 @@ export function LiminalSinHeroContent() {
           </div>
         </div>
       </div>
-      <div className="relative aspect-video rounded-xl overflow-hidden border border-black/8 shadow-sm max-md:hidden">
+      <div className="relative aspect-video rounded-xl overflow-hidden border border-[color:var(--theme-inset-border)] shadow-sm max-md:hidden">
         <Image
           src="/assets/images/Liminal_Sin_Title.jpg"
           alt="Liminal Sin"

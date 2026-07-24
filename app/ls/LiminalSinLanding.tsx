@@ -10,8 +10,6 @@ import { LiminalSinSliceScopeContent } from "@/app/ls/LiminalSinSliceScope";
 import {
   LiminalSinAccessContent,
   LiminalSinCapabilitiesContent,
-  LiminalSinStoryContent,
-  LiminalSinTrustContent,
 } from "@/app/ls/LiminalSinStorySections";
 
 function AccessFooterNote() {
@@ -41,8 +39,6 @@ export function LiminalSinLanding() {
         label: "Experience",
         content: <LiminalSinExperienceContent />,
       },
-      { label: "Story", content: <LiminalSinStoryContent /> },
-      { label: "Trust", content: <LiminalSinTrustContent /> },
       { label: "Capabilities", content: <LiminalSinCapabilitiesContent /> },
       { label: "Architecture", content: <LiminalSinArchitectureContent /> },
       { label: "Slice scope", content: <LiminalSinSliceScopeContent /> },

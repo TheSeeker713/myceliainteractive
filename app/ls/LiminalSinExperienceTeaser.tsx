@@ -3,9 +3,9 @@
 const EXPERIENCE_BULLETS = [
   "Speak naturally: your voice is the primary mechanic; no menus or controllers",
   "Characters perceive your webcam and vocal cadence through a live Game Master",
-  "Trust and fear metrics shift agent behavior in real time across three characters",
+  "Prototype cast: Jason and the Player — voice-driven exchange in real time",
   "Generative liminal environments rebuild with Imagen 4 stills and Veo video loops",
-  "Break the fourth wall: consequences persist; the simulation can destabilize",
+  "An enhanced trust system is planned for the MVP (not in this vertical slice)",
 ] as const;
 
 export function LiminalSinExperienceContent() {
@@ -15,7 +15,7 @@ export function LiminalSinExperienceContent() {
         What You&apos;ll Experience
       </h2>
       <p className="liquid-glass-body text-studio-text-muted max-w-2xl mb-8 max-md:mb-4 leading-relaxed">
-        A gated vertical slice of Act 1: a psychological trust-driven narrative
+        A gated vertical slice of Act 1: a psychological interactive narrative
         where your presence shapes every exchange.
       </p>
       <ul className="grid grid-cols-1 gap-3 max-md:gap-2 max-w-4xl list-none p-0 m-0">
