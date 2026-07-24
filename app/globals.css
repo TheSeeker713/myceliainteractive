@@ -1,18 +1,19 @@
 @import "tailwindcss";
+@import "./styles/theme-tokens.css";
 @import "./styles/game-animations.css";
 @import "./styles/game-animations-hud.css";
 @import "./styles/game-effects.css";
 
 @theme {
-  --color-studio-bg: #fafaf8;
-  --color-studio-bg-muted: #f4f2ee;
-  --color-studio-surface: #ffffff;
-  --color-studio-text: #171717;
-  --color-studio-text-muted: #5c5c5c;
-  --color-studio-border: rgba(0, 0, 0, 0.08);
-  --color-studio-accent: #2d6a7e;
-  --color-studio-accent-hover: #245a6b;
-  --color-studio-accent-light: #e8f4f8;
+  --color-studio-bg: var(--studio-bg);
+  --color-studio-bg-muted: var(--studio-bg-muted);
+  --color-studio-surface: var(--studio-surface);
+  --color-studio-text: var(--studio-text);
+  --color-studio-text-muted: var(--studio-text-muted);
+  --color-studio-border: var(--studio-border);
+  --color-studio-accent: var(--studio-accent);
+  --color-studio-accent-hover: var(--studio-accent-hover);
+  --color-studio-accent-light: var(--studio-accent-light);
 
   --color-hero-bg-dark: #08041a;
   --color-hero-bg-default: #140a36;
@@ -25,19 +26,15 @@
   --color-game-danger-surface: #0a0a0a;
 
   /* Studio namespace — glass-legible text tier for HeroSection's frosted-glass card (plan.md spec). */
-  --color-studio-text-on-glass: #0f0f14;
-  --color-studio-subtitle-on-glass: #1e1e28;
-  --color-studio-body-on-glass: #14141e;
+  --color-studio-text-on-glass: var(--studio-text-on-glass);
+  --color-studio-subtitle-on-glass: var(--studio-subtitle-on-glass);
+  --color-studio-body-on-glass: var(--studio-body-on-glass);
 
   --animate-fade-in: fade-in 0.8s ease-out forwards;
   --animate-fade-in-up: fade-in-up 0.8s ease-out forwards;
 }
 
 :root {
-  --studio-bg: #fafaf8;
-  --studio-text: #171717;
-  --studio-text-muted: #5c5c5c;
-  --studio-accent: #2d6a7e;
   --font-sans: var(--font-geist-sans, system-ui, sans-serif);
   --font-mono: var(--font-geist-mono, monospace);
   --content-max-width: 1120px;
@@ -148,10 +145,10 @@ html {
 body {
   background: linear-gradient(
     165deg,
-    #e8f4f8 0%,
-    #fafaf8 35%,
-    #f5f0eb 70%,
-    #fafaf8 100%
+    var(--theme-body-wash-0) 0%,
+    var(--theme-body-wash-1) 35%,
+    var(--theme-body-wash-2) 70%,
+    var(--theme-body-wash-3) 100%
   );
   color: var(--studio-text);
   font-family: var(--font-sans);
@@ -171,16 +168,16 @@ body {
 }
 
 .studio-card {
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--lg-studio-card-bg);
   border: 1px solid var(--color-studio-border);
   border-radius: 1rem;
   backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 20px var(--lg-studio-card-shadow);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .studio-card:hover {
-  box-shadow: 0 12px 40px rgba(45, 106, 126, 0.06);
+  box-shadow: 0 12px 40px var(--lg-studio-card-hover-shadow);
 }
 
 .scroll-fold-scene {
