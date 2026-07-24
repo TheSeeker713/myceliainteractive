@@ -68,6 +68,8 @@ export const ROADMAP_MILESTONES = [
     title: "Studio 25 Films",
     timeframe: "Active · Jul 2026",
     detail: "Active production work with Studio 25 Films.",
+    href: "https://studio25films.com",
+    external: true,
   },
   {
     title: "Agentic project work",

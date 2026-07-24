@@ -35,6 +35,16 @@ export function RoadmapContent() {
             <p className="mt-2 text-sm text-studio-text-muted leading-relaxed lg:text-base">
               {milestone.detail}
             </p>
+            {"href" in milestone && milestone.href ? (
+              <a
+                href={milestone.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-block text-sm font-medium text-studio-accent hover:underline"
+              >
+                Visit Studio 25 Films →
+              </a>
+            ) : null}
           </div>
         ))}
       </div>
