@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { useIsMobileViewport } from "@/app/mobile";
-import { callMobileSafe } from "@/app/mobile/guardMobile";
+import { callMobileSafe, runMobileSafe } from "@/app/mobile/guardMobile";
 import {
   hasSeenMobileCardGuide,
   markMobileCardGuideSeen,
@@ -19,6 +19,7 @@ import {
   MobileCardGuideArrows,
   MobileCardGuideTip,
 } from "@/app/mobile/MobileCardGuide";
+import { MobileFeatureErrorBoundary } from "@/app/mobile/MobileFeatureErrorBoundary";
 import type { CardCycleState } from "./cardCycle";
 import {
   accumulateWheelDelta,
@@ -274,7 +275,9 @@ export function MyceliaCardStage({
     }
     guideFadingRef.current = true;
     setGuideFading(true);
-    markMobileCardGuideSeen();
+    runMobileSafe("card-guide-mark-seen", () => {
+      markMobileCardGuideSeen();
+    });
     if (guideFadeTimerRef.current != null) {
       clearTimeout(guideFadeTimerRef.current);
     }
@@ -667,11 +670,15 @@ export function MyceliaCardStage({
             {pane?.content}
           </GlitchPane>
           {showMobileCardGuide ? (
-            <MobileCardGuideArrows fading={guideFading} />
+            <MobileFeatureErrorBoundary feature="card-guide-arrows">
+              <MobileCardGuideArrows fading={guideFading} />
+            </MobileFeatureErrorBoundary>
           ) : null}
         </div>
         {showMobileCardGuide ? (
-          <MobileCardGuideTip fading={guideFading} />
+          <MobileFeatureErrorBoundary feature="card-guide-tip">
+            <MobileCardGuideTip fading={guideFading} />
+          </MobileFeatureErrorBoundary>
         ) : null}
       </div>
     </div>

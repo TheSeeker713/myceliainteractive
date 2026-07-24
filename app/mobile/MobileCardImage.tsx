@@ -13,6 +13,7 @@ import {
 import { createPortal } from "react-dom";
 import { callMobileSafe, runMobileSafe } from "@/app/mobile/guardMobile";
 import { attachVisualViewportFixedRoot } from "@/app/mobile/visualViewportFixedRoot";
+import { MobileFeatureErrorBoundary } from "@/app/mobile/MobileFeatureErrorBoundary";
 import "@/app/styles/mobile/card-image.css";
 
 type MobileCardImageProps = {
@@ -136,7 +137,15 @@ function MobileCardLightbox({
  * Compact mobile-only card thumbnail + tap-to-expand lightbox.
  * Real `<img>` for native long-press Save Image. Drag-excluded via data-card-media.
  */
-export function MobileCardImage({
+export function MobileCardImage(props: MobileCardImageProps) {
+  return (
+    <MobileFeatureErrorBoundary feature="card-image">
+      <MobileCardImageInner {...props} />
+    </MobileFeatureErrorBoundary>
+  );
+}
+
+function MobileCardImageInner({
   src,
   alt,
   objectFit = "cover",
@@ -189,7 +198,15 @@ export function MobileCardImage({
  * Same drag exclusion; lightbox shows the same paused clip larger.
  * Native long-press Save Video when the browser offers it on `<video>`.
  */
-export function MobileCardVideoThumb({
+export function MobileCardVideoThumb(props: MobileCardVideoThumbProps) {
+  return (
+    <MobileFeatureErrorBoundary feature="card-video">
+      <MobileCardVideoThumbInner {...props} />
+    </MobileFeatureErrorBoundary>
+  );
+}
+
+function MobileCardVideoThumbInner({
   src,
   label,
   className = "",

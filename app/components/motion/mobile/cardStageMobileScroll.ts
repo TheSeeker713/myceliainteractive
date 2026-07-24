@@ -17,8 +17,9 @@ export const MOBILE_DRAG_MAX_ROTATION_DEG = 8;
  * True when the scrollport can still move in `direction` (1 = down / next content).
  * When content does not overflow, returns false (already "at edge" both ways).
  *
- * Used by MyceliaCardStage keyboard handling (desktop + mobile until 3E.3).
- * Mobile vertical scroll never advances panes (3E.1+).
+ * Used by MyceliaCardStage keyboard handling (desktop + mobile).
+ * Mobile vertical scroll never advances panes (3E.1+); keyboard still uses
+ * this edge check so Arrow/Page keys can change panes after content scrolls.
  */
 export function canScrollStageContent(
   scrollPort: Pick<HTMLElement, "scrollTop" | "scrollHeight" | "clientHeight"> | null,
