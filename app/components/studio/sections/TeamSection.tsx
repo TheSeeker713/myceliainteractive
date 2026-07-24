@@ -29,10 +29,6 @@ export function TeamContent() {
           </div>
         ))}
       </div>
-      <p className="mt-6 text-sm text-studio-text-muted">
-        Bootstrapped two-person team · Albuquerque, New Mexico · shipping
-        publicly accessible experiences
-      </p>
     </SceneCard>
   );
 }

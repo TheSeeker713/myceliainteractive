@@ -7,27 +7,6 @@ import {
 } from "@/app/components/motion/LiquidGlassSurface";
 import { Button } from "@/app/components/studio/Button";
 
-const HORIZON_PHASES = [
-  {
-    year: "Years 1–2",
-    title: "Foundation",
-    detail:
-      "Scale real-time agent systems, generative media pipelines, and public interactive experiences.",
-  },
-  {
-    year: "Years 3–5",
-    title: "Platform",
-    detail:
-      "Expand agentic SaaS products (KAIA) and multi-experience narrative infrastructure.",
-  },
-  {
-    year: "Years 6–10",
-    title: "Presence",
-    detail:
-      "Ambient, portable interfaces that extend participatory narrative beyond traditional screens.",
-  },
-] as const;
-
 export function VisionPage() {
   return (
     <LiquidGlassPage className="pb-8">
@@ -67,9 +46,10 @@ export function VisionPage() {
           <p>
             Mycelia Interactive is building live AI interactive narrative and
             agentic systems, where audience voice, vision, and behavior reshape
-            story in real time. Liminal Sin demonstrates multi-agent trust
-            architecture; KAIA extends the same foundation toward productivity
-            SaaS.
+            story in real time. Liminal Sin demonstrates multi-agent
+            architecture; KAIA is a project tailored to full spectrum
+            neurodivergent user base. More info on KAIA will be available this
+            fall.
           </p>
           <p>
             Entertainment is where we put those systems to work: low-latency
@@ -81,33 +61,16 @@ export function VisionPage() {
 
       <LiquidGlassSurface variant="cover">
         <h2 className="font-semibold text-studio-text mb-4">The Horizon</h2>
-        <p className="liquid-glass-body text-studio-text-muted max-w-3xl leading-relaxed mb-8">
-          Over a ten-year horizon, we see participatory presence extending beyond
-          screens: ambient, portable interfaces that keep audiences connected to
-          narrative and collaborative intelligence in education, research, and
-          creative work. Entertainment remains the proving ground; the north star
-          is human-centered, always-on agentic companionship in physical space.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {HORIZON_PHASES.map((phase) => (
-            <div
-              key={phase.year}
-              className="rounded-xl border border-black/8 bg-white/30 p-6"
-            >
-              <p
-                data-lg-kicker
-                className="liquid-glass-kicker text-studio-accent"
-              >
-                {phase.year}
-              </p>
-              <h3 className="mt-2 text-lg font-semibold text-studio-text">
-                {phase.title}
-              </h3>
-              <p className="mt-2 text-sm text-studio-text-muted leading-relaxed lg:text-base">
-                {phase.detail}
-              </p>
-            </div>
-          ))}
+        <div className="rounded-xl border border-black/8 bg-white/30 p-6 max-w-2xl">
+          <p className="liquid-glass-body text-studio-text-muted leading-relaxed">
+            The 10-year plan is currently undergoing extensive revision.
+          </p>
+          <p
+            data-lg-kicker
+            className="mt-4 liquid-glass-kicker text-studio-accent"
+          >
+            Coming soon
+          </p>
         </div>
       </LiquidGlassSurface>
 

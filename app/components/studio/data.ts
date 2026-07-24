@@ -46,7 +46,7 @@ export const TEAM = [
     name: "Jeremy Robards",
     role: "Co-founder · CTO, CAIO, CCO",
     detail:
-      "Leads product development, interactive systems architecture, Gemini Live integration, and full-stack delivery.",
+      "Leads product development, agentic AI workflows, AI engineering, and immersive, interactive entertainment experiences. Full-stack development.",
     email: "jeremy@myceliainteractive.com",
   },
 ] as const;
@@ -77,8 +77,8 @@ export const ROADMAP_MILESTONES = [
   },
   {
     title: "KAIA prototype",
-    timeframe: "Scheduled · Aug 2026",
+    timeframe: "Scheduled · Sep 2026",
     detail:
-      "KAIA scheduled for production as a prototype in August 2026.",
+      "KAIA scheduled for production as a prototype in September 2026.",
   },
 ] as const;
