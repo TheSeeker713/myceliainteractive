@@ -84,7 +84,7 @@ export function AccessibilityPanel({
       role="dialog"
       aria-modal="false"
       aria-labelledby={titleId}
-      className="absolute right-0 top-full z-[calc(var(--z-site-chrome)+1)] mt-2 w-[min(calc(100vw-2rem),22rem)] max-h-[min(70dvh,32rem)] overflow-y-auto rounded-xl border border-black/10 bg-white/95 p-4 shadow-lg backdrop-blur-xl pointer-events-auto"
+      className="absolute right-0 top-full z-[calc(var(--z-site-chrome)+1)] mt-2 w-[min(calc(100vw-2rem),22rem)] max-h-[min(70dvh,32rem)] overflow-y-auto rounded-xl border border-[color:var(--theme-popover-border)] bg-[color:var(--theme-popover-bg)] p-4 shadow-lg backdrop-blur-xl pointer-events-auto"
       onWheel={(event) => event.stopPropagation()}
       onTouchMove={(event) => event.stopPropagation()}
     >

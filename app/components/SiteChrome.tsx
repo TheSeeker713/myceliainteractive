@@ -67,7 +67,7 @@ export function SiteHeader() {
           setMobileOpen(false);
           setA11yOpen((open) => !open);
         }}
-        className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg border border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-utility-bg)] text-studio-text-muted hover:text-studio-text hover:bg-[color:var(--theme-utility-bg-active)] transition-colors pointer-events-auto"
+        className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg border border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-utility-bg)] text-studio-text hover:bg-[color:var(--theme-utility-bg-active)] transition-colors pointer-events-auto"
         aria-label="Accessibility options"
         aria-expanded={a11yOpen}
         aria-controls={a11yPanelId}

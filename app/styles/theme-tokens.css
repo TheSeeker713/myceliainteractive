@@ -44,6 +44,14 @@
   --theme-utility-bg: rgba(255, 255, 255, 0.5);
   --theme-utility-bg-active: rgba(255, 255, 255, 0.9);
 
+  /* Popovers / sheets / in-panel controls (a11y panel, mobile sheet) */
+  --theme-popover-bg: rgba(255, 255, 255, 0.95);
+  --theme-popover-border: rgba(0, 0, 0, 0.1);
+  --theme-popover-divider: rgba(0, 0, 0, 0.08);
+  --theme-control-bg: rgba(255, 255, 255, 0.7);
+  --theme-control-bg-active: #ffffff;
+  --theme-sheet-backdrop: rgba(15, 15, 20, 0.45);
+
   /* Aliases used by Tailwind @theme mapping + high-contrast overrides */
   --studio-text-on-glass: #0f0f14;
   --studio-subtitle-on-glass: #1e1e28;
@@ -155,6 +163,13 @@ html[data-theme="dark"] {
   --theme-chrome-border: rgba(255, 255, 255, 0.1);
   --theme-utility-bg: rgba(255, 255, 255, 0.06);
   --theme-utility-bg-active: rgba(255, 255, 255, 0.12);
+
+  --theme-popover-bg: rgba(22, 32, 36, 0.96);
+  --theme-popover-border: rgba(255, 255, 255, 0.12);
+  --theme-popover-divider: rgba(255, 255, 255, 0.1);
+  --theme-control-bg: rgba(255, 255, 255, 0.06);
+  --theme-control-bg-active: rgba(255, 255, 255, 0.14);
+  --theme-sheet-backdrop: rgba(0, 0, 0, 0.55);
 
   --lg-card-color: #e8efed;
   --lg-card-fill-0: rgba(22, 32, 36, 0.72);

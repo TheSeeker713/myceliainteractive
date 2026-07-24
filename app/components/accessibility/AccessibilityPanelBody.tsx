@@ -54,7 +54,7 @@ export function AccessibilityPanelBody() {
         <div className="py-2">
           <p className="text-sm font-medium text-studio-text mb-2">Text size</p>
           <div
-            className="inline-flex min-h-11 items-stretch rounded-lg border border-black/10 bg-white/70 p-0.5"
+            className="inline-flex min-h-11 items-stretch rounded-lg border border-[color:var(--theme-popover-border)] bg-[color:var(--theme-control-bg)] p-0.5"
             role="radiogroup"
             aria-label="Text size"
             onKeyDown={(event) => {
@@ -82,7 +82,7 @@ export function AccessibilityPanelBody() {
                   onClick={() => updatePrefs({ textSize: option.id })}
                   className={
                     selected
-                      ? "inline-flex items-center justify-center min-h-10 min-w-10 px-2.5 rounded-md text-xs font-semibold text-studio-text bg-white shadow-sm"
+                      ? "inline-flex items-center justify-center min-h-10 min-w-10 px-2.5 rounded-md text-xs font-semibold text-studio-text bg-[color:var(--theme-control-bg-active)] shadow-sm"
                       : "inline-flex items-center justify-center min-h-10 min-w-10 px-2.5 rounded-md text-xs font-semibold text-studio-text-muted hover:text-studio-text"
                   }
                 >
@@ -126,12 +126,12 @@ export function AccessibilityPanelBody() {
         />
       </div>
 
-      <div className="mt-4 pt-3 border-t border-black/8">
+      <div className="mt-4 pt-3 border-t border-[color:var(--theme-popover-divider)]">
         <button
           type="button"
           onClick={resetAccessibility}
           disabled={!prefsReady}
-          className="inline-flex items-center justify-center min-h-11 w-full rounded-lg border border-black/10 bg-white/70 px-3 text-sm font-medium text-studio-text hover:bg-white transition-colors disabled:opacity-50"
+          className="inline-flex items-center justify-center min-h-11 w-full rounded-lg border border-[color:var(--theme-popover-border)] bg-[color:var(--theme-control-bg)] px-3 text-sm font-medium text-studio-text hover:bg-[color:var(--theme-control-bg-active)] transition-colors disabled:opacity-50"
         >
           Reset accessibility settings
         </button>
