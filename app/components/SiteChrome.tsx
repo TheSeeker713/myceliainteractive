@@ -3,9 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { AccessibilityPanel } from "@/app/components/AccessibilityPanel";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
+import { OPEN_ACCESSIBILITY_EVENT } from "@/app/components/motion/SiteMotionShell";
 import {
   AccessibilityBottomSheet,
   MobileFeatureErrorBoundary,
@@ -35,6 +36,16 @@ export function SiteHeader() {
   const navId = useId();
   const a11yPanelId = useId();
   const closeA11y = () => setA11yOpen(false);
+
+  useEffect(() => {
+    const onOpen = () => {
+      setMobileOpen(false);
+      setA11yOpen(true);
+      a11yButtonRef.current?.focus();
+    };
+    window.addEventListener(OPEN_ACCESSIBILITY_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_ACCESSIBILITY_EVENT, onOpen);
+  }, []);
 
   if (pathname !== menuPathname) {
     setMenuPathname(pathname);

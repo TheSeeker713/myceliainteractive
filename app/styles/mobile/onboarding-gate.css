@@ -1,0 +1,94 @@
+/* First-visit motion onboarding (Part 4). */
+
+.mycelia-onboarding-root {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-site-chrome) + 40);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: max(1rem, env(safe-area-inset-top, 0px))
+    max(1rem, env(safe-area-inset-right, 0px))
+    max(1rem, env(safe-area-inset-bottom, 0px))
+    max(1rem, env(safe-area-inset-left, 0px));
+  background: rgba(10, 12, 14, 0.45);
+  transform: translate3d(0, 0, 0);
+  box-sizing: border-box;
+}
+
+.mycelia-onboarding-root--desktop {
+  align-items: center;
+}
+
+.mycelia-onboarding-panel {
+  width: min(100%, 24rem);
+  border-radius: 1rem;
+  border: 1px solid var(--theme-chrome-border);
+  background: var(--studio-surface);
+  color: var(--studio-text);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+  padding: 1.25rem 1.25rem 1.35rem;
+}
+
+.mycelia-onboarding-root--desktop .mycelia-onboarding-panel {
+  width: min(100%, 22rem);
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.mycelia-onboarding-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.mycelia-onboarding-body,
+.mycelia-onboarding-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--studio-text-muted);
+}
+
+.mycelia-onboarding-link {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--studio-accent);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+  min-height: 1.5rem;
+}
+
+.mycelia-onboarding-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+}
+
+.mycelia-onboarding-primary,
+.mycelia-onboarding-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  border-radius: 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mycelia-onboarding-primary {
+  border: 0;
+  background: var(--studio-accent);
+  color: #fff;
+}
+
+.mycelia-onboarding-secondary {
+  border: 1px solid var(--theme-chrome-border);
+  background: var(--theme-utility-bg);
+  color: var(--studio-text);
+}

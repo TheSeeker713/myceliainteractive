@@ -16,6 +16,7 @@ import {
   createWebGLAtmosphereRenderer,
   type WebGLAtmosphereRenderer,
 } from "@/app/components/motion/atmosphere/webglRenderer";
+import { subscribeAtmospherePointer } from "@/app/mobile/atmospherePointerBridge";
 import "./liquid-glass.css";
 
 export const FLOW_VIDEO_SRC = "/assets/atmosphere/mycelia-flow.mp4";
@@ -166,16 +167,20 @@ function FullVideoAtmosphere({
 
       const updatePointer = (event: PointerEvent) => {
         retryPlayIfNeeded();
+        applyPointerClient(event.clientX, event.clientY);
+      };
+
+      const applyPointerClient = (clientX: number, clientY: number) => {
         const input = normalizePointerInput({
-          clientX: event.clientX,
-          clientY: event.clientY,
+          clientX,
+          clientY,
           previousClientX: previousPointerX,
           previousClientY: previousPointerY,
           viewportWidth: window.innerWidth,
           viewportHeight: window.innerHeight,
         });
-        previousPointerX = event.clientX;
-        previousPointerY = event.clientY;
+        previousPointerX = clientX;
+        previousPointerY = clientY;
         latestPointerX = input.pointerX;
         latestPointerY = input.pointerY;
         renderer?.setInput({
@@ -185,6 +190,11 @@ function FullVideoAtmosphere({
           pointerVelocityY: input.pointerVelocityY * POINTER_VELOCITY_GAIN,
         });
         pushCamera();
+      };
+
+      const onBridgePointer = (sample: { clientX: number; clientY: number }) => {
+        retryPlayIfNeeded();
+        applyPointerClient(sample.clientX, sample.clientY);
       };
 
       const onFlowWheel = (event: Event) => {
@@ -224,6 +234,7 @@ function FullVideoAtmosphere({
       window.addEventListener("scroll", onDocumentScroll, { passive: true });
       window.addEventListener(MYCELIA_FLOW_WHEEL_EVENT, onFlowWheel);
       window.addEventListener("atmosphere-preview-wheel", onFlowWheel);
+      const unsubscribeBridge = subscribeAtmospherePointer(onBridgePointer);
       video.addEventListener("error", onVideoError);
       rendererRef.current = renderer;
       renderer.start();
@@ -248,6 +259,7 @@ function FullVideoAtmosphere({
         window.removeEventListener("atmosphere-preview-wheel", onFlowWheel);
         window.removeEventListener("pointermove", retryPlayIfNeeded);
         window.removeEventListener("scroll", retryPlayIfNeeded);
+        unsubscribeBridge();
         video.removeEventListener("error", onVideoError);
         rendererRef.current = null;
         renderer?.dispose();
