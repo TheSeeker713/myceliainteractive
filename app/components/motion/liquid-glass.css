@@ -329,14 +329,34 @@
   will-change: opacity, transform;
 }
 
+/*
+  Drag layer must share the stage-card width budget. Without this, the layer
+  stretches to the full sticky stage on desktop, left-aligning the capped card
+  inside a full-bleed wrapper (hero text-center masked the issue).
+*/
+.mycelia-card-drag-layer {
+  width: min(100%, 38rem);
+  max-width: 100%;
+  justify-self: center;
+  align-self: center;
+}
+
 @media (min-width: 768px) {
   .liquid-glass-stage-card {
+    width: min(100%, 52rem);
+  }
+
+  .mycelia-card-drag-layer {
     width: min(100%, 52rem);
   }
 }
 
 @media (min-width: 1024px) {
   .liquid-glass-stage-card {
+    width: min(100%, 62rem);
+  }
+
+  .mycelia-card-drag-layer {
     width: min(100%, 62rem);
   }
 }

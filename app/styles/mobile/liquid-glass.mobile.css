@@ -38,8 +38,8 @@
     touch-action: pan-y;
   }
 
+  /* Width already set in liquid-glass.css; keep max-width clamp for narrow phones. */
   .mycelia-card-drag-layer {
-    width: min(100%, 38rem);
     max-width: 100%;
     will-change: transform;
   }
