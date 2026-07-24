@@ -58,3 +58,9 @@ public/.deprecated/
 
 # Local test/verification files
 _tests/
+
+# Local Playwright browser cache (Chromium install; never commit)
+.playwright-browsers/
+
+# Regenerated a11y measurement dumps (local F6 runs)
+scripts/a11y/f6-contrast-results*.json
