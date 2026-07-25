@@ -32,6 +32,10 @@ import {
   type ScrollMachineState,
 } from "./cardScrollMachine";
 import { shouldCaptureStageScroll } from "./cardStagePointer";
+import {
+  isSamePathStageNavHref,
+  paneIndexFromHash,
+} from "./paneHashNavigation";
 import { LiquidGlassSurface } from "./LiquidGlassSurface";
 import { MYCELIA_FLOW_WHEEL_EVENT } from "./MyceliaFlowAtmosphere";
 import { attachCardStageMobileListeners } from "./mobile/attachCardStageMobileListeners";
@@ -593,20 +597,62 @@ export function MyceliaCardStage({
   }, [panes.length, isMobileViewport]);
 
   useEffect(() => {
+    const paneIds = panes.map((pane) => pane.id);
+
     const jumpToHash = () => {
+      const index = paneIndexFromHash(window.location.hash, paneIds);
+      if (index == null) return;
       const hash = window.location.hash.replace(/^#/, "");
-      if (!hash) return;
-      const index = panes.findIndex((pane) => pane.id === hash);
-      if (index < 0) return;
-      pendingFocusIdRef.current = hash;
+      pendingFocusIdRef.current = hash || null;
       const jumped = createScrollMachineState(index);
       machineRef.current = jumped;
       startTransition(() => setMachine(jumped));
     };
 
+    /**
+     * Next.js <Link> soft-nav on the same route often updates the URL via
+     * history.pushState without firing `hashchange`. Capture same-path
+     * hash / home links and apply the stage jump ourselves.
+     */
+    const onSamePathNavClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+      const anchor = (event.target as Element | null)?.closest?.("a");
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (!href) return;
+
+      const match = isSamePathStageNavHref(
+        href,
+        window.location.origin,
+        window.location.pathname,
+      );
+      if (!match) return;
+
+      // Empty hash → hero. Non-empty only if it matches a pane id.
+      const nextIndex = paneIndexFromHash(match.hash, paneIds);
+      if (nextIndex == null) return;
+
+      event.preventDefault();
+      const nextUrl = `${window.location.pathname}${window.location.search}${match.hash}`;
+      const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      if (currentUrl !== nextUrl) {
+        window.history.pushState(null, "", nextUrl);
+      }
+      jumpToHash();
+    };
+
     jumpToHash();
     window.addEventListener("hashchange", jumpToHash);
-    return () => window.removeEventListener("hashchange", jumpToHash);
+    window.addEventListener("popstate", jumpToHash);
+    document.addEventListener("click", onSamePathNavClick, true);
+    return () => {
+      window.removeEventListener("hashchange", jumpToHash);
+      window.removeEventListener("popstate", jumpToHash);
+      document.removeEventListener("click", onSamePathNavClick, true);
+    };
   }, [panes]);
 
   const { cardIndex, cycle } = getCycleForScrollMachine(
