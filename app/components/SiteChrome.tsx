@@ -113,11 +113,11 @@ export function SiteHeader() {
   );
 
   return (
-    <header className="site-gutter site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-bg)] backdrop-blur-md">
-      <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-between gap-2 sm:gap-4">
+    <header className="site-chrome-x site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-bg)] backdrop-blur-md">
+      <div className="site-chrome-inner flex items-center justify-between gap-2 sm:gap-4">
         <SiteHomeLogo />
 
-        <div className="flex items-center gap-1.5 sm:gap-3 lg:gap-5 min-w-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 lg:gap-5 min-w-0 shrink-0">
           <nav
             className="hidden lg:flex items-center gap-3 xl:gap-4 text-sm"
             aria-label="Primary"
@@ -156,13 +156,13 @@ export function SiteFooter() {
   if (shouldHideChrome(pathname)) return null;
 
   return (
-    <footer className="site-footer site-gutter site-footer-py sticky bottom-0 max-md:static z-[var(--z-site-chrome)] w-full border-t border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-footer-bg)] backdrop-blur-md mt-auto">
-      <div className="max-w-[var(--content-max-width)] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm text-studio-text-muted">
+    <footer className="site-footer site-chrome-x site-footer-py sticky bottom-0 max-md:static z-[var(--z-site-chrome)] w-full border-t border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-footer-bg)] backdrop-blur-md mt-auto">
+      <div className="site-chrome-inner flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm text-studio-text-muted">
         <span>
           &copy; {new Date().getFullYear()} Mycelia Interactive LLC. All rights
           reserved.
         </span>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 lg:-mr-2">
           <Link
             href="/privacy"
             className="inline-flex items-center min-h-11 px-2 hover:text-studio-accent transition-colors"

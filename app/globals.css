@@ -38,6 +38,8 @@
   --font-sans: var(--font-geist-sans, system-ui, sans-serif);
   --font-mono: var(--font-geist-mono, monospace);
   --content-max-width: 1120px;
+  /* Desktop chrome edge inset (header/footer) — tighter than body .site-gutter. */
+  --chrome-gutter-x: 0.75rem;
   /* Include safe-area so stage height math stays correct under viewport-fit=cover. */
   --header-h: calc(3.75rem + env(safe-area-inset-top, 0px));
   --footer-h: calc(4.5rem + env(safe-area-inset-bottom, 0px));
@@ -102,6 +104,36 @@
 .site-gutter {
   padding-left: clamp(1.5rem, 6vw, 4rem);
   padding-right: clamp(1.5rem, 6vw, 4rem);
+}
+
+/*
+  Header/footer horizontal chrome.
+  Below lg: same as body .site-gutter (mobile/tablet unchanged).
+  lg+: pin to viewport edges with --chrome-gutter-x (+ safe-area).
+*/
+.site-chrome-x {
+  padding-left: clamp(1.5rem, 6vw, 4rem);
+  padding-right: clamp(1.5rem, 6vw, 4rem);
+}
+
+.site-chrome-inner {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 1024px) {
+  .site-chrome-x {
+    padding-left: max(var(--chrome-gutter-x), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--chrome-gutter-x), env(safe-area-inset-right, 0px));
+  }
+
+  .site-chrome-inner {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .ls-section-py {

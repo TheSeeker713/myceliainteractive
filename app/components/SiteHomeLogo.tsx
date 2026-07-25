@@ -76,7 +76,7 @@ export function SiteHomeLogo() {
         ref={logoRef}
         href="/"
         aria-label="Mycelia Interactive LLC home"
-        className="site-home-logo group relative inline-flex items-center min-h-11 py-1 shrink-0 mr-auto -ml-1 lg:-ml-3"
+        className="site-home-logo group relative inline-flex items-center min-h-11 py-1 shrink-0 -ml-1 lg:ml-0"
       >
         {/* Mobile / tablet: keep current banner logo (explicitly not the MI mark). */}
         <Image
