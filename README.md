@@ -13,10 +13,12 @@ This repository is the **frontend/site repo**. It contains the public marketing 
 
 ## What This Repo Contains
 
-- Mycelia Interactive LLC studio homepage (`/`)
-- Liminal Sin landing page (`/ls`) — experience overview, access request form
-- Liminal Sin request gate (`/ls/game`) — closed prototype; directs visitors to request access
-- Cloudflare Worker (`workers/signup-api.ts`) — signup API, access token validation, D1
+- Mycelia Interactive LLC studio site (homepage and company pages)
+- Liminal Sin marketing pages, access request flow, and gated play client
+- Site motion shell: WebGL video-texture atmosphere, liquid-glass card stage
+- Theme system (System / Lightside / Darkside) and accessibility preferences UI
+- Mobile card navigation (drag-follow), tilt parallax, and first-visit onboarding gate
+- Cloudflare Worker (`workers/signup-api.ts`) — signup API, access tokens, D1, cron
 
 ## Live Links
 
@@ -33,16 +35,25 @@ This repository is the **frontend/site repo**. It contains the public marketing 
 
 ## Related Repositories
 
-Frontend/site repo: TheSeeker713/myceliainteractive (this repo)
+Frontend/site repo: TheSeeker713/myceliainteractive (this repo)  
 The Liminal Sin backend runtime is maintained in a separate, private repository.
 
 ## Tech Stack
 
-- Next.js 16.2.x
+- Next.js 16.2.x (App Router, static export)
 - React 19.2.x
 - TypeScript 5.9.x
 - Tailwind CSS 4.3.x
-- Cloudflare Workers / Pages deployment via Wrangler 4.98.x
+- Framer Motion
+- Cloudflare Workers via Wrangler 4.98.x (assets from `./out`)
+
+## Site features (high level)
+
+- **Atmosphere:** WebGL video-texture background (`MyceliaFlowAtmosphere`) behind the studio shell
+- **Card stage:** Desktop scroll/glitch pane navigation; mobile drag-follow card browsing with guide UI and image lightbox
+- **Theme:** Sticky System / Lightside / Darkside toggle (persisted); CSS theme tokens
+- **Accessibility:** Preferences panel (desktop popover / mobile bottom sheet) — contrast, text size, reduce motion, pause atmosphere
+- **Mobile extras:** Device-tilt parallax (with permission) and motion onboarding gate
 
 ## Local Development
 
@@ -57,12 +68,13 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Testing (local)
 
-Before deploy, run:
+Before considering a change complete, run:
 
 ```bash
-npm run lint
-npm test
 npm run build
+npm run lint
+npx tsc --noEmit
+npm test
 ```
 
 **Future revision (MI):** Add GitHub Actions CI (`.github/workflows/ci.yml`) to run lint, test, and build on every push/PR. Requires a GitHub token with the `workflow` scope. Vitest and `npm test` are already in place; only the automated cloud runner is deferred.
@@ -77,18 +89,28 @@ git clone https://github.com/TheSeeker713/liminal-sin-gemini.git
 
 ## Deployment
 
-```bash
-npm run deploy
-```
+**Primary path:** push to `main`. Cloudflare Workers Builds auto-builds and deploys the Worker (static assets from `./out`) on every push to `main`.
 
-Builds the static export and deploys via Wrangler.
+Manual `npm run deploy` (`next build && wrangler deploy`) exists for exceptional/out-of-band use and should not be treated as the normal ship path.
+
+Dry-run validation (does not publish):
+
+```bash
+npm run deploy:dry-run
+```
 
 ## Primary Frontend Routes
 
 | Route | Description |
 |---|---|
-| `/` | Mycelia Interactive LLC studio homepage |
-| `/ls` | Liminal Sin landing page + access request form |
+| `/` | Mycelia Interactive LLC studio homepage (card stage) |
+| `/ls` | Liminal Sin landing — story, architecture, access request |
 | `/ls/game` | Closed prototype gate — request access (not playable) |
 | `/ls/play` | Private play entry — requires `?access=token` issued by team |
 | `/ls/privacy` | Liminal Sin privacy policy |
+| `/ls/judges` | Legacy deep-link easter egg — insult page, then client redirect to `/ls` |
+| `/roadmap` | Company roadmap |
+| `/vision` | 10-year vision |
+| `/team` | Team |
+| `/contact` | Contact |
+| `/privacy` | Company privacy policy |
