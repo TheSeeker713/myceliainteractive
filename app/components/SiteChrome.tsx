@@ -113,7 +113,7 @@ export function SiteHeader() {
   );
 
   return (
-    <header className="site-gutter site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-bg)] backdrop-blur-xl">
+    <header className="site-gutter site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-bg)] backdrop-blur-md">
       <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-between gap-2 sm:gap-4">
         <SiteHomeLogo />
 

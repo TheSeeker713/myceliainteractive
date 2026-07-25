@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 function subscribeOnboardingFlag(onStoreChange: () => void) {
@@ -24,15 +24,19 @@ function getOnboardingOpenServerSnapshot() {
   return false;
 }
 
+type TipPos = { top: number; left: number };
+
 /**
  * Home / brand control.
  * - Below lg (mobile + tablet hamburger chrome): existing banner — unchanged.
  * - lg+ (desktop nav chrome): new MI mark (mi_logo.webp) only.
  * Logo tip is pointer-events:none always — never a click-blocking layer and
  * does not participate in MotionOnboardingGate hit-testing (portaled tip sits
- * above the dimmer for visibility only).
+ * above the dimmer for visibility only, anchored to the logo rect).
  */
 export function SiteHomeLogo() {
+  const logoRef = useRef<HTMLAnchorElement>(null);
+  const [tipPos, setTipPos] = useState<TipPos | null>(null);
   const onboardingOpen = useSyncExternalStore(
     subscribeOnboardingFlag,
     getOnboardingOpenSnapshot,
@@ -44,12 +48,32 @@ export function SiteHomeLogo() {
     () => false,
   );
 
+  useEffect(() => {
+    if (!onboardingOpen) return;
+
+    const update = () => {
+      const rect = logoRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setTipPos({ top: rect.bottom + 4, left: rect.left });
+    };
+
+    const raf = requestAnimationFrame(update);
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [onboardingOpen]);
+
   const tipClassName =
     "pointer-events-none rounded-md border border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-popover-bg)] px-2 py-1 text-xs font-medium text-studio-text shadow-sm backdrop-blur-md whitespace-nowrap";
 
   return (
     <>
       <Link
+        ref={logoRef}
         href="/"
         aria-label="Mycelia Interactive LLC home"
         className="site-home-logo group relative inline-flex items-center min-h-11 py-1 shrink-0 mr-auto -ml-1 lg:-ml-3"
@@ -82,13 +106,15 @@ export function SiteHomeLogo() {
       </Link>
 
       {/*
-        Onboarding: tip portaled above the gate dimmer for visibility only.
+        Onboarding: tip portaled above the gate dimmer, positioned from the
+        logo's getBoundingClientRect (not viewport gutters — content is centered).
         pointer-events-none — does not block gate dismiss / CTA clicks.
       */}
-      {isClient && onboardingOpen
+      {isClient && onboardingOpen && tipPos
         ? createPortal(
             <span
-              className={`${tipClassName} fixed z-[calc(var(--z-site-chrome)+45)] left-[max(0.75rem,env(safe-area-inset-left,0px))] top-[calc(var(--header-h)+0.15rem)] hidden lg:block`}
+              className={`${tipClassName} fixed z-[calc(var(--z-site-chrome)+45)] hidden lg:block`}
+              style={{ top: tipPos.top, left: tipPos.left }}
               aria-hidden="true"
             >
               Mycelia Interactive

@@ -37,8 +37,8 @@
   --theme-body-wash-2: #f5f0eb;
   --theme-body-wash-3: #fafaf8;
 
-  /* Chrome surfaces */
-  --theme-chrome-bg: rgba(255, 255, 255, 0.75);
+  /* Chrome surfaces — header stays light over dark atmosphere (blur samples WebGL). */
+  --theme-chrome-bg: rgba(255, 255, 255, 0.92);
   --theme-chrome-footer-bg: rgba(255, 255, 255, 0.8);
   --theme-chrome-border: rgba(0, 0, 0, 0.08);
   --theme-utility-bg: rgba(255, 255, 255, 0.5);
