@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { AccessibilityPanel } from "@/app/components/AccessibilityPanel";
+import { SiteHomeLogo } from "@/app/components/SiteHomeLogo";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
 import { OPEN_ACCESSIBILITY_EVENT } from "@/app/components/motion/SiteMotionShell";
 import {
@@ -115,23 +115,11 @@ export function SiteHeader() {
   return (
     <header className="site-gutter site-header-py sticky top-0 z-[var(--z-site-chrome)] w-full border-b border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-chrome-bg)] backdrop-blur-xl">
       <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-between gap-2 sm:gap-4">
-        <Link
-          href="/"
-          aria-label="Mycelia Interactive LLC home"
-          className="inline-flex items-center min-h-11 py-1 shrink-0 -ml-1"
-        >
-          <Image
-            src="/assets/images/Mycelia Interactive Banner.png"
-            alt="Mycelia Interactive LLC"
-            width={280}
-            height={72}
-            className="h-8 md:h-10 lg:h-12 w-auto object-contain"
-          />
-        </Link>
+        <SiteHomeLogo />
 
         <div className="flex items-center gap-1.5 sm:gap-3 lg:gap-5 min-w-0">
           <nav
-            className="hidden lg:flex items-center gap-5 text-sm"
+            className="hidden lg:flex items-center gap-3 xl:gap-4 text-sm"
             aria-label="Primary"
           >
             <PrimaryNavLinks variant="desktop" />

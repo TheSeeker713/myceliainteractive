@@ -76,6 +76,8 @@ function MotionOnboardingGateInner({
     const previous = document.body.style.overflow;
     runMobileSafe("onboarding-open", () => {
       document.body.style.overflow = "hidden";
+      // Signal for desktop logo tip only — does not change gate hit-testing.
+      document.documentElement.setAttribute("data-mycelia-onboarding", "open");
       rootRef.current
         ?.querySelector<HTMLElement>("button, [href]")
         ?.focus();
@@ -89,6 +91,7 @@ function MotionOnboardingGateInner({
     document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = previous;
+      document.documentElement.removeAttribute("data-mycelia-onboarding");
       document.removeEventListener("keydown", onKey);
     };
     // dismiss is stable enough via ref pattern below
