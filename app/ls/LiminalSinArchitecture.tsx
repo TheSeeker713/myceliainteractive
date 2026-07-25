@@ -142,7 +142,7 @@ export function LiminalSinArchitectureContent() {
           {MOBILE_ARCHITECTURE_BULLETS.map((bullet) => (
             <li
               key={bullet}
-              className="flex gap-3 text-sm text-studio-text-muted leading-relaxed border-b border-black/8 pb-3 last:border-0"
+              className="flex gap-3 text-sm text-studio-text-muted leading-relaxed border-b border-[color:var(--theme-inset-border)] pb-3 last:border-0"
             >
               <span
                 className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-studio-accent"

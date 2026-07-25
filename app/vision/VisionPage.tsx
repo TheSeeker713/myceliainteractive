@@ -61,7 +61,7 @@ export function VisionPage() {
 
       <LiquidGlassSurface variant="cover">
         <h2 className="font-semibold text-studio-text mb-4">The Horizon</h2>
-        <div className="rounded-xl border border-black/8 bg-white/30 p-6 max-w-2xl">
+        <div className="rounded-xl border border-[color:var(--theme-inset-border)] bg-[color:var(--theme-inset-bg)] p-6 max-w-2xl">
           <p className="liquid-glass-body text-studio-text-muted leading-relaxed">
             The 10-year plan is currently undergoing extensive revision.
           </p>

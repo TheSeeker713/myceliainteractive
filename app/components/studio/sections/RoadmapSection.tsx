@@ -21,7 +21,7 @@ export function RoadmapContent() {
         {ROADMAP_MILESTONES.map((milestone) => (
           <div
             key={milestone.title}
-            className="rounded-xl border border-black/8 bg-white/30 p-4"
+            className="rounded-xl border border-[color:var(--theme-inset-border)] bg-[color:var(--theme-inset-bg)] p-4"
           >
             <p
               data-lg-kicker

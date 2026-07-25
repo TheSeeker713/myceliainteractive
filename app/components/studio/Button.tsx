@@ -32,7 +32,7 @@ function getButtonClasses({
     variant === "primary" &&
       "bg-studio-accent text-white hover:bg-[var(--color-studio-accent-hover)]",
     variant === "secondary" &&
-      "border border-black/10 bg-white text-studio-text hover:bg-studio-bg-muted",
+      "border border-[color:var(--theme-chrome-border)] bg-[color:var(--theme-control-bg)] text-studio-text hover:bg-[color:var(--theme-control-bg-active)]",
     className,
   );
 }
