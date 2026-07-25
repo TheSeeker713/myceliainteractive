@@ -1,0 +1,57 @@
+/* Desktop architecture diagram enlarge overlay (/ls). */
+
+.ls-arch-diagram-trigger {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  text-align: left;
+  border-radius: 0.5rem;
+}
+
+.ls-arch-diagram-trigger:focus-visible {
+  outline: 2px solid var(--studio-accent);
+  outline-offset: 2px;
+}
+
+.ls-arch-diagram-lightbox-root {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-site-chrome) + 30);
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1.25rem, env(safe-area-inset-top, 0px))
+    max(1.25rem, env(safe-area-inset-right, 0px))
+    max(1.25rem, env(safe-area-inset-bottom, 0px))
+    max(1.25rem, env(safe-area-inset-left, 0px));
+  background: var(--theme-sheet-backdrop);
+  cursor: zoom-out;
+  border: 0;
+  margin: 0;
+}
+
+.ls-arch-diagram-lightbox-panel {
+  width: min(100%, 56rem);
+  max-height: 100%;
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--theme-popover-border);
+  background: var(--theme-popover-bg);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  cursor: zoom-out;
+  overflow: auto;
+}
+
+.ls-arch-diagram-lightbox-panel svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
