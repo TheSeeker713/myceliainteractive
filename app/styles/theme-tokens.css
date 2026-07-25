@@ -59,6 +59,14 @@
   --theme-inset-text: rgba(40, 50, 55, 0.78);
   --theme-guide-arrow: rgba(30, 50, 58, 0.85);
 
+  /*
+   * Nested content cards inside liquid-glass shells (Team / Roadmap / Vision /ls teasers).
+   * Lightside keeps the prior bg-white/30 read; Darkside is near-opaque so atmosphere
+   * does not wash through a third translucent layer under body text.
+   */
+  --theme-inner-card-bg: rgba(255, 255, 255, 0.3);
+  --theme-inner-card-border: rgba(0, 0, 0, 0.08);
+
   /* Aliases used by Tailwind @theme mapping + high-contrast overrides */
   --studio-text-on-glass: #0f0f14;
   --studio-subtitle-on-glass: #1e1e28;
@@ -183,6 +191,10 @@ html[data-theme="dark"] {
   --theme-inset-border: rgba(255, 255, 255, 0.12);
   --theme-inset-text: rgba(200, 212, 208, 0.88);
   --theme-guide-arrow: rgba(180, 200, 198, 0.75);
+
+  /* Nested cards: studio-bg tone @ ~92% so busy atmosphere barely shows through */
+  --theme-inner-card-bg: rgba(16, 22, 24, 0.92);
+  --theme-inner-card-border: rgba(255, 255, 255, 0.12);
 
   --lg-card-color: #e8efed;
   --lg-card-fill-0: rgba(22, 32, 36, 0.72);

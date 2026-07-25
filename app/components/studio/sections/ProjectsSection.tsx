@@ -14,7 +14,7 @@ type ProjectItem = (typeof PROJECTS)[number];
 function ProjectMedia({ project }: { project: ProjectItem }) {
   if ("video" in project && project.video) {
     return (
-      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8 bg-black/20">
+      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-[color:var(--theme-inner-card-border)] bg-black/20">
         <video
           src={project.video}
           className="absolute inset-0 h-full w-full object-cover"
@@ -32,7 +32,7 @@ function ProjectMedia({ project }: { project: ProjectItem }) {
   if ("image" in project && project.image) {
     // object-contain so full artwork (e.g. S33k3r) is visible, not cropped.
     return (
-      <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden border border-black/8 bg-black/15">
+      <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden border border-[color:var(--theme-inner-card-border)] bg-black/15">
         <Image
           src={project.image}
           alt={project.name}

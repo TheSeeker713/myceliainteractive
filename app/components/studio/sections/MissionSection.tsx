@@ -14,7 +14,7 @@ export function MissionContent() {
       >
         Direction
       </p>
-      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-black/8 max-md:hidden">
+      <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-[color:var(--theme-inner-card-border)] max-md:hidden">
         <Image
           src="/assets/images/Roadmap_Network.webp"
           alt=""

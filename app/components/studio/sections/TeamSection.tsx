@@ -11,7 +11,7 @@ export function TeamContent() {
         {TEAM.map((member) => (
           <div
             key={member.name}
-            className="rounded-xl border border-[color:var(--theme-inset-border)] bg-[color:var(--theme-inset-bg)] p-5"
+            className="rounded-xl border border-[color:var(--theme-inner-card-border)] bg-[color:var(--theme-inner-card-bg)] p-5"
           >
             <h3 className="text-lg font-semibold text-studio-text">
               {member.name}

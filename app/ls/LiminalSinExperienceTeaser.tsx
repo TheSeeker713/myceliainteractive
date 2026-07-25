@@ -22,7 +22,7 @@ export function LiminalSinExperienceContent() {
         {EXPERIENCE_BULLETS.map((bullet) => (
           <li
             key={bullet}
-            className="flex gap-3 text-sm text-studio-text-muted leading-relaxed rounded-xl border border-[color:var(--theme-inset-border)] bg-[color:var(--theme-inset-bg)] p-4 max-md:p-3"
+            className="flex gap-3 text-sm text-studio-text-muted leading-relaxed rounded-xl border border-[color:var(--theme-inner-card-border)] bg-[color:var(--theme-inner-card-bg)] p-4 max-md:p-3"
           >
             <span
               className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-studio-accent"
