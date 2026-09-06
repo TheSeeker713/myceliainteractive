@@ -27,25 +27,26 @@ There is no separate `typecheck` script. TypeScript is enforced via `next build`
 
 Do not claim tooling that isn't actually installed (e.g. MSW, Prettier, Playwright, axe-core, Lighthouse) as part of the standard check suite unless it has actually been added as a dependency. Verify against `package.json` before stating a testing methodology as fact.
 
-## Mandatory checks after every change
+## Mandatory two-pass checks after every approved step
 
-Run and pass before considering a step complete:
+Run this complete suite twice and receive 100% passing results in both passes before considering a step ready for its devlog:
 
 1. `npm run build`
 2. `npm run lint`
 3. `npx tsc --noEmit` (explicit typecheck; not a package.json script)
 4. `npm test` (`vitest run`)
 
-Also run any step-specific runtime/visual/mobile checks as appropriate.
+Also run every relevant step-specific runtime, visual, mobile, browser, and device-input check in both passes. A skipped required check, partial pass, flaky result, or failure blocks the devlog, commit, push, deployment, and step completion.
 
 ## Version control policy (mandatory, automatic)
 
-After every step's checks pass:
+After both test passes succeed and the dated devlog entry is written:
 
 1. Commit to **`main`** with a clear, specific message.
 2. Push to `origin/main` **immediately and automatically**, without asking and without waiting for a separate "commit and push" prompt.
 3. Report a commit/push record every time: hash, message, branch, and confirmed `origin/main` ahead/behind status, verified against actual `git log origin/main` — never asserted from memory or a prior claim.
-4. If a previously claimed push cannot be verified against actual `git log origin/main`, say so explicitly rather than asserting it happened.
+4. Verify and report the Cloudflare deployment triggered by the push. A successful push alone does not prove deployment.
+5. If a previously claimed push or deployment cannot be verified, say so explicitly rather than asserting it happened.
 
 There is no Workers Builds gate to check and no holding pattern. Cloudflare Workers Builds will auto-deploy on push — that is expected and accepted, not a reason to delay or ask first.
 
@@ -88,16 +89,15 @@ The automatic push flow above is the only deploy path that runs without asking. 
 
 These apply to every session.
 
-1. **Plan Mode first.** For any non-trivial feature or refactor, start in Plan Mode. Produce a numbered, reviewable plan before writing or editing a single line of code. Do not begin implementation until Jeremy explicitly approves the plan, and do not begin an individual step until that step is separately approved.
+1. **Phases and separately approved steps.** For any non-trivial feature or refactor, produce a numbered, reviewable plan organized into phases and steps before writing or editing implementation code. Jeremy must explicitly approve each exact step before it begins. Approval of the plan or phase does not authorize all contained steps.
 2. **No hallucination.** Never state that a file, function, dependency, or behavior exists unless you have actually opened and read it in this repo during this session. If unsure, say "I need to check" and go check. Do not invent API names, package names, or config values. If something in a prior audit or doc appears stale or contradicted by the live code, flag the discrepancy explicitly instead of trusting either source blindly.
 3. **No code write/edit without approval.** This includes small "obvious" fixes, formatting changes, and config tweaks. Nothing gets written to disk until Jeremy says go. (Version control itself — commit and push per the policy above — is the one exception, and only after a step is already approved and its checks pass.)
 4. **No file deletion or edit without approval**, beyond the mechanical commit/push covered above. This includes moving assets into a `legacy/` folder and touching `.gitignore`. Propose the exact move/edit list first.
-5. **AGENTS.md and this file are read-only to agents.** You may read this file for context. You must never edit, rewrite, or delete it, even during a cleanup pass, even if it looks out of date. Flag apparent drift to Jeremy as an observation only — Jeremy edits these files by hand.
+5. **AGENTS.md and this file are protected.** Read them before work. Never edit, rewrite, or delete either file unless Jeremy directly instructs the agent to change the project rules. Flag apparent drift to Jeremy instead of silently reconciling it.
 6. **Verification before assertion.** Never report a change as "already present," "already done," or "already live" without first checking actual current state — local build and/or production, whichever Jeremy is looking at. If challenged on whether a change exists, re-verify from source and live output before responding. Do not defend a prior claim without checking it first.
-7. **End of session:**
-   - Run the full mandatory check suite (build, lint, typecheck, test) plus any step-specific runtime/visual/mobile checks.
-   - Do not consider a session "done" on green automated checks alone. Package up what changed and note it needs Jeremy's manual testing on a real external browser/device before it's considered fully verified. Automated Playwright-style self-reports are not sufficient on their own for this project.
-   - Commit and push per the version control policy above — automatic, no separate prompt.
+7. **Daily devlog before commit.** After both verification passes succeed, update `/docs/devlog/YYYY-MM-DD.md`. Reuse the same file for all work completed that day. Each timestamped entry has a one-sentence review on the timestamp line, followed by detailed first-person production paragraphs and the byline `Jeremy Robards, CTO and CAIO, Mycelia Interactive`. Immediately before writing any devlog, perform one fresh online search about human writing psychology and another about current signs of AI-written prose. Retain the URLs in a source note. If the searches cannot be completed, stop before the devlog.
+8. **End of step:** Commit, push, verify `origin/main`, and verify the automatic Cloudflare deployment only after both test passes and the devlog. Report the evidence.
+9. **End of phase:** Stop after the final approved step is deployed. Provide a production report and focused manual UI/UX checklist. The next phase remains blocked until Jeremy returns an explicit greenlight naming that phase together with his production test report, including devices, browsers, and defects observed.
 
 ## Current initiative status
 
